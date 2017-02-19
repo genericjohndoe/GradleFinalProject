@@ -7,15 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.udacity.gradle.jokes.Joker;
-
 /**
  * Created by joeljohnson on 1/25/17.
  */
 
-public class myLibraryFragment extends Fragment {
+public class MyLibraryFragment extends Fragment {
 
-    public myLibraryFragment() {
+    public MyLibraryFragment() {
     }
 
     @Override
@@ -23,8 +21,7 @@ public class myLibraryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_image, container, false);
         TextView textview = (TextView) root. findViewById(R.id.libraryWelcomeTextView);
-        Joker joker = new Joker();
-        textview.setText(joker.getJoke());
+        textview.setText(getActivity().getIntent().getExtras().getString(getString(R.string.joke_key)));
         return root;
     }
 }

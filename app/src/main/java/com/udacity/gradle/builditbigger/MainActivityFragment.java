@@ -8,9 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.gjd.mylibrary.myLibraryActivity;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.gjd.mylibrary.MyLibraryActivity;
+import com.udacity.gradle.jokes.Joker;
 
 
 /**
@@ -29,7 +28,9 @@ public class MainActivityFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(getContext(), myLibraryActivity.class);
+                Joker joker = new Joker();
+                Intent myIntent = new Intent(getContext(), MyLibraryActivity.class);
+                myIntent.putExtra(getString(R.string.joke_key), joker.getJoke());
                 startActivity(myIntent);
             }
         });
@@ -37,15 +38,6 @@ public class MainActivityFragment extends Fragment {
                 new AndroidJsonFactory(), null)
                 .setRootUrl("http://<my-computer-address>:8080/_ah/api/");*/
         new EndpointsAsyncTask().execute(new Pair(getContext(), "Manfred"));
-
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
         return root;
     }
 
