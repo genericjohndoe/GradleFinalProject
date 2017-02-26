@@ -1,12 +1,14 @@
 package com.udacity.gradle.builditbigger;
 
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.AsyncOutput {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,4 +39,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    @VisibleForTesting
+    public void asyncTaskOutput(String finalString) {
+        if (!finalString.equals(null)) {
+            Log.i("AsyncTask output",finalString);
+        } else {
+            Log.i("AsyncTask output","N/A");
+        }
+    }
 }

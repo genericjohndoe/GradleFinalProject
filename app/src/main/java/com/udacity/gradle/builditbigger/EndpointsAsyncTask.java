@@ -16,9 +16,10 @@ import java.io.IOException;
  * Created by joeljohnson on 1/25/17.
  */
 
-class EndpointsAsyncTask extends AsyncTask<Pair, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Pair, Void, String> {
     private static MyApi myApiService = null;
     private Context context;
+    public String finalString;
 
     @Override
     protected String doInBackground(Pair... params) {
@@ -36,7 +37,6 @@ class EndpointsAsyncTask extends AsyncTask<Pair, Void, String> {
                         }
                     });
             // end options for devappserver
-
             myApiService = builder.build();
         }
 
@@ -44,6 +44,7 @@ class EndpointsAsyncTask extends AsyncTask<Pair, Void, String> {
         String name = params[0].second;
 
         try {
+            EndpointsAsyncTaskTest.OUTPUT = myApiService.sayHi(name).execute().getData();
             return myApiService.sayHi(name).execute().getData();
         } catch (IOException e) {
             return e.getMessage();
@@ -53,6 +54,7 @@ class EndpointsAsyncTask extends AsyncTask<Pair, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        MainActivityFragment.asyncTaskOutputString = result;
     }
 
 }
