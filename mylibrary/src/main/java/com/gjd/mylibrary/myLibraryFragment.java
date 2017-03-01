@@ -11,9 +11,9 @@ import android.widget.TextView;
  * Created by joeljohnson on 1/25/17.
  */
 
-public class MyLibraryFragment extends Fragment {
+public class myLibraryFragment extends Fragment {
 
-    public MyLibraryFragment() {
+    public myLibraryFragment() {
     }
 
     @Override

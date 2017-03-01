@@ -9,10 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.gjd.mylibrary.MyLibraryActivity;
+import com.gjd.mylibrary.myLibraryActivity;
 import com.udacity.gradle.jokes.Joker;
-
-import static java.security.AccessController.getContext;
 
 
 /**
@@ -34,7 +32,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Joker joker = new Joker();
-                Intent myIntent = new Intent(getContext(), MyLibraryActivity.class);
+                Intent myIntent = new Intent(getContext(), myLibraryActivity.class);
                 myIntent.putExtra(getString(R.string.joke_key), joker.getJoke());
                 startActivity(myIntent);
             }
