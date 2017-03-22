@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.udacity.gradle.builditbigger"
@@ -28,8 +28,15 @@ android {
             applicationId "com.udacity.gradle.testing.paid"
         }
     }
-    sourceSets {
+    /*sourceSets {
         main { java.srcDirs = ['src/main/java', 'src/androidTest/java'] }
+    }*/
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
     }
 }
 
@@ -38,7 +45,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile project(':javaJokes')
+    compile project(':backend')
     compile project(':mylibrary')
     compile 'com.android.support:appcompat-v7:25.1.0'
     freeCompile 'com.google.android.gms:play-services-ads:10.0.1'
