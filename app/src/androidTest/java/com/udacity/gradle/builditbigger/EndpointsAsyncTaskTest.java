@@ -13,8 +13,8 @@ public class EndpointsAsyncTaskTest extends Activity {
 
     @Test
     public void doInBackground() throws Exception {
-       EndpointsAsyncTask task =  new EndpointsAsyncTask();
-               task.execute(this);
+        EndpointsAsyncTask task = new EndpointsAsyncTask();
+        task.execute(this);
         String output = task.get();
         assertNotNull(output);
     }
