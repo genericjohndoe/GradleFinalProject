@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import com.example.gjd.builditbigger.backend.myApi.MyApi;
 import com.gjd.mylibrary.myLibraryActivity;
+
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -13,7 +14,6 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 
-import static java.security.AccessController.getContext;
 
 /**
  * Created by joeljohnson on 1/25/17.

@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.34'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.54'
     }
 }
 
@@ -23,9 +23,9 @@ targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
     compile project(':javaJokes')
-    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.34'
-    compile 'com.google.appengine:appengine-endpoints:1.9.34'
-    compile 'com.google.appengine:appengine-endpoints-deps:1.9.34'
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.54'
+    compile 'com.google.appengine:appengine-endpoints:1.9.54'
+    compile 'com.google.appengine:appengine-endpoints-deps:1.9.54'
     compile 'javax.servlet:servlet-api:2.5'
 }
 
