@@ -1,3 +1,4 @@
+/*
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
@@ -15,9 +16,11 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import java.io.IOException;
 
 
+*/
 /**
  * Created by joeljohnson on 1/25/17.
- */
+ *//*
+
 
 public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyApi myApiService = null;
@@ -61,3 +64,4 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
 }
 
+*/
