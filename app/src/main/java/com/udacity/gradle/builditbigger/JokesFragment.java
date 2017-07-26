@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,38 +21,48 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * A placeholder fragment containing a simple view.
+ * Created by joeljohnson on 7/25/17.
  */
-public class MainActivityFragment extends Fragment {
+
+public class JokesFragment extends Fragment {
 
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mLanguageDatabaseReference;
+    private DatabaseReference mjokesDatabaseReference;
     private ChildEventListener mChildEventListener;
 
     RecyclerView recyclerview;
+    JokeAdapter jokeAdapter;
+    List<Joke> jokes;
+    String genre;
+    String language;
 
-    LanguageAdapter languageAdapter;
-    List<String> languages;
 
-
-    public MainActivityFragment() {}
+    public JokesFragment() {}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getActivity().getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null){
+            genre = extras.getString(getString(R.string.genres));
+            language = extras.getString(getString(R.string.languages));
+        }
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mLanguageDatabaseReference = mFirebaseDatabase.getReference().child(getString(R.string.languages));
-        languages = new ArrayList<>();
-        languageAdapter = new LanguageAdapter(getActivity(), languages);
+        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(getString(R.string.languages))
+                .child(language).child(getString(R.string.genres)).child(genre);
+        jokes = new ArrayList<>();
+        jokeAdapter = new JokeAdapter(getActivity(), jokes);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String language = dataSnapshot.getKey();
-                languages.add(language);
-                languageAdapter.notifyItemInserted(languages.size() - 1);
+                Joke joke = dataSnapshot.getValue(Joke.class);
+                jokes.add(joke);
+                jokeAdapter.notifyItemInserted(jokes.size() - 1);
             }
 
             @Override
@@ -66,7 +77,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         };
-        mLanguageDatabaseReference.addChildEventListener(mChildEventListener);
+        mjokesDatabaseReference.addChildEventListener(mChildEventListener);
     }
 
     @Override
@@ -76,7 +87,7 @@ public class MainActivityFragment extends Fragment {
         recyclerview = (RecyclerView) root.findViewById(R.id.recycler_view);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        recyclerview.setAdapter(languageAdapter);
+        recyclerview.setAdapter(jokeAdapter);
         root.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,8 +99,8 @@ public class MainActivityFragment extends Fragment {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 if (!input.equals("") || !input.equals(null)) {
-                                    String newLanguage = input.toString();
-                                    mLanguageDatabaseReference.push().setValue(newLanguage);
+                                    Joke newJoke = new Joke("new joke", "me", input.toString());
+                                    mjokesDatabaseReference.push().setValue(newJoke);
                                 }
                             }
                         })
@@ -98,8 +109,4 @@ public class MainActivityFragment extends Fragment {
         });
         return root;
     }
-
-
-    
 }
-

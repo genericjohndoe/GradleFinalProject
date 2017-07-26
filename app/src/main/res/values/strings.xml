@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Build it Bigger</string>
+    <string name="app_name">Hilarity</string>
     <string name="instructions">Press the button for a delicious joke!</string>
     <string name="button_text">Tell Joke</string>
     <string name="action_settings">Settings</string>
@@ -13,5 +13,10 @@
     <string name="languages">languages</string>
     <string name="English">English</string>
     <string name="Spanish">Spanish</string>
+    <string name="genres">Genres</string>
+    <string name="jokes_list">Jokes List</string>
+    <string name="jokeBody">jokeBody</string>
+    <string name="jokeTitle">jokeTitle</string>
+    <string name="userName">userName</string>
 
 </resources>

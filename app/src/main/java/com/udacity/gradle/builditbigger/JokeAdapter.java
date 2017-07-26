@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,19 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
         }
 
         @Override
-        public void onClick(View view) {}
+        public void onClick(View view) {
+            TextView jokeName = (TextView) view.findViewById(R.id.joke_name);
+            TextView userName = (TextView) view.findViewById(R.id.user_name);
+            TextView jokeBody = (TextView) view.findViewById(R.id.joke_body);
+            String jokeBodyString = jokeBody.getText().toString();
+            String userNameString = userName.getText().toString();
+            String jokeNameString = jokeName.getText().toString();
+            Intent intent = new Intent(context, JokeActivity.class);
+            intent.putExtra(context.getString(R.string.jokeBody), jokeBodyString);
+            intent.putExtra(context.getString(R.string.userName), userNameString);
+            intent.putExtra(context.getString(R.string.jokeTitle), jokeNameString);
+            context.startActivity(intent);
+        }
     }
 
 

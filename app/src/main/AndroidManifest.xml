@@ -22,6 +22,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".GenreActivity"
+            android:label="@string/genres"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".JokesActivity"
+            android:label="@string/jokes_list"
+            android:parentActivityName=".GenreActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".GenreActivity" />
+        </activity>
+        <activity
+            android:name=".JokeActivity"
+            android:label="@string/jokes_list"
+            android:parentActivityName=".JokesActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".JokesActivity" />
+        </activity>
     </application>
 
 </manifest>
