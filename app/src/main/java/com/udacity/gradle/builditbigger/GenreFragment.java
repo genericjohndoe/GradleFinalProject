@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
     private ChildEventListener mChildEventListener;
 
     RecyclerView recyclerview;
-    JokeAdapter jokeAdapter;
     GenreAdapter genreAdapter;
     List<String> genres;
     String langauge;
@@ -43,6 +43,7 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("GF", "GF started");
 
         Intent intent = getActivity().getIntent();
         Bundle extras = intent.getExtras();
@@ -51,6 +52,7 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGenreDatabaseReference = mFirebaseDatabase.getReference().child(getString(R.string.languages)).child(langauge).
                 child(getString(R.string.genres));
+        if (mGenreDatabaseReference == null) Log.i("GF", "Database reference is null");
         genres = new ArrayList<>();
         genreAdapter = new GenreAdapter(getActivity(),genres, this);
         mChildEventListener = new ChildEventListener() {
@@ -59,6 +61,7 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
                 String genre = dataSnapshot.getKey();
                 genres.add(genre);
                 genreAdapter.notifyItemInserted(genres.size() - 1);
+                Log.i("GF", genre);
             }
 
             @Override
@@ -83,7 +86,7 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
         recyclerview = (RecyclerView) root.findViewById(R.id.recycler_view);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        recyclerview.setAdapter(jokeAdapter);
+        recyclerview.setAdapter(genreAdapter);
         root.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
