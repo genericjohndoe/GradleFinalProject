@@ -36,7 +36,6 @@ public class MainActivityFragment extends Fragment {
     LanguageAdapter languageAdapter;
     List<String> languages;
 
-
     public MainActivityFragment() {}
 
     @Override
@@ -49,7 +48,7 @@ public class MainActivityFragment extends Fragment {
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String language = dataSnapshot.getKey();
+                String language = dataSnapshot.getValue(String.class);
                 languages.add(language);
                 languageAdapter.notifyItemInserted(languages.size() - 1);
             }

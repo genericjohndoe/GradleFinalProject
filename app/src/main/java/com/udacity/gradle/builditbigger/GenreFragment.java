@@ -36,7 +36,7 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
     RecyclerView recyclerview;
     GenreAdapter genreAdapter;
     List<String> genres;
-    String langauge;
+    String langaugeGenre;
 
     public GenreFragment() {}
 
@@ -47,11 +47,10 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
 
         Intent intent = getActivity().getIntent();
         Bundle extras = intent.getExtras();
-        if (extras != null) langauge = extras.getString(getString(R.string.languages));
+        if (extras != null) langaugeGenre = extras.getString(getString(R.string.languages));
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGenreDatabaseReference = mFirebaseDatabase.getReference().child(getString(R.string.languages)).child(langauge).
-                child(getString(R.string.genres));
+        mGenreDatabaseReference = mFirebaseDatabase.getReference().child(langaugeGenre);
         if (mGenreDatabaseReference == null) Log.i("GF", "Database reference is null");
         genres = new ArrayList<>();
         genreAdapter = new GenreAdapter(getActivity(),genres, this);
@@ -61,7 +60,6 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
                 String genre = dataSnapshot.getKey();
                 genres.add(genre);
                 genreAdapter.notifyItemInserted(genres.size() - 1);
-                Log.i("GF", genre);
             }
 
             @Override
@@ -111,6 +109,6 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
 
     @Override
     public String passItem() {
-        return langauge;
+        return langaugeGenre;
     }
 }

@@ -22,8 +22,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
     public JokeAdapter(Context context, List<Joke> objects) {
         this.context = context;
         this.jokes = objects;
-
-
     }
 
     public class JokeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

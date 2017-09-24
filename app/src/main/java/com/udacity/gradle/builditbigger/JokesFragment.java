@@ -53,8 +53,7 @@ public class JokesFragment extends Fragment {
         }
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(getString(R.string.languages))
-                .child(language).child(getString(R.string.genres)).child(genre);
+        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
         jokes = new ArrayList<>();
         jokeAdapter = new JokeAdapter(getActivity(), jokes);
         mChildEventListener = new ChildEventListener() {

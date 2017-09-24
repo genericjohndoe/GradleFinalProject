@@ -40,7 +40,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
             TextView tv = (TextView) view;
             String text = tv.getText().toString();
             Intent intent = new Intent(context, GenreActivity.class);
-            intent.putExtra(context.getString(R.string.languages), text);
+            intent.putExtra(context.getString(R.string.languages), text + " Genres");
             context.startActivity(intent);
         }
     }
