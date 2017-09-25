@@ -14,22 +14,22 @@ import java.util.List;
  * Created by joeljohnson on 7/17/17.
  */
 
-public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder> {
+public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHolder> {
     Context context;
     List<Joke> jokes;
 
 
-    public JokeAdapter(Context context, List<Joke> objects) {
+    public JokesAdapter(Context context, List<Joke> objects) {
         this.context = context;
         this.jokes = objects;
     }
 
-    public class JokeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class JokesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView jokeName;
         TextView userName;
         TextView jokeBody;
 
-        public JokeViewHolder(View view) {
+        public JokesViewHolder(View view) {
             super(view);
             jokeName = (TextView) view.findViewById(R.id.joke_name);
             userName = (TextView) view.findViewById(R.id.user_name);
@@ -61,13 +61,13 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
     }
 
     @Override
-    public JokeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public JokesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, null);
-        return new JokeViewHolder(view);
+        return new JokesViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(JokeViewHolder holder, int position) {
+    public void onBindViewHolder(JokesViewHolder holder, int position) {
         Joke joke = jokes.get(position);
         holder.jokeName.setText(joke.getJokeTitle());
         holder.userName.setText(joke.getUserName());

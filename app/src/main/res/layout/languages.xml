@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/languages"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="@android:style/TextAppearance.Material.Display2">
+    android:orientation="horizontal"
+    android:gravity="center"
+    >
 
-</TextView>
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/language_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:buttonTint="@color/common_google_signin_btn_text_dark_default" />
+
+    <TextView
+        android:id="@+id/language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="monospace"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"
+        android:textSize="30sp" />
+
+
+</LinearLayout>

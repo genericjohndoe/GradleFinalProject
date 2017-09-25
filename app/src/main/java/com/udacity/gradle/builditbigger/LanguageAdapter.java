@@ -1,14 +1,13 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
-
-import java.util.List;
 
 /**
  * Created by joeljohnson on 7/25/17.
@@ -17,37 +16,50 @@ import java.util.List;
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder> {
 
     Context context;
-    List<String> languages;
+    RecyclerViewCallback rvc;
+    String[] languages = new String[]{"English", "Español", "Français", "Deutsch", "Português","русский",
+            "العربية","中文","日本語", "हिंदी"};
 
 
-    public LanguageAdapter(Context context, List<String> languages) {
+    public LanguageAdapter(Context context, RecyclerViewCallback rvc) {
         this.context = context;
-        this.languages = languages;
+        this.rvc = rvc;
     }
 
     public class LanguageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView language;
+        CheckBox checkBox;
 
         public LanguageViewHolder(View view) {
             super(view);
-            language = (TextView) view.findViewById(R.id.languages);
+            language = (TextView) view.findViewById(R.id.language);
+            checkBox = (CheckBox) view.findViewById(R.id.language_checkbox);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String text = language.getText().toString();
+                    Log.i("joke", "text = " + text);
+                    rvc.passItem(text);
+                }
+            });
             view.setOnClickListener(this);
             view.setTag(this);
         }
 
         @Override
         public void onClick(View view) {
-            TextView tv = (TextView) view;
-            String text = tv.getText().toString();
-            Intent intent = new Intent(context, GenreActivity.class);
-            intent.putExtra(context.getString(R.string.languages), text + " Genres");
-            context.startActivity(intent);
+            if (checkBox.isChecked()) {
+                //TextView tv = (TextView) view;
+                String text = language.getText().toString();
+                Log.i("joke", "text = " + text);
+                rvc.passItem(text);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return languages.size();
+        return languages.length;
     }
 
     @Override
@@ -58,7 +70,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
 
     @Override
     public void onBindViewHolder(LanguageViewHolder holder, int position) {
-        String language = languages.get(position);
+        String language = languages[position];
         holder.language.setText(language);
     }
 }

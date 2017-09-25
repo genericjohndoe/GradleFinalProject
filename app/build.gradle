@@ -36,10 +36,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    //compile project(path: ':backend', configuration: 'android-endpoints')
-    //compile project(':mylibrary')
 
     compile 'com.afollestad.material-dialogs:core:0.9.4.5'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //Firebase
     compile 'com.google.firebase:firebase-database:11.0.2'

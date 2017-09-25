@@ -18,13 +18,13 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
     Context context;
     List<String> genres;
-    RecyclerViewCallback rvc;
+    //RecyclerViewCallback rvc;
 
 
-    public GenreAdapter(Context context, List<String> genres, RecyclerViewCallback rvc) {
+    public GenreAdapter(Context context, List<String> genres) {
         this.context = context;
         this.genres = genres;
-        this.rvc = rvc;
+        //this.rvc = rvc;
     }
 
     public class GenreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -32,7 +32,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
         public GenreViewHolder(View view) {
             super(view);
-            genre = (TextView) view.findViewById(R.id.languages);
+            genre = (TextView) view.findViewById(R.id.genre_title);
             view.setOnClickListener(this);
             view.setTag(this);
         }
@@ -42,7 +42,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
             TextView tv = (TextView) view;
             Intent intent = new Intent(context, JokesActivity.class);
             intent.putExtra(context.getString(R.string.genres), tv.getText().toString());
-            intent.putExtra(context.getString(R.string.languages), rvc.passItem());
+            //intent.putExtra(context.getString(R.string.languages), rvc.passItem());
             context.startActivity(intent);
         }
     }
@@ -54,7 +54,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
     @Override
     public GenreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.languages, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.genre_text_view, null);
         return new GenreViewHolder(view);
     }
 

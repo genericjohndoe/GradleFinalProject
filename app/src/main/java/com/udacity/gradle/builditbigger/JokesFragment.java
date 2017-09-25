@@ -33,7 +33,7 @@ public class JokesFragment extends Fragment {
     private ChildEventListener mChildEventListener;
 
     RecyclerView recyclerview;
-    JokeAdapter jokeAdapter;
+    JokesAdapter jokeAdapter;
     List<Joke> jokes;
     String genre;
     String language;
@@ -55,7 +55,7 @@ public class JokesFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
         jokes = new ArrayList<>();
-        jokeAdapter = new JokeAdapter(getActivity(), jokes);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -82,7 +82,7 @@ public class JokesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_main, container, false);
+        View root = inflater.inflate(R.layout.fragment_jokes, container, false);
         recyclerview = (RecyclerView) root.findViewById(R.id.recycler_view);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));

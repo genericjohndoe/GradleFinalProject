@@ -26,7 +26,7 @@ import java.util.List;
  * Created by joeljohnson on 7/25/17.
  */
 
-public class GenreFragment extends Fragment implements RecyclerViewCallback {
+public class GenreFragment extends Fragment  {
 
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
@@ -53,7 +53,7 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
         mGenreDatabaseReference = mFirebaseDatabase.getReference().child(langaugeGenre);
         if (mGenreDatabaseReference == null) Log.i("GF", "Database reference is null");
         genres = new ArrayList<>();
-        genreAdapter = new GenreAdapter(getActivity(),genres, this);
+        genreAdapter = new GenreAdapter(getActivity(),genres);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -80,8 +80,8 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_main, container, false);
-        recyclerview = (RecyclerView) root.findViewById(R.id.recycler_view);
+        View root = inflater.inflate(R.layout.fragment_genre, container, false);
+        recyclerview = (RecyclerView) root.findViewById(R.id.genre_recyclerview);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(genreAdapter);
@@ -107,8 +107,5 @@ public class GenreFragment extends Fragment implements RecyclerViewCallback {
         return root;
     }
 
-    @Override
-    public String passItem() {
-        return langaugeGenre;
-    }
+
 }

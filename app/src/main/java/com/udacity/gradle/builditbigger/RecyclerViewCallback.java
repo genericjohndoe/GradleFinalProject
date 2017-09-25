@@ -6,5 +6,5 @@ package com.udacity.gradle.builditbigger;
 
 public interface RecyclerViewCallback {
 
-    String passItem();
+    void passItem(String item);
 }
