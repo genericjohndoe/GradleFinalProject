@@ -2,15 +2,16 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -83,7 +84,7 @@ public class JokesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_jokes, container, false);
-        recyclerview = (RecyclerView) root.findViewById(R.id.recycler_view);
+        recyclerview = root.findViewById(R.id.recycler_view);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
@@ -91,16 +92,19 @@ public class JokesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.add_joke)
-                        .content(R.string.add_joke_short)
-                        .backgroundColorRes(R.color.material_blue_grey_800)
-                        .inputType(InputType.TYPE_CLASS_TEXT)
-                        .input(R.string.input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
+                        .customView(R.layout.activity_new_joke, true)
+                        .positiveText("Submit")
+                        .negativeText("Cancel")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
-                                if (!input.equals("") || !input.equals(null)) {
-                                    Joke newJoke = new Joke("new joke", "me", input.toString());
-                                    mjokesDatabaseReference.push().setValue(newJoke);
-                                }
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
                             }
                         })
                         .show().setCanceledOnTouchOutside(false);
