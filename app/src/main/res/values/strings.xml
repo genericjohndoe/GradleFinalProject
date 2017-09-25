@@ -8,7 +8,7 @@
     <string name="add">Add</string>
     <string name="add_joke">Add a joke to the repository</string>
     <string name="add_joke_short">Add a joke</string>
-    <string name="input_hint" translatable="false">Hey wanna here a joke ... your life</string>
+    <string name="input_hint">Hey wanna here a joke ... your life</string>
     <string name="input_prefill"></string>
     <string name="languages">languages</string>
     <string name="English">English</string>
@@ -18,5 +18,10 @@
     <string name="jokeBody">jokeBody</string>
     <string name="jokeTitle">jokeTitle</string>
     <string name="userName">userName</string>
+    <string name="add_genre">Add a genre to the repository</string>
+    <string name="add_genre_short">Add a genre</string>
+    <string name="genre_input_hint">Dank Memes Jokes</string>
+    <string name="cancel">Cancel</string>
+    <string name="restricted">restricted genre</string>
 
 </resources>
