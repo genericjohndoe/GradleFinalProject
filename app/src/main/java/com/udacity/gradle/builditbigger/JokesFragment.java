@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -98,7 +99,11 @@ public class JokesFragment extends Fragment {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                
+                                View view = dialog.getCustomView();
+                                String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
+                                String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
+                                Joke joke = new Joke(jokeTitle, "user", jokeBody);
+                                mjokesDatabaseReference.push().setValue(joke);
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {

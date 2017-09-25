@@ -7,7 +7,7 @@
     android:weightSum="1">
 
     <EditText
-        android:id="@+id/title"
+        android:id="@+id/title_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -20,7 +20,7 @@
         />
 
     <EditText
-        android:id="@+id/joke_body"
+        android:id="@+id/joke_body_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
