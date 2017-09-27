@@ -26,6 +26,7 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
     LanguageAdapter languageAdapter;
     List<String> languageList;
 
+
     public MainActivityFragment() {}
 
     @Override
