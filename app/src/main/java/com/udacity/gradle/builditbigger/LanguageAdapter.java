@@ -2,11 +2,9 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 /**
@@ -28,32 +26,18 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
 
     public class LanguageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView language;
-        CheckBox checkBox;
+
 
         public LanguageViewHolder(View view) {
             super(view);
-            language = (TextView) view.findViewById(R.id.language);
-            checkBox = (CheckBox) view.findViewById(R.id.language_checkbox);
-            checkBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String text = language.getText().toString();
-                    Log.i("joke", "text = " + text);
-                    rvc.passItem(text);
-                }
-            });
+            language = (TextView) view.findViewById(R.id.languages);
             view.setOnClickListener(this);
             view.setTag(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (checkBox.isChecked()) {
-                //TextView tv = (TextView) view;
-                String text = language.getText().toString();
-                Log.i("joke", "text = " + text);
-                rvc.passItem(text);
-            }
+            rvc.passItem(language.getText().toString());
         }
     }
 

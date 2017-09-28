@@ -1,8 +1,9 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by joeljohnson on 7/25/17.
@@ -39,7 +41,7 @@ public class GenreFragment extends Fragment  {
     RecyclerView recyclerview;
     GenreAdapter genreAdapter;
     List<String> genres;
-    String langaugeGenre;
+    String langaugeGenre = "";
 
     public GenreFragment() {}
 
@@ -48,9 +50,18 @@ public class GenreFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         Log.i("GF", "GF started");
 
-        Intent intent = getActivity().getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) langaugeGenre = extras.getString(getString(R.string.languages));
+//        Intent intent = getActivity().getIntent();
+//        Bundle extras = intent.getExtras();
+//        if (extras != null && !extras.getString(getString(R.string.languages)).equals(null)){
+//            langaugeGenre = extras.getString(getString(R.string.languages));
+//            Log.i("jokes", "pulled from intent");
+//        } else {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
+            langaugeGenre = set.toArray()[0] + " Genres";
+            Log.i("jokes", "pulled from set");
+            //langaugeGenre = "English Genres";
+        //}
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGenreDatabaseReference = mFirebaseDatabase.getReference().child(langaugeGenre);

@@ -23,5 +23,6 @@
     <string name="genre_input_hint">Dank Memes Jokes</string>
     <string name="cancel">Cancel</string>
     <string name="restricted">restricted genre</string>
+    <string name="preference_saved_languages_set">saved languages</string>
 
 </resources>

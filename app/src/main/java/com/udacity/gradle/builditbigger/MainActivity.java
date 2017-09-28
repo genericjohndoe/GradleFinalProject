@@ -1,8 +1,12 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -49,6 +53,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (!pref.getBoolean("firstTimeRun", true)) {
+
+            // start the preferences activity
+            startActivity(new Intent(getBaseContext(), GenreActivity.class));
+
+            //get the preferences editor
+//            SharedPreferences.Editor editor = pref.edit();
+//
+//            // avoid for next run
+//            editor.putBoolean("firstTimeRun", false);
+//            if (editor.commit()){
+//                Log.i("jokes", "firsttimeRun saved");
+//            }
+            Log.i("jokes", "not first run");
+        } else {
+            Log.i("jokes", "first run");
+            SharedPreferences.Editor editor = pref.edit();
+
+            // avoid for next run
+            editor.putBoolean("firstTimeRun", false);
+            if (editor.commit()){
+                Log.i("jokes", "firsttimeRun saved");
+            }
+        }
     }
 
 
