@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/posts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text="Posts"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        android:layout_marginStart="8dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        app:srcCompat="@color/colorPrimary"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp" />
+
+    <Button
+        android:id="@+id/followers"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Followers"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/posts"
+        android:layout_marginStart="8dp" />
+
+    <Button
+        android:id="@+id/following"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Following"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/followers"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text='"user name"'
+        app:layout_constraintLeft_toLeftOf="@+id/following"
+        app:layout_constraintTop_toBottomOf="@+id/following" />
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:id="@+id/profile_view_pager">
+
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:id="@+id/profile_tab_layout"
+            android:visibility="visible">
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Posts"
+                android:visibility="visible" />
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Genres"
+                android:visibility="visible" />
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Media"
+                android:visibility="visible" />
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Likes"
+                android:visibility="visible" />
+
+        </android.support.design.widget.TabLayout>
+
+
+    </android.support.v4.view.ViewPager>
+
+</android.support.constraint.ConstraintLayout>

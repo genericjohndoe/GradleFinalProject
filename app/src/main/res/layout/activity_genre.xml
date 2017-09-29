@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
-    android:name="com.udacity.gradle.builditbigger.GenreFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout="@layout/fragment_genre" />
+<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:id="@+id/fragment"-->
+    <!--android:name="com.udacity.gradle.builditbigger.GenreFragment"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:layout="@layout/fragment_genre" />-->
+
+<android.support.v4.view.ViewPager
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/pager"
+android:layout_width="match_parent"
+android:layout_height="match_parent" />

@@ -55,23 +55,12 @@ public class MainActivity extends AppCompatActivity {
         };
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (!pref.getBoolean("firstTimeRun", true)) {
-
             // start the preferences activity
             startActivity(new Intent(getBaseContext(), GenreActivity.class));
-
-            //get the preferences editor
-//            SharedPreferences.Editor editor = pref.edit();
-//
-//            // avoid for next run
-//            editor.putBoolean("firstTimeRun", false);
-//            if (editor.commit()){
-//                Log.i("jokes", "firsttimeRun saved");
-//            }
             Log.i("jokes", "not first run");
         } else {
             Log.i("jokes", "first run");
             SharedPreferences.Editor editor = pref.edit();
-
             // avoid for next run
             editor.putBoolean("firstTimeRun", false);
             if (editor.commit()){

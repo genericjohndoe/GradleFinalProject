@@ -53,7 +53,6 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), GenreActivity.class);
-                //intent.putExtra(getActivity().getString(R.string.languages), languageList.get(0) + " Genres");
                 getActivity().startActivity(intent);
             }
         });

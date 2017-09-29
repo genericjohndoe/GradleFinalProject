@@ -1,16 +1,13 @@
 package com.udacity.gradle.builditbigger;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.firebase.ui.auth.AuthUI;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Arrays;
 
 /**
  * Created by joeljohnson on 7/25/17.
@@ -18,41 +15,15 @@ import java.util.Arrays;
 
 public class GenreActivity extends AppCompatActivity {
 
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-    public static final int RC_SIGN_IN = 1;
-    private String mUsername;
-    public static final String ANONYMOUS = "anonymous";
-
+    ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre);
-
-        mUsername = ANONYMOUS;
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    onSignedInInitialize(user.getDisplayName());
-                } else {
-                    // User is signed out
-                    onSignedOutCleanup();
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setAvailableProviders(
-                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-            }
-        };
+        PagerAdapter mAdapter = new PagerAdapter(getSupportFragmentManager());
+        viewPager = findViewById(R.id.pager);
+        viewPager.setAdapter(mAdapter);
+        viewPager.setCurrentItem(0);
 
     }
 
@@ -79,25 +50,23 @@ public class GenreActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onSignedInInitialize(String username) {
-        mUsername = username;
-    }
+    private class PagerAdapter extends FragmentPagerAdapter {
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    private void onSignedOutCleanup() {
-        mUsername = ANONYMOUS;
-    }
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new GenreFragment();
+            } else {
+                return new Profile();
+            }
+        }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        if (mAuthStateListener != null) {
-//            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-//        }
+        @Override
+        public int getCount() {
+            return 2;
+        }
     }
 }
