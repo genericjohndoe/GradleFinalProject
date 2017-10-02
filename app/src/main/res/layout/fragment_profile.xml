@@ -12,12 +12,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:text="Posts"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/profile_imageview"
+        app:layout_constraintTop_toTopOf="@+id/profile_imageview"
         android:layout_marginStart="8dp" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profile_imageview"
         android:layout_width="100dp"
         android:layout_height="150dp"
         app:srcCompat="@color/colorPrimary"
@@ -35,7 +35,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="Followers"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/profile_imageview"
         app:layout_constraintTop_toBottomOf="@+id/posts"
         android:layout_marginStart="8dp" />
 
@@ -47,7 +47,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="Following"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/profile_imageview"
         app:layout_constraintTop_toBottomOf="@+id/followers"
         android:layout_marginStart="8dp" />
 
@@ -66,8 +66,8 @@
         android:layout_marginLeft="0dp"
         android:layout_marginTop="16dp"
         android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintLeft_toLeftOf="@+id/profile_imageview"
+        app:layout_constraintTop_toBottomOf="@+id/profile_imageview"
         android:id="@+id/profile_view_pager">
 
         <android.support.design.widget.TabLayout

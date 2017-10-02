@@ -62,8 +62,8 @@ public class JokesFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Joke joke = dataSnapshot.getValue(Joke.class);
-                jokes.add(joke);
-                jokeAdapter.notifyItemInserted(jokes.size() - 1);
+                jokes.add(0,joke);
+                jokeAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -103,7 +103,7 @@ public class JokesFragment extends Fragment {
                                 String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
                                 String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
                                 Joke joke = new Joke(jokeTitle, "user", jokeBody);
-                                mjokesDatabaseReference.push().setValue(joke);
+                                mjokesDatabaseReference.push().setValue(joke, 0);
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {

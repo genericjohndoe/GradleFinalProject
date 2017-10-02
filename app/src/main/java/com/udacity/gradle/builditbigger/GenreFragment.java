@@ -71,9 +71,9 @@ public class GenreFragment extends Fragment  {
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String genre = dataSnapshot.getKey();
-                genres.add(genre);
-                genreAdapter.notifyItemInserted(genres.size() - 1);
+                String genre = dataSnapshot.getValue(String.class);
+                genres.add(0,genre);
+                genreAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -117,7 +117,7 @@ public class GenreFragment extends Fragment  {
                             public void onInput(MaterialDialog dialog, CharSequence input) {
                                 if (!input.equals("") || !input.equals(null)) {
                                     String newGenre = input.toString();
-                                    mGenreDatabaseReference.push().setValue(newGenre);
+                                    mGenreDatabaseReference.push().setValue(newGenre, 0);
                                 }
                             }
                         })

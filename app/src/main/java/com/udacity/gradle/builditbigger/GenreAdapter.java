@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,8 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
     @Override
     public void onBindViewHolder(GenreViewHolder holder, int position) {
-        String language = genres.get(position);
-        holder.genre.setText(language);
+        String genre = genres.get(position);
+        holder.genre.setText(genre);
+        Log.i("genre adapter", genre + " at " + position);
     }
 }
