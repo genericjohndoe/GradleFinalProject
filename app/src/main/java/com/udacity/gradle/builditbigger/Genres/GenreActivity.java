@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Genres;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.udacity.gradle.builditbigger.UserSpecific.Profile;
+import com.udacity.gradle.builditbigger.R;
 
 /**
  * Created by joeljohnson on 7/25/17.

@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".MainActivity"
+            android:name=".SignInTutorial.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,36 +23,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GenreActivity"
+            android:name=".Genres.GenreActivity"
             android:label="@string/genres"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".SignInTutorial.MainActivity"
             android:theme="@style/AppTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value=".MainActivity" />-->
         </activity>
         <activity
-            android:name=".JokesActivity"
+            android:name=".Jokes.JokesActivity"
             android:label="@string/jokes_list"
-            android:parentActivityName=".GenreActivity"
+            android:parentActivityName=".Genres.GenreActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GenreActivity" />
+                android:value=".Genres.GenreActivity" />
         </activity>
         <activity
-            android:name=".JokeActivity"
+            android:name=".Joke.JokeActivity"
             android:label="@string/jokes_list"
-            android:parentActivityName=".JokesActivity"
+            android:parentActivityName=".Jokes.JokesActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".JokesActivity" />
+                android:value=".Jokes.JokesActivity" />
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Genres;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -22,9 +22,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -50,18 +53,11 @@ public class GenreFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         Log.i("GF", "GF started");
 
-//        Intent intent = getActivity().getIntent();
-//        Bundle extras = intent.getExtras();
-//        if (extras != null && !extras.getString(getString(R.string.languages)).equals(null)){
-//            langaugeGenre = extras.getString(getString(R.string.languages));
-//            Log.i("jokes", "pulled from intent");
-//        } else {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
             langaugeGenre = set.toArray()[0] + " Genres";
-            Log.i("jokes", "pulled from set");
-            //langaugeGenre = "English Genres";
-        //}
+            Log.i("jokes", Locale.getDefault().getDisplayLanguage());
+
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGenreDatabaseReference = mFirebaseDatabase.getReference().child(langaugeGenre);

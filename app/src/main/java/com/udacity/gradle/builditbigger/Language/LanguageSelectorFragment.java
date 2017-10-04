@@ -1,41 +1,35 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Language;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.udacity.gradle.builditbigger.Genres.GenreActivity;
-import com.udacity.gradle.builditbigger.Language.LanguageAdapter;
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.RecyclerViewCallback;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import agency.tango.materialintroscreen.SlideFragment;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Created by joeljohnson on 10/3/17.
  */
-public class MainActivityFragment extends Fragment implements RecyclerViewCallback {
+
+public class LanguageSelectorFragment extends SlideFragment implements RecyclerViewCallback {
 
     RecyclerView recyclerview;
-    ImageButton imageButton;
     LanguageAdapter languageAdapter;
     List<String> languageList;
-
-
-
-    public MainActivityFragment() {}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,21 +39,32 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_main, container, false);
-        recyclerview = root.findViewById(R.id.languages_recyclerview);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_main, container, false);
+        recyclerview = view.findViewById(R.id.languages_recyclerview);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.setAdapter(languageAdapter);
-        imageButton = root.findViewById(R.id.proceed);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), GenreActivity.class);
-                getActivity().startActivity(intent);
-            }
-        });
-        return root;
+        return view;
+    }
+
+    @Override
+    public int backgroundColor() {
+        return R.color.primary;
+    }
+
+    @Override
+    public int buttonsColor() {
+        return R.color.accent;
+    }
+
+    @Override
+    public boolean canMoveFurther() {
+        return languageList.size() >= 1;
+    }
+
+    @Override
+    public String cantMoveFurtherErrorMessage() {
+        return "No Language Selected";
     }
 
     @Override
@@ -74,5 +79,5 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
         }
         Log.i("joke", ""+languageList.size());
     }
-}
 
+}

@@ -1,9 +1,11 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Jokes;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.udacity.gradle.builditbigger.R;
 
 /**
  * Created by joeljohnson on 7/25/17.

@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Jokes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.udacity.gradle.builditbigger.Joke.Joke;
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

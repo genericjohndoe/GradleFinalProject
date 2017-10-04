@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Language;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.RecyclerViewCallback;
 
 /**
  * Created by joeljohnson on 7/25/17.

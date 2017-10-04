@@ -1,11 +1,10 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.SignInTutorial;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,11 +12,18 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.udacity.gradle.builditbigger.Genres.GenreActivity;
+import com.udacity.gradle.builditbigger.Language.LanguageSelectorFragment;
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.UserSpecific.ChooseUserNameFragment;
 
 import java.util.Arrays;
 
+import agency.tango.materialintroscreen.MaterialIntroActivity;
+import agency.tango.materialintroscreen.SlideFragmentBuilder;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends MaterialIntroActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -28,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         mUsername = ANONYMOUS;
         mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (!pref.getBoolean("firstTimeRun", true)) {
             // start the preferences activity
-            startActivity(new Intent(getBaseContext(), GenreActivity.class));
+            //startActivity(new Intent(getBaseContext(), GenreActivity.class));
             Log.i("jokes", "not first run");
         } else {
             Log.i("jokes", "first run");
@@ -67,6 +73,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("jokes", "firsttimeRun saved");
             }
         }
+
+        addSlide(new SlideFragmentBuilder()
+                .backgroundColor(R.color.primary)
+                .buttonsColor(R.color.accent)
+                .title("Test title")
+                .description("test description")
+                .build());
+        addSlide(new LanguageSelectorFragment());
+        addSlide(new ChooseUserNameFragment());
+
     }
 
 
@@ -112,5 +128,12 @@ public class MainActivity extends AppCompatActivity {
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
+    }
+
+    @Override
+    public void onFinish() {
+        super.onFinish();
+        startActivity(new Intent(getBaseContext(), GenreActivity.class));
+        Log.i("joke", "onFinished called");
     }
 }

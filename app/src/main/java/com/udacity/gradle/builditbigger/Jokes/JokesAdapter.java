@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Jokes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.udacity.gradle.builditbigger.Joke.Joke;
+import com.udacity.gradle.builditbigger.Joke.JokeActivity;
+import com.udacity.gradle.builditbigger.R;
 
 import java.util.List;
 

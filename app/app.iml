@@ -42,13 +42,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/freeDebug/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/freeDebug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/freeDebug/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/free/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/free/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/free/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/free/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/free/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/free/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/free/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFreeDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFreeDebug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFreeDebug/assets" type="java-test-resource" />
@@ -56,6 +49,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testFreeDebug/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFreeDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testFreeDebug/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/free/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/free/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/free/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/free/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/apt/androidTest/free/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/free/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/free/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/free/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/free/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/free/assets" type="java-resource" />
@@ -162,6 +162,7 @@
     <orderEntry type="library" exported="" name="animated-vector-drawable-26.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javawriter-2.1.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-26.0.1" level="project" />
+    <orderEntry type="library" exported="" name="material-intro-screen-0.0.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="firebase-common-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-lite-11.0.4" level="project" />

@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Joke;
 
 /**
  * Created by joeljohnson on 7/17/17.
