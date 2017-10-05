@@ -19,11 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.R;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 //import com.firebase.ui.auth.User;
 
 /**
@@ -68,14 +63,14 @@ public class Profile extends Fragment {
             Glide.with(this)
                     .load(mFirebaseUser.getPhotoUrl())
                     .into(mProfileImageView);
-            Map<String, Object> map = new HashMap<>();
-            User user1 = new User("dd","www.google.com",new ArrayList<User>(),new ArrayList<User>());
-            User user2 = new User("tt","www.google.com",new ArrayList<User>(),new ArrayList<User>());
-            List<User> users = new ArrayList<>();
-            users.add(user1);
-            users.add(user2);
-            map.put(mFirebaseUser.getUid(), new User("jj","www.google.com",users,users));
-            userDatabaseReference.child(mFirebaseUser.getUid()).setValue(new User("jj","www.google.com",users,users));
+//            Map<String, Object> map = new HashMap<>();
+//            User user1 = new User("dd","www.google.com",new ArrayList<User>(),new ArrayList<User>());
+//            User user2 = new User("tt","www.google.com",new ArrayList<User>(),new ArrayList<User>());
+//            List<User> users = new ArrayList<>();
+//            users.add(user1);
+//            users.add(user2);
+//            map.put(mFirebaseUser.getUid(), new User("jj","www.google.com",users,users));
+//            userDatabaseReference.child(mFirebaseUser.getUid()).setValue(new User("jj","www.google.com",users,users));
         }
 
         return root;
