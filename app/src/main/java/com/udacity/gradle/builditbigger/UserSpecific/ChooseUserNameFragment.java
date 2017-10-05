@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger.UserSpecific;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,17 +51,21 @@ public class ChooseUserNameFragment extends SlideFragment {
                     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     final String userName = editText.getText().toString();
                     Query query = userDatabaseReference.child("userlist").limitToFirst(1).equalTo(userName).orderByValue();
-                    query.addValueEventListener(new ValueEventListener() {
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.i("joke", "onDataChange called");
                             if (dataSnapshot.getChildrenCount() == 0){
                                 userDatabaseReference.child(firebaseUser.getUid())
                                         .setValue(new User(userName,"www.google.com",null,null));
                                 userDatabaseReference.getRoot().child("userlist")
                                         .child(firebaseUser.getUid()).setValue(userName);
+                                Log.i("joke", "no username found");
+
                             } else {
                                 Toast toast = Toast.makeText(getActivity(), "User name taken", Toast.LENGTH_SHORT);
                                 toast.show();
+                                Log.i("joke", "user name found");
                             }
                         }
 
