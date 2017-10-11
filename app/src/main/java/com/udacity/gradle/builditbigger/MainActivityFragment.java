@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.udacity.gradle.builditbigger.Genres.GenreActivity;
 import com.udacity.gradle.builditbigger.Language.LanguageAdapter;
 
 import java.util.ArrayList;
@@ -51,14 +49,14 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
         recyclerview = root.findViewById(R.id.languages_recyclerview);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.setAdapter(languageAdapter);
-        imageButton = root.findViewById(R.id.proceed);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), GenreActivity.class);
-                getActivity().startActivity(intent);
-            }
-        });
+//        imageButton = root.findViewById(R.id.proceed);
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), GenreActivity.class);
+//                getActivity().startActivity(intent);
+//            }
+//        });
         return root;
     }
 

@@ -6,19 +6,21 @@ import java.util.List;
  * Created by joeljohnson on 10/2/17.
  */
 
-public class User {
+public class HilarityUser {
     String userName;
     String urlString;
-    List<User> followers;
-    List<User> following;
+    List<HilarityUser> followers;
+    List<HilarityUser> following;
+    String[] languages;
 
-    public User(){}
+    public HilarityUser(){}
 
-    public User(String userName, String urlString, List<User> followers, List<User> following){
+    public HilarityUser(String userName, String urlString, List<HilarityUser> followers, List<HilarityUser> following, String[] languages){
         this.userName = userName;
         this.urlString = urlString;
         this.followers = followers;
         this.following = following;
+        this.languages = languages;
     }
 
     public String getUserName(){
@@ -29,13 +31,15 @@ public class User {
         return urlString;
     }
 
-    public List<User>  getFollowers(){
+    public List<HilarityUser>  getFollowers(){
         return followers;
     }
 
-    public List<User> getFollowing(){
+    public List<HilarityUser> getFollowing(){
         return following;
     }
+
+    public String[] getLanguages() { return languages;}
 
     public void setUserName(String userName){
         this.userName = userName;
@@ -45,12 +49,18 @@ public class User {
         this.urlString = urlString;
     }
 
-    public void setFollowers(List<User> followers){
+    public void setFollowers(List<HilarityUser> followers){
         this.followers = followers;
     }
 
-    public void setFollowing(List<User> following){
+    public void setFollowing(List<HilarityUser> following){
         this.following = following;
     }
+
+    public void setLanguages(String[] languages){
+        this.languages = languages;
+    }
+
+
 }
 

@@ -12,6 +12,12 @@ import android.view.MenuItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Genres.GenreActivity;
 import com.udacity.gradle.builditbigger.Language.LanguageSelectorFragment;
 import com.udacity.gradle.builditbigger.R;
@@ -27,6 +33,7 @@ public class MainActivity extends MaterialIntroActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private DatabaseReference databaseReference;
     public static final int RC_SIGN_IN = 1;
     private String mUsername;
     public static final String ANONYMOUS = "anonymous";
@@ -43,10 +50,21 @@ public class MainActivity extends MaterialIntroActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    onSignedInInitialize(user.getDisplayName());
+                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                    Query query = databaseReference.limitToFirst(1).equalTo(user.getUid()).orderByKey();
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getChildrenCount() == 1){
+                                startActivity(new Intent(getBaseContext(), GenreActivity.class));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
                 } else {
-                    // User is signed out
-                    onSignedOutCleanup();
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()

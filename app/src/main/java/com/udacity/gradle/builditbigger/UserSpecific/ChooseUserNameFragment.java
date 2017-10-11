@@ -1,6 +1,8 @@
 package com.udacity.gradle.builditbigger.UserSpecific;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.R;
 
+import java.util.Set;
+
 import agency.tango.materialintroscreen.SlideFragment;
 
 /**
@@ -31,11 +35,12 @@ public class ChooseUserNameFragment extends SlideFragment {
     ImageButton imageButton;
     DatabaseReference userDatabaseReference;
     FirebaseUser firebaseUser;
+    boolean userNameCreated;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        userNameCreated = false;
     }
 
     @Override
@@ -56,12 +61,15 @@ public class ChooseUserNameFragment extends SlideFragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Log.i("joke", "onDataChange called");
                             if (dataSnapshot.getChildrenCount() == 0){
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                                Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
+
                                 userDatabaseReference.child(firebaseUser.getUid())
-                                        .setValue(new User(userName,"www.google.com",null,null));
+                                        .setValue(new HilarityUser(userName,"www.google.com",null,null, (String[]) set.toArray()));
                                 userDatabaseReference.getRoot().child("userlist")
                                         .child(firebaseUser.getUid()).setValue(userName);
                                 Log.i("joke", "no username found");
-
+                                userNameCreated = true;
                             } else {
                                 Toast toast = Toast.makeText(getActivity(), "User name taken", Toast.LENGTH_SHORT);
                                 toast.show();
@@ -93,11 +101,11 @@ public class ChooseUserNameFragment extends SlideFragment {
 
     @Override
     public boolean canMoveFurther() {
-        return true;
+        return userNameCreated;
     }
 
     @Override
     public String cantMoveFurtherErrorMessage() {
-        return "No Language Selected";
+        return "Must Pick Viable User Name First";
     }
 }

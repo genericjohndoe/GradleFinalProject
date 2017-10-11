@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"
-    android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"
     android:textSize="30sp"
     />
 
