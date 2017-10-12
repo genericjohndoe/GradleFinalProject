@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Genres.GenreActivity;
 import com.udacity.gradle.builditbigger.Language.LanguageSelectorFragment;
 import com.udacity.gradle.builditbigger.R;
@@ -50,6 +51,7 @@ public class MainActivity extends MaterialIntroActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    Constants.UID = user.getUid();
                     databaseReference = FirebaseDatabase.getInstance().getReference();
                     Query query = databaseReference.limitToFirst(1).equalTo(user.getUid()).orderByKey();
                     query.addListenerForSingleValueEvent(new ValueEventListener() {

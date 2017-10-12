@@ -9,4 +9,5 @@ import com.udacity.gradle.builditbigger.UserSpecific.HilarityUser;
 public class Constants {
 
     public static HilarityUser user;
+    public static String UID;
 }

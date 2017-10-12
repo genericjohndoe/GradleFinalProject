@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 
 //import com.firebase.ui.auth.User;
@@ -62,7 +63,8 @@ public class Profile extends Fragment {
             userDatabaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
+                    HilarityUser user = dataSnapshot.getValue(HilarityUser.class);
+                    Constants.user = user;
                     mUserNameTextView.setText(user.getUserName());
                 }
 

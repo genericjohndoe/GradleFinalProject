@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
@@ -35,6 +36,7 @@ public class JokesFragment extends Fragment {
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mjokesDatabaseReference;
+    private DatabaseReference mPersonaljokesDatabaseReference;
     private ChildEventListener mChildEventListener;
 
     RecyclerView recyclerview;
@@ -59,6 +61,7 @@ public class JokesFragment extends Fragment {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
+        mPersonaljokesDatabaseReference = mFirebaseDatabase.getReference();
         jokes = new ArrayList<>();
         jokeAdapter = new JokesAdapter(getActivity(), jokes);
         mChildEventListener = new ChildEventListener() {
@@ -105,8 +108,9 @@ public class JokesFragment extends Fragment {
                                 View view = dialog.getCustomView();
                                 String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
                                 String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
-                                Joke joke = new Joke(jokeTitle, "user", jokeBody);
+                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody);
                                 mjokesDatabaseReference.push().setValue(joke, 0);
+                                mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").child(""+System.currentTimeMillis()).setValue(joke,0);
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {

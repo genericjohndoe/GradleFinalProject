@@ -11,11 +11,11 @@ public class HilarityUser {
     String urlString;
     List<HilarityUser> followers;
     List<HilarityUser> following;
-    String[] languages;
+    List<String> languages;
 
     public HilarityUser(){}
 
-    public HilarityUser(String userName, String urlString, List<HilarityUser> followers, List<HilarityUser> following, String[] languages){
+    public HilarityUser(String userName, String urlString, List<HilarityUser> followers, List<HilarityUser> following, List<String> languages){
         this.userName = userName;
         this.urlString = urlString;
         this.followers = followers;
@@ -39,7 +39,7 @@ public class HilarityUser {
         return following;
     }
 
-    public String[] getLanguages() { return languages;}
+    public List<String> getLanguages() { return languages;}
 
     public void setUserName(String userName){
         this.userName = userName;
@@ -57,7 +57,7 @@ public class HilarityUser {
         this.following = following;
     }
 
-    public void setLanguages(String[] languages){
+    public void setLanguages(List<String> languages){
         this.languages = languages;
     }
 

@@ -22,6 +22,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import agency.tango.materialintroscreen.SlideFragment;
@@ -63,9 +65,10 @@ public class ChooseUserNameFragment extends SlideFragment {
                             if (dataSnapshot.getChildrenCount() == 0){
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                                 Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
-
+                                List<String> languageList = new ArrayList<String>();
+                                languageList.addAll(set);
                                 userDatabaseReference.child(firebaseUser.getUid())
-                                        .setValue(new HilarityUser(userName,"www.google.com",null,null, (String[]) set.toArray()));
+                                        .setValue(new HilarityUser(userName,"www.google.com", null, null, languageList));
                                 userDatabaseReference.getRoot().child("userlist")
                                         .child(firebaseUser.getUid()).setValue(userName);
                                 Log.i("joke", "no username found");

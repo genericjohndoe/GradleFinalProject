@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
@@ -39,6 +40,7 @@ public class GenreFragment extends Fragment  {
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGenreDatabaseReference;
+    private DatabaseReference mPersonalGenreDatabaseReference;
     private ChildEventListener mChildEventListener;
 
     RecyclerView recyclerview;
@@ -61,6 +63,7 @@ public class GenreFragment extends Fragment  {
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mGenreDatabaseReference = mFirebaseDatabase.getReference().child(langaugeGenre);
+        mPersonalGenreDatabaseReference = mFirebaseDatabase.getReference();
         if (mGenreDatabaseReference == null) Log.i("GF", "Database reference is null");
         genres = new ArrayList<>();
         genreAdapter = new GenreAdapter(getActivity(),genres);
@@ -114,6 +117,7 @@ public class GenreFragment extends Fragment  {
                                 if (!input.equals("") || !input.equals(null)) {
                                     String newGenre = input.toString();
                                     mGenreDatabaseReference.push().setValue(newGenre, 0);
+                                    mPersonalGenreDatabaseReference.child(Constants.UID + " Genres").child(newGenre).setValue(System.currentTimeMillis(),0);
                                 }
                             }
                         })
