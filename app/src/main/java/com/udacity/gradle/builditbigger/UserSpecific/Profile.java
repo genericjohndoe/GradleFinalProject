@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 
-//import com.firebase.ui.auth.User;
+
 
 /**
  * Created by joeljohnson on 9/28/17.
@@ -50,7 +52,7 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         viewPager = root.findViewById(R.id.profile_view_pager);
-        //viewPager.setAdapter();
+        viewPager.setAdapter(new ProfilePagerAdapter(getActivity().getSupportFragmentManager()));
         tabLayout = root.findViewById(R.id.profile_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
         mUserNameTextView = root.findViewById(R.id.user_name);
@@ -79,5 +81,23 @@ public class Profile extends Fragment {
         }
 
         return root;
+    }
+
+    private class ProfilePagerAdapter extends FragmentPagerAdapter {
+        public ProfilePagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) return new HilarityUserJokes();
+            if (position == 1) return new HilarityUserGenres();
+            return new HilarityUserLikes();
+        }
     }
 }

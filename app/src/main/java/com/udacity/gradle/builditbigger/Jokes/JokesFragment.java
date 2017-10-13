@@ -110,7 +110,7 @@ public class JokesFragment extends Fragment {
                                 String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
                                 Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody);
                                 mjokesDatabaseReference.push().setValue(joke, 0);
-                                mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").child(""+System.currentTimeMillis()).setValue(joke,0);
+                                mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {

@@ -92,12 +92,6 @@
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Media"
-                android:visibility="visible" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Likes"
                 android:visibility="visible" />
 
