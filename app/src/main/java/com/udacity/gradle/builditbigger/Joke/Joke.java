@@ -8,14 +8,16 @@ public class Joke {
     String jokeTitle;
     String userName;
     String jokeBody;
+    Object timeStamp;
 
-    public Joke(){
 
-    }
-    public Joke(String joke, String user, String body){
+    public Joke(){}
+
+    public Joke(String joke, String user, String body, Object time){
         jokeTitle = joke;
         userName = user;
         jokeBody = body;
+        timeStamp = time;
     }
 
     public String getJokeTitle() {
@@ -41,4 +43,8 @@ public class Joke {
     public void setJokeBody(String body){
         jokeBody = body;
     }
+
+    public Object getTimeStamp(){ return timeStamp; }
+
+
 }

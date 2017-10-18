@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.R;
@@ -108,7 +109,7 @@ public class JokesFragment extends Fragment {
                                 View view = dialog.getCustomView();
                                 String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
                                 String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
-                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody);
+                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP);
                                 mjokesDatabaseReference.push().setValue(joke, 0);
                                 mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);
                             }
