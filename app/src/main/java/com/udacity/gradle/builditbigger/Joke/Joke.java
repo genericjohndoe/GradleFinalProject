@@ -1,23 +1,29 @@
 package com.udacity.gradle.builditbigger.Joke;
 
+import com.udacity.gradle.builditbigger.Constants.Constants;
+
 /**
  * Created by joeljohnson on 7/17/17.
  */
 
 public class Joke {
-    String jokeTitle;
-    String userName;
-    String jokeBody;
-    Object timeStamp;
+    private String jokeTitle;
+    private String author;
+    private String jokeBody;
+    private Object timeStamp;
+    private String genre;
+    private String uid;
 
 
     public Joke(){}
 
-    public Joke(String joke, String user, String body, Object time){
+    public Joke(String joke, String user, String body, Object time, String genre){
         jokeTitle = joke;
-        userName = user;
+        author = user;
         jokeBody = body;
         timeStamp = time;
+        this.genre = genre;
+        uid = Constants.UID;
     }
 
     public String getJokeTitle() {
@@ -28,23 +34,23 @@ public class Joke {
         jokeTitle = text;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String name) {
-        userName = name;
+    public String getAuthor() {
+        return author;
     }
 
     public String getJokeBody(){
         return jokeBody;
     }
 
-    public void setJokeBody(String body){
-        jokeBody = body;
-    }
+    public void setJokeBody(String body){jokeBody = body;}
 
-    public Object getTimeStamp(){ return timeStamp; }
+    public Object getTimeStamp(){return timeStamp;}
+
+    public String getGenre(){return genre;}
+
+    public String getUID(){return uid;}
+
+
 
 
 }

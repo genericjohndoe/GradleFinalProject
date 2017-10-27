@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.udacity.gradle.builditbigger.Joke.Joke;
@@ -32,12 +33,21 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         TextView jokeName;
         TextView userName;
         TextView jokeBody;
+        ImageButton likeButton;
 
         public JokesViewHolder(View view) {
             super(view);
             jokeName = (TextView) view.findViewById(R.id.joke_name);
             userName = (TextView) view.findViewById(R.id.user_name);
             jokeBody = (TextView) view.findViewById(R.id.joke_body);
+            likeButton = (ImageButton) view.findViewById(R.id.like_button);
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO change state of button, check it posted is liked first
+                    //TODO change info in database
+                }
+            });
             view.setOnClickListener(this);
             view.setTag(this);
         }
@@ -47,13 +57,10 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             TextView jokeName = (TextView) view.findViewById(R.id.joke_name);
             TextView userName = (TextView) view.findViewById(R.id.user_name);
             TextView jokeBody = (TextView) view.findViewById(R.id.joke_body);
-            String jokeBodyString = jokeBody.getText().toString();
-            String userNameString = userName.getText().toString();
-            String jokeNameString = jokeName.getText().toString();
             Intent intent = new Intent(context, JokeActivity.class);
-            intent.putExtra(context.getString(R.string.jokeBody), jokeBodyString);
-            intent.putExtra(context.getString(R.string.userName), userNameString);
-            intent.putExtra(context.getString(R.string.jokeTitle), jokeNameString);
+            intent.putExtra(context.getString(R.string.jokeBody), jokeBody.getText().toString());
+            intent.putExtra(context.getString(R.string.userName), userName.getText().toString());
+            intent.putExtra(context.getString(R.string.jokeTitle), jokeName.getText().toString());
             context.startActivity(intent);
         }
     }

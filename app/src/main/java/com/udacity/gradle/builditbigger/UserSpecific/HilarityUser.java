@@ -1,5 +1,7 @@
 package com.udacity.gradle.builditbigger.UserSpecific;
 
+import com.udacity.gradle.builditbigger.Constants.Constants;
+
 import java.util.List;
 
 /**
@@ -7,20 +9,18 @@ import java.util.List;
  */
 
 public class HilarityUser {
-    String userName;
-    String urlString;
-    List<HilarityUser> followers;
-    List<HilarityUser> following;
-    List<String> languages;
+    private String userName;
+    private String urlString;
+    private List<String> languages;
+    private String uid;
 
     public HilarityUser(){}
 
-    public HilarityUser(String userName, String urlString, List<HilarityUser> followers, List<HilarityUser> following, List<String> languages){
+    public HilarityUser(String userName, String urlString, List<String> languages){
         this.userName = userName;
         this.urlString = urlString;
-        this.followers = followers;
-        this.following = following;
         this.languages = languages;
+        uid = Constants.UID;
     }
 
     public String getUserName(){
@@ -31,15 +31,9 @@ public class HilarityUser {
         return urlString;
     }
 
-    public List<HilarityUser>  getFollowers(){
-        return followers;
-    }
-
-    public List<HilarityUser> getFollowing(){
-        return following;
-    }
-
     public List<String> getLanguages() { return languages;}
+
+    public String getUID(){return uid;}
 
     public void setUserName(String userName){
         this.userName = userName;
@@ -47,14 +41,6 @@ public class HilarityUser {
 
     public void setUrlString(String urlString){
         this.urlString = urlString;
-    }
-
-    public void setFollowers(List<HilarityUser> followers){
-        this.followers = followers;
-    }
-
-    public void setFollowing(List<HilarityUser> following){
-        this.following = following;
     }
 
     public void setLanguages(List<String> languages){

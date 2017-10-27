@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/profile_page"
+            android:icon="@drawable/ic_profile_icon"
+            android:title="Profile" />
+        <item
+            android:id="@+id/feed_page"
+            android:icon="@drawable/ic_feed_image"
+            android:title="Feed" />
+        <item
+            android:id="@+id/explore_page"
+            android:icon="@drawable/ic_explore_image"
+            android:title="Explore" />
+        <item
+            android:id="@+id/meme_creator_page"
+            android:icon="@drawable/ic_meme_creator"
+            android:title="Meme Creator" />
+        <item
+            android:id="@+id/live_stream_page"
+            android:icon="@drawable/ic_live_stream"
+            android:title="Live Stream" />
+        <item
+            android:id="@+id/forums_page"
+            android:icon="@drawable/ic_action_name"
+            android:title="Forums" />
+        <item
+            android:id="@+id/paypal_page"
+            android:icon="@drawable/ic_payment"
+            android:title="Paypal" />
+        <item
+            android:id="@+id/settings_page"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout" />
+    </group>
+
+
+
+</menu>

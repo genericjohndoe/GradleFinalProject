@@ -109,7 +109,7 @@ public class JokesFragment extends Fragment {
                                 View view = dialog.getCustomView();
                                 String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
                                 String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
-                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP);
+                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP, genre);
                                 mjokesDatabaseReference.push().setValue(joke, 0);
                                 mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);
                             }
