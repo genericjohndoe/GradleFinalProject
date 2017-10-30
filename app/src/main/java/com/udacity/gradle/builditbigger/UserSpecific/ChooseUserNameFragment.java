@@ -67,8 +67,8 @@ public class ChooseUserNameFragment extends SlideFragment {
                                 Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
                                 List<String> languageList = new ArrayList<String>();
                                 languageList.addAll(set);
-                                userDatabaseReference.child(firebaseUser.getUid())
-                                        .setValue(new HilarityUser(userName,"www.google.com", null, null, languageList));
+                                userDatabaseReference.child("users").child(firebaseUser.getUid())
+                                        .setValue(new HilarityUser(userName,"www.google.com", languageList));
                                 userDatabaseReference.getRoot().child("userlist")
                                         .child(firebaseUser.getUid()).setValue(userName);
                                 Log.i("joke", "no username found");

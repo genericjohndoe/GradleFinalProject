@@ -81,7 +81,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     public void onBindViewHolder(JokesViewHolder holder, int position) {
         Joke joke = jokes.get(position);
         holder.jokeName.setText(joke.getJokeTitle());
-        holder.userName.setText(joke.getUserName());
+        holder.userName.setText(joke.getAuthor());
         holder.jokeBody.setText(joke.getJokeBody());
     }
 }

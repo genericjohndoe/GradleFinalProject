@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Genres.GenreActivity;
 import com.udacity.gradle.builditbigger.Language.LanguageSelectorFragment;
+import com.udacity.gradle.builditbigger.Main22Activity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.UserSpecific.ChooseUserNameFragment;
 
@@ -58,7 +59,7 @@ public class MainActivity extends MaterialIntroActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getChildrenCount() == 1){
-                                startActivity(new Intent(getBaseContext(), GenreActivity.class));
+                                startActivity(new Intent(getBaseContext(), Main22Activity.class));
                             }
                         }
 

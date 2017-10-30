@@ -80,17 +80,23 @@ public class Main22Activity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.profile_page) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.feed_page) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.explore_page) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.meme_creator_page) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.live_stream_page) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.forums_page) {
+
+        } else if (id == R.id.paypal_page) {
+
+        } else if (id == R.id.settings_page) {
+
+        } else if (id == R.id.logout) {
 
         }
 
