@@ -1,9 +1,7 @@
 package com.udacity.gradle.builditbigger.SignInTutorial;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
@@ -19,9 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Genres.GenreActivity;
+import com.udacity.gradle.builditbigger.HilarityActivity;
 import com.udacity.gradle.builditbigger.Language.LanguageSelectorFragment;
-import com.udacity.gradle.builditbigger.Main22Activity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.UserSpecific.ChooseUserNameFragment;
 
@@ -54,12 +51,12 @@ public class MainActivity extends MaterialIntroActivity {
                     // User is signed in
                     Constants.UID = user.getUid();
                     databaseReference = FirebaseDatabase.getInstance().getReference();
-                    Query query = databaseReference.limitToFirst(1).equalTo(user.getUid()).orderByKey();
+                    Query query = databaseReference.equalTo("users/"+user.getUid()).orderByKey();
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getChildrenCount() == 1){
-                                startActivity(new Intent(getBaseContext(), Main22Activity.class));
+                                startActivity(new Intent(getBaseContext(), HilarityActivity.class));
                             }
                         }
 
@@ -80,20 +77,6 @@ public class MainActivity extends MaterialIntroActivity {
                 }
             }
         };
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (!pref.getBoolean("firstTimeRun", true)) {
-            // start the preferences activity
-            //startActivity(new Intent(getBaseContext(), GenreActivity.class));
-            Log.i("jokes", "not first run");
-        } else {
-            Log.i("jokes", "first run");
-            SharedPreferences.Editor editor = pref.edit();
-            // avoid for next run
-            editor.putBoolean("firstTimeRun", false);
-            if (editor.commit()){
-                Log.i("jokes", "firsttimeRun saved");
-            }
-        }
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.primary)
@@ -129,14 +112,6 @@ public class MainActivity extends MaterialIntroActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void onSignedInInitialize(String username) {
-        mUsername = username;
-    }
-
-    private void onSignedOutCleanup() {
-        mUsername = ANONYMOUS;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -154,7 +129,7 @@ public class MainActivity extends MaterialIntroActivity {
     @Override
     public void onFinish() {
         super.onFinish();
-        startActivity(new Intent(getBaseContext(), GenreActivity.class));
+        startActivity(new Intent(getBaseContext(), HilarityActivity.class));
         Log.i("joke", "onFinished called");
     }
 }

@@ -5,7 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.udacity.gradle.builditbigger.Main2Activity"
-    tools:showIn="@layout/activity_hilarity">
+    tools:context="com.udacity.gradle.builditbigger.HilarityActivity"
+    tools:showIn="@layout/app_bar_hilarity">
+
+    <FrameLayout
+        android:id="@+id/hilarity_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 </android.support.constraint.ConstraintLayout>

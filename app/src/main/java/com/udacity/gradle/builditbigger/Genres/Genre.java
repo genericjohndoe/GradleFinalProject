@@ -12,6 +12,7 @@ public class Genre {
     private Boolean restricted;
     private Object timeStamp;
     private String uid;
+    private String language;
 
     public Genre(){}
 
@@ -34,4 +35,6 @@ public class Genre {
     public Object getTimeStamp(){return timeStamp;}
 
     public String getUID(){return uid;}
+
+    public String getLanguage(){return language;}
 }

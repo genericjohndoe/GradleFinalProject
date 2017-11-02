@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:paddingTop="48dp">
 
     <TextView
@@ -10,21 +10,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:text="at"
+        android:text="Please Select Username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textSize="40sp" />
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/username_edittext"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:inputType="text"
         android:singleLine="true" />
 
-    <ImageButton
-        android:id="@+id/validate"
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_done_white_24dp" />
+        android:layout_weight="0"
+        android:text="Please check to see if the username selected is availible by pressing the 'proceed' button on the right" />
+
 </LinearLayout>

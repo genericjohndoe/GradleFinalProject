@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.udacity.gradle.builditbigger.HilarityActivity">
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,7 +13,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/posts"
+        android:id="@+id/posts_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -16,7 +22,7 @@
         app:layout_constraintTop_toTopOf="@+id/profile_imageview"
         android:layout_marginStart="8dp" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_imageview"
         android:layout_width="100dp"
         android:layout_height="150dp"
@@ -25,56 +31,26 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="8dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
 
-    <Button
-        android:id="@+id/followers"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Followers"
-        app:layout_constraintLeft_toRightOf="@+id/profile_imageview"
-        app:layout_constraintTop_toBottomOf="@+id/posts"
-        android:layout_marginStart="8dp" />
-
-    <Button
-        android:id="@+id/following"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Following"
-        app:layout_constraintLeft_toRightOf="@+id/profile_imageview"
-        app:layout_constraintTop_toBottomOf="@+id/followers"
-        android:layout_marginStart="8dp" />
-
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text='"user name"'
-        app:layout_constraintLeft_toLeftOf="@+id/following"
-        app:layout_constraintTop_toBottomOf="@+id/following" />
 
     <android.support.v4.view.ViewPager
+        android:id="@+id/profile_view_pager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
         android:layout_marginTop="16dp"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@+id/profile_imageview"
-        app:layout_constraintTop_toBottomOf="@+id/profile_imageview"
-        android:id="@+id/profile_view_pager">
+        app:layout_constraintTop_toBottomOf="@+id/profile_imageview">
 
         <android.support.design.widget.TabLayout
+            android:id="@+id/profile_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:id="@+id/profile_tab_layout"
+            android:contextClickable="false"
             android:visibility="visible">
 
             <android.support.design.widget.TabItem
@@ -95,9 +71,59 @@
                 android:text="Likes"
                 android:visibility="visible" />
 
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Media"
+                android:visibility="visible" />
+
         </android.support.design.widget.TabLayout>
 
 
     </android.support.v4.view.ViewPager>
 
+    <TextView
+        android:id="@+id/subscriptions_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:text="Subscriptions"
+        app:layout_constraintEnd_toStartOf="@+id/subscribers_tv"
+        app:layout_constraintStart_toEndOf="@+id/posts_tv"
+        app:layout_constraintTop_toTopOf="@+id/posts_tv" />
+
+    <TextView
+        android:id="@+id/subscribers_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:text="Subscribers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/subscriptions_tv" />
+
+    <Button
+        android:id="@+id/subscribe_button"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Subscribe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_imageview"
+        app:layout_constraintTop_toBottomOf="@+id/subscriptions_tv" />
+
 </android.support.constraint.ConstraintLayout>
+
+<android.support.design.widget.FloatingActionButton
+android:id="@+id/fab"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_gravity="bottom|end"
+android:layout_margin="@dimen/fab_margin"
+app:srcCompat="@drawable/ic_add" />
+
+</android.support.design.widget.CoordinatorLayout>
