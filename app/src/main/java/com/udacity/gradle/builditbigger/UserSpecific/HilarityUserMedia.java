@@ -1,54 +1,52 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.UserSpecific;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 10/30/17.
+ * Created by joeljohnson on 11/2/17.
  */
 
-public class ExploreFragment extends Fragment {
+public class HilarityUserMedia extends Fragment {
 
-    // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mjokesDatabaseReference;
-    private DatabaseReference mPersonaljokesDatabaseReference;
     private ChildEventListener mChildEventListener;
 
     RecyclerView recyclerview;
+    EditText searchEditText;
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
-    String genre;
-    String language;
-
-
-    public ExploreFragment() {}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //TODO change database path to all posts
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
-        mPersonaljokesDatabaseReference = mFirebaseDatabase.getReference();
+        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(Constants.UID + " Likes");
         jokes = new ArrayList<>();
         jokeAdapter = new JokesAdapter(getActivity(), jokes);
         mChildEventListener = new ChildEventListener() {
@@ -75,13 +73,27 @@ public class ExploreFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         recyclerview = root.findViewById(R.id.recycler_view);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //TODO take into account screen size when populating grid
+        recyclerview.setLayoutManager(new GridLayoutManager(getActivity(),4));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
+
+        searchEditText = root.findViewById(R.id.search_et);
+        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
         return root;
     }
 }

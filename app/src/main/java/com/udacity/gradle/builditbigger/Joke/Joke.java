@@ -17,6 +17,7 @@ public class Joke {
 
     public Joke(){}
 
+    //TODO modify constructor to include image/video url
     public Joke(String joke, String user, String body, Object time, String genre){
         jokeTitle = joke;
         author = user;

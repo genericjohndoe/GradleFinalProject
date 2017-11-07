@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger.UserSpecific;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,12 +9,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -23,9 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ServerValue;
-import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Joke.Joke;
+import com.udacity.gradle.builditbigger.Dialog.NewPostDialog;
 import com.udacity.gradle.builditbigger.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -66,7 +65,7 @@ public class Profile extends Fragment {
         subscribersTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //TODO show subscribers fragment
+                //TODO show subscribers list fragment
                 return false;
             }
         });
@@ -74,14 +73,14 @@ public class Profile extends Fragment {
         subscriptionsTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //TODO show subscriptions fragment
+                //TODO show subscriptions list fragment
                 return false;
             }
         });
         subscribersTextView = root.findViewById(R.id.subscribers_tv);
         mProfileImageView = root.findViewById(R.id.profile_imageview);
 
-        fab =  root.findViewById(R.id.fab);
+        fab = root.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,16 +130,16 @@ public class Profile extends Fragment {
         return root;
     }
 
-    private void configureFAB(int state){
-        if (state == 0){
+    private void configureFAB(int state) {
+        if (state == 0) {
             fab.show();
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   showNewJokeDialog();
+                    showNewJokeDialog();
                 }
             });
-        } else if (state == 1){
+        } else if (state == 1) {
             fab.show();
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -153,66 +152,70 @@ public class Profile extends Fragment {
         }
     }
 
-    private void showNewJokeDialog(){
-        new MaterialDialog.Builder(getActivity()).title(R.string.add_joke)
-                .customView(R.layout.activity_new_joke, true)
+    private void showNewJokeDialog() {
+        //TODO get access to VP, set up VP, when submit button is pressed joke is posted
+//        new MaterialDialog.Builder(getActivity()).title(R.string.add_joke)
+//                .customView(R.layout.dialog_new_text_joke, true)
+//                .positiveText("Submit")
+//                .negativeText("Cancel")
+//                .onPositive(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        View view = dialog.getCustomView();
+//                        String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
+//                        String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
+//                        Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP, "");
+//                                    /*mjokesDatabaseReference.push().setValue(joke, 0);
+//                                    mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);*/
+//                    }
+//                })
+//                .onNegative(new MaterialDialog.SingleButtonCallback() {
+//                    @Override
+//                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//                        dialog.dismiss();
+//                    }
+//                })
+//                .show().setCanceledOnTouchOutside(false);
+        new NewPostDialog().show(getActivity().getSupportFragmentManager(), "dialog");
+    }
+
+    private void showNewGenreDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .customView(R.layout.dialog_new_genre, true)
                 .positiveText("Submit")
                 .negativeText("Cancel")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         View view = dialog.getCustomView();
-                        String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
-                        String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
-                        Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP, "");
-                                    /*mjokesDatabaseReference.push().setValue(joke, 0);
-                                    mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);*/
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show().setCanceledOnTouchOutside(false);
-    }
+                        String genreTitle = ((EditText) view.findViewById(R.id.new_genre_title_et)).getText().toString();
+                        Boolean isRestricted = ((CheckBox) view.findViewById(R.id.restricted_checkBox)).isChecked();
+                        Spinner spinner = view.findViewById(R.id.new_genre_language_spinner);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                //TODO get access to langugae with position set to variable
+                            }
 
-    private void showNewGenreDialog(){
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.add_genre)
-                .content(R.string.add_genre_short)
-                .backgroundColorRes(R.color.material_blue_grey_800)
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .dismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
+                            @Override
+                            public void onNothingSelected(AdapterView<?> adapterView) {
+                                //TODO maybe set variable to null
+                            }
+                        });
+                        //TODO create new genre object, push to database
                     }
                 })
-                .input(R.string.genre_input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        if (!input.equals("") || !input.equals(null)) {
-                            String newGenre = input.toString();
-                                        /*mGenreDatabaseReference.push().setValue(newGenre, 0);
-                                        mPersonalGenreDatabaseReference.child(Constants.UID +
-                                                " Genres").child(newGenre).setValue(System.currentTimeMillis(),0);*/
-                        }
-                    }
-                })
-                .negativeText(R.string.cancel)
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
                     }
                 })
-                .checkBoxPromptRes(R.string.restricted, false, null)
                 .show().setCanceledOnTouchOutside(false);
     }
 
     private class ProfilePagerAdapter extends FragmentPagerAdapter {
-        public ProfilePagerAdapter(FragmentManager fm){
+        public ProfilePagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

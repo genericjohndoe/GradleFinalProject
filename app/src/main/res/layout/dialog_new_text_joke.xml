@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+    android:layout_height="wrap_content">
 
     <EditText
         android:id="@+id/title_edittext"
@@ -29,5 +28,14 @@
         android:hint="@string/add_joke_short"
         android:inputType="textMultiLine"
          />
+
+    <AutoCompleteTextView
+        android:id="@+id/genre_autoCompleteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:drawableStart="@drawable/ic_search"
+        android:text="Please choose genre " />
 
 </LinearLayout>

@@ -91,7 +91,7 @@ public class JokesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_jokes, container, false);
+        View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         recyclerview = root.findViewById(R.id.recycler_view);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
@@ -100,7 +100,7 @@ public class JokesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.add_joke)
-                        .customView(R.layout.activity_new_joke, true)
+                        .customView(R.layout.dialog_new_text_joke, true)
                         .positiveText("Submit")
                         .negativeText("Cancel")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
