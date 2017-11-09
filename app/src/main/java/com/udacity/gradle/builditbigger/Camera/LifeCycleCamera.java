@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -69,6 +70,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         this.fragment = fragment;
         this.lifecycle = lifecycle;
         mTextureView = aftv;
+        this.lifecycle.addObserver(this);
     }
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -415,12 +417,12 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(LifecycleOwner lifecycleOwner) {
         mFile = new File(fragment.getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    public void onResume() {
+    public void onResume(LifecycleOwner lifecycleOwner) {
         startBackgroundThread();
 
         // When the screen is turned off and turned back on, the SurfaceTexture is already
@@ -435,7 +437,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    public void onPause() {
+    public void onPause(LifecycleOwner lifecycleOwner) {
         closeCamera();
         stopBackgroundThread();
     }
