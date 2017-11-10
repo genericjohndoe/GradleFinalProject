@@ -20,6 +20,7 @@ import com.udacity.gradle.builditbigger.R;
 public class NewVideoPost extends Fragment {
     //TODO change UI to open camera and show horizontal linear recyclerview below
     //todo ensure camera is set to video
+    //todo ensure camera object is deleted when fragment dies
     AutoFitTextureView textureView;
     RecyclerView recyclerView;
     LifeCycleCamera camera;
@@ -36,7 +37,7 @@ public class NewVideoPost extends Fragment {
         textureView = root.findViewById(R.id.textureView);
         recyclerView = root.findViewById(R.id.video_thumbnail_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        camera = new LifeCycleCamera(this, getLifecycle(),textureView);
+        camera = new LifeCycleCamera(this, textureView);
         return root;
     }
 }

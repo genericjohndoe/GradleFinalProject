@@ -64,13 +64,11 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     //todo set up class to access camera
     private Fragment fragment;
-    private Lifecycle lifecycle;
 
-    public LifeCycleCamera(Fragment fragment, Lifecycle lifecycle, AutoFitTextureView aftv){
+    public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv){
         this.fragment = fragment;
-        this.lifecycle = lifecycle;
         mTextureView = aftv;
-        this.lifecycle.addObserver(this);
+        this.fragment.getLifecycle().addObserver(this);
     }
     /**
      * Conversion from screen rotation to JPEG orientation.
