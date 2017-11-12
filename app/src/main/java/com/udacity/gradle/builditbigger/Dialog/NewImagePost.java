@@ -37,7 +37,7 @@ public class NewImagePost extends Fragment {
         textureView = root.findViewById(R.id.textureView);
         recyclerView = root.findViewById(R.id.photo_thumbnail_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL, false));
-        camera = new LifeCycleCamera(this, textureView);
+        camera = new LifeCycleCamera(this, textureView, LifeCycleCamera.PHOTO);
         return root;
     }
 

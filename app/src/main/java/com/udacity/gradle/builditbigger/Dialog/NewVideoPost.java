@@ -37,7 +37,7 @@ public class NewVideoPost extends Fragment {
         textureView = root.findViewById(R.id.textureView);
         recyclerView = root.findViewById(R.id.video_thumbnail_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        camera = new LifeCycleCamera(this, textureView);
+        camera = new LifeCycleCamera(this, textureView, LifeCycleCamera.VIDEO);
         return root;
     }
 }

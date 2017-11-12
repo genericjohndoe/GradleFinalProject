@@ -45,8 +45,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
 
-import com.udacity.gradle.builditbigger.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -67,11 +65,13 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     //todo set up class to access camera
     private Fragment fragment;
+    private int mode;
 
-    public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv){
+    public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv, int mode){
         this.fragment = fragment;
         mTextureView = aftv;
         this.fragment.getLifecycle().addObserver(this);
+        this.mode = mode;
     }
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -87,7 +87,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     private static final String[] VIDEO_PERMISSIONS = {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
-    };
+    }
 
     public static int PHOTO = 0;
     public static int VIDEO = 1;
@@ -512,9 +512,11 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                     }
                 }
 
-            }else {
+            }
+        } else {
             fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
     }
 
     /**
@@ -523,7 +525,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
      * @param width  The width of available size for camera preview
      * @param height The height of available size for camera preview
      */
-    @SuppressWarnings("SuspiciousNameCombination")
+    //@SuppressWarnings("SuspiciousNameCombination")
     private void setUpCameraOutputs(int width, int height) {
         CameraManager manager = (CameraManager) fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
