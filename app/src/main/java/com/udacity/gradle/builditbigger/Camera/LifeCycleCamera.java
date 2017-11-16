@@ -1,15 +1,11 @@
 package com.udacity.gradle.builditbigger.Camera;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -30,15 +26,12 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaRecorder;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -63,203 +56,16 @@ import java.util.concurrent.TimeUnit;
 
 public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequestPermissionsResultCallback {
 
-    //todo set up class to access camera
-    private Fragment fragment;
-    private int mode;
-
-    public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv, int mode){
-        this.fragment = fragment;
-        mTextureView = aftv;
-        this.fragment.getLifecycle().addObserver(this);
-        this.mode = mode;
-    }
-    /**
-     * Conversion from screen rotation to JPEG orientation.
-     */
-    private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
-    private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();//maps int to int
-    private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
+    //photo only variables
     private static final int REQUEST_CAMERA_PERMISSION = 1;
-    private static final int REQUEST_VIDEO_PERMISSIONS = 2;
-    private static final String FRAGMENT_DIALOG = "dialog";
-
-    private static final String[] VIDEO_PERMISSIONS = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-    }
-
-    public static int PHOTO = 0;
-    public static int VIDEO = 1;
-
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }//populates sparse array
-
-    static {
-        INVERSE_ORIENTATIONS.append(Surface.ROTATION_0, 270);
-        INVERSE_ORIENTATIONS.append(Surface.ROTATION_90, 180);
-        INVERSE_ORIENTATIONS.append(Surface.ROTATION_180, 90);
-        INVERSE_ORIENTATIONS.append(Surface.ROTATION_270, 0);
-    }
-
-    /**
-     * Tag for the class.
-     */
-    private static final String TAG = "LifeCycleCamera";
-
-    /**
-     * Camera state: Showing camera preview.
-     */
     private static final int STATE_PREVIEW = 0;
-
-    /**
-     * Camera state: Waiting for the focus to be locked.
-     */
     private static final int STATE_WAITING_LOCK = 1;
-
-    /**
-     * Camera state: Waiting for the exposure to be precapture state.
-     */
     private static final int STATE_WAITING_PRECAPTURE = 2;
-
-    /**
-     * Camera state: Waiting for the exposure state to be something other than precapture.
-     */
     private static final int STATE_WAITING_NON_PRECAPTURE = 3;
-
-    /**
-     * Camera state: Picture was taken.
-     */
     private static final int STATE_PICTURE_TAKEN = 4;
-
-    /**
-     * Max preview width that is guaranteed by Camera2 API
-     */
     private static final int MAX_PREVIEW_WIDTH = 1920;
-
-    /**
-     * Max preview height that is guaranteed by Camera2 API
-     */
     private static final int MAX_PREVIEW_HEIGHT = 1080;
-
-    /**
-     * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
-     * {@link TextureView}.
-     */
-    private final TextureView.SurfaceTextureListener mSurfaceTextureListener
-            = new TextureView.SurfaceTextureListener() {
-
-        @Override //ST used to render stuff for TextureView, open camera when ST is availible
-        public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
-            openCamera(width, height);
-        }
-
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
-            configureTransform(width, height);
-        }
-
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
-            return true;
-        }
-
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture texture) {
-        }
-
-    };
-
-    /**
-     * ID of the current {@link CameraDevice}.
-     */
-    private String mCameraId;
-
-    /**
-     * An {@link AutoFitTextureView} for camera preview.
-     * TV  that can be adjusted to a specified aspect ratio
-     */
-    private AutoFitTextureView mTextureView;
-
-    /**
-     * A {@link CameraCaptureSession } for camera preview.
-     * used for capturing images from the camera or reprocessing images
-     */
-    private CameraCaptureSession mCaptureSession;
-
-    /**
-     * A reference to the opened {@link CameraDevice}.
-     * The CameraDevice class is a representation of a single camera connected to an Android device,
-     * allowing for fine-grain control of image capture and post-processing at high frame rates.
-     */
-    private CameraDevice mCameraDevice;
-
-    /**
-     * The {@link android.util.Size} of camera preview.
-     *Immutable class for describing width and height dimensions in pixels
-     */
-    private Size mPreviewSize;
-
-    /**
-     * {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state.
-     */
-    private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
-
-        @Override
-        public void onOpened(@NonNull CameraDevice cameraDevice) {
-            // This method is called when the camera is opened.  We start camera preview here.
-            mCameraOpenCloseLock.release();
-            mCameraDevice = cameraDevice;
-            createCameraPreviewSession();
-        }
-
-        @Override
-        public void onDisconnected(@NonNull CameraDevice cameraDevice) {
-            mCameraOpenCloseLock.release();
-            cameraDevice.close();
-            mCameraDevice = null;
-        }
-
-        @Override
-        public void onError(@NonNull CameraDevice cameraDevice, int error) {
-            mCameraOpenCloseLock.release();
-            cameraDevice.close();
-            mCameraDevice = null;
-            if (null != fragment.getActivity()) {
-                fragment.getActivity().finish();
-            }
-        }
-
-    };
-
-    /**
-     * An additional thread for running tasks that shouldn't block the UI.
-     */
-    private HandlerThread mBackgroundThread;
-
-    /**
-     * A {@link Handler} for running tasks in the background.
-     */
-    private Handler mBackgroundHandler;
-
-    /**
-     * An {@link ImageReader} that handles still image capture.
-     */
     private ImageReader mImageReader;
-
-    /**
-     * This is the output file for our picture.
-     */
-    private File mFile;
-
-    /**
-     * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
-     * still image is ready to be saved.
-     */
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
 
@@ -269,51 +75,9 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
 
     };
-
-    /**
-     * {@link CaptureRequest.Builder} for the camera preview
-     */
-    private CaptureRequest.Builder mPreviewRequestBuilder;
-
-    /**
-     * {@link CaptureRequest} generated by {@link #mPreviewRequestBuilder}
-     */
-    private CaptureRequest mPreviewRequest;
-
-    /**
-     * The current state of camera state for taking pictures.
-     *
-     * @see #mCaptureCallback
-     */
+    private CaptureRequest mPreviewRequest; //CaptureRequest.Builder.build() called in v
     private int mState = STATE_PREVIEW;
-
-    /**
-     * A {@link Semaphore} to prevent the app from exiting before closing the camera.
-     */
-    private Semaphore mCameraOpenCloseLock = new Semaphore(1);
-
-    /**
-     * Whether the current camera device supports Flash or not.
-     */
     private boolean mFlashSupported;
-
-    /**
-     * Orientation of the camera sensor
-     */
-    private int mSensorOrientation;
-
-    private MediaRecorder mMediaRecorder;
-
-    private String mNextVideoAbsolutePath;
-
-    private Size mVideoSize;
-
-    private boolean mIsRecordingVideo;
-
-    /**
-     * A {@link CameraCaptureSession.CaptureCallback} that handles events related to JPEG capture.
-     * A callback object for tracking the progress of a CaptureRequest submitted to the camera device
-     */
     private CameraCaptureSession.CaptureCallback mCaptureCallback
             = new CameraCaptureSession.CaptureCallback() {
 
@@ -378,12 +142,130 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
 
     };
+    //end of photo only variables
 
-    /**
-     * Shows a {@link Toast} on the UI thread.
-     *
-     * @param text The message to show
-     */
+    //variables shared between photo and video mode
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 90);
+        ORIENTATIONS.append(Surface.ROTATION_90, 0);
+        ORIENTATIONS.append(Surface.ROTATION_180, 270);
+        ORIENTATIONS.append(Surface.ROTATION_270, 180);
+    }
+    private String mCameraId;
+    private AutoFitTextureView mTextureView;
+    private CameraCaptureSession mCaptureSession;
+    private CameraDevice mCameraDevice;
+    private Size mPreviewSize;
+    private HandlerThread mBackgroundThread;
+    private Handler mBackgroundHandler;
+    private File mFile;
+    private CaptureRequest.Builder mPreviewRequestBuilder;
+    private Semaphore mCameraOpenCloseLock = new Semaphore(1);
+    private int mSensorOrientation; //is of type Integer in video class
+    static class CompareSizesByArea implements Comparator<Size> {
+
+        @Override
+        public int compare(Size lhs, Size rhs) {
+            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
+                    (long) rhs.getWidth() * rhs.getHeight());
+        }
+    }
+    private final TextureView.SurfaceTextureListener mSurfaceTextureListener
+            = new TextureView.SurfaceTextureListener() {
+
+        @Override
+        public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
+           if (mode == PHOTO){
+               openCameraForPhoto(width, height);
+           } else {
+               openCameraForVideo(width, height);
+           }
+        }
+
+        @Override
+        public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
+            configureTransform(width, height);
+        }
+
+        @Override
+        public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
+            return true;
+        }
+
+        @Override
+        public void onSurfaceTextureUpdated(SurfaceTexture texture) {
+        }
+
+    };
+    private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
+
+        @Override
+        public void onOpened(@NonNull CameraDevice cameraDevice) {
+            // This method is called when the camera is opened.  We start camera preview here.
+            mCameraOpenCloseLock.release();
+            mCameraDevice = cameraDevice;
+            if (mode == PHOTO) {
+                createCameraPreviewSession();
+            }else {
+                startVideoPreview();
+            }
+        }
+
+        @Override
+        public void onDisconnected(@NonNull CameraDevice cameraDevice) {
+            mCameraOpenCloseLock.release();
+            cameraDevice.close();
+            mCameraDevice = null;
+        }
+
+        @Override
+        public void onError(@NonNull CameraDevice cameraDevice, int error) {
+            mCameraOpenCloseLock.release();
+            cameraDevice.close();
+            mCameraDevice = null;
+            if (null != fragment.getActivity()) {
+                fragment.getActivity().finish();
+            }
+        }
+
+    };
+    private Fragment fragment;
+    private int mode;
+    //end of variables shared between photo and video mode
+
+    //variables only for video mode
+    private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
+    private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
+    private static final int REQUEST_VIDEO_PERMISSIONS = 2;
+    private static final String[] VIDEO_PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+    };
+    private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
+    static {
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_0, 270);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_90, 180);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_180, 90);
+        INVERSE_ORIENTATIONS.append(Surface.ROTATION_270, 0);
+    }
+    private Size mVideoSize;
+    private MediaRecorder mMediaRecorder;
+    private boolean mIsRecordingVideo;
+    private String mNextVideoAbsolutePath;
+    //end of video mode variables
+
+    //constructor
+    public static final int PHOTO = 0;
+    public static final int VIDEO = 1;
+
+    public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv, int mode){
+        this.fragment = fragment;
+        mTextureView = aftv;
+        this.fragment.getLifecycle().addObserver(this);
+        this.mode = mode;
+    }
+
     private void showToast(final String text) {
         if (fragment.getActivity() != null) {
             fragment.getActivity().runOnUiThread(new Runnable() {
@@ -395,24 +277,8 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
-     * is at least as large as the respective texture view size, and that is at most as large as the
-     * respective max size, and whose aspect ratio matches with the specified value. If such size
-     * doesn't exist, choose the largest one that is at most as large as the respective max size,
-     * and whose aspect ratio matches with the specified value.
-     *
-     * @param choices           The list of sizes that the camera supports for the intended output
-     *                          class
-     * @param textureViewWidth  The width of the texture view relative to sensor coordinate
-     * @param textureViewHeight The height of the texture view relative to sensor coordinate
-     * @param maxWidth          The maximum width that can be chosen
-     * @param maxHeight         The maximum height that can be chosen
-     * @param aspectRatio       The aspect ratio
-     * @return The optimal {@code Size}, or an arbitrary one if none were big enough
-     */
-    private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
-                                          int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
+    private static Size chooseOptimalSizeForPhoto(Size[] choices, int textureViewWidth,
+                                                  int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
 
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<>();
@@ -439,25 +305,45 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         } else if (notBigEnough.size() > 0) {
             return Collections.max(notBigEnough, new CompareSizesByArea());
         } else {
-            Log.e(TAG, "Couldn't find any suitable preview size");
+            //Log.e(TAG, "Couldn't find any suitable preview size");
+            return choices[0];
+        }
+    }
+
+    private static Size chooseOptimalSizeForVideo(Size[] choices, int width, int height, Size aspectRatio) {
+        // Collect the supported resolutions that are at least as big as the preview Surface
+        List<Size> bigEnough = new ArrayList<>();
+        int w = aspectRatio.getWidth();
+        int h = aspectRatio.getHeight();
+        for (Size option : choices) {
+            if (option.getHeight() == option.getWidth() * h / w &&
+                    option.getWidth() >= width && option.getHeight() >= height) {
+                bigEnough.add(option);
+            }
+        }
+        // Pick the smallest of those, assuming we found any
+        if (bigEnough.size() > 0) {
+            return Collections.min(bigEnough, new CompareSizesByArea());
+        } else {
+            //Log.e(TAG, "Couldn't find any suitable preview size");
             return choices[0];
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onActivityCreated(LifecycleOwner lifecycleOwner) {
-        mFile = new File(fragment.getActivity().getExternalFilesDir(null), "pic.jpg");
+        if (mode == PHOTO) mFile = new File(fragment.getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume(LifecycleOwner lifecycleOwner) {
         startBackgroundThread();
-        // When the screen is turned off and turned back on, the SurfaceTexture is already
-        // available, and "onSurfaceTextureAvailable" will not be called. In that case, we can open
-        // a camera and start preview from here (otherwise, we wait until the surface is ready in
-        // the SurfaceTextureListener).
         if (mTextureView.isAvailable()) {
-            openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            if (mode == PHOTO) {
+                openCameraForPhoto(mTextureView.getWidth(), mTextureView.getHeight());
+            } else {
+                openCameraForVideo(mTextureView.getWidth(), mTextureView.getHeight());
+            }
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
@@ -511,22 +397,25 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                         break;
                     }
                 }
-
             }
         } else {
             fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-
     }
 
-    /**
-     * Sets up member variables related to camera.
-     *
-     * @param width  The width of available size for camera preview
-     * @param height The height of available size for camera preview
-     */
-    //@SuppressWarnings("SuspiciousNameCombination")
+    private boolean hasPermissionsGranted(String[] permissions) {
+        for (String permission : permissions) {
+            if (ActivityCompat.checkSelfPermission(fragment.getActivity(), permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @SuppressWarnings("SuspiciousNameCombination")
     private void setUpCameraOutputs(int width, int height) {
+
         CameraManager manager = (CameraManager) fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
             for (String cameraId : manager.getCameraIdList()) {
@@ -574,7 +463,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                         }
                         break;
                     default:
-                        Log.e(TAG, "Display rotation is invalid: " + displayRotation);
+                        //Log.e(TAG, "Display rotation is invalid: " + displayRotation);
                 }
 
                 Point displaySize = new Point();
@@ -602,7 +491,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                 // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
                 // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
                 // garbage capture data.
-                mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
+                mPreviewSize = chooseOptimalSizeForPhoto(map.getOutputSizes(SurfaceTexture.class),
                         rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
                         maxPreviewHeight, largest);
 
@@ -628,15 +517,12 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         } catch (NullPointerException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
-            /*ErrorDialog.newInstance(getString(R.string.camera_error))
-                    .show(getChildFragmentManager(), FRAGMENT_DIALOG);*/
+            //ErrorDialog.newInstance(getString(R.string.camera_error))
+            //        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
         }
     }
 
-    /**
-     * Opens the camera specified by {@link #mCameraId}.
-     */
-    private void openCamera(int width, int height) {
+    private void openCameraForPhoto(int width, int height) {
         if (ContextCompat.checkSelfPermission(fragment.getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             requestCameraPermission();
@@ -644,6 +530,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
+
         CameraManager manager = (CameraManager) fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
@@ -657,9 +544,59 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Closes the current {@link CameraDevice}.
-     */
+    private void openCameraForVideo(int width, int height) {
+        if (!hasPermissionsGranted(VIDEO_PERMISSIONS)) {
+            requestVideoPermissions();
+            return;
+        }
+
+        if (null == fragment.getActivity() || fragment.getActivity().isFinishing()) {
+            return;
+        }
+        CameraManager manager = (CameraManager) fragment.getActivity().getSystemService(Context.CAMERA_SERVICE);
+        try {
+            //Log.d(TAG, "tryAcquire");
+            if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
+                throw new RuntimeException("Time out waiting to lock camera opening.");
+            }
+            String cameraId = manager.getCameraIdList()[0];
+
+            // Choose the sizes for camera preview and video recording
+            CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+            StreamConfigurationMap map = characteristics
+                    .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
+            if (map == null) {
+                throw new RuntimeException("Cannot get available preview/video sizes");
+            }
+            mVideoSize = chooseVideoSize(map.getOutputSizes(MediaRecorder.class));
+            mPreviewSize = chooseOptimalSizeForVideo(map.getOutputSizes(SurfaceTexture.class),
+                    width, height, mVideoSize);
+
+            int orientation = fragment.getActivity().getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            } else {
+                mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
+            }
+            configureTransform(width, height);
+            mMediaRecorder = new MediaRecorder();
+            manager.openCamera(cameraId, mStateCallback, null);
+        } catch (CameraAccessException e) {
+            Toast.makeText(fragment.getActivity(), "Cannot access the camera.", Toast.LENGTH_SHORT).show();
+            fragment.getActivity().finish();
+        } catch (NullPointerException e) {
+            // Currently an NPE is thrown when the Camera2API is used but not supported on the
+            // device this code runs.
+            //ErrorDialog.newInstance(getString(R.string.camera_error))
+            //        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Interrupted while trying to lock camera opening.");
+        } catch (SecurityException e){
+
+        }
+    }
+
     private void closeCamera() {
         try {
             mCameraOpenCloseLock.acquire();
@@ -675,6 +612,10 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                 mImageReader.close();
                 mImageReader = null;
             }
+            if (null != mMediaRecorder) {
+                mMediaRecorder.release();
+                mMediaRecorder = null;
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera closing.", e);
         } finally {
@@ -682,18 +623,12 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Starts a background thread and its {@link Handler}.
-     */
     private void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("CameraBackground");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
     }
 
-    /**
-     * Stops the background thread and its {@link Handler}.
-     */
     private void stopBackgroundThread() {
         mBackgroundThread.quitSafely();
         try {
@@ -705,12 +640,8 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Creates a new {@link CameraCaptureSession} for camera preview.
-     */
     private void createCameraPreviewSession() {
         try {
-            //todo must add code for video
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
 
@@ -738,7 +669,6 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
                             // When the session is ready, we start displaying the preview.
                             mCaptureSession = cameraCaptureSession;
-                            //todo move try block to own method
                             try {
                                 // Auto focus should be continuous for camera preview.
                                 mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
@@ -767,15 +697,8 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Configures the necessary {@link android.graphics.Matrix} transformation to `mTextureView`.
-     * This method should be called after the camera preview size is determined in
-     * setUpCameraOutputs and also the size of `mTextureView` is fixed.
-     *
-     * @param viewWidth  The width of `mTextureView`
-     * @param viewHeight The height of `mTextureView`
-     */
     private void configureTransform(int viewWidth, int viewHeight) {
+
         if (null == mTextureView || null == mPreviewSize || null == fragment.getActivity()) {
             return;
         }
@@ -793,22 +716,16 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                     (float) viewWidth / mPreviewSize.getWidth());
             matrix.postScale(scale, scale, centerX, centerY);
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
-        } else if (Surface.ROTATION_180 == rotation) {
+        } else if (Surface.ROTATION_180 == rotation && mode == PHOTO) {
             matrix.postRotate(180, centerX, centerY);
         }
         mTextureView.setTransform(matrix);
     }
 
-    /**
-     * Initiate a still image capture.
-     */
     private void takePicture() {
         lockFocus();
     }
 
-    /**
-     * Lock the focus as the first step for a still image capture.
-     */
     private void lockFocus() {
         try {
             // This is how to tell the camera to lock focus.
@@ -823,10 +740,6 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Run the precapture sequence for capturing a still image. This method should be called when
-     * we get a response in {@link #mCaptureCallback} from {@link #lockFocus()}.
-     */
     private void runPrecaptureSequence() {
         try {
             // This is how to tell the camera to trigger.
@@ -841,12 +754,9 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Capture a still picture. This method should be called when we get a response in
-     * {@link #mCaptureCallback} from both {@link #lockFocus()}.
-     */
     private void captureStillPicture() {
         try {
+            ;
             if (null == fragment.getActivity() || null == mCameraDevice) {
                 return;
             }
@@ -872,7 +782,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
                     showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
+                    //Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
             };
@@ -885,12 +795,6 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Retrieves the JPEG orientation from the specified screen rotation.
-     *
-     * @param rotation The screen rotation.
-     * @return The JPEG orientation (one of 0, 90, 270, and 360)
-     */
     private int getOrientation(int rotation) {
         // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
         // We have to take that into account and rotate JPEG properly.
@@ -899,10 +803,6 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360;
     }
 
-    /**
-     * Unlock the focus. This method should be called when still image capture sequence is
-     * finished.
-     */
     private void unlockFocus() {
         try {
             // Reset the auto-focus trigger
@@ -927,9 +827,6 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    /**
-     * Saves a JPEG {@link Image} into the specified {@link File}.
-     */
     private static class ImageSaver implements Runnable {
 
         /**
@@ -971,45 +868,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     }
 
-    /**
-     * Compares two {@code Size}s based on their areas.
-     */
-    static class CompareSizesByArea implements Comparator<Size> {
-
-        @Override
-        public int compare(Size lhs, Size rhs) {
-            // We cast here to ensure the multiplications won't overflow
-            return Long.signum((long) lhs.getWidth() * lhs.getHeight() -
-                    (long) rhs.getWidth() * rhs.getHeight());
-        }
-
-    }
-
-    /**
-     * Update the camera preview. {startPreview()} needs to be called in advance.
-     */
-    //todo indicate only for video
-    private void updatePreview() {
-        if (null == mCameraDevice) {
-            return;
-        }
-        try {
-            setUpCaptureRequestBuilder(mPreviewRequestBuilder);
-            HandlerThread thread = new HandlerThread("CameraPreview");
-            thread.start();
-            mCaptureSession.setRepeatingRequest(mPreviewRequestBuilder.build(), null, mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-    //todo for video
-    private void setUpCaptureRequestBuilder(CaptureRequest.Builder builder) {
-        builder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
-    }
-
-    //todo
     private void setUpMediaRecorder() throws IOException {
-
         if (null == fragment.getActivity()) {
             return;
         }
@@ -1048,8 +907,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
             return;
         }
         try {
-            //closeCamera()
-            //closePreviewSession();
+            closePreviewSession();
             setUpMediaRecorder();
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
@@ -1079,7 +937,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                         @Override
                         public void run() {
                             // UI
-
+                            //mButtonVideo.setText(R.string.stop);
                             mIsRecordingVideo = true;
 
                             // Start recording
@@ -1101,10 +959,17 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     }
 
+    private void closePreviewSession() {
+        if (mCaptureSession != null) {
+            mCaptureSession.close();
+            mCaptureSession = null;
+        }
+    }
+
     private void stopRecordingVideo() {
         // UI
         mIsRecordingVideo = false;
-
+        //mButtonVideo.setText(R.string.record);
         // Stop recording
         mMediaRecorder.stop();
         mMediaRecorder.reset();
@@ -1113,10 +978,63 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         if (null != fragment.getActivity()) {
             Toast.makeText(fragment.getActivity(), "Video saved: " + mNextVideoAbsolutePath,
                     Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
+            //Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
         }
         mNextVideoAbsolutePath = null;
-        //startPreview();
+        startVideoPreview();
+    }
+
+    private void startVideoPreview() {
+        if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
+            return;
+        }
+        try {
+            closePreviewSession();
+            SurfaceTexture texture = mTextureView.getSurfaceTexture();
+            assert texture != null;
+            texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            mPreviewRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+
+            Surface previewSurface = new Surface(texture);
+            mPreviewRequestBuilder.addTarget(previewSurface);
+
+            mCameraDevice.createCaptureSession(Collections.singletonList(previewSurface),
+                    new CameraCaptureSession.StateCallback() {
+
+                        @Override
+                        public void onConfigured(@NonNull CameraCaptureSession session) {
+                            mCaptureSession = session;
+                            updatePreview();
+                        }
+
+                        @Override
+                        public void onConfigureFailed(@NonNull CameraCaptureSession session) {
+                            if (null != fragment.getActivity()) {
+                                Toast.makeText(fragment.getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, mBackgroundHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updatePreview() {
+        if (null == mCameraDevice) {
+            return;
+        }
+        try {
+            setUpCaptureRequestBuilder(mPreviewRequestBuilder);
+            HandlerThread thread = new HandlerThread("CameraPreview");
+            thread.start();
+            mCaptureSession.setRepeatingRequest(mPreviewRequestBuilder.build(), null, mBackgroundHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setUpCaptureRequestBuilder(CaptureRequest.Builder builder) {
+        builder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
     }
 
     private static Size chooseVideoSize(Size[] choices) {
@@ -1125,36 +1043,8 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                 return size;
             }
         }
-        Log.e(TAG, "Couldn't find any suitable video size");
+        //Log.e(TAG, "Couldn't find any suitable video size");
         return choices[choices.length - 1];
-    }
-    public static class ErrorDialog extends DialogFragment {
-
-        private static final String ARG_MESSAGE = "message";
-
-        public static ErrorDialog newInstance(String message) {
-            ErrorDialog dialog = new ErrorDialog();
-            Bundle args = new Bundle();
-            args.putString(ARG_MESSAGE, message);
-            dialog.setArguments(args);
-            return dialog;
-        }
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Activity activity = getActivity();
-            return new AlertDialog.Builder(activity)
-                    .setMessage(getArguments().getString(ARG_MESSAGE))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            activity.finish();
-                        }
-                    })
-                    .create();
-        }
-
     }
 
 }

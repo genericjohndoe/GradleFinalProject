@@ -24,7 +24,9 @@ public class HilarityActivity extends AppCompatActivity
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        changeFragment(new Profile());
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.hilarity_content_frame, new Profile())
+                .commit();
 
         /*FloatingActionButton fab =  findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

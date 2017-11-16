@@ -66,7 +66,6 @@ public class NewPostDialog extends DialogFragment {
     private void changeFragment(Fragment fragment){
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.new_post_fragment, fragment)
-                .addToBackStack(null)
                 .commit();
     }
 }
