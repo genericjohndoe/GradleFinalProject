@@ -26,6 +26,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaRecorder;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -55,7 +56,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequestPermissionsResultCallback {
-
+    //todo ensure saved photo can be seen from gallery
     //photo only variables
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final int STATE_PREVIEW = 0;
@@ -332,7 +333,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onActivityCreated(LifecycleOwner lifecycleOwner) {
-        if (mode == PHOTO) mFile = new File(fragment.getActivity().getExternalFilesDir(null), "pic.jpg");
+        if (mode == PHOTO) mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "pic.jpg");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -722,7 +723,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         mTextureView.setTransform(matrix);
     }
 
-    private void takePicture() {
+    public void takePicture() {
         lockFocus();
     }
 

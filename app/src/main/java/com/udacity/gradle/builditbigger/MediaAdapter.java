@@ -40,7 +40,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return imagesFile.listFiles().length;
+        return imagesFile.listFiles(new PhotoFilter()).length;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
