@@ -10,14 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,32 +43,32 @@ public class ExploreFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //TODO change database path to all posts
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
-        mPersonaljokesDatabaseReference = mFirebaseDatabase.getReference();
-        jokes = new ArrayList<>();
-        jokeAdapter = new JokesAdapter(getActivity(), jokes);
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Joke joke = dataSnapshot.getValue(Joke.class);
-                jokes.add(0,joke);
-                jokeAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
-        mjokesDatabaseReference.addChildEventListener(mChildEventListener);
+//        mFirebaseDatabase = FirebaseDatabase.getInstance();
+//        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
+//        mPersonaljokesDatabaseReference = mFirebaseDatabase.getReference();
+//        jokes = new ArrayList<>();
+//        jokeAdapter = new JokesAdapter(getActivity(), jokes);
+//        mChildEventListener = new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                Joke joke = dataSnapshot.getValue(Joke.class);
+//                jokes.add(0,joke);
+//                jokeAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {}
+//        };
+//        mjokesDatabaseReference.addChildEventListener(mChildEventListener);
     }
 
     @Override

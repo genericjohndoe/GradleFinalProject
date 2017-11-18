@@ -26,6 +26,8 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -43,8 +45,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -231,7 +235,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
 
     };
-    private Fragment fragment;
+    private static Fragment fragment;
     private int mode;
     //end of variables shared between photo and video mode
 
@@ -333,7 +337,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onActivityCreated(LifecycleOwner lifecycleOwner) {
-        if (mode == PHOTO) mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "pic.jpg");
+        if (mode == PHOTO) mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/"+getCurrentDateAndTime()+".jpg");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -860,6 +864,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                 if (null != output) {
                     try {
                         output.close();
+                        makeFileAvailible(mFile);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -1046,6 +1051,20 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
         //Log.e(TAG, "Couldn't find any suitable video size");
         return choices[choices.length - 1];
+    }
+
+    private String getCurrentDateAndTime(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
+    }
+
+    public static void makeFileAvailible(File file){
+        MediaScannerConnection.scanFile(fragment.getActivity(), new String[]{file.toString()}
+                , null, new MediaScannerConnection.OnScanCompletedListener(){
+                    public void onScanCompleted(String path, Uri uri){}
+                });
     }
 
 }

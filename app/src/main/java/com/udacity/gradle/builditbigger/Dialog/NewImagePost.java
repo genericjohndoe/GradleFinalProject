@@ -59,6 +59,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
             @Override
             public void onClick(View view) {
                 camera.takePicture();
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
         });
         return root;
@@ -80,8 +81,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_EXTERNAL_STORAGE) {
             if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-               /* ErrorDialog.newInstance(getString(R.string.request_permission))
-                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);*/
+               //recyclerView.setAdapter(new MediaAdapter(mGalleryFolder, this));
             }
         }
     }
