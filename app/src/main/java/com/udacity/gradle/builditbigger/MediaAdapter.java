@@ -1,8 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,13 +16,12 @@ import java.io.File;
  * Created by joeljohnson on 11/15/17.
  */
 
-public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> implements ActivityCompat.OnRequestPermissionsResultCallback {
-    private File imagesFile;
+public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
+    //todo implement ContentResolver.openFileDescriptor to gain access to files without permissions
     private Fragment fragment;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private Cursor cursor;
 
-    public MediaAdapter(File folderFile, Fragment fragment) {
-        imagesFile = folderFile;
+    public MediaAdapter( Fragment fragment) {
         this.fragment = fragment;
     }
 
@@ -37,14 +34,21 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        File imageFile = imagesFile.listFiles()[position];
-        Glide.with(fragment).load(imageFile)
+        cursor.moveToPosition(position);
+        String path = cursor.getString(0);
+        //Uri uri = new Uri.Builder().path(path).build();
+//        try {
+//            ParcelFileDescriptor pfd = fragment.getActivity().getContentResolver().openFileDescriptor(uri, ContentResolver.SCHEME_FILE);
+//        } catch (FileNotFoundException e){
+//
+//        }
+        Glide.with(fragment).load(new File(path))
                 .into(holder.getImageView());
     }
 
     @Override
     public int getItemCount() {
-        return imagesFile.listFiles(new PhotoFilter()).length;
+        return (cursor != null) ? cursor.getCount() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,21 +64,8 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
-            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-               /* ErrorDialog.newInstance(getString(R.string.request_permission))
-                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);*/
-            }
-        }
-    }
-
-    private void requestStorageWritePermission() {
-        if (fragment.shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            //new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-        } else {
-            fragment.requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
-        }
+    public void swapCursor(Cursor newCursor) {
+        cursor = newCursor;
+        notifyDataSetChanged();
     }
 }

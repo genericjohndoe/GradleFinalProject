@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequestPermissionsResultCallback {
-    //todo ensure saved photo can be seen from gallery
+    //todo ensure camera object is deleted when fragment dies
     //photo only variables
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final int STATE_PREVIEW = 0;
