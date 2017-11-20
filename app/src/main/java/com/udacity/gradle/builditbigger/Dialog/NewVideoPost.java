@@ -1,8 +1,18 @@
 package com.udacity.gradle.builditbigger.Dialog;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,23 +21,36 @@ import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
+import com.udacity.gradle.builditbigger.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 
 /**
  * Created by joeljohnson on 11/4/17.
  */
 
-public class NewVideoPost extends Fragment {
+public class NewVideoPost extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>, ActivityCompat.OnRequestPermissionsResultCallback {
     //TODO change UI to open camera and show horizontal linear recyclerview below
     //todo ensure camera is set to video
     //todo ensure camera object is deleted when fragment dies
     AutoFitTextureView textureView;
     RecyclerView recyclerView;
     LifeCycleCamera camera;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private String[] mediaColumns = new String[]{
+            MediaStore.Video.VideoColumns.DATA,
+            MediaStore.Video.VideoColumns.DATE_TAKEN
+    };
+    private MediaAdapter mediaAdapter;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestStorageWritePermission();
+            return;
+        }
+        mediaAdapter = new MediaAdapter(this);
     }
 
     @Nullable
@@ -37,7 +60,46 @@ public class NewVideoPost extends Fragment {
         textureView = root.findViewById(R.id.textureView);
         recyclerView = root.findViewById(R.id.video_thumbnail_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(mediaAdapter);
         camera = new LifeCycleCamera(this, textureView, LifeCycleCamera.VIDEO);
         return root;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(0, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    private void requestStorageWritePermission() {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            //new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+        } else {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            }
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(getActivity(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI, mediaColumns,
+                null,null, mediaColumns[1] + " DESC" );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        data.setNotificationUri(getActivity().getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        mediaAdapter.swapCursor(data);
+    }
+
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mediaAdapter.swapCursor(null);
     }
 }
