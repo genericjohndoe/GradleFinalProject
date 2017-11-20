@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
@@ -41,6 +42,8 @@ public class NewVideoPost extends Fragment implements  LoaderManager.LoaderCallb
             MediaStore.Video.VideoColumns.DATE_TAKEN
     };
     private MediaAdapter mediaAdapter;
+    Button record;
+    boolean startrecording = true;
 
 
     @Override
@@ -62,6 +65,19 @@ public class NewVideoPost extends Fragment implements  LoaderManager.LoaderCallb
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(mediaAdapter);
         camera = new LifeCycleCamera(this, textureView, LifeCycleCamera.VIDEO);
+        record = root.findViewById(R.id.record);
+        record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (startrecording){
+                    camera.startRecordingVideo();
+                    startrecording = !startrecording;
+                } else {
+                    camera.stopRecordingVideo();
+                    startrecording = !startrecording;
+                }
+            }
+        });
         return root;
     }
 

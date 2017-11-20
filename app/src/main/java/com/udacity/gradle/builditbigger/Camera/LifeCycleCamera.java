@@ -903,12 +903,12 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     }
 
     private String getVideoFilePath(Context context) {
-        final File dir = context.getExternalFilesDir(null);
-        return (dir == null ? "" : (dir.getAbsolutePath() + "/"))
-                + System.currentTimeMillis() + ".mp4";
+        final File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/"+getCurrentDateAndTime()+".mp4");
+        makeFileAvailible(dir);
+        return dir.toString();
     }
 
-    private void startRecordingVideo() {
+    public void startRecordingVideo() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
@@ -972,7 +972,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         }
     }
 
-    private void stopRecordingVideo() {
+    public void stopRecordingVideo() {
         // UI
         mIsRecordingVideo = false;
         //mButtonVideo.setText(R.string.record);
