@@ -66,7 +66,7 @@ public class GenreFragment extends Fragment  {
         mPersonalGenreDatabaseReference = mFirebaseDatabase.getReference();
         if (mGenreDatabaseReference == null) Log.i("GF", "Database reference is null");
         genres = new ArrayList<>();
-        genreAdapter = new GenreAdapter(getActivity(),genres);
+        //genreAdapter = new GenreAdapter(getActivity(),genres);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

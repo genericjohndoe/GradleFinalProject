@@ -12,12 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
@@ -33,69 +32,70 @@ import java.util.List;
 
 public class HilarityUserJokes extends Fragment {
 
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mjokesDatabaseReference;
-    private ChildEventListener mChildEventListener;
-
     RecyclerView recyclerview;
     EditText searchEditText;
+    ImageView noItems;
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(Constants.UID + " Jokes");
         jokes = new ArrayList<>();
+        Constants.DATABASE.child("userposts/" + Constants.UID + "/Posts")
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Joke joke = dataSnapshot.getValue(Joke.class);
+                            jokes.add(joke);
+                            jokeAdapter.notifyDataSetChanged();
+                            configureUI();
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
         jokeAdapter = new JokesAdapter(getActivity(), jokes);
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Joke joke = dataSnapshot.getValue(Joke.class);
-                jokes.add(0,joke);
-                jokeAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        };
-        mjokesDatabaseReference.addChildEventListener(mChildEventListener);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
+        noItems = root.findViewById(R.id.no_item_imageview);
+
         recyclerview = root.findViewById(R.id.recycler_view);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,true));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
-        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener(){
+        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 || dy < 0) {
                     //TODO hide profile fragment fab
+                    //((Profile) getParentFragment()).hideFab();
                 }
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //TODO SHOW profile fragment fab
+                    //((Profile) getParentFragment()).showFab();
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+        configureUI();
 
         searchEditText = root.findViewById(R.id.search_et);
         searchEditText.setOnKeyListener(new View.OnKeyListener() {
@@ -111,5 +111,15 @@ public class HilarityUserJokes extends Fragment {
             }
         });
         return root;
+    }
+
+    public void configureUI() {
+        if (jokes.isEmpty()) {
+            recyclerview.setVisibility(View.GONE);
+            noItems.setVisibility(View.VISIBLE);
+        } else {
+            recyclerview.setVisibility(View.VISIBLE);
+            noItems.setVisibility(View.GONE);
+        }
     }
 }

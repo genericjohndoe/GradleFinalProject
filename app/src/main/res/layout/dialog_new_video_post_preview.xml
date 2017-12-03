@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <com.udacity.gradle.builditbigger.Camera.AutoFitTextureView
         android:id="@+id/textureView"
         android:layout_width="match_parent"

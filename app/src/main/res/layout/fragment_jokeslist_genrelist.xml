@@ -18,11 +18,13 @@
         android:scrollbarStyle="outsideOverlay"
         android:paddingTop="8dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Currently, there's nothing here to show"
-        android:id="@+id/empty_tv"/>
+    <ImageView
+        android:id="@+id/no_item_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cropToPadding="false"
+        android:scaleType="fitStart"
+        app:srcCompat="@drawable/ic_do_not_disturb_black_24dp" />
 
 </LinearLayout>
 

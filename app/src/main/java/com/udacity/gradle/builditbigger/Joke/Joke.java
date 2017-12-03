@@ -1,30 +1,35 @@
 package com.udacity.gradle.builditbigger.Joke;
 
-import com.udacity.gradle.builditbigger.Constants.Constants;
-
 /**
  * Created by joeljohnson on 7/17/17.
  */
 
 public class Joke {
     private String jokeTitle;
-    private String author;
+    private String user;
     private String jokeBody;
-    private Object timeStamp;
+    private String timeStamp;
     private String genre;
     private String uid;
+    private String mediaURL;
+    private String pushId;
+    private String tagline;
 
 
     public Joke(){}
 
     //TODO modify constructor to include image/video url
-    public Joke(String joke, String user, String body, Object time, String genre){
-        jokeTitle = joke;
-        author = user;
+    public Joke(String jokeTitle, String user, String body, String time, String genre,
+                String url, String uid, String pushId, String tagline){
+        this.jokeTitle = jokeTitle;
+        this.user = user;
         jokeBody = body;
         timeStamp = time;
         this.genre = genre;
-        uid = Constants.UID;
+        this.uid = uid;
+        mediaURL = url;
+        this.pushId = pushId;
+        this.tagline = tagline;
     }
 
     public String getJokeTitle() {
@@ -35,8 +40,8 @@ public class Joke {
         jokeTitle = text;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getUser() {
+        return user;
     }
 
     public String getJokeBody(){
@@ -45,13 +50,16 @@ public class Joke {
 
     public void setJokeBody(String body){jokeBody = body;}
 
-    public Object getTimeStamp(){return timeStamp;}
+    public String getTimeStamp(){return timeStamp;}
 
     public String getGenre(){return genre;}
 
     public String getUID(){return uid;}
 
+    public String getMediaURL(){return mediaURL;}
 
+    public String getPushId(){return pushId;}
 
+    public String getTagline(){return tagline;}
 
 }

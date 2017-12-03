@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Dialog;
 
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.udacity.gradle.builditbigger.R;
 
 import java.io.File;
 
@@ -36,12 +37,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         cursor.moveToPosition(position);
         String path = cursor.getString(0);
-        //Uri uri = new Uri.Builder().path(path).build();
-//        try {
-//            ParcelFileDescriptor pfd = fragment.getActivity().getContentResolver().openFileDescriptor(uri, ContentResolver.SCHEME_FILE);
-//        } catch (FileNotFoundException e){
-//
-//        }
         Glide.with(fragment).load(new File(path))
                 .into(holder.getImageView());
     }

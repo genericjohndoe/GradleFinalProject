@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.UserSpecific;
+package com.udacity.gradle.builditbigger.MainUI;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,9 +18,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Genres.Genre;
-import com.udacity.gradle.builditbigger.Genres.GenreAdapter;
-import com.udacity.gradle.builditbigger.MainUI.Profile;
+import com.udacity.gradle.builditbigger.Joke.Joke;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
@@ -28,44 +27,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 10/12/17.
+ * Created by joeljohnson on 10/30/17.
  */
 
-public class HilarityUserGenres extends Fragment {
+public class FeedFragment extends Fragment {
+    // Firebase instance variables
+    /*private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mjokesDatabaseReference;
+    private DatabaseReference mPersonaljokesDatabaseReference;
+    private ChildEventListener mChildEventListener;*/
 
     RecyclerView recyclerview;
     EditText searchEditText;
     ImageView noItems;
-    GenreAdapter genreAdapter;
-    List<Genre> genres;
+    JokesAdapter jokeAdapter;
+    List<Joke> jokes;
 
+
+
+    public FeedFragment() {}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        genres = new ArrayList<>();
-        Constants.DATABASE.child("usergenres/"+Constants.UID).addChildEventListener(new ChildEventListener() {
+        jokes = new ArrayList<>();
+        Constants.DATABASE.child("feeds/"+Constants.UID)
+                .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Genre genre = dataSnapshot.getValue(Genre.class);
-                genres.add(genre);
-                genreAdapter.notifyDataSetChanged();
+                Joke joke = dataSnapshot.getValue(Joke.class);
+                jokes.add(joke);
+                jokeAdapter.notifyDataSetChanged();
                 configureUI();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
-        genreAdapter = new GenreAdapter(getActivity(),genres);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes);
     }
 
     @Override
@@ -73,32 +89,11 @@ public class HilarityUserGenres extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         noItems = root.findViewById(R.id.no_item_imageview);
-
         recyclerview = root.findViewById(R.id.recycler_view);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,true));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        recyclerview.setAdapter(genreAdapter);
-        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener(){
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-                if (dy > 0 || dy < 0) {
-                    //TODO hide profile fragment fab
-                    ((Profile) getParentFragment()).hideFab();
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE){
-                    //TODO SHOW profile fragment fab
-                    ((Profile) getParentFragment()).showFab();
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
+        recyclerview.setAdapter(jokeAdapter);
         configureUI();
-
         searchEditText = root.findViewById(R.id.search_et);
         searchEditText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -116,7 +111,7 @@ public class HilarityUserGenres extends Fragment {
     }
 
     public void configureUI() {
-        if (genres.isEmpty()) {
+        if (jokes.isEmpty()) {
             recyclerview.setVisibility(View.GONE);
             noItems.setVisibility(View.VISIBLE);
         } else {

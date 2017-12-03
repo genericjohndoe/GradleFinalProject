@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.udacity.gradle.builditbigger.Jokes.JokesActivity;
@@ -21,22 +22,29 @@ import java.util.List;
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
 
     Context context;
-    List<String> genres;
-    //RecyclerViewCallback rvc;
+    List<Genre> genres;
 
 
-    public GenreAdapter(Context context, List<String> genres) {
+    public GenreAdapter(Context context, List<Genre> genres) {
         this.context = context;
         this.genres = genres;
-        //this.rvc = rvc;
     }
 
     public class GenreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView genre;
+        TextView genreTitle;
+        ImageButton lockButton;
 
         public GenreViewHolder(View view) {
             super(view);
-            genre = (TextView) view.findViewById(R.id.genre_title);
+            genreTitle = view.findViewById(R.id.genre_title_textview);
+            lockButton = view.findViewById(R.id.lock_imageButton);
+            lockButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //todo switch between lock and unlock if genre was created by user
+                    //todo after checking if the changes in the database are made
+                }
+            });
             view.setOnClickListener(this);
             view.setTag(this);
         }
@@ -64,8 +72,9 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
     @Override
     public void onBindViewHolder(GenreViewHolder holder, int position) {
-        String genre = genres.get(position);
-        holder.genre.setText(genre);
+        Genre genre = genres.get(position);
+        holder.genreTitle.setText(genre.getTitle());
+        //todo check if genre is restricted, set appropriate image
         Log.i("genre adapter", genre + " at " + position);
     }
 }

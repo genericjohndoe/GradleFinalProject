@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.MainUI;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,11 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.udacity.gradle.builditbigger.UserSpecific.Profile;
+import com.udacity.gradle.builditbigger.R;
 
 public class HilarityActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    //todo change left nav so that header is gone
+    //todo replace imgs with gifs in left nav
     DrawerLayout drawer;
 
     @Override
@@ -111,7 +112,7 @@ public class HilarityActivity extends AppCompatActivity
         return true;
     }
 
-    private void changeFragment(Fragment fragment){
+    public void changeFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.hilarity_content_frame, fragment)
                 .addToBackStack(null)

@@ -25,11 +25,11 @@
             android:name=".SignInTutorial.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Intro">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Genres.GenreActivity"
@@ -59,14 +59,9 @@
                 android:value=".Jokes.JokesActivity" />
         </activity>
         <activity
-            android:name=".HilarityActivity"
+            android:name=".MainUI.HilarityActivity"
             android:label="@string/title_activity_main22"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

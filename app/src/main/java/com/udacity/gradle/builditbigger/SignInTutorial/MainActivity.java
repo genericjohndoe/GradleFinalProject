@@ -12,15 +12,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.HilarityActivity;
-import com.udacity.gradle.builditbigger.Language.LanguageSelectorFragment;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.UserSpecific.ChooseUserNameFragment;
+import com.udacity.gradle.builditbigger.UserSpecific.HilarityUser;
 
 import java.util.Arrays;
 
@@ -32,39 +29,25 @@ public class MainActivity extends MaterialIntroActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private DatabaseReference databaseReference;
+    private FirebaseUser user;
     public static final int RC_SIGN_IN = 1;
-    private String mUsername;
-    public static final String ANONYMOUS = "anonymous";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        mUsername = ANONYMOUS;
+        /*todo change intro screen to show legal stuff, prompts new user to pick user name
+        runs query on database when user stops typing, okay'd by animation
+        show introduction page then load app activity
+        do test to see where Constants.UID gets initialize
+        todo*/
         mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Constants.UID = user.getUid();
-                    databaseReference = FirebaseDatabase.getInstance().getReference();
-                    Query query = databaseReference.equalTo("users/"+user.getUid()).orderByKey();
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getChildrenCount() == 1){
-                                startActivity(new Intent(getBaseContext(), HilarityActivity.class));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                } else {
+                user = firebaseAuth.getCurrentUser();
+                if (user != null) { // User is signed in
+                    configureApp(user);
+                } else { //user isn't signed in, prompts user to sign in
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -74,18 +57,17 @@ public class MainActivity extends MaterialIntroActivity {
                                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                                     .build(),
                             RC_SIGN_IN);
+
+                    addSlide(new SlideFragmentBuilder()
+                            .backgroundColor(R.color.primary)
+                            .buttonsColor(R.color.accent)
+                            .title("Test title")
+                            .description("test description")
+                            .build());
+                    addSlide(new ChooseUserNameFragment());
                 }
             }
         };
-
-        addSlide(new SlideFragmentBuilder()
-                .backgroundColor(R.color.primary)
-                .buttonsColor(R.color.accent)
-                .title("Test title")
-                .description("test description")
-                .build());
-        addSlide(new LanguageSelectorFragment());
-        addSlide(new ChooseUserNameFragment());
 
     }
 
@@ -129,7 +111,22 @@ public class MainActivity extends MaterialIntroActivity {
     @Override
     public void onFinish() {
         super.onFinish();
-        startActivity(new Intent(getBaseContext(), HilarityActivity.class));
-        Log.i("joke", "onFinished called");
+        if (user != null) configureApp(user);
+        Log.i("uid", Constants.UID);
+        Log.i("Hilarity", "onFinished called");
+    }
+
+    public void configureApp(FirebaseUser user){
+        Constants.UID = user.getUid();
+        Constants.DATABASE.child("users/"+Constants.UID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Constants.USER = dataSnapshot.getValue(HilarityUser.class);
+                if (Constants.USER != null) startActivity(new Intent(getBaseContext(), HilarityActivity.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 }

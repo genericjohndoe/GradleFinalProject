@@ -1,8 +1,6 @@
 package com.udacity.gradle.builditbigger.UserSpecific;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +12,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
 
 import agency.tango.materialintroscreen.SlideFragment;
 
@@ -32,7 +29,6 @@ import agency.tango.materialintroscreen.SlideFragment;
 
 public class ChooseUserNameFragment extends SlideFragment {
     EditText editText;
-    DatabaseReference userDatabaseReference;
     FirebaseUser firebaseUser;
     boolean userNameCreated;
 
@@ -45,7 +41,6 @@ public class ChooseUserNameFragment extends SlideFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_choose_username, container, false);
-        userDatabaseReference = FirebaseDatabase.getInstance().getReference();
         editText = view.findViewById(R.id.username_edittext);
         return view;
     }
@@ -74,22 +69,20 @@ public class ChooseUserNameFragment extends SlideFragment {
         if (editText.getText().toString().length() > 0){
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             final String userName = editText.getText().toString();
-            Query query = userDatabaseReference.child("userlist").limitToFirst(1).equalTo(userName).orderByValue();
+            Query query = Constants.DATABASE.child("userlist").limitToFirst(1).equalTo(userName).orderByValue();
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.i("joke", "onDataChange called");
                     if (dataSnapshot.getChildrenCount() == 0){
-                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                        Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
                         List<String> languageList = new ArrayList<String>();
-                        languageList.addAll(set);
-                        userDatabaseReference.child("users").child(firebaseUser.getUid())
-                                .setValue(new HilarityUser(userName,"www.google.com", languageList));
-                        userDatabaseReference.getRoot().child("following/"+firebaseUser.getUid()+"/num").setValue(0);
-                        userDatabaseReference.getRoot().child("followers/"+firebaseUser.getUid()+"/num").setValue(0);
-                        userDatabaseReference.getRoot().child("userlist/"+firebaseUser.getUid()).setValue(userName);
-                        Log.i("joke", "no username found");
+                        languageList.add(Locale.getDefault().getDisplayLanguage());
+                        Constants.DATABASE.child("users/"+firebaseUser.getUid())
+                                .setValue(new HilarityUser(userName,"https://developer.android.com/_static/2f20c0c6d8/images/android/touchicon-180.png", languageList));
+                        Constants.DATABASE.child("following/"+firebaseUser.getUid()+"/num").setValue(0);
+                        Constants.DATABASE.child("followers/"+firebaseUser.getUid()+"/num").setValue(0);
+                        Constants.DATABASE.child("userlist/"+firebaseUser.getUid()).setValue(userName);
+                        Constants.DATABASE.child("userposts/"+firebaseUser.getUid()+"/NumPosts").setValue(0);
                         userNameCreated = true;
                     }
                 }

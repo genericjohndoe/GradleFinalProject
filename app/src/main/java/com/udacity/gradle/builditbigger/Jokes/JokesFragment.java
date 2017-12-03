@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -19,8 +18,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
-import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
@@ -106,12 +103,12 @@ public class JokesFragment extends Fragment {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                View view = dialog.getCustomView();
-                                String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
-                                String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
-                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP, genre);
-                                mjokesDatabaseReference.push().setValue(joke, 0);
-                                mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);
+//                                View view = dialog.getCustomView();
+//                                String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
+//                                String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
+//                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP, genre);
+//                                mjokesDatabaseReference.push().setValue(joke, 0);
+//                                mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {

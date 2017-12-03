@@ -22,7 +22,6 @@ import android.widget.Button;
 
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
-import com.udacity.gradle.builditbigger.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 
 /**
@@ -30,17 +29,15 @@ import com.udacity.gradle.builditbigger.R;
  */
 
 public class NewVideoPost extends Fragment implements  LoaderManager.LoaderCallbacks<Cursor>, ActivityCompat.OnRequestPermissionsResultCallback {
-    //TODO change UI to open camera and show horizontal linear recyclerview below
-    //todo ensure camera is set to video
+    //TODO modify UI to show how long user has been recording, switch between textureview and videoview
+    //todo take into account screen rotation such that textureview takes up entire screen in landscape mode
+    //todo after movie is selected, populate dialog with another fragment allow the user to add a tag line and submit
     //todo ensure camera object is deleted when fragment dies
     AutoFitTextureView textureView;
     RecyclerView recyclerView;
     LifeCycleCamera camera;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private String[] mediaColumns = new String[]{
-            MediaStore.Video.VideoColumns.DATA,
-            MediaStore.Video.VideoColumns.DATE_TAKEN
-    };
+    private String[] mediaColumns = {MediaStore.Video.VideoColumns.DATA, MediaStore.Video.VideoColumns.DATE_TAKEN};
     private MediaAdapter mediaAdapter;
     Button record;
     boolean startrecording = true;
@@ -59,7 +56,7 @@ public class NewVideoPost extends Fragment implements  LoaderManager.LoaderCallb
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_new_video_post, container, false);
+        View root = inflater.inflate(R.layout.dialog_new_video_post_preview, container, false);
         textureView = root.findViewById(R.id.textureView);
         recyclerView = root.findViewById(R.id.video_thumbnail_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -75,6 +72,14 @@ public class NewVideoPost extends Fragment implements  LoaderManager.LoaderCallb
                 } else {
                     camera.stopRecordingVideo();
                     startrecording = !startrecording;
+                    //String filename = camera.getFilePath();
+                    Bundle bundle = new Bundle();
+                    //bundle.putString("filepath", filename);
+                    NewImageSubmission nis = new NewImageSubmission();
+                    nis.setArguments(bundle);
+                    getParentFragment().getChildFragmentManager()
+                            .beginTransaction().replace(R.id.dialog_frame_layout, nis)
+                            .commit();
                 }
             }
         });

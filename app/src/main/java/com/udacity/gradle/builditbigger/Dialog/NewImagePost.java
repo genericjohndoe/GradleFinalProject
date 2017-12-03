@@ -15,14 +15,18 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.UploadTask;
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
-import com.udacity.gradle.builditbigger.MediaAdapter;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 
 /**
@@ -32,6 +36,8 @@ import com.udacity.gradle.builditbigger.R;
 public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor> {
     //todo replace texture view with image if one is clicked in recyclerview
     //todo create way to go back to texture view
+    //todo upon screen rotation, ensure texture view takes up entire screen
+    //todo enable saving to firebase storage
     //todo change UI  to show snap button over texture view
     AutoFitTextureView textureView;
     RecyclerView recyclerView;
@@ -40,11 +46,9 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     private String GALLERY_LOCATION = "hilarity_image";
     //private File mGalleryFolder;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private String[] mediaColumns = new String[]{
-            MediaStore.Images.ImageColumns.DATA,
-            MediaStore.Images.ImageColumns.DATE_TAKEN
-    };
+    private String[] mediaColumns = {MediaStore.Images.ImageColumns.DATA, MediaStore.Images.ImageColumns.DATE_TAKEN};
     private MediaAdapter mediaAdapter;
+    boolean justSanpped;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,12 +58,13 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
             return;
         }
         mediaAdapter = new MediaAdapter(this);
+        justSanpped = false;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_new_image_post, container, false);
+        View root = inflater.inflate(R.layout.dialog_new_image_post_preview, container, false);
         textureView = root.findViewById(R.id.textureView);
         snap = root.findViewById(R.id.snap);
         recyclerView = root.findViewById(R.id.photo_thumbnail_recyclerview);
@@ -70,7 +75,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
             @Override
             public void onClick(View view) {
                 camera.takePicture();
-                recyclerView.getAdapter().notifyDataSetChanged();
+                justSanpped = true;
             }
         });
         return root;
@@ -121,9 +126,36 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         data.setNotificationUri(getActivity().getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         mediaAdapter.swapCursor(data);
+        if (justSanpped) {
+            Constants.STORAGE.child("users/"+Constants.UID+"/images").putFile(camera.getFilePath())
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //todo tell user upload failed
+                        }
+                    })
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+                            continueToSubmit(downloadUrl);
+                        }
+                    });
+        }
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
         mediaAdapter.swapCursor(null);
+    }
+
+    public void continueToSubmit(String filename){
+        Bundle bundle = new Bundle();
+        bundle.putString("filepath", filename);
+        Log.i("file name 1", filename);
+        NewImageSubmission nis = new NewImageSubmission();
+        nis.setArguments(bundle);
+        getParentFragment().getChildFragmentManager()
+                .beginTransaction().replace(R.id.new_post_fragment, nis)
+                .commit();
     }
 }

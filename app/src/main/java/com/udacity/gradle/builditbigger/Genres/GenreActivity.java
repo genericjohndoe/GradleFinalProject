@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.udacity.gradle.builditbigger.UserSpecific.Profile;
+import com.udacity.gradle.builditbigger.MainUI.Profile;
 import com.udacity.gradle.builditbigger.R;
 
 /**
