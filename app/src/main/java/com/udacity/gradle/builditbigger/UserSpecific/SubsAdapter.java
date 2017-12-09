@@ -28,7 +28,7 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
     List<String> subscribersList;
     Fragment fragment;
 
-    public SubsAdapter( List<String> list, Fragment fragment) {
+    public SubsAdapter(List<String> list, Fragment fragment) {
         subscribersList = list;
         this.fragment = fragment;
     }
@@ -42,7 +42,7 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        FirebaseDatabase.getInstance().getReference("users/"+subscribersList.get(position))
+        FirebaseDatabase.getInstance().getReference("users/" + subscribersList.get(position))
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -52,7 +52,8 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
                 });
     }
 

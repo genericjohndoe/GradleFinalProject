@@ -15,8 +15,8 @@ public class PhotoFilter implements FileFilter {
     public boolean accept(File file) {
         String extension = getFileExtension(file);
         if (!extension.equals("")) {
-            for (String type: validTypes){
-                if (type.equals(extension.toLowerCase())){
+            for (String type : validTypes) {
+                if (type.equals(extension.toLowerCase())) {
                     return true;
                 }
             }

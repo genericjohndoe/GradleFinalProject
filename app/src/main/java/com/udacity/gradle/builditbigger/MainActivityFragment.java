@@ -32,8 +32,8 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
     List<String> languageList;
 
 
-
-    public MainActivityFragment() {}
+    public MainActivityFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,11 +66,11 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putStringSet(getString(R.string.preference_saved_languages_set), new HashSet<String>(languageList));
-        if (editor.commit()){
+        if (editor.commit()) {
             Toast toast = Toast.makeText(getActivity(), "language added", Toast.LENGTH_SHORT);
             toast.show();
         }
-        Log.i("joke", ""+languageList.size());
+        Log.i("joke", "" + languageList.size());
     }
 }
 

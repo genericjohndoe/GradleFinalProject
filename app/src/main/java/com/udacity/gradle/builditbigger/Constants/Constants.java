@@ -16,4 +16,7 @@ public class Constants {
     public static String UID;
     public static DatabaseReference DATABASE = FirebaseDatabase.getInstance().getReference();
     public static StorageReference STORAGE = FirebaseStorage.getInstance().getReference();
+    public static final int TEXT = 1;
+    public static final int IMAGE = 2;
+    public static final int VIDEO = 3;
 }

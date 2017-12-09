@@ -151,12 +151,14 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     //variables shared between photo and video mode
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
+
     private String mCameraId;
     private AutoFitTextureView mTextureView;
     private CameraCaptureSession mCaptureSession;
@@ -168,6 +170,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     private CaptureRequest.Builder mPreviewRequestBuilder;
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
     private int mSensorOrientation; //is of type Integer in video class
+
     static class CompareSizesByArea implements Comparator<Size> {
 
         @Override
@@ -176,16 +179,17 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                     (long) rhs.getWidth() * rhs.getHeight());
         }
     }
+
     private final TextureView.SurfaceTextureListener mSurfaceTextureListener
             = new TextureView.SurfaceTextureListener() {
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
-           if (mode == PHOTO){
-               openCameraForPhoto(width, height);
-           } else {
-               openCameraForVideo(width, height);
-           }
+            if (mode == PHOTO) {
+                openCameraForPhoto(width, height);
+            } else {
+                openCameraForVideo(width, height);
+            }
         }
 
         @Override
@@ -212,7 +216,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
             mCameraDevice = cameraDevice;
             if (mode == PHOTO) {
                 createCameraPreviewSession();
-            }else {
+            } else {
                 startVideoPreview();
             }
         }
@@ -248,12 +252,14 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
             Manifest.permission.RECORD_AUDIO,
     };
     private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
+
     static {
         INVERSE_ORIENTATIONS.append(Surface.ROTATION_0, 270);
         INVERSE_ORIENTATIONS.append(Surface.ROTATION_90, 180);
         INVERSE_ORIENTATIONS.append(Surface.ROTATION_180, 90);
         INVERSE_ORIENTATIONS.append(Surface.ROTATION_270, 0);
     }
+
     private Size mVideoSize;
     private MediaRecorder mMediaRecorder;
     private boolean mIsRecordingVideo;
@@ -264,7 +270,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     public static final int PHOTO = 0;
     public static final int VIDEO = 1;
 
-    public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv, int mode){
+    public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv, int mode) {
         this.fragment = fragment;
         mTextureView = aftv;
         this.fragment.getLifecycle().addObserver(this);
@@ -337,7 +343,8 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onActivityCreated(LifecycleOwner lifecycleOwner) {
-        if (mode == PHOTO) mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/"+getCurrentDateAndTime()+".jpg");
+        if (mode == PHOTO)
+            mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/" + getCurrentDateAndTime() + ".jpg");
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -381,7 +388,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         if (shouldShowRequestPermissionRationale(VIDEO_PERMISSIONS)) {
             //new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
-            fragment.requestPermissions( VIDEO_PERMISSIONS, REQUEST_VIDEO_PERMISSIONS);
+            fragment.requestPermissions(VIDEO_PERMISSIONS, REQUEST_VIDEO_PERMISSIONS);
         }
     }
 
@@ -597,7 +604,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
             //        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.");
-        } catch (SecurityException e){
+        } catch (SecurityException e) {
 
         }
     }
@@ -903,7 +910,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     }
 
     private String getVideoFilePath(Context context) {
-        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/"+getCurrentDateAndTime()+".mp4");
+        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/" + getCurrentDateAndTime() + ".mp4");
         //Constants.STORAGE.child("users/"+Constants.UID).putFile(mFile.toURI());
         makeFileAvailible(mFile);
         return mFile.toString();
@@ -1054,21 +1061,22 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         return choices[choices.length - 1];
     }
 
-    private String getCurrentDateAndTime(){
+    private String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
     }
 
-    public static void makeFileAvailible(File file){
+    public static void makeFileAvailible(File file) {
         MediaScannerConnection.scanFile(fragment.getActivity(), new String[]{file.toString()}
-                , null, new MediaScannerConnection.OnScanCompletedListener(){
-                    public void onScanCompleted(String path, Uri uri){}
+                , null, new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                    }
                 });
     }
 
-    public Uri getFilePath(){
+    public Uri getFilePath() {
         return Uri.fromFile(mFile);
     }
 

@@ -116,17 +116,19 @@ public class MainActivity extends MaterialIntroActivity {
         Log.i("Hilarity", "onFinished called");
     }
 
-    public void configureApp(FirebaseUser user){
+    public void configureApp(FirebaseUser user) {
         Constants.UID = user.getUid();
-        Constants.DATABASE.child("users/"+Constants.UID).addValueEventListener(new ValueEventListener() {
+        Constants.DATABASE.child("users/" + Constants.UID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Constants.USER = dataSnapshot.getValue(HilarityUser.class);
-                if (Constants.USER != null) startActivity(new Intent(getBaseContext(), HilarityActivity.class));
+                if (Constants.USER != null)
+                    startActivity(new Intent(getBaseContext(), HilarityActivity.class));
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 }

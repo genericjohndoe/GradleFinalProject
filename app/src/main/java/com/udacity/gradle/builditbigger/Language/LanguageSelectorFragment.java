@@ -73,11 +73,11 @@ public class LanguageSelectorFragment extends SlideFragment implements RecyclerV
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putStringSet(getString(R.string.preference_saved_languages_set), new HashSet<String>(languageList));
-        if (editor.commit()){
+        if (editor.commit()) {
             Toast toast = Toast.makeText(getActivity(), "language added", Toast.LENGTH_SHORT);
             toast.show();
         }
-        Log.i("joke", ""+languageList.size());
+        Log.i("joke", "" + languageList.size());
     }
 
 }

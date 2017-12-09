@@ -65,7 +65,6 @@ public class Profile extends Fragment {
     private List<String> languages = new ArrayList<>();
 
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

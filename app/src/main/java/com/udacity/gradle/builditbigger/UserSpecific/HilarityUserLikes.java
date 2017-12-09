@@ -53,16 +53,20 @@ public class HilarityUserLikes extends Fragment {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
         jokeAdapter = new JokesAdapter(getActivity(), jokes);
     }
@@ -73,12 +77,12 @@ public class HilarityUserLikes extends Fragment {
         noItems = root.findViewById(R.id.no_item_imageview);
 
         recyclerview = root.findViewById(R.id.recycler_view);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,true));
+        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
-        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener(){
+        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 || dy < 0) {
                     //TODO hide profile fragment fab
                     ((Profile) getParentFragment()).hideFab();
@@ -88,14 +92,13 @@ public class HilarityUserLikes extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //TODO SHOW profile fragment fab
                     ((Profile) getParentFragment()).showFab();
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
-        configureUI();
 
         searchEditText = root.findViewById(R.id.search_et);
         searchEditText.setOnKeyListener(new View.OnKeyListener() {
@@ -110,6 +113,7 @@ public class HilarityUserLikes extends Fragment {
                 return false;
             }
         });
+        configureUI();
         return root;
     }
 
@@ -117,9 +121,11 @@ public class HilarityUserLikes extends Fragment {
         if (jokes.isEmpty()) {
             recyclerview.setVisibility(View.GONE);
             noItems.setVisibility(View.VISIBLE);
+            searchEditText.setVisibility(View.GONE);
         } else {
             recyclerview.setVisibility(View.VISIBLE);
             noItems.setVisibility(View.GONE);
+            searchEditText.setVisibility(View.VISIBLE);
         }
     }
 }

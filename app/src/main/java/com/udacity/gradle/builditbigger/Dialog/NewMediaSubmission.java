@@ -28,7 +28,7 @@ public class NewMediaSubmission extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_framelayout, container, false);
         getChildFragmentManager().beginTransaction()
-                .add(R.id.dialog_frame_layout, typeOfFragment == 1 ? new NewImagePost(): new NewVideoPost() )
+                .add(R.id.dialog_frame_layout, typeOfFragment == 1 ? new NewImagePost() : new NewVideoPost())
                 .addToBackStack(null).commit();
         return root;
     }

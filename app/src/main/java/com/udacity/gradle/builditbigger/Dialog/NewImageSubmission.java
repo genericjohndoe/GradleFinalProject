@@ -3,17 +3,27 @@ package com.udacity.gradle.builditbigger.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.R;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by joeljohnson on 11/21/17.
@@ -26,6 +36,8 @@ public class NewImageSubmission extends Fragment {
     private EditText tagline;
     private AutoCompleteTextView genre;
     private String filePath;
+    private Button submit;
+    private List<String> genrelist;
 
     public NewImageSubmission() {
     }
@@ -34,7 +46,30 @@ public class NewImageSubmission extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         filePath = getArguments().getString("filepath");
-        Log.i("file name 2", filePath);
+        genrelist = new ArrayList<>();
+        Constants.DATABASE.child("genrelist").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String genre = dataSnapshot.getValue(String.class);
+                genrelist.add(genre);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Nullable
@@ -44,12 +79,27 @@ public class NewImageSubmission extends Fragment {
         imageSubmission = root.findViewById(R.id.imagePost);
         tagline = root.findViewById(R.id.image_tagline);
         genre = root.findViewById(R.id.genre);
-        //File file = new File(filePath);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_dropdown_item_1line, genrelist);
+        genre.setAdapter(arrayAdapter);
         Glide.with(this)
                 .load(filePath)
                 .into(imageSubmission);
-        Toast.makeText(getActivity(), filePath, Toast.LENGTH_SHORT).show();
-
+        submit = root.findViewById(R.id.submit_button);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(System.currentTimeMillis());
+                String formattedDate = cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
+                DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
+                Joke newImagePost = new Joke("", Constants.USER.getUserName(), "", formattedDate,
+                        genre.getText().toString(), filePath, Constants.UID, db.getKey(), tagline.getText().toString(),Constants.IMAGE);
+                db.setValue(newImagePost);
+                Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/likes/num").setValue(0);
+                Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/comments/num").setValue(0);
+            }
+        });
         return root;
     }
 }

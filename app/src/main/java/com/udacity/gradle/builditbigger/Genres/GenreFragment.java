@@ -35,7 +35,7 @@ import java.util.Set;
  * Created by joeljohnson on 7/25/17.
  */
 
-public class GenreFragment extends Fragment  {
+public class GenreFragment extends Fragment {
 
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
@@ -48,7 +48,8 @@ public class GenreFragment extends Fragment  {
     List<String> genres;
     String langaugeGenre = "";
 
-    public GenreFragment() {}
+    public GenreFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,9 +57,9 @@ public class GenreFragment extends Fragment  {
         Log.i("GF", "GF started");
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
-            langaugeGenre = set.toArray()[0] + " Genres";
-            Log.i("jokes", Locale.getDefault().getDisplayLanguage());
+        Set<String> set = sharedPref.getStringSet(getString(R.string.preference_saved_languages_set), null);
+        langaugeGenre = set.toArray()[0] + " Genres";
+        Log.i("jokes", Locale.getDefault().getDisplayLanguage());
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -71,21 +72,25 @@ public class GenreFragment extends Fragment  {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String genre = dataSnapshot.getValue(String.class);
-                genres.add(0,genre);
+                genres.add(0, genre);
                 genreAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         };
         mGenreDatabaseReference.addChildEventListener(mChildEventListener);
     }
@@ -117,7 +122,7 @@ public class GenreFragment extends Fragment  {
                                 if (!input.equals("") || !input.equals(null)) {
                                     String newGenre = input.toString();
                                     mGenreDatabaseReference.push().setValue(newGenre, 0);
-                                    mPersonalGenreDatabaseReference.child(Constants.UID + " Genres").child(newGenre).setValue(System.currentTimeMillis(),0);
+                                    mPersonalGenreDatabaseReference.child(Constants.UID + " Genres").child(newGenre).setValue(System.currentTimeMillis(), 0);
                                 }
                             }
                         })
@@ -127,7 +132,7 @@ public class GenreFragment extends Fragment  {
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 dialog.dismiss();
                             }
-                         })
+                        })
                         .checkBoxPromptRes(R.string.restricted, false, null)
                         .show().setCanceledOnTouchOutside(false);
             }

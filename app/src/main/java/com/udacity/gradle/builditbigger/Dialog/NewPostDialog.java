@@ -46,28 +46,18 @@ public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRe
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) changeFragment(new NewTextPost());
-                if (tab.getPosition() == 1){
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt("media", 1);
-//                    NewMediaSubmission nms = new NewMediaSubmission();
-//                    nms.setArguments(bundle);
-                    changeFragment(new NewImagePost());
-                }
-                if (tab.getPosition() == 2){
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt("media", 2);
-//                    NewMediaSubmission nms = new NewMediaSubmission();
-//                    nms.setArguments(bundle);
-                    changeFragment(new NewVideoPost());
-                }
+                if (tab.getPosition() == 1) changeFragment(new NewImagePost());
+                if (tab.getPosition() == 2) changeFragment(new NewVideoPost());
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
 
             //TODO allow user to submit information to the database
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
 
 
@@ -85,7 +75,7 @@ public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRe
         return dialog;
     }
 
-    private void changeFragment(Fragment fragment){
+    private void changeFragment(Fragment fragment) {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.new_post_fragment, fragment)
                 .commit();

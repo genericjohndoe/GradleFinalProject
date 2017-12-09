@@ -57,10 +57,7 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <FrameLayout
-            android:id="@+id/post_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <include layout="@layout/image_post_content_item"/>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

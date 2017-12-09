@@ -22,7 +22,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     private Fragment fragment;
     private Cursor cursor;
 
-    public MediaAdapter( Fragment fragment) {
+    public MediaAdapter(Fragment fragment) {
         this.fragment = fragment;
     }
 

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,6 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,7 @@ public class HilarityUserJokes extends Fragment {
     RecyclerView recyclerview;
     EditText searchEditText;
     ImageView noItems;
+
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
 
@@ -42,27 +43,32 @@ public class HilarityUserJokes extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         jokes = new ArrayList<>();
-        Constants.DATABASE.child("userposts/" + Constants.UID + "/Posts")
+        Constants.DATABASE.child("userposts/" + Constants.UID + "/posts")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Joke joke = dataSnapshot.getValue(Joke.class);
-                            jokes.add(joke);
-                            jokeAdapter.notifyDataSetChanged();
-                            configureUI();
+                        jokes.add(joke);
+                        Log.i("joke size", jokes.size() + "");
+                        jokeAdapter.notifyDataSetChanged();
+                        configureUI();
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    }
 
                     @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {}
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    }
 
                     @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
                 });
         jokeAdapter = new JokesAdapter(getActivity(), jokes);
     }
@@ -71,31 +77,6 @@ public class HilarityUserJokes extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         noItems = root.findViewById(R.id.no_item_imageview);
-
-        recyclerview = root.findViewById(R.id.recycler_view);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,true));
-        recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        recyclerview.setAdapter(jokeAdapter);
-        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0) {
-                    //TODO hide profile fragment fab
-                    //((Profile) getParentFragment()).hideFab();
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    //TODO SHOW profile fragment fab
-                    //((Profile) getParentFragment()).showFab();
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-        configureUI();
 
         searchEditText = root.findViewById(R.id.search_et);
         searchEditText.setOnKeyListener(new View.OnKeyListener() {
@@ -110,6 +91,38 @@ public class HilarityUserJokes extends Fragment {
                 return false;
             }
         });
+
+        recyclerview = root.findViewById(R.id.recycler_view);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        llm.setStackFromEnd(true);
+        recyclerview.setLayoutManager(llm);
+
+        recyclerview.setAdapter(jokeAdapter);
+        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0) {
+                    //TODO hide profile fragment fab
+                    //todo set up animation for hiding ET, rate of disappear ~ rate of scrolling
+                    searchEditText.setVisibility(View.GONE);
+                    //((Profile) getParentFragment()).hideFab();
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    //TODO SHOW profile fragment fab
+                    //todo show ET anim at specific rate
+                    searchEditText.setVisibility(View.VISIBLE);
+                    //((Profile) getParentFragment()).showFab();
+                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
+        configureUI();
         return root;
     }
 
@@ -117,9 +130,11 @@ public class HilarityUserJokes extends Fragment {
         if (jokes.isEmpty()) {
             recyclerview.setVisibility(View.GONE);
             noItems.setVisibility(View.VISIBLE);
+            searchEditText.setVisibility(View.GONE);
         } else {
             recyclerview.setVisibility(View.VISIBLE);
             noItems.setVisibility(View.GONE);
+            searchEditText.setVisibility(View.VISIBLE);
         }
     }
 }

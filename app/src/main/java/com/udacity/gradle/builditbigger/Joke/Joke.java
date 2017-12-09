@@ -14,13 +14,15 @@ public class Joke {
     private String mediaURL;
     private String pushId;
     private String tagline;
+    private Integer type;
 
 
-    public Joke(){}
+    public Joke() {
+    }
 
     //TODO modify constructor to include image/video url
     public Joke(String jokeTitle, String user, String body, String time, String genre,
-                String url, String uid, String pushId, String tagline){
+                String url, String uid, String pushId, String tagline, Integer type) {
         this.jokeTitle = jokeTitle;
         this.user = user;
         jokeBody = body;
@@ -30,6 +32,7 @@ public class Joke {
         mediaURL = url;
         this.pushId = pushId;
         this.tagline = tagline;
+        this.type = type;
     }
 
     public String getJokeTitle() {
@@ -44,22 +47,38 @@ public class Joke {
         return user;
     }
 
-    public String getJokeBody(){
+    public String getJokeBody() {
         return jokeBody;
     }
 
-    public void setJokeBody(String body){jokeBody = body;}
+    public void setJokeBody(String body) {
+        jokeBody = body;
+    }
 
-    public String getTimeStamp(){return timeStamp;}
+    public String getTimeStamp() {
+        return timeStamp;
+    }
 
-    public String getGenre(){return genre;}
+    public String getGenre() {
+        return genre;
+    }
 
-    public String getUID(){return uid;}
+    public String getUID() {
+        return uid;
+    }
 
-    public String getMediaURL(){return mediaURL;}
+    public String getMediaURL() {
+        return mediaURL;
+    }
 
-    public String getPushId(){return pushId;}
+    public String getPushId() {
+        return pushId;
+    }
 
-    public String getTagline(){return tagline;}
+    public String getTagline() {
+        return tagline;
+    }
+
+    public Integer getType(){ return type;}
 
 }

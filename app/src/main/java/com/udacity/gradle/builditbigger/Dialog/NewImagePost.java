@@ -29,6 +29,9 @@ import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * Created by joeljohnson on 11/3/17.
  */
@@ -119,7 +122,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(getActivity(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, mediaColumns,
-                null,null, mediaColumns[1] + " DESC" );
+                null, null, mediaColumns[1] + " DESC");
     }
 
     @Override
@@ -127,7 +130,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
         data.setNotificationUri(getActivity().getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         mediaAdapter.swapCursor(data);
         if (justSanpped) {
-            Constants.STORAGE.child("users/"+Constants.UID+"/images").putFile(camera.getFilePath())
+            Constants.STORAGE.child("users/" + Constants.UID + "/images/" + getCurrentDateAndTime() + ".png").putFile(camera.getFilePath())
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -148,7 +151,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
         mediaAdapter.swapCursor(null);
     }
 
-    public void continueToSubmit(String filename){
+    public void continueToSubmit(String filename) {
         Bundle bundle = new Bundle();
         bundle.putString("filepath", filename);
         Log.i("file name 1", filename);
@@ -156,6 +159,13 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
         nis.setArguments(bundle);
         getParentFragment().getChildFragmentManager()
                 .beginTransaction().replace(R.id.new_post_fragment, nis)
-                .commit();
+                .addToBackStack(null).commit();
+    }
+
+    private String getCurrentDateAndTime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
     }
 }

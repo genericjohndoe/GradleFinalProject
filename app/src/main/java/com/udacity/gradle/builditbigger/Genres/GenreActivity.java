@@ -19,6 +19,7 @@ import com.udacity.gradle.builditbigger.R;
 public class GenreActivity extends AppCompatActivity {
 
     ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

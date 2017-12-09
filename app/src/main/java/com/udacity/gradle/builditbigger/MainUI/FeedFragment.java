@@ -44,43 +44,43 @@ public class FeedFragment extends Fragment {
     List<Joke> jokes;
 
 
-
-    public FeedFragment() {}
+    public FeedFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         jokes = new ArrayList<>();
-        Constants.DATABASE.child("feeds/"+Constants.UID)
+        Constants.DATABASE.child("feeds/" + Constants.UID)
                 .addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Joke joke = dataSnapshot.getValue(Joke.class);
-                jokes.add(joke);
-                jokeAdapter.notifyDataSetChanged();
-                configureUI();
-            }
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        Joke joke = dataSnapshot.getValue(Joke.class);
+                        jokes.add(joke);
+                        jokeAdapter.notifyDataSetChanged();
+                        configureUI();
+                    }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+                    }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                    }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
         jokeAdapter = new JokesAdapter(getActivity(), jokes);
     }
 
@@ -90,7 +90,7 @@ public class FeedFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         noItems = root.findViewById(R.id.no_item_imageview);
         recyclerview = root.findViewById(R.id.recycler_view);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,true));
+        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
         configureUI();

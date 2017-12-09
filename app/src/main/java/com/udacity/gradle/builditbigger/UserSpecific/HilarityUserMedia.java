@@ -53,21 +53,25 @@ public class HilarityUserMedia extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Joke joke = dataSnapshot.getValue(Joke.class);
-                jokes.add(0,joke);
+                jokes.add(0, joke);
                 jokeAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         };
         mjokesDatabaseReference.addChildEventListener(mChildEventListener);
     }
@@ -77,7 +81,7 @@ public class HilarityUserMedia extends Fragment {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         recyclerview = root.findViewById(R.id.recycler_view);
         //TODO take into account screen size when populating grid
-        recyclerview.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
 

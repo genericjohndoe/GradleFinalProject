@@ -44,7 +44,8 @@ public class JokesFragment extends Fragment {
     String language;
 
 
-    public JokesFragment() {}
+    public JokesFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class JokesFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
         Bundle extras = intent.getExtras();
-        if (extras != null){
+        if (extras != null) {
             genre = extras.getString(getString(R.string.genres));
             language = extras.getString(getString(R.string.languages));
         }
@@ -66,21 +67,25 @@ public class JokesFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Joke joke = dataSnapshot.getValue(Joke.class);
-                jokes.add(0,joke);
+                jokes.add(0, joke);
                 jokeAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         };
         mjokesDatabaseReference.addChildEventListener(mChildEventListener);
     }

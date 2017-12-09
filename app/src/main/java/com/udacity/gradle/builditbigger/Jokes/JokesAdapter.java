@@ -1,14 +1,15 @@
 package com.udacity.gradle.builditbigger.Jokes;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -16,9 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
-import com.udacity.gradle.builditbigger.Posts.ImagePostContent;
-import com.udacity.gradle.builditbigger.Posts.TextPostContent;
-import com.udacity.gradle.builditbigger.Posts.VideoPostContent;
 import com.udacity.gradle.builditbigger.R;
 
 import java.util.List;
@@ -32,6 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHolder> {
     Context context;
     List<Joke> jokes;
+    int id = 1;
 
 
     public JokesAdapter(Context context, List<Joke> objects) {
@@ -48,16 +47,14 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         ImageButton likeButton;
         ImageButton options;
         ImageButton comments;
-        FrameLayout frameLayout;
-
+        TextView tagline;
 
         public JokesViewHolder(View view) {
             super(view);
+            tagline = view.findViewById(R.id.tagline_textView);
             timeStampTextView = view.findViewById(R.id.time_date_textView);
-            frameLayout = view.findViewById(R.id.post_content);
             profileImg = view.findViewById(R.id.profile_imageview);
             userName = view.findViewById(R.id.username_textView);
-
             options = view.findViewById(R.id.options_imageButton);
             options.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,6 +79,10 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return jokes.get(position).getType();
+    }
 
     @Override
     public int getItemCount() {
@@ -90,13 +91,36 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     @Override
     public JokesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item, null);
-        return new JokesViewHolder(view);
+        View view;
+        switch  (viewType){
+            case Constants.TEXT:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_post, parent, false);
+                return new TextPostViewHolder(view);
+             case Constants.IMAGE:
+                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_post, parent, false);
+                 return new ImagePostViewHolder(view);
+             case Constants.VIDEO:
+                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_post, parent, false);
+                 return new VideoPostViewHolder(view);
+        }
+       return null;
     }
 
     @Override
     public void onBindViewHolder(final JokesViewHolder holder, int position) {
         final Joke joke = jokes.get(position);
+
+        if (holder instanceof TextPostViewHolder){
+            ((TextPostViewHolder) holder).title.setText(joke.getJokeTitle());
+            ((TextPostViewHolder) holder).body.setText(joke.getJokeBody());
+            ((TextPostViewHolder) holder).tagline.setText(joke.getTagline());
+        } else if (holder instanceof ImagePostViewHolder){
+            Glide.with(context).load(joke.getMediaURL()).into(((ImagePostViewHolder) holder).post);
+            ((ImagePostViewHolder) holder).tagline.setText(joke.getTagline());
+        } else {
+            ((VideoPostViewHolder) holder).post.setVideoURI(Uri.parse(joke.getMediaURL()));
+        }
+
         holder.userName.setText(joke.getUser());
 
         Constants.DATABASE.child("users/" + joke.getUID() + "/urlString")
@@ -117,7 +141,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Integer num = dataSnapshot.getValue(Integer.class);
-                        holder.likeCounterTextView.setText(Integer.toString(num));
+                        holder.likeCounterTextView.setText(Integer.toString(0));
                     }
 
                     @Override
@@ -130,7 +154,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Integer num = dataSnapshot.getValue(Integer.class);
-                        holder.commentCounterTextView.setText(Integer.toString(num));
+                        holder.commentCounterTextView.setText(Integer.toString(0));
                     }
 
                     @Override
@@ -150,33 +174,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {}
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
                 });
-
-        if (joke.getMediaURL().equals("")) {
-            Bundle bundle = new Bundle();
-            bundle.putString("jokeTitle", joke.getJokeTitle());
-            bundle.putString("jokeBody", joke.getJokeBody());
-            bundle.putString("tagline", joke.getTagline());
-            //may not work
-            TextPostContent tpc = new TextPostContent();
-            tpc.setArguments(bundle);
-            holder.frameLayout.addView(tpc.getView());
-        } else if (joke.getMediaURL().contains(".png")) {//may need to take into account more file types
-            Bundle bundle = new Bundle();
-            bundle.putString("media_url", joke.getMediaURL());
-            bundle.putString("tagline", joke.getTagline());
-            ImagePostContent ipc = new ImagePostContent();
-            ipc.setArguments(bundle);
-            holder.frameLayout.addView(ipc.getView());
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putString("media_url", joke.getMediaURL());
-            bundle.putString("tagline", joke.getTagline());
-            VideoPostContent vpc = new VideoPostContent();
-            vpc.setArguments(bundle);
-            holder.frameLayout.addView(vpc.getView());
-        }
 
         holder.timeStampTextView.setText(joke.getTimeStamp());
 
@@ -198,7 +198,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {}
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
                         });
             }
         });
@@ -212,5 +213,35 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         });
     }
 
+    public class TextPostViewHolder extends JokesViewHolder{
+        TextView title;
+        TextView body;
+
+        public TextPostViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.jokeTitle_textView);
+            body = view.findViewById(R.id.jokeBody_textView);
+        }
+
+    }
+
+    public class ImagePostViewHolder extends JokesViewHolder{
+        ImageView post;
+
+        public ImagePostViewHolder(View view){
+            super(view);
+            post = view.findViewById(R.id.post_imageview);
+        }
+    }
+
+    public class VideoPostViewHolder extends JokesViewHolder{
+        VideoView post;
+
+        public VideoPostViewHolder(View view){
+            super(view);
+            post = view.findViewById(R.id.post_videoView);
+            post.start();
+        }
+    }
 
 }

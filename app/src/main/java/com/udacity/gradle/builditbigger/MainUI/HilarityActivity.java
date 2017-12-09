@@ -112,7 +112,7 @@ public class HilarityActivity extends AppCompatActivity
         return true;
     }
 
-    public void changeFragment(Fragment fragment){
+    public void changeFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.hilarity_content_frame, fragment)
                 .addToBackStack(null)
