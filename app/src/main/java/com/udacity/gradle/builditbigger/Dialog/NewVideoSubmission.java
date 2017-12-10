@@ -59,7 +59,6 @@ public class NewVideoSubmission extends Fragment {
                 Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/comments/num").setValue(0);
             }
         });
-
         return root;
     }
 }

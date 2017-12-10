@@ -77,8 +77,9 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
         snap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                camera.takePicture();
-                justSanpped = true;
+//                camera.takePicture();
+//                justSanpped = true;
+                camera.switchCamera();
             }
         });
         return root;
