@@ -21,12 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.UploadTask;
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
-import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 
 import java.text.SimpleDateFormat;
@@ -74,27 +70,28 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startrecording) {
-                    camera.startRecordingVideo();
-                    startrecording = !startrecording;
-                } else {
-                    camera.stopRecordingVideo();
-                    startrecording = !startrecording;
-                    Constants.STORAGE.child("users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4").putFile(camera.getFilePath())
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    //todo tell user upload failed
-                                }
-                            })
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    String downloadUrl = taskSnapshot.getDownloadUrl().toString();
-                                    continueToSubmit(downloadUrl);
-                                }
-                            });
-                }
+//                if (startrecording) {
+//                    camera.startRecordingVideo();
+//                    startrecording = !startrecording;
+//                } else {
+//                    camera.stopRecordingVideo();
+//                    startrecording = !startrecording;
+//                    Constants.STORAGE.child("users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4").putFile(camera.getFilePath())
+//                            .addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    //todo tell user upload failed
+//                                }
+//                            })
+//                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                @Override
+//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                    String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+//                                    continueToSubmit(downloadUrl);
+//                                }
+//                            });
+//                }
+                camera.switchCamera();
             }
         });
         return root;

@@ -192,7 +192,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
       if (mode == PHOTO) {
         openCameraForPhoto(width, height, isBackCamera ? CAMERA_BACK : CAMERA_FRONT);
       } else {
-        openCameraForVideo(width, height);
+        openCameraForVideo(width, height, isBackCamera ? CAMERA_BACK : CAMERA_FRONT);
       }
     }
 
@@ -358,7 +358,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
       if (mode == PHOTO) {
         openCameraForPhoto(mTextureView.getWidth(), mTextureView.getHeight(), isBackCamera ? CAMERA_BACK : CAMERA_FRONT);
       } else {
-        openCameraForVideo(mTextureView.getWidth(), mTextureView.getHeight());
+        openCameraForVideo(mTextureView.getWidth(), mTextureView.getHeight(), isBackCamera ? CAMERA_BACK : CAMERA_FRONT);
       }
     } else {
       mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
@@ -558,7 +558,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     }
   }
 
-  private void openCameraForVideo(int width, int height) {
+  private void openCameraForVideo(int width, int height, String cameraId) {
     if (!hasPermissionsGranted(VIDEO_PERMISSIONS)) {
       requestVideoPermissions();
       return;
@@ -573,7 +573,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
       if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
         throw new RuntimeException("Time out waiting to lock camera opening.");
       }
-      mCameraId = manager.getCameraIdList()[0];
+      mCameraId = cameraId;
 
       // Choose the sizes for camera preview and video recording
       CameraCharacteristics characteristics = manager.getCameraCharacteristics(mCameraId);
