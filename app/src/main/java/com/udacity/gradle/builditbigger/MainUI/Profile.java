@@ -3,7 +3,6 @@ package com.udacity.gradle.builditbigger.MainUI;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +21,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,7 +57,8 @@ public class Profile extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private FloatingActionButton fab;
+    //private FloatingActionButton fab;
+    private FloatingActionMenu fam;
     private TextView subscribersTextView;
     private TextView subscriptionsTextView;
     private TextView numberOfPosts;
@@ -81,17 +82,15 @@ public class Profile extends Fragment {
         viewPager.setAdapter(new ProfilePagerAdapter(getActivity().getSupportFragmentManager()));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
-                configureFAB(position);
+                /*configureFAB(position);*/
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
 
         tabLayout = root.findViewById(R.id.profile_tab_layout);
@@ -157,13 +156,15 @@ public class Profile extends Fragment {
             }
         });
 
-        fab = root.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showNewJokeDialog();
-            }
-        });
+
+
+//        fab = root.findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showNewJokeDialog();
+//            }
+//        });
 
         mProfileImageView = root.findViewById(R.id.profile_imageview);
         getActivity().setTitle(Constants.USER.getUserName());
@@ -174,27 +175,27 @@ public class Profile extends Fragment {
         return root;
     }
 
-    private void configureFAB(int state) {
-        if (state == 0) {
-            fab.show();
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showNewJokeDialog();
-                }
-            });
-        } else if (state == 1) {
-            fab.show();
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showNewGenreDialog();
-                }
-            });
-        } else {
-            fab.hide();
-        }
-    }
+//    private void configureFAB(int state) {
+//        if (state == 0) {
+//            fab.show();
+//            fab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    showNewJokeDialog();
+//                }
+//            });
+//        } else if (state == 1) {
+//            fab.show();
+//            fab.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    showNewGenreDialog();
+//                }
+//            });
+//        } else {
+//            fab.hide();
+//        }
+//    }
 
     private void showNewJokeDialog() {
         new NewPostDialog().show(getActivity().getSupportFragmentManager(), "dialog");
@@ -291,12 +292,12 @@ public class Profile extends Fragment {
                 .commit();
     }
 
-    public void hideFab() {
+    /*public void hideFab() {
         fab.hide();
     }
 
     public void showFab() {
         fab.show();
-    }
+    }*/
 
 }

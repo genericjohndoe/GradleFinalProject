@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.MainUI.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
@@ -85,7 +84,7 @@ public class HilarityUserLikes extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 || dy < 0) {
                     //TODO hide profile fragment fab
-                    ((Profile) getParentFragment()).hideFab();
+                    //((Profile) getParentFragment()).hideFab();
                 }
             }
 
@@ -94,7 +93,7 @@ public class HilarityUserLikes extends Fragment {
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //TODO SHOW profile fragment fab
-                    ((Profile) getParentFragment()).showFab();
+                    //((Profile) getParentFragment()).showFab();
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }

@@ -44,6 +44,7 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     //todo take into account screen rotation such that textureview takes up entire screen in landscape mode
     //todo after movie is selected, populate dialog with another fragment allow the user to add a tag line and submit
     //todo ensure camera object is deleted when fragment dies
+    //todo error handling for screen rotation
     AutoFitTextureView textureView;
     RecyclerView recyclerView;
     LifeCycleCamera camera;
@@ -119,7 +120,7 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
                     camera.stopRecordingVideo();
                     startrecording = !startrecording;
                     handler.removeCallbacks(runnable);
-                    timer.setText("0:00:00");
+                    timer.setText("0:00:00:000");
                     Constants.STORAGE.child("users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4").putFile(camera.getFilePath())
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -144,34 +145,6 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
                 camera.switchCamera();
             }
         });
-//        record = root.findViewById(R.id.record);
-//        record.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (startrecording) {
-//                    camera.startRecordingVideo();
-//                    startrecording = !startrecording;
-//                } else {
-//                    camera.stopRecordingVideo();
-//                    startrecording = !startrecording;
-//                    Constants.STORAGE.child("users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4").putFile(camera.getFilePath())
-//                            .addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    //todo tell user upload failed
-//                                }
-//                            })
-//                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                                @Override
-//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                                    String downloadUrl = taskSnapshot.getDownloadUrl().toString();
-//                                    continueToSubmit(downloadUrl);
-//                                }
-//                            });
-//                }
-//                camera.switchCamera();
-//            }
-//        });
         return root;
     }
 

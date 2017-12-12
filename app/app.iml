@@ -161,6 +161,7 @@
     <orderEntry type="library" name="com.google.firebase:firebase-analytics-impl-11.6.0" level="project" />
     <orderEntry type="library" name="com.github.bumptech.glide:annotations:4.3.1@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-auth-api-phone-license-11.6.0" level="project" />
+    <orderEntry type="library" name="com.github.clans:fab-1.6.4" level="project" />
     <orderEntry type="library" name="com.android.support.constraint:constraint-layout-solver:1.1.0-beta1@jar" level="project" />
     <orderEntry type="library" name="com.google.android.gms:play-services-tasks-license-11.6.0" level="project" />
     <orderEntry type="library" name="com.google.firebase:firebase-iid-license-11.6.0" level="project" />

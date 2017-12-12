@@ -67,6 +67,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
 
     compile 'agency.tango.android:material-intro-screen:0.0.5'
+
+    compile 'com.github.clans:fab:1.6.4'
 }
 
 
