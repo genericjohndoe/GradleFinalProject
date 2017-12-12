@@ -1,27 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.udacity.gradle.builditbigger.Camera.AutoFitTextureView
         android:id="@+id/textureView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"/>
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/photo_thumbnail_recyclerview" />
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:id="@+id/photo_thumbnail_recyclerview"
-        android:layout_weight="1"/>
-
-    <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="snap"
-        android:id="@+id/snap"/>
+        android:layout_alignParentBottom="true" />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/switchcamera_imageButton"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_above="@+id/photo_thumbnail_recyclerview"
+        android:layout_alignParentEnd="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_switch_camera_white_24px" />
+
+    <ImageButton
+        android:id="@+id/takepicture_imageButton"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_above="@+id/photo_thumbnail_recyclerview"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/textureView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_camera_white_24px" />
+
+</RelativeLayout>

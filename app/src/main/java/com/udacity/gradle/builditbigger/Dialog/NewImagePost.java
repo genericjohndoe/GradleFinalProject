@@ -19,7 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,7 +45,8 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     AutoFitTextureView textureView;
     RecyclerView recyclerView;
     LifeCycleCamera camera;
-    Button snap;
+    ImageButton snap;
+    ImageButton switchCamera;
     private String GALLERY_LOCATION = "hilarity_image";
     //private File mGalleryFolder;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -69,7 +70,8 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_new_image_post_preview, container, false);
         textureView = root.findViewById(R.id.textureView);
-        snap = root.findViewById(R.id.snap);
+        snap = root.findViewById(R.id.takepicture_imageButton);
+        switchCamera = root.findViewById(R.id.switchcamera_imageButton);
         recyclerView = root.findViewById(R.id.photo_thumbnail_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(mediaAdapter);
@@ -77,8 +79,13 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
         snap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                camera.takePicture();
-//                justSanpped = true;
+                camera.takePicture();
+                justSanpped = true;
+            }
+        });
+        switchCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 camera.switchCamera();
             }
         });
