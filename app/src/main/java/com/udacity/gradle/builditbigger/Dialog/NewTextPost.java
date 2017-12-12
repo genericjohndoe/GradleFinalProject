@@ -3,7 +3,6 @@ package com.udacity.gradle.builditbigger.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,12 +90,13 @@ public class NewTextPost extends Fragment {
                 Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/likes/num").setValue(0);
                 Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/comments/num").setValue(0);
                 //todo find out why code doesn't work, fragment is null
-                NewPostDialog npd = ((NewPostDialog) getActivity().getSupportFragmentManager()
-                        .findFragmentById(R.id.new_post_dialog_fragment));
-                Log.i("npd null", "" + (npd != null));
-                //.getDialog().cancel();
+                ((NewPostDialog) getActivity().getSupportFragmentManager().findFragmentByTag("dialog")).dismiss();
             }
         });
         return root;
+    }
+
+    public void dismissDialog(){
+
     }
 }

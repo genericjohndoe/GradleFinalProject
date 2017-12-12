@@ -40,14 +40,14 @@ public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_new_post, container, false);
-        changeFragment(new NewTextPost());
+        changeFragment(new NewTextPost(), "new post");
         tabLayout = root.findViewById(R.id.tablayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0) changeFragment(new NewTextPost());
-                if (tab.getPosition() == 1) changeFragment(new NewImagePost());
-                if (tab.getPosition() == 2) changeFragment(new NewVideoPost());
+                if (tab.getPosition() == 0) changeFragment(new NewTextPost(), "new text post");
+                if (tab.getPosition() == 1) changeFragment(new NewImagePost(), "new image post");
+                if (tab.getPosition() == 2) changeFragment(new NewVideoPost(), "new video post");
             }
 
             @Override
@@ -75,9 +75,10 @@ public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRe
         return dialog;
     }
 
-    private void changeFragment(Fragment fragment) {
+    private void changeFragment(Fragment fragment, String tag) {
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.new_post_fragment, fragment)
+                .replace(R.id.new_post_fragment, fragment, tag)
+                .addToBackStack(null)
                 .commit();
     }
 

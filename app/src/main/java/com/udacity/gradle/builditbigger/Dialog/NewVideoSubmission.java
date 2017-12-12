@@ -57,6 +57,7 @@ public class NewVideoSubmission extends Fragment {
                 db.setValue(newImagePost);
                 Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/likes/num").setValue(0);
                 Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/comments/num").setValue(0);
+                ((NewPostDialog) getActivity().getSupportFragmentManager().findFragmentByTag("dialog")).dismiss();
             }
         });
         return root;
