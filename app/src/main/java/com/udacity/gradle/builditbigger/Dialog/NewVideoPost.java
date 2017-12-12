@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +21,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.UploadTask;
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
 
 import java.text.SimpleDateFormat;
@@ -43,8 +50,14 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private String[] mediaColumns = {MediaStore.Video.VideoColumns.DATA, MediaStore.Video.VideoColumns.DATE_TAKEN};
     private MediaAdapter mediaAdapter;
-    Button record;
+   // Button record;
+    TextView timer;
+    ImageButton recordImageButton;
+    ImageButton switchCamera;
+    Handler handler;
     boolean startrecording = true;
+    int Seconds, Minutes, MilliSeconds;
+    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
 
 
     @Override
@@ -61,15 +74,80 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_new_video_post_preview, container, false);
+        handler = new Handler();
+        final Runnable runnable = new Runnable() {
+
+            public void run() {
+
+                MillisecondTime = SystemClock.uptimeMillis() - StartTime;
+
+                UpdateTime = TimeBuff + MillisecondTime;
+
+                Seconds = (int) (UpdateTime / 1000);
+
+                Minutes = Seconds / 60;
+
+                Seconds = Seconds % 60;
+
+                MilliSeconds = (int) (UpdateTime % 1000);
+
+                timer.setText("" + Minutes + ":"
+                        + String.format("%02d", Seconds) + ":"
+                        + String.format("%03d", MilliSeconds));
+
+                handler.postDelayed(this, 0);
+            }
+
+        };
+        timer = root.findViewById(R.id.timer);
         textureView = root.findViewById(R.id.textureView);
         recyclerView = root.findViewById(R.id.video_thumbnail_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(mediaAdapter);
         camera = new LifeCycleCamera(this, textureView, LifeCycleCamera.VIDEO);
-        record = root.findViewById(R.id.record);
-        record.setOnClickListener(new View.OnClickListener() {
+        recordImageButton = root.findViewById(R.id.recording_imageButton);
+        recordImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (startrecording) {
+                    camera.startRecordingVideo();
+                    startrecording = !startrecording;
+                    StartTime = SystemClock.uptimeMillis();
+                    handler.postDelayed(runnable, 0);
+                    recordImageButton.setImageResource(R.drawable.ic_stop_black_24dp);
+                } else {
+                    camera.stopRecordingVideo();
+                    startrecording = !startrecording;
+                    handler.removeCallbacks(runnable);
+                    timer.setText("0:00:00");
+                    Constants.STORAGE.child("users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4").putFile(camera.getFilePath())
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    //todo tell user upload failed
+                                }
+                            })
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+                                    continueToSubmit(downloadUrl);
+                                }
+                            });
+                }
+            }
+        });
+        switchCamera = root.findViewById(R.id.switchcamera_imageButton);
+        switchCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                camera.switchCamera();
+            }
+        });
+//        record = root.findViewById(R.id.record);
+//        record.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
 //                if (startrecording) {
 //                    camera.startRecordingVideo();
 //                    startrecording = !startrecording;
@@ -91,9 +169,9 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
 //                                }
 //                            });
 //                }
-                camera.switchCamera();
-            }
-        });
+//                camera.switchCamera();
+//            }
+//        });
         return root;
     }
 
