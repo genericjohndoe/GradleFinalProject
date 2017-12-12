@@ -1,17 +1,13 @@
 package com.udacity.gradle.builditbigger.UserSpecific;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -33,7 +29,7 @@ import java.util.List;
 public class HilarityUserLikes extends Fragment {
 
     RecyclerView recyclerview;
-    EditText searchEditText;
+    //EditText searchEditText;
     ImageView noItems;
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
@@ -99,19 +95,19 @@ public class HilarityUserLikes extends Fragment {
             }
         });
 
-        searchEditText = root.findViewById(R.id.search_et);
-        searchEditText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-                    return true;
-                }
-                return false;
-            }
-        });
+//        searchEditText = root.findViewById(R.id.search_et);
+//        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                // If the event is a key-down event on the "enter" button
+//                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+//                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+//                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
         configureUI();
         return root;
     }
@@ -120,11 +116,11 @@ public class HilarityUserLikes extends Fragment {
         if (jokes.isEmpty()) {
             recyclerview.setVisibility(View.GONE);
             noItems.setVisibility(View.VISIBLE);
-            searchEditText.setVisibility(View.GONE);
+            //searchEditText.setVisibility(View.GONE);
         } else {
             recyclerview.setVisibility(View.VISIBLE);
             noItems.setVisibility(View.GONE);
-            searchEditText.setVisibility(View.VISIBLE);
+            //searchEditText.setVisibility(View.VISIBLE);
         }
     }
 }

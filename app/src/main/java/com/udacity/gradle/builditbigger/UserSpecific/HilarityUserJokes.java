@@ -1,24 +1,21 @@
 package com.udacity.gradle.builditbigger.UserSpecific;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.HideFAB;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.R;
@@ -33,11 +30,14 @@ import java.util.List;
 public class HilarityUserJokes extends Fragment {
 
     RecyclerView recyclerview;
-    EditText searchEditText;
+    //EditText searchEditText;
     ImageView noItems;
 
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
+    HideFAB conFam;
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +71,8 @@ public class HilarityUserJokes extends Fragment {
                     }
                 });
         jokeAdapter = new JokesAdapter(getActivity(), jokes);
+        conFam = (HideFAB) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
+
     }
 
     @Override
@@ -78,19 +80,19 @@ public class HilarityUserJokes extends Fragment {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         noItems = root.findViewById(R.id.no_item_imageview);
 
-        searchEditText = root.findViewById(R.id.search_et);
-        searchEditText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-                    return true;
-                }
-                return false;
-            }
-        });
+//        searchEditText = root.findViewById(R.id.search_et);
+//        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                // If the event is a key-down event on the "enter" button
+//                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+//                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+//                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
         recyclerview = root.findViewById(R.id.recycler_view);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
@@ -104,8 +106,9 @@ public class HilarityUserJokes extends Fragment {
                 if (dy > 0 || dy < 0) {
                     //TODO hide profile fragment fab
                     //todo set up animation for hiding ET, rate of disappear ~ rate of scrolling
-                    searchEditText.setVisibility(View.GONE);
+                    //searchEditText.setVisibility(View.GONE);
                     //((Profile) getParentFragment()).hideFab();
+                    conFam.hideFAB();
                 }
             }
 
@@ -115,8 +118,9 @@ public class HilarityUserJokes extends Fragment {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //TODO SHOW profile fragment fab
                     //todo show ET anim at specific rate
-                    searchEditText.setVisibility(View.VISIBLE);
+                    //searchEditText.setVisibility(View.VISIBLE);
                     //((Profile) getParentFragment()).showFab();
+                    conFam.showFAB();
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
@@ -130,11 +134,11 @@ public class HilarityUserJokes extends Fragment {
         if (jokes.isEmpty()) {
             recyclerview.setVisibility(View.GONE);
             noItems.setVisibility(View.VISIBLE);
-            searchEditText.setVisibility(View.GONE);
+            //searchEditText.setVisibility(View.GONE);
         } else {
             recyclerview.setVisibility(View.VISIBLE);
             noItems.setVisibility(View.GONE);
-            searchEditText.setVisibility(View.VISIBLE);
+            //searchEditText.setVisibility(View.VISIBLE);
         }
     }
 }

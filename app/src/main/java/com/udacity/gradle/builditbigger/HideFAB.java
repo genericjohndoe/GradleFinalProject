@@ -5,5 +5,6 @@ package com.udacity.gradle.builditbigger;
  */
 
 public interface HideFAB {
-    public void ConfigureFAB();
+    void showFAB();
+    void hideFAB();
 }

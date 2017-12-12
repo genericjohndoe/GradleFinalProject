@@ -26,7 +26,7 @@ public class HilarityActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.hilarity_content_frame, new Profile())
+                .add(R.id.hilarity_content_frame, new Profile(), "profile")
                 .commit();
 
         /*FloatingActionButton fab =  findViewById(R.id.fab);
@@ -86,13 +86,13 @@ public class HilarityActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.profile_page) {
-            changeFragment(new Profile());
+            changeFragment(new Profile(), "profile");
             this.setTitle("Profile");
         } else if (id == R.id.feed_page) {
-            changeFragment(new FeedFragment());
+            changeFragment(new FeedFragment(), "feed");
             setTitle("Feed");
         } else if (id == R.id.explore_page) {
-            changeFragment(new ExploreFragment());
+            changeFragment(new ExploreFragment(), "explore");
             setTitle("Explore");
         } else if (id == R.id.meme_creator_page) {
 
@@ -112,9 +112,9 @@ public class HilarityActivity extends AppCompatActivity
         return true;
     }
 
-    public void changeFragment(Fragment fragment) {
+    public void changeFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.hilarity_content_frame, fragment)
+                .replace(R.id.hilarity_content_frame, fragment, tag)
                 .addToBackStack(null)
                 .commit();
     }

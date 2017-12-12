@@ -1,16 +1,13 @@
 package com.udacity.gradle.builditbigger.UserSpecific;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.google.firebase.database.ChildEventListener;
@@ -85,19 +82,19 @@ public class HilarityUserMedia extends Fragment {
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
 
-        searchEditText = root.findViewById(R.id.search_et);
-        searchEditText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-                    return true;
-                }
-                return false;
-            }
-        });
+//        searchEditText = root.findViewById(R.id.search_et);
+//        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                // If the event is a key-down event on the "enter" button
+//                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+//                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+//                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
         return root;
     }
 }
