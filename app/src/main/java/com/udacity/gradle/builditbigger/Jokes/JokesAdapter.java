@@ -219,6 +219,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 cf.setArguments(bundle);
                 ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.hilarity_content_frame, cf)
+                        .addToBackStack(null)
                         .commit();
             }
         });

@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -86,6 +88,12 @@ public class CommentFragment extends Fragment {
                     Comment comment = new Comment(Constants.UID, formattedDate, Constants.USER.getUserName(), Constants.USER.getUrlString(),
                             commentEditText.getText().toString());
                     Constants.DATABASE.child("userpostslikescomments/"+uid+"/"+postId+"/list").push().setValue(comment);
+                    InputMethodManager inputManager = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    commentEditText.setText("");
                 }
             }
         });
