@@ -18,11 +18,13 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_hilarity"
         app:menu="@menu/activity_hilarity_drawer"
+        android:fitsSystemWindows="true"
         android:background="@color/theme_primary"
         app:itemIconTint="@color/dark_gray"
         app:itemTextColor="@color/dark_gray"/>
 
 </android.support.v4.widget.DrawerLayout>
+
+    <!--app:headerLayout="@layout/nav_header_hilarity"-->
+    <!--app:menu="@menu/activity_hilarity_drawer"-->

@@ -46,6 +46,7 @@ public class HilarityUserGenres extends Fragment {
                 genres.add(genre);
                 genreAdapter.notifyDataSetChanged();
                 configureUI();
+                if (recyclerview != null) recyclerview.scrollToPosition(genres.size()-1);
             }
 
             @Override

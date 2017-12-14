@@ -172,6 +172,33 @@ public class Profile extends Fragment implements HideFAB {
 //        });
         fam = root.findViewById(R.id.fam);
         searchFab = root.findViewById(R.id.search_fab);
+        searchFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(getActivity())
+                        .customView(R.layout.search, true)
+                        .positiveText("Search")
+                        .negativeText("Cancel")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                View view = dialog.getCustomView();
+                                String searchKeyword = ((EditText) view.findViewById(R.id.search)).getText().toString();
+                                //todo identify which fragment is showing
+                                //todo on server side when post is created, add list of tags, check to see if tag exist
+                                //todo parse through part of database looking for keyword
+                                //todo modify recyclerview to show only returned results
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show().setCanceledOnTouchOutside(false);
+            }
+        });
         newPostFab = root.findViewById(R.id.new_post_fab);
         newPostFab.setOnClickListener(new View.OnClickListener() {
             @Override

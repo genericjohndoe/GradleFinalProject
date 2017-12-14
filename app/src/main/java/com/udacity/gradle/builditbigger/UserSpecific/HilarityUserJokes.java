@@ -105,10 +105,6 @@ public class HilarityUserJokes extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 || dy < 0) {
-                    //TODO hide profile fragment fab
-                    //todo set up animation for hiding ET, rate of disappear ~ rate of scrolling
-                    //searchEditText.setVisibility(View.GONE);
-                    //((Profile) getParentFragment()).hideFab();
                     conFam.hideFAB();
                 }
             }
@@ -117,10 +113,6 @@ public class HilarityUserJokes extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    //TODO SHOW profile fragment fab
-                    //todo show ET anim at specific rate
-                    //searchEditText.setVisibility(View.VISIBLE);
-                    //((Profile) getParentFragment()).showFab();
                     conFam.showFAB();
                 }
                 super.onScrollStateChanged(recyclerView, newState);

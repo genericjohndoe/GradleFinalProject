@@ -2,6 +2,8 @@ package com.udacity.gradle.builditbigger.Jokes;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.R;
@@ -110,11 +113,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     public void onBindViewHolder(final JokesViewHolder holder, int position) {
         final Joke joke = jokes.get(position);
 
-        if (holder instanceof TextPostViewHolder){
+        if (holder instanceof TextPostViewHolder) {
             ((TextPostViewHolder) holder).title.setText(joke.getJokeTitle());
             ((TextPostViewHolder) holder).body.setText(joke.getJokeBody());
             ((TextPostViewHolder) holder).tagline.setText(joke.getTagline());
-        } else if (holder instanceof ImagePostViewHolder){
+        } else if (holder instanceof ImagePostViewHolder) {
             Glide.with(context).load(joke.getMediaURL()).into(((ImagePostViewHolder) holder).post);
             ((ImagePostViewHolder) holder).tagline.setText(joke.getTagline());
         } else {
@@ -209,9 +212,19 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             public void onClick(View view) {
                 //todo start animation between fragments
                 //todo show recyclerview of comments
+                CommentFragment cf = new CommentFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("uid", joke.getUID());
+                bundle.putString("post id", joke.getPushId());
+                cf.setArguments(bundle);
+                ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.hilarity_content_frame, cf)
+                        .commit();
             }
         });
     }
+
+
 
     public class TextPostViewHolder extends JokesViewHolder{
         TextView title;

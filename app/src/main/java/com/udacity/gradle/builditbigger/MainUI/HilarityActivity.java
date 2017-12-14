@@ -15,7 +15,6 @@ import com.udacity.gradle.builditbigger.R;
 
 public class HilarityActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    //todo change left nav so that header is gone
     //todo replace imgs with gifs in left nav
     DrawerLayout drawer;
 
@@ -29,20 +28,41 @@ public class HilarityActivity extends AppCompatActivity
                 .add(R.id.hilarity_content_frame, new Profile(), "profile")
                 .commit();
 
-        /*FloatingActionButton fab =  findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO take into account what fragment is currently shown in the activity
-                //TODO if fragment is composed of more than one fragment, take that in account
-            }
-        });*/
-
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+//        Drawer result = new DrawerBuilder()
+//                .withActivity(this)
+//                .withToolbar(toolbar)
+//                .withDisplayBelowStatusBar(true)
+//                .withGenerateMiniDrawer(true)
+//                .addDrawerItems(
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_profile_icon),
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_feed_image),
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_explore_image),
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_meme_creator),
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_live_stream),
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_payment),
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_settings),
+//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_logout)
+//                )
+//                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+//                    @Override
+//                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//                        // do something with the clicked item :D
+//                        return true;
+//                    }
+//                })
+//                .buildView();
+//
+//        new MiniDrawer().withDrawer(result).build(this);
+//
+//        CoordinatorLayout cl = findViewById(R.id.drawer_layout);
+//        cl.addView(new MiniDrawer().withDrawer(result).build(this));
+
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -87,7 +107,7 @@ public class HilarityActivity extends AppCompatActivity
 
         if (id == R.id.profile_page) {
             changeFragment(new Profile(), "profile");
-            this.setTitle("Profile");
+            //this.setTitle("Profile");
         } else if (id == R.id.feed_page) {
             changeFragment(new FeedFragment(), "feed");
             setTitle("Feed");
@@ -119,3 +139,29 @@ public class HilarityActivity extends AppCompatActivity
                 .commit();
     }
 }
+/*Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withDisplayBelowStatusBar(true)
+                .withGenerateMiniDrawer(true)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_profile_icon),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_feed_image),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_explore_image),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_meme_creator),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_live_stream),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_payment),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_settings),
+                        new PrimaryDrawerItem().withIcon(R.drawable.ic_logout)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        // do something with the clicked item :D
+                        return true;
+                    }
+                })
+                .buildView();
+
+        new MiniDrawer().withDrawer(result);*/
+

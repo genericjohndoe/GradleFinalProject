@@ -45,6 +45,7 @@ public class HilarityUserLikes extends Fragment {
                 jokes.add(joke);
                 jokeAdapter.notifyDataSetChanged();
                 configureUI();
+                if (recyclerview != null) recyclerview.scrollToPosition(jokes.size()-1);
             }
 
             @Override
