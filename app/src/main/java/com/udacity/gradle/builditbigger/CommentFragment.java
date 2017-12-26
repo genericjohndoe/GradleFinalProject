@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 public class CommentFragment extends Fragment {
-
+    //todo get comment to show without clicking on the edittext
     RecyclerView recyclerView;
     EditText commentEditText;
     ImageButton submitImageButton;
@@ -51,6 +51,8 @@ public class CommentFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Comment comment = dataSnapshot.getValue(Comment.class);
                 comments.add(comment);
+                commentsAdapter.notifyDataSetChanged();
+                if (recyclerView != null) recyclerView.scrollToPosition(comments.size()-1);
             }
 
             @Override

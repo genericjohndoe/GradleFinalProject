@@ -41,7 +41,7 @@ import com.udacity.gradle.builditbigger.UserSpecific.SubscribersFragment;
 import com.udacity.gradle.builditbigger.UserSpecific.SubscriptionsFragment;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -257,9 +257,12 @@ public class Profile extends Fragment implements HideFAB {
                                 android.R.layout.simple_dropdown_item_1line, languages);
                         AutoCompleteTextView genreLanguage = view.findViewById(R.id.languageAutoCompleteTextView);
                         genreLanguage.setAdapter(adapter);
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis(System.currentTimeMillis());
+                        String formattedDate = cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference("usergenres/" + Constants.UID).push();
                         Genre newGenre = new Genre(genreTitle, Constants.USER.getUserName(), isRestricted, genreLanguage.toString(),
-                                new Date(System.currentTimeMillis()), Constants.USER.getUID(), db.getKey());
+                                formattedDate, Constants.USER.getUID(), db.getKey());
                         db.setValue(newGenre);
 
                     }

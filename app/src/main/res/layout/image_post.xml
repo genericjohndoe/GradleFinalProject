@@ -57,7 +57,25 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <include layout="@layout/image_post_content_item"/>
+        <ImageView
+            android:id="@+id/post_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            />
+
+        <TextView
+            android:id="@+id/tagline_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

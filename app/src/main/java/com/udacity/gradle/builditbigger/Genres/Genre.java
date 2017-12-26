@@ -1,7 +1,5 @@
 package com.udacity.gradle.builditbigger.Genres;
 
-import java.util.Date;
-
 /**
  * Created by joeljohnson on 10/17/17.
  */
@@ -10,7 +8,7 @@ public class Genre {
     private String title;
     private String author;
     private Boolean restricted;
-    private Date timeStamp;
+    private String timeStamp;
     private String uid;
     private String language;
     private String genreId;
@@ -19,7 +17,7 @@ public class Genre {
     }
 
     public Genre(String title, String userName, Boolean restricted,
-                 String language, Date time, String uid, String genreId) {
+                 String language, String time, String uid, String genreId) {
         this.title = title;
         this.author = userName;
         this.restricted = restricted;
@@ -45,7 +43,7 @@ public class Genre {
         this.restricted = restricted;
     }
 
-    public Date getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 

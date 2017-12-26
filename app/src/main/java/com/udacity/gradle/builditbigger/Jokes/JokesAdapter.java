@@ -11,9 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -21,6 +28,7 @@ import com.udacity.gradle.builditbigger.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 
 import java.util.List;
 
@@ -121,7 +129,16 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             Glide.with(context).load(joke.getMediaURL()).into(((ImagePostViewHolder) holder).post);
             ((ImagePostViewHolder) holder).tagline.setText(joke.getTagline());
         } else {
-            ((VideoPostViewHolder) holder).post.setVideoURI(Uri.parse(joke.getMediaURL()));
+            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+// Produces DataSource instances through which media data is loaded.
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
+                    Util.getUserAgent(context, "Hilarity"), bandwidthMeter);
+// Produces Extractor instances for parsing the media data.
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            if (((VideoPostViewHolder) holder).post.getPlayer() != null) {
+                ((VideoPostViewHolder) holder).post.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(joke.getMediaURL()),
+                        dataSourceFactory, extractorsFactory, null, null));
+            }
         }
 
         holder.userName.setText(joke.getUser());
@@ -249,12 +266,12 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     }
 
     public class VideoPostViewHolder extends JokesViewHolder{
-        VideoView post;
+        SimpleExoPlayerView post;
 
         public VideoPostViewHolder(View view){
             super(view);
             post = view.findViewById(R.id.post_videoView);
-            post.start();
+            new VideoLifeCyclerObserver((AppCompatActivity) context, post);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.MainUI;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.udacity.gradle.builditbigger.R;
 
 public class HilarityActivity extends AppCompatActivity
@@ -125,7 +129,14 @@ public class HilarityActivity extends AppCompatActivity
         } else if (id == R.id.settings_page) {
 
         } else if (id == R.id.logout) {
-
+            //todo check to see if works
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onComplete(@NonNull Task<Void> task) {
+                            // ...
+                        }
+                    });
         }
 
         drawer.closeDrawer(GravityCompat.START);

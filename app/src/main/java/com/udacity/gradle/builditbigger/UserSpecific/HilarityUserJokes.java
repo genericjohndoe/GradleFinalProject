@@ -81,20 +81,6 @@ public class HilarityUserJokes extends Fragment {
         View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
         noItems = root.findViewById(R.id.no_item_imageview);
 
-//        searchEditText = root.findViewById(R.id.search_et);
-//        searchEditText.setOnKeyListener(new View.OnKeyListener() {
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                // If the event is a key-down event on the "enter" button
-//                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-//                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-//                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-
         recyclerview = root.findViewById(R.id.recycler_view);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
         llm.setStackFromEnd(true);

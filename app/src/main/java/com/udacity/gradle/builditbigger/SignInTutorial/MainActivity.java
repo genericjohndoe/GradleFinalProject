@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
@@ -35,6 +36,9 @@ public class MainActivity extends MaterialIntroActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
+        Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
+        Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
         /*todo change intro screen to show legal stuff, prompts new user to pick user name
         runs query on database when user stops typing, okay'd by animation
         show introduction page then load app activity
@@ -117,6 +121,7 @@ public class MainActivity extends MaterialIntroActivity {
     }
 
     public void configureApp(FirebaseUser user) {
+        //Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
         Constants.UID = user.getUid();
         Constants.DATABASE.child("users/" + Constants.UID).addValueEventListener(new ValueEventListener() {
             @Override
