@@ -19,6 +19,7 @@ import com.udacity.gradle.builditbigger.HideFAB;
 import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.VideoCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,13 @@ import java.util.List;
  * Created by joeljohnson on 10/12/17.
  */
 
-public class HilarityUserJokes extends Fragment {
+public class HilarityUserJokes extends Fragment implements VideoCallback {
 
     RecyclerView recyclerview;
     //EditText searchEditText;
     ImageView noItems;
-
+    List<Long> videosOnScreen;
+    long currentlyPlaying;
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
     HideFAB conFam;
@@ -42,6 +44,7 @@ public class HilarityUserJokes extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        videosOnScreen = new ArrayList();
         jokes = new ArrayList<>();
         Constants.DATABASE.child("userposts/" + Constants.UID + "/posts")
                 .addChildEventListener(new ChildEventListener() {
@@ -71,7 +74,7 @@ public class HilarityUserJokes extends Fragment {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-        jokeAdapter = new JokesAdapter(getActivity(), jokes);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
         conFam = (HideFAB) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
 
     }
@@ -119,5 +122,33 @@ public class HilarityUserJokes extends Fragment {
             noItems.setVisibility(View.GONE);
             //searchEditText.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void getVideoInfo(boolean started, int position) {
+
+    }
+
+    @Override
+    public void onNewVideoPost(long id) {
+        videosOnScreen.add(id);
+    }
+
+    @Override
+    public void onVideoPostRecycled(long id) {
+        videosOnScreen.remove(Long.valueOf(id));
+    }
+
+    @Override
+    public void setCurrentlyPlaying(long id) {
+        Log.i("Hoe8", "video id before "+currentlyPlaying);
+        if (currentlyPlaying == 0L) {
+            currentlyPlaying = id;
+        } else {
+            JokesAdapter.VideoPostViewHolder holder = (JokesAdapter.VideoPostViewHolder) recyclerview.findViewHolderForItemId(currentlyPlaying);
+            holder.getPost().getPlayer().stop();
+            currentlyPlaying = id;
+        }
+        Log.i("Hoe8", "video id after "+currentlyPlaying);
     }
 }

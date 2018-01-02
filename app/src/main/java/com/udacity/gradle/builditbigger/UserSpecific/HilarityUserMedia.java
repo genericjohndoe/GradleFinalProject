@@ -45,7 +45,7 @@ public class HilarityUserMedia extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mjokesDatabaseReference = mFirebaseDatabase.getReference().child(Constants.UID + " Likes");
         jokes = new ArrayList<>();
-        jokeAdapter = new JokesAdapter(getActivity(), jokes);
+        //jokeAdapter = new JokesAdapter(getActivity(), jokes);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

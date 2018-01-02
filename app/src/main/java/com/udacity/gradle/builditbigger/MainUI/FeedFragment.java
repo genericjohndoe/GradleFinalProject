@@ -1,13 +1,16 @@
 package com.udacity.gradle.builditbigger.MainUI;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -19,6 +22,7 @@ import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
+import com.udacity.gradle.builditbigger.VideoCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,18 +31,14 @@ import java.util.List;
  * Created by joeljohnson on 10/30/17.
  */
 
-public class FeedFragment extends Fragment {
-    // Firebase instance variables
-    /*private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mjokesDatabaseReference;
-    private DatabaseReference mPersonaljokesDatabaseReference;
-    private ChildEventListener mChildEventListener;*/
+public class FeedFragment extends Fragment implements VideoCallback {
 
+    LinearLayoutManager llm;
     RecyclerView recyclerview;
-    EditText searchEditText;
     ImageView noItems;
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
+    EditText searchEditText;
 
 
     public FeedFragment() {
@@ -78,32 +78,33 @@ public class FeedFragment extends Fragment {
 
                     }
                 });
-        jokeAdapter = new JokesAdapter(getActivity(), jokes);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_jokeslist_genrelist, container, false);
+        View root = inflater.inflate(R.layout.feed_explore_page, container, false);
         noItems = root.findViewById(R.id.no_item_imageview);
         recyclerview = root.findViewById(R.id.recycler_view);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
+        llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        recyclerview.setLayoutManager(llm);
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerview.setAdapter(jokeAdapter);
         configureUI();
-//        searchEditText = root.findViewById(R.id.search_et);
-//        searchEditText.setOnKeyListener(new View.OnKeyListener() {
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                // If the event is a key-down event on the "enter" button
-//                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-//                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-//                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
+        searchEditText = root.findViewById(R.id.search_et);
+        searchEditText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
         return root;
     }
 
@@ -115,5 +116,32 @@ public class FeedFragment extends Fragment {
             recyclerview.setVisibility(View.VISIBLE);
             noItems.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //outState.putLong("player position", jokeAdapter.getPlayerPosition());
+        //if (recyclerview.findViewHolderForLayoutPosition(llm.getLay))
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void getVideoInfo(boolean started, int position) {
+        //recyclerview.find
+    }
+
+    @Override
+    public void setCurrentlyPlaying(long id) {
+
+    }
+
+    @Override
+    public void onNewVideoPost(long id) {
+
+    }
+
+    @Override
+    public void onVideoPostRecycled(long id) {
+
     }
 }

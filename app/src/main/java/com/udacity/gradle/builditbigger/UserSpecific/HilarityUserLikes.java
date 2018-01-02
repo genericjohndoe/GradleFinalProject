@@ -18,6 +18,7 @@ import com.udacity.gradle.builditbigger.Joke.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
+import com.udacity.gradle.builditbigger.VideoCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  * Created by joeljohnson on 10/12/17.
  */
 
-public class HilarityUserLikes extends Fragment {
+public class HilarityUserLikes extends Fragment implements VideoCallback {
 
     RecyclerView recyclerview;
     //EditText searchEditText;
@@ -64,7 +65,7 @@ public class HilarityUserLikes extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        jokeAdapter = new JokesAdapter(getActivity(), jokes);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
     }
 
     @Override
@@ -123,5 +124,25 @@ public class HilarityUserLikes extends Fragment {
             noItems.setVisibility(View.GONE);
             //searchEditText.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void getVideoInfo(boolean started, int position) {
+
+    }
+
+    @Override
+    public void setCurrentlyPlaying(long id) {
+
+    }
+
+    @Override
+    public void onNewVideoPost(long id) {
+
+    }
+
+    @Override
+    public void onVideoPostRecycled(long id) {
+
     }
 }

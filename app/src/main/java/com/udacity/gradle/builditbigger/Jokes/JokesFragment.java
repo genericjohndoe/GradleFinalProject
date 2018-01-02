@@ -59,7 +59,7 @@ public class JokesFragment extends Fragment {
         mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
         mPersonaljokesDatabaseReference = mFirebaseDatabase.getReference();
         jokes = new ArrayList<>();
-        jokeAdapter = new JokesAdapter(getActivity(), jokes);
+        //jokeAdapter = new JokesAdapter(getActivity(), jokes);
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

@@ -9,12 +9,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.udacity.gradle.builditbigger.MessagesFragment;
 import com.udacity.gradle.builditbigger.R;
 
 public class HilarityActivity extends AppCompatActivity
@@ -25,6 +27,7 @@ public class HilarityActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("Hoe8", "activity created");
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -98,6 +101,9 @@ public class HilarityActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_message){
+            changeFragment(new MessagesFragment(), "messages");
         }
 
         return super.onOptionsItemSelected(item);
