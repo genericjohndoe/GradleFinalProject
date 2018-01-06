@@ -1,27 +1,21 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MessagesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MessagesFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
  */
 public class MessagesFragment extends Fragment {
 
-    public MessagesFragment() {
-        // Required empty public constructor
-    }
+    ImageButton composeButton;
+    RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +26,20 @@ public class MessagesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_messages, container, false);
+        View root = inflater.inflate(R.layout.fragment_messages, container, false);
+        recyclerView = root.findViewById(R.id.messages_recyclerview);
+        composeButton = root.findViewById(R.id.new_message_imagebutton);
+        composeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.hilarity_content_frame, new ComposeMessageFragment(), "compose message")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        return root;
     }
 
 

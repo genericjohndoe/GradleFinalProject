@@ -20,7 +20,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup">
         <activity
             android:name=".SignInTutorial.MainActivity"
             android:label="@string/app_name"

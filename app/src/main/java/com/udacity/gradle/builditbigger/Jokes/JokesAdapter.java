@@ -53,6 +53,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         this.context = context;
         this.jokes = objects;
         this.vc = vc;
+        setHasStableIds(true);
     }
 
     public class JokesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -144,6 +145,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             if (((VideoPostViewHolder) holder).post.getPlayer() != null) {
                 ((VideoPostViewHolder) holder).post.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(joke.getMediaURL()),
                         dataSourceFactory, extractorsFactory, null, null), false, false);
+                Log.i("Hoe8","position for view holder " + position);
             }
         }
 
@@ -273,18 +275,26 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     public class VideoPostViewHolder extends JokesViewHolder implements ExoPlayer.ExoPlayerComponent{
         SimpleExoPlayerView post;
+        VideoLifeCyclerObserver vlco;
         long playPosition = 0L;
         boolean isPlaying = false;
         boolean hasStarted = false;
+        long id;
 
         //todo when video is started check to see if another video is playing
 
         public VideoPostViewHolder(View view){
             super(view);
             post = view.findViewById(R.id.post_videoView);
-            new VideoLifeCyclerObserver((AppCompatActivity) context, post, this);
             vc.onNewVideoPost(getItemId());
             Log.i("Hoe8", "vid post created");
+            setVlco();
+
+        }
+
+        public void setVlco(){
+            Log.i("Hoe8",""+(this==null));
+            vlco = new VideoLifeCyclerObserver((AppCompatActivity) context, post, this);
         }
 
         public SimpleExoPlayerView getPost(){
@@ -301,7 +311,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         public void setIsPlaying(boolean playing){
             Log.i("Hoe8", "VideoPostViewHolder.setIsPlaying called");
-            if (playing) vc.setCurrentlyPlaying(getItemId());
+            if (playing) vc.setCurrentlyPlaying((int) getItemId());
+            Log.i("Hoe8","item id " + getItemId());
             isPlaying = playing;
         }
 
@@ -314,6 +325,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         }
 
         public void setHasStarted(boolean started){
+
+            Log.i("Hoe8", "vh hasStarted called");
             hasStarted = started;
         }
 
@@ -330,9 +343,15 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     @Override
     public void onViewRecycled(JokesViewHolder holder) {
+        Log.i("Hoe8","onViewRecycled");
         if (holder instanceof VideoPostViewHolder){
             vc.onVideoPostRecycled(holder.getItemId());
         }
         super.onViewRecycled(holder);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return (long) position;
     }
 }

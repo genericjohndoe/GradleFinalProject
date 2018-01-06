@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -107,6 +108,20 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+        recyclerview.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+                Log.i("Hoe8", "child detached");
+                if (view.findViewById(R.id.post_videoView) != null){
+                    ((SimpleExoPlayerView) view.findViewById(R.id.post_videoView)).getPlayer().stop();
+                }
+            }
+        });
 
         configureUI();
         return root;
@@ -142,13 +157,19 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
     @Override
     public void setCurrentlyPlaying(long id) {
         Log.i("Hoe8", "video id before "+currentlyPlaying);
-        if (currentlyPlaying == 0L) {
+        Log.i("Hoe8", "video id parameter "+id);
+        if (currentlyPlaying == 0) {
             currentlyPlaying = id;
-        } else {
-            JokesAdapter.VideoPostViewHolder holder = (JokesAdapter.VideoPostViewHolder) recyclerview.findViewHolderForItemId(currentlyPlaying);
-            holder.getPost().getPlayer().stop();
+            Log.i("Hoe8", "video 1 id after "+currentlyPlaying);
+        } else if (currentlyPlaying != id) {
+            JokesAdapter.VideoPostViewHolder holder = (JokesAdapter.VideoPostViewHolder) recyclerview.findViewHolderForItemId((long) currentlyPlaying);
+            if (holder != null){
+                holder.getPost().getPlayer().stop();
+            } else{
+                Log.i("Hoe8", "holder is null");
+            }
             currentlyPlaying = id;
+            Log.i("Hoe8", "video 2 id after "+currentlyPlaying);
         }
-        Log.i("Hoe8", "video id after "+currentlyPlaying);
     }
 }

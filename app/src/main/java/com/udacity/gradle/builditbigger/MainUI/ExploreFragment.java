@@ -110,22 +110,14 @@ public class ExploreFragment extends Fragment implements VideoCallback {
     }
 
     @Override
-    public void getVideoInfo(boolean started, int position) {
-
-    }
+    public void getVideoInfo(boolean started, int position) {}
 
     @Override
-    public void onVideoPostRecycled(long id) {
-
-    }
+    public void onVideoPostRecycled(long id) {}
 
     @Override
-    public void setCurrentlyPlaying(long id) {
-
-    }
+    public void setCurrentlyPlaying(long id) {}
 
     @Override
-    public void onNewVideoPost(long id) {
-
-    }
+    public void onNewVideoPost(long id) {}
 }
