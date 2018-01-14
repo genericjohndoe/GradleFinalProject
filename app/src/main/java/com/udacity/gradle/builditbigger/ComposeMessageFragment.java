@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -43,6 +44,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
     ChipsInput chipsInput;
     RecyclerView recyclerView;
     List<HilarityUser> chipList;
+    EditText editText;
 
 
     @Override
@@ -78,7 +80,33 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
         chipsInput = root.findViewById(R.id.chips_input);
         //todo get access to edit text, connect to text watcher
         recyclerView = root.findViewById(R.id.user_message_recyclerview);
-        recyclerView.setAdapter(new UsersToMessageAdapter(chipList,this));
+        recyclerView.setAdapter(new UsersToMessageAdapter(chipList,this, getActivity()));
+        editText = root.findViewById(R.id.incoming_message_edittext);
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b){
+                    //todo swap out recycler view adapter
+                    Log.i("Sample", "has focus");
+                } else {
+                    //todo swap out recycler view adapter
+                    Log.i("Sample", " no focus");
+                }
+            }
+        });
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    //todo add code for submission to database
+                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    mgr.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
         return root;
     }
 
