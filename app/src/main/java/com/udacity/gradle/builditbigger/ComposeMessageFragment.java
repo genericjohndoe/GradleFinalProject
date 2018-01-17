@@ -36,7 +36,6 @@ import java.util.List;
  */
 public class ComposeMessageFragment extends Fragment implements CreateChip {
 
-    //todo create adapter for recyclerview with two different viewholders (for editext and chips)
     //todo connect edit text and other recycler view show that before typing user sees
     //todo chron list of people messaged, then people in network, then queries master list of user
     //todo once user is picked from bottom recyclerview, add user chips to top recycler view
@@ -44,13 +43,20 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
     ChipsInput chipsInput;
     RecyclerView recyclerView;
     List<HilarityUser> chipList;
+    List<Message> messageList;
     EditText editText;
+
+    UsersToMessageAdapter usersToMessageAdapter;
+    MessagesAdapter messagesAdapter;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         chipList = new ArrayList<>();
+        messageList = new ArrayList<>();
+        usersToMessageAdapter = new UsersToMessageAdapter(chipList,this, getActivity());
+        messagesAdapter = new MessagesAdapter(messageList ,getActivity());
         Constants.DATABASE.child("network/"+Constants.UID)
                 .addChildEventListener(new ChildEventListener() {
                     @Override
@@ -80,17 +86,16 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
         chipsInput = root.findViewById(R.id.chips_input);
         //todo get access to edit text, connect to text watcher
         recyclerView = root.findViewById(R.id.user_message_recyclerview);
-        recyclerView.setAdapter(new UsersToMessageAdapter(chipList,this, getActivity()));
+        recyclerView.setAdapter(usersToMessageAdapter);
         editText = root.findViewById(R.id.incoming_message_edittext);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b){
-                    //todo swap out recycler view adapter
-                    Log.i("Sample", "has focus");
+                    recyclerView.setAdapter(messagesAdapter);
                 } else {
-                    //todo swap out recycler view adapter
-                    Log.i("Sample", " no focus");
+                    //todo check to sent message has already been set
+                    recyclerView.setAdapter(usersToMessageAdapter);
                 }
             }
         });
