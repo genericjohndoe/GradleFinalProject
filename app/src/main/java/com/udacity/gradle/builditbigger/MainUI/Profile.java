@@ -99,8 +99,7 @@ public class Profile extends Fragment implements HideFAB {
         viewPager.setAdapter(new ProfilePagerAdapter(getActivity().getSupportFragmentManager()));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
@@ -108,8 +107,7 @@ public class Profile extends Fragment implements HideFAB {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
 
 
@@ -161,7 +159,7 @@ public class Profile extends Fragment implements HideFAB {
             }
         );
 
-        userInfoViewModel.getUserProfileImg().observe(this, (dataSnapshot ->{
+        userInfoViewModel.getUserProfileImg().observe(this, (dataSnapshot -> {
             String profileUrl = dataSnapshot.getValue(String.class);
             Glide.with(Profile.this)
                     .load(profileUrl)
