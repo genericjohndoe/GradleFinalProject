@@ -1,5 +1,8 @@
 package com.udacity.gradle.builditbigger.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by joeljohnson on 7/17/17.
  */
@@ -15,6 +18,7 @@ public class Joke {
     private String pushId;
     private String tagline;
     private Integer type;
+    private List<String> taglist;
 
 
     public Joke() {
@@ -33,6 +37,7 @@ public class Joke {
         this.pushId = pushId;
         this.tagline = tagline;
         this.type = type;
+        taglist = new ArrayList<>();
     }
 
     public String getJokeTitle() {
@@ -80,5 +85,9 @@ public class Joke {
     }
 
     public Integer getType(){ return type;}
+
+    public List<String> getTaglist(){
+        return taglist;
+    }
 
 }

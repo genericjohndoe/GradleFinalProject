@@ -1,5 +1,7 @@
 package com.udacity.gradle.builditbigger;
 
+import com.github.clans.fab.FloatingActionButton;
+
 /**
  * Created by joeljohnson on 11/6/17.
  */
@@ -7,4 +9,5 @@ package com.udacity.gradle.builditbigger;
 public interface HideFAB {
     void showFAB();
     void hideFAB();
+    FloatingActionButton getFAB();
 }

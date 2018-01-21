@@ -23,7 +23,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.CreateChip;
 import com.udacity.gradle.builditbigger.Models.Message;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.UserSpecific.HilarityUser;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
 import java.util.ArrayList;
 import java.util.List;

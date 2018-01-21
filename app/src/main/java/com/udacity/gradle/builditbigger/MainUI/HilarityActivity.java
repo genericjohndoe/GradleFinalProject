@@ -17,7 +17,9 @@ import android.view.View;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Messaging.MessagesFragment;
+import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.UserSpecific.SubscribersFragment;
 import com.udacity.gradle.builditbigger.UserSpecific.SubscriptionsFragment;
@@ -35,7 +37,7 @@ public class HilarityActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.hilarity_content_frame, new Profile(), "profile")
+                .add(R.id.hilarity_content_frame, Profile.newInstance(Constants.UID), "profile")
                 .commit();
 
         drawer = findViewById(R.id.drawer_layout);
@@ -119,7 +121,7 @@ public class HilarityActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.profile_page) {
-            changeFragment(new Profile(), "profile");
+            changeFragment(Profile.newInstance(Constants.UID), "profile");
             //this.setTitle("Profile");
         } else if (id == R.id.feed_page) {
             changeFragment(new FeedFragment(), "feed");

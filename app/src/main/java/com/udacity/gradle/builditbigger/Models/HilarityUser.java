@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.UserSpecific;
+package com.udacity.gradle.builditbigger.Models;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
 

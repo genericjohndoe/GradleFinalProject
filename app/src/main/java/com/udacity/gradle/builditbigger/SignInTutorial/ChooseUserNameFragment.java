@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.UserSpecific;
+package com.udacity.gradle.builditbigger.SignInTutorial;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
 import java.util.ArrayList;

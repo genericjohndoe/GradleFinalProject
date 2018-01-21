@@ -17,8 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.UserSpecific.ChooseUserNameFragment;
-import com.udacity.gradle.builditbigger.UserSpecific.HilarityUser;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
 import java.util.Arrays;
 

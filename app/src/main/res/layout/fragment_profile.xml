@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainUI.HilarityActivity">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/posts_tv"
@@ -44,17 +44,17 @@
             app:layout_constraintStart_toEndOf="@+id/posts_tv"
             app:layout_constraintTop_toTopOf="@+id/posts_tv" />
 
-    <TextView
-        android:id="@+id/subscribers_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:focusable="auto"
-        android:text="Subscribers"
-        android:textAppearance="@android:style/TextAppearance.Material.Small"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/subscriptions_tv" />
+        <TextView
+            android:id="@+id/subscribers_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="auto"
+            android:text="Subscribers"
+            android:textAppearance="@android:style/TextAppearance.Material.Small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/subscriptions_tv" />
 
         <Button
             android:id="@+id/subscribe_button"
@@ -71,8 +71,6 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/profile_view_pager"
             android:layout_width="0dp"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="1"
             android:layout_height="0dp"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="12dp"
@@ -80,7 +78,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profile_imageview">
+            app:layout_constraintTop_toBottomOf="@id/profile_imageview"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="1">
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/profile_tab_layout"
@@ -111,31 +111,33 @@
 
         </android.support.v4.view.ViewPager>
 
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fam"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_anchor="@+id/constraintLayout"
-        app:layout_anchorGravity="right|bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/new_post_fab"
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add" />
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_anchor="@+id/constraintLayout"
+            app:layout_anchorGravity="right|bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/search_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_search" />
-    </com.github.clans.fab.FloatingActionMenu>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/new_post_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/search_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search" />
+        </com.github.clans.fab.FloatingActionMenu>
 
     </android.support.constraint.ConstraintLayout>
+
+</layout>
 

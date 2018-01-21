@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Profile;
 
 import android.arch.lifecycle.LiveData;
 

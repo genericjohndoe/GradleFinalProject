@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.CreateChip;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.UserSpecific.HilarityUser;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
 import java.util.List;
 

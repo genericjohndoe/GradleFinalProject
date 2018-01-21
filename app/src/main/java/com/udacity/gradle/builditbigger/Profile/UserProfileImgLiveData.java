@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Profile;
 
 import android.arch.lifecycle.LiveData;
 
@@ -12,12 +12,12 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
  * Created by joeljohnson on 1/20/18.
  */
 
-public class NumPostLiveData extends LiveData<DataSnapshot> {
+public class UserProfileImgLiveData extends LiveData<DataSnapshot> {
 
     private DatabaseReference databaseReference;
 
-    public NumPostLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/NumPosts");
+    public UserProfileImgLiveData(String uid){
+        databaseReference = Constants.DATABASE.child("users/"+uid+"/urlString");
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {

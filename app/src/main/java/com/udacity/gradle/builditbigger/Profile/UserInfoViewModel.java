@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Profile;
 
 import android.arch.lifecycle.ViewModel;
 
@@ -13,6 +13,7 @@ public class UserInfoViewModel extends ViewModel {
     private NumPostLiveData numPostLiveData;
     private NumFollowingLiveData numFollowingLiveData;
     private NumFollowersLiveData numFollowersLiveData;
+    private LanguagesLiveData languagesLiveData;
 
     UserInfoViewModel(String uid){
         userNameLiveData = new UserNameLiveData(uid);
@@ -20,6 +21,7 @@ public class UserInfoViewModel extends ViewModel {
         numPostLiveData = new NumPostLiveData(uid);
         numFollowingLiveData = new NumFollowingLiveData(uid);
         numFollowersLiveData = new NumFollowersLiveData(uid);
+        languagesLiveData = new LanguagesLiveData();
     }
 
     public UserNameLiveData getUserName(){
@@ -38,5 +40,9 @@ public class UserInfoViewModel extends ViewModel {
 
     public NumFollowersLiveData getNumFollowersLiveData() {
         return numFollowersLiveData;
+    }
+
+    public LanguagesLiveData getLanguagesLiveData() {
+        return languagesLiveData;
     }
 }
