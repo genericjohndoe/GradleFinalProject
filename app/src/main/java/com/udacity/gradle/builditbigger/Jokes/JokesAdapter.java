@@ -288,7 +288,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             post = view.findViewById(R.id.post_videoView);
             vc.onNewVideoPost(getItemId());
             Log.i("Hoe8", "vid post created");
-            setVlco();
+           // setVlco();
 
         }
 

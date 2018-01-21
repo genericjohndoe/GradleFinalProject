@@ -115,23 +115,12 @@ public class Profile extends Fragment implements HideFAB {
 
         tabLayout.setupWithViewPager(viewPager);
 
-        subscribersTextView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //todo find out why 2 taps are needed to go back, maybe replace FT with intent for activity
-                view.performClick();
-                changeFragment(new SubscribersFragment());
-                return false;
-            }
+        subscribersTextView.setOnClickListener(view ->{
+            changeFragment(new SubscribersFragment());
         });
 
-        subscriptionsTextView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                view.performClick();
-                changeFragment(new SubscriptionsFragment());
-                return false;
-            }
+        subscriptionsTextView.setOnClickListener(view -> {
+            changeFragment(new SubscriptionsFragment());
         });
 
         searchFab.setOnClickListener(view ->  {
@@ -315,5 +304,6 @@ public class Profile extends Fragment implements HideFAB {
     public void showFAB() {
         fam.showMenu(true);
     }
+
 
 }

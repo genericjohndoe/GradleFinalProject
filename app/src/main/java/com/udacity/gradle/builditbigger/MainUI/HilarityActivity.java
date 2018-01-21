@@ -12,12 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.udacity.gradle.builditbigger.Messaging.MessagesFragment;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.UserSpecific.SubscribersFragment;
+import com.udacity.gradle.builditbigger.UserSpecific.SubscriptionsFragment;
 
 public class HilarityActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -154,6 +157,14 @@ public class HilarityActivity extends AppCompatActivity
                 .replace(R.id.hilarity_content_frame, fragment, tag)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public void getFollowersList(View view){
+        changeFragment(new SubscribersFragment(), "Subscribers");
+    }
+
+    public void getFollowingList(View view){
+        changeFragment(new SubscriptionsFragment(), "subscriptions");
     }
 }
 /*Drawer result = new DrawerBuilder()
