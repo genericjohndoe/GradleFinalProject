@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Genres;
+package com.udacity.gradle.builditbigger.Models;
 
 /**
  * Created by joeljohnson on 10/17/17.

@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Models;
 
 /**
  * Created by joeljohnson on 12/13/17.

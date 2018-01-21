@@ -1,5 +1,8 @@
 package com.udacity.gradle.builditbigger.MainUI;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,9 +34,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Dialog.NewPostDialog;
-import com.udacity.gradle.builditbigger.Genres.Genre;
+import com.udacity.gradle.builditbigger.Models.Genre;
 import com.udacity.gradle.builditbigger.HideFAB;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.UserInfoViewModel;
+import com.udacity.gradle.builditbigger.UserInfoViewModelFactory;
 import com.udacity.gradle.builditbigger.UserSpecific.HilarityUserGenres;
 import com.udacity.gradle.builditbigger.UserSpecific.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.UserSpecific.HilarityUserLikes;
@@ -82,12 +87,20 @@ public class Profile extends Fragment implements HideFAB {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         numberOfPosts = root.findViewById(R.id.posts_tv);
-
+        mProfileImageView = root.findViewById(R.id.profile_imageview);
+        newPostFab = root.findViewById(R.id.new_post_fab);
         viewPager = root.findViewById(R.id.profile_view_pager);
+        tabLayout = root.findViewById(R.id.profile_tab_layout);
+        subscribersTextView = root.findViewById(R.id.subscribers_tv);
+        subscriptionsTextView = root.findViewById(R.id.subscriptions_tv);
+        fam = root.findViewById(R.id.fam);
+        searchFab = root.findViewById(R.id.search_fab);
+
         viewPager.setAdapter(new ProfilePagerAdapter(getActivity().getSupportFragmentManager()));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
             public void onPageSelected(int position) {
@@ -95,13 +108,13 @@ public class Profile extends Fragment implements HideFAB {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
-        tabLayout = root.findViewById(R.id.profile_tab_layout);
+
         tabLayout.setupWithViewPager(viewPager);
 
-        subscribersTextView = root.findViewById(R.id.subscribers_tv);
         subscribersTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -112,7 +125,6 @@ public class Profile extends Fragment implements HideFAB {
             }
         });
 
-        subscriptionsTextView = root.findViewById(R.id.subscriptions_tv);
         subscriptionsTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -122,59 +134,7 @@ public class Profile extends Fragment implements HideFAB {
             }
         });
 
-        Constants.DATABASE.child("userposts/" + Constants.UID + "/NumPosts").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Long number = dataSnapshot.getValue(Long.class);
-                numberOfPosts.setText(number + " posts");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        Constants.DATABASE.child("following/" + Constants.UID + "/num").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Long number = dataSnapshot.getValue(Long.class);
-                subscriptionsTextView.setText(number + " subscriptions");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        Constants.DATABASE.child("followers/" + Constants.UID + "/num").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Long number = dataSnapshot.getValue(Long.class);
-                subscribersTextView.setText(number + " subscribers");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-//        fab = root.findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showNewJokeDialog();
-//            }
-//        });
-        fam = root.findViewById(R.id.fam);
-        searchFab = root.findViewById(R.id.search_fab);
-        searchFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        searchFab.setOnClickListener(view ->  {
                 new MaterialDialog.Builder(getActivity())
                         .customView(R.layout.search, true)
                         .positiveText("Search")
@@ -198,40 +158,53 @@ public class Profile extends Fragment implements HideFAB {
                         })
                         .show().setCanceledOnTouchOutside(false);
             }
-        });
-        newPostFab = root.findViewById(R.id.new_post_fab);
-        newPostFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showNewJokeDialog();
-            }
-        });
-        mProfileImageView = root.findViewById(R.id.profile_imageview);
-        getActivity().setTitle(Constants.USER.getUserName());
-        Glide.with(this)
-                .load(Constants.USER.getUrlString())
-                .into(mProfileImageView);
+        );
 
+        newPostFab.setOnClickListener(view -> showNewJokeDialog());
+
+        UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this,
+                new UserInfoViewModelFactory(Constants.UID))
+                .get(UserInfoViewModel.class);
+
+        userInfoViewModel.getUserName().observe(this, (dataSnapshot) -> {
+                String userName = dataSnapshot.getValue(String.class);
+                getActivity().setTitle(userName);
+            }
+        );
+
+        userInfoViewModel.getUserProfileImg().observe(this, (dataSnapshot ->{
+            String profileUrl = dataSnapshot.getValue(String.class);
+            Glide.with(Profile.this)
+                    .load(profileUrl)
+                    .into(mProfileImageView);
+            })
+        );
+
+        userInfoViewModel.getNumPostLiveData().observe(this, (dataSnapshot -> {
+            Long number = dataSnapshot.getValue(Long.class);
+            numberOfPosts.setText(number + " posts");
+            })
+        );
+
+        userInfoViewModel.getNumFollowingLiveData().observe(this, dataSnapshot -> {
+            Long number = dataSnapshot.getValue(Long.class);
+            subscriptionsTextView.setText(number + " subscriptions");
+        });
+
+        userInfoViewModel.getNumFollowersLiveData().observe(this, dataSnapshot -> {
+            Long number = dataSnapshot.getValue(Long.class);
+            subscribersTextView.setText(number + " subscribers");
+        });
         return root;
     }
 
     private void configureFAB(int state) {
         if (state == 0) {
             fam.showMenu(true);
-            newPostFab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showNewJokeDialog();
-                }
-            });
+            newPostFab.setOnClickListener(view -> showNewJokeDialog());
         } else if (state == 1) {
             fam.showMenu(true);
-            newPostFab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showNewGenreDialog();
-                }
-            });
+            newPostFab.setOnClickListener(view -> showNewGenreDialog());
         } else {
             fam.hideMenu(true);
         }

@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Comments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,10 @@ import android.widget.ImageButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.udacity.gradle.builditbigger.Comments.CommentsAdapter;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Models.Comment;
+import com.udacity.gradle.builditbigger.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

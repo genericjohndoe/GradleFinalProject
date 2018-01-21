@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.udacity.gradle.builditbigger.MessagesFragment">
+    tools:context="com.udacity.gradle.builditbigger.Messaging.MessagesFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageButton

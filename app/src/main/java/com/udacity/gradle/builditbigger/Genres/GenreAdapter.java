@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.udacity.gradle.builditbigger.Jokes.JokesActivity;
+import com.udacity.gradle.builditbigger.Models.Genre;
 import com.udacity.gradle.builditbigger.R;
 
 import java.util.List;

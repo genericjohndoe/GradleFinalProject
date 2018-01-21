@@ -13,7 +13,7 @@ import android.widget.VideoView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Joke.Joke;
+import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
 
 import java.util.Calendar;
