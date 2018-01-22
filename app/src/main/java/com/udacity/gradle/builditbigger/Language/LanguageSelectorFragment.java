@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.RecyclerViewCallback;
+import com.udacity.gradle.builditbigger.Interfaces.RecyclerViewCallback;
 
 import java.util.ArrayList;
 import java.util.HashSet;

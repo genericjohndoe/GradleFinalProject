@@ -31,7 +31,7 @@ import com.udacity.gradle.builditbigger.Comments.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.VideoCallback;
+import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 
 import java.util.List;

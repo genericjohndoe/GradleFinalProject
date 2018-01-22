@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.model.ChipInterface;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.CreateChip;
+import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
 import com.udacity.gradle.builditbigger.Models.Message;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;

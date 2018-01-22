@@ -9,7 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.udacity.gradle.builditbigger.CreateChip;
+import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 

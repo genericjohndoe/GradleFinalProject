@@ -3,7 +3,6 @@ package com.udacity.gradle.builditbigger.Profile;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +16,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
@@ -26,9 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Dialog.NewPostDialog;
 import com.udacity.gradle.builditbigger.Models.Genre;
-import com.udacity.gradle.builditbigger.HideFAB;
+import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.UserSpecific.HilarityUserGenres;
+import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.UserSpecific.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.UserSpecific.SubscribersFragment;
@@ -200,7 +198,7 @@ public class Profile extends Fragment implements HideFAB {
             super(fm);
         }
 
-        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid), new HilarityUserGenres(),
+        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid), HilarityUserGenres.newInstance(uid),
                 new HilarityUserLikes()};
 
         String[] tabTitles = new String[]{"Posts", "Genres", "Likes"};

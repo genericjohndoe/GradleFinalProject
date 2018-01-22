@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.RecyclerViewCallback;
+import com.udacity.gradle.builditbigger.Interfaces.RecyclerViewCallback;
 
 /**
  * Created by joeljohnson on 7/25/17.

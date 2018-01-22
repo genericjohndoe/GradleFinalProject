@@ -18,7 +18,7 @@ import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
-import com.udacity.gradle.builditbigger.VideoCallback;
+import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 
 import java.util.ArrayList;
 import java.util.List;

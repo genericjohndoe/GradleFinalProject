@@ -13,22 +13,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.HideFAB;
+import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Profile.UserInfoViewModel;
-import com.udacity.gradle.builditbigger.Profile.UserInfoViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.VideoCallback;
+import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
 import java.util.ArrayList;
@@ -39,7 +32,7 @@ import java.util.List;
  */
 
 public class HilarityUserJokes extends Fragment implements VideoCallback {
-
+    //todo test search and back press
     List<Long> videosOnScreen = new ArrayList<>();
     long currentlyPlaying;
     JokesAdapter jokeAdapter;
