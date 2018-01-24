@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Profile.UserGenres;
+package com.udacity.gradle.builditbigger.SubscribersSubsrciptions;
 
 import android.arch.lifecycle.LiveData;
 
@@ -7,23 +7,25 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Models.Genre;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
+import com.udacity.gradle.builditbigger.Models.Joke;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * Created by joeljohnson on 1/23/18.
  */
 
-public class UserGenreLiveData extends LiveData<Genre> {
-    DatabaseReference databaseReference;
+public class SubscribersLiveData extends LiveData<HilarityUser> {
 
-    public UserGenreLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("usergenres/" + uid);
+    private DatabaseReference databaseReference;
+
+    public SubscribersLiveData(String uid){
+        databaseReference = Constants.DATABASE.child("followers/" + uid + "/list");
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot.getValue(Genre.class));
+            setValue(dataSnapshot.getValue(HilarityUser.class));
         }
 
         @Override

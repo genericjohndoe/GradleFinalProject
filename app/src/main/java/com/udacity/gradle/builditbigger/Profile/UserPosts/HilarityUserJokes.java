@@ -70,24 +70,18 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0) {
-                    conFam.hideFAB();
-                }
+                if (dy > 0 || dy < 0) conFam.hideFAB();
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    conFam.showFAB();
-                }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) conFam.showFAB();
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
         binding.recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
-            public void onChildViewAttachedToWindow(View view) {
-            }
+            public void onChildViewAttachedToWindow(View view) {}
 
             @Override
             public void onChildViewDetachedFromWindow(View view) {
@@ -112,8 +106,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
         UserPostsViewModel userPostsViewModel = ViewModelProviders.of(this,
                 new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
-        userPostsViewModel.getUserPostsLiveData().observe(this, dataSnapshot -> {
-            Joke joke = dataSnapshot.getValue(Joke.class);
+        userPostsViewModel.getUserPostsLiveData().observe(this, joke -> {
             jokes.add(joke);
             if (!searched) {
                 Log.i("joke size", jokes.size() + "");
@@ -146,8 +139,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
                             ViewModelProviders.of(this,
                                     new SearchUserPostsViewModelFactory(uid, splitSearchKeyword))
                                     .get(SearchUserViewModel.class).getSearchUserPostsLiveData()
-                                    .observe(this, dataSnapshot -> {
-                                        Joke joke = dataSnapshot.getValue(Joke.class);
+                                    .observe(this, joke -> {
                                         if (!searches.contains(joke))
                                         searches.add(joke);
                                         jokeAdapter.notifyDataSetChanged();

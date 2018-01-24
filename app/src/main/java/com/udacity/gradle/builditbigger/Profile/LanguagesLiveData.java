@@ -13,7 +13,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
  * Created by joeljohnson on 1/21/18.
  */
 
-public class LanguagesLiveData extends LiveData<DataSnapshot> {
+public class LanguagesLiveData extends LiveData<String> {
 
     private DatabaseReference databaseReference;
 
@@ -25,7 +25,7 @@ public class LanguagesLiveData extends LiveData<DataSnapshot> {
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot);
+            setValue(dataSnapshot.getValue(String.class));
         }
 
         @Override

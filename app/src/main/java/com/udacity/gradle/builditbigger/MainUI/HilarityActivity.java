@@ -21,8 +21,8 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Messaging.MessagesFragment;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.UserSpecific.SubscribersFragment;
-import com.udacity.gradle.builditbigger.UserSpecific.SubscriptionsFragment;
+import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscribersFragment;
+import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscriptionsFragment;
 
 public class HilarityActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,36 +45,6 @@ public class HilarityActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-//        Drawer result = new DrawerBuilder()
-//                .withActivity(this)
-//                .withToolbar(toolbar)
-//                .withDisplayBelowStatusBar(true)
-//                .withGenerateMiniDrawer(true)
-//                .addDrawerItems(
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_profile_icon),
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_feed_image),
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_explore_image),
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_meme_creator),
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_live_stream),
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_payment),
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_settings),
-//                        new PrimaryDrawerItem().withIcon(R.drawable.ic_logout)
-//                )
-//                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-//                    @Override
-//                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-//                        // do something with the clicked item :D
-//                        return true;
-//                    }
-//                })
-//                .buildView();
-//
-//        new MiniDrawer().withDrawer(result).build(this);
-//
-//        CoordinatorLayout cl = findViewById(R.id.drawer_layout);
-//        cl.addView(new MiniDrawer().withDrawer(result).build(this));
-
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -161,37 +131,7 @@ public class HilarityActivity extends AppCompatActivity
                 .commit();
     }
 
-    public void getFollowersList(View view){
-        changeFragment(new SubscribersFragment(), "Subscribers");
-    }
 
-    public void getFollowingList(View view){
-        changeFragment(new SubscriptionsFragment(), "subscriptions");
-    }
 }
-/*Drawer result = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withDisplayBelowStatusBar(true)
-                .withGenerateMiniDrawer(true)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_profile_icon),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_feed_image),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_explore_image),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_meme_creator),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_live_stream),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_payment),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_settings),
-                        new PrimaryDrawerItem().withIcon(R.drawable.ic_logout)
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        // do something with the clicked item :D
-                        return true;
-                    }
-                })
-                .buildView();
 
-        new MiniDrawer().withDrawer(result);*/
 

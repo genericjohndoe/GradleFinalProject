@@ -11,16 +11,14 @@ import java.util.List;
 public class HilarityUser {
     private String userName;
     private String urlString;
-    private List<String> languages;
     private String uid;
 
     public HilarityUser() {
     }
 
-    public HilarityUser(String userName, String urlString, List<String> languages) {
+    public HilarityUser(String userName, String urlString) {
         this.userName = userName;
         this.urlString = urlString;
-        this.languages = languages;
         uid = Constants.UID;
     }
 
@@ -32,9 +30,6 @@ public class HilarityUser {
         return urlString;
     }
 
-    public List<String> getLanguages() {
-        return languages;
-    }
 
     public String getUID() {
         return uid;
@@ -47,11 +42,5 @@ public class HilarityUser {
     public void setUrlString(String urlString) {
         this.urlString = urlString;
     }
-
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
-    }
-
-
 }
 

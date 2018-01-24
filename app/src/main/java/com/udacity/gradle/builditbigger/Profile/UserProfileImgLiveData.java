@@ -12,7 +12,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
  * Created by joeljohnson on 1/20/18.
  */
 
-public class UserProfileImgLiveData extends LiveData<DataSnapshot> {
+public class UserProfileImgLiveData extends LiveData<String> {
 
     private DatabaseReference databaseReference;
 
@@ -23,7 +23,7 @@ public class UserProfileImgLiveData extends LiveData<DataSnapshot> {
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            setValue(dataSnapshot);
+            setValue(dataSnapshot.getValue(String.class));
         }
 
         @Override

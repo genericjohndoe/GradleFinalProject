@@ -12,7 +12,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
  * Created by joeljohnson on 1/20/18.
  */
 
-public class NumFollowingLiveData extends LiveData<DataSnapshot> {
+public class NumFollowingLiveData extends LiveData<Long> {
     private DatabaseReference databaseReference;
 
     public NumFollowingLiveData(String uid){
@@ -22,7 +22,7 @@ public class NumFollowingLiveData extends LiveData<DataSnapshot> {
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            setValue(dataSnapshot);
+            setValue(dataSnapshot.getValue(Long.class));
         }
 
         @Override

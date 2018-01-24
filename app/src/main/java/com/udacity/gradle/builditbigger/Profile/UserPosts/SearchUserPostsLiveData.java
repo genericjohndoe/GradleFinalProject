@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Models.Joke;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * Created by joeljohnson on 1/21/18.
  */
 
-public class SearchUserPostsLiveData extends LiveData<DataSnapshot> {
+public class SearchUserPostsLiveData extends LiveData<Joke> {
     private DatabaseReference databaseReference;
     private String[] tags;
 
@@ -31,7 +32,7 @@ public class SearchUserPostsLiveData extends LiveData<DataSnapshot> {
            for (DataSnapshot snap: snaps){
                for (String tag: tags){
                    if (snap.getValue(String.class).equals(tag)){
-                       setValue(dataSnapshot);
+                       setValue(dataSnapshot.getValue(Joke.class));
                    }
                }
            }

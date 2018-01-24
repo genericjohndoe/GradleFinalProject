@@ -28,9 +28,9 @@ import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
-import com.udacity.gradle.builditbigger.UserSpecific.HilarityUserLikes;
-import com.udacity.gradle.builditbigger.UserSpecific.SubscribersFragment;
-import com.udacity.gradle.builditbigger.UserSpecific.SubscriptionsFragment;
+import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
+import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscribersFragment;
+import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscriptionsFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
 
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class Profile extends Fragment implements HideFAB {
 
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
 
-        binding.subscribersTv.setOnClickListener(view -> changeFragment(new SubscribersFragment()));
+        binding.subscribersTv.setOnClickListener(view -> SubscribersFragment.newInstance(uid));
 
         binding.subscriptionsTv.setOnClickListener(view -> changeFragment(new SubscriptionsFragment()));
 
@@ -103,38 +103,32 @@ public class Profile extends Fragment implements HideFAB {
                 new UserInfoViewModelFactory(uid))
                 .get(UserInfoViewModel.class);
 
-        userInfoViewModel.getUserName().observe(this, dataSnapshot -> {
-                String userName = dataSnapshot.getValue(String.class);
+        userInfoViewModel.getUserName().observe(this, userName -> {
                 getActivity().setTitle(userName);
             }
         );
 
-        userInfoViewModel.getUserProfileImg().observe(this, dataSnapshot -> {
-            String profileUrl = dataSnapshot.getValue(String.class);
+        userInfoViewModel.getUserProfileImg().observe(this, profileUrl -> {
             Glide.with(Profile.this)
                     .load(profileUrl)
                     .into(binding.profileImageview);
             }
         );
 
-        userInfoViewModel.getNumPostLiveData().observe(this, dataSnapshot -> {
-            Long number = dataSnapshot.getValue(Long.class);
-            binding.postsTv.setText(number + " posts");
+        userInfoViewModel.getNumPostLiveData().observe(this, numPosts -> {
+            binding.postsTv.setText(numPosts + " posts");
             }
         );
 
-        userInfoViewModel.getNumFollowingLiveData().observe(this, dataSnapshot -> {
-            Long number = dataSnapshot.getValue(Long.class);
-            binding.subscriptionsTv.setText(number + " subscriptions");
+        userInfoViewModel.getNumFollowingLiveData().observe(this, numFollowing -> {
+            binding.subscriptionsTv.setText(numFollowing + " subscriptions");
         });
 
-        userInfoViewModel.getNumFollowersLiveData().observe(this, dataSnapshot -> {
-            Long number = dataSnapshot.getValue(Long.class);
-            binding.subscribersTv.setText(number + " subscribers");
+        userInfoViewModel.getNumFollowersLiveData().observe(this, numFollowers -> {
+            binding.subscribersTv.setText(numFollowers + " subscribers");
         });
 
-        userInfoViewModel.getLanguagesLiveData().observe(this, dataSnapshot -> {
-            String lang = dataSnapshot.getValue(String.class);
+        userInfoViewModel.getLanguagesLiveData().observe(this, lang -> {
             languages.add(lang);
         });
 
@@ -153,7 +147,8 @@ public class Profile extends Fragment implements HideFAB {
             binding.fam.showMenu(true);
             binding.newPostFab.setOnClickListener(view -> showNewGenreDialog());
         } else {
-            binding.fam.hideMenu(true);
+            binding.fam.showMenu(true);
+            binding.newPostFab.setOnClickListener(null);
         }
     }
 
@@ -199,7 +194,7 @@ public class Profile extends Fragment implements HideFAB {
         }
 
         Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid), HilarityUserGenres.newInstance(uid),
-                new HilarityUserLikes()};
+                HilarityUserLikes.newInstance(uid)};
 
         String[] tabTitles = new String[]{"Posts", "Genres", "Likes"};
 
