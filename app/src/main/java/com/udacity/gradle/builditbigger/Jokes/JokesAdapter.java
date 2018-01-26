@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Jokes;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,8 @@ import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
+import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
+import com.udacity.gradle.builditbigger.databinding.VideoPostBinding;
 
 import java.util.List;
 
@@ -56,44 +59,12 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         setHasStableIds(true);
     }
 
-    public class JokesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView userName;
-        TextView likeCounterTextView;
-        TextView commentCounterTextView;
-        TextView timeStampTextView;
-        CircleImageView profileImg;
-        ImageButton likeButton;
-        ImageButton options;
-        ImageButton comments;
-        TextView tagline;
+    public class JokesViewHolder extends RecyclerView.ViewHolder {
+        GenericPostBinding binding;
 
-        public JokesViewHolder(View view) {
-            super(view);
-            tagline = view.findViewById(R.id.tagline_textView);
-            timeStampTextView = view.findViewById(R.id.time_date_textView);
-            profileImg = view.findViewById(R.id.profile_imageview);
-            userName = view.findViewById(R.id.username_textView);
-            options = view.findViewById(R.id.options_imageButton);
-            options.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //todo open custom dialog
-                }
-            });
-
-            likeButton = view.findViewById(R.id.favorite_imageButton);
-            likeCounterTextView = view.findViewById(R.id.likes_counter_textView);
-
-            comments = view.findViewById(R.id.comment_imageButton);
-            commentCounterTextView = view.findViewById(R.id.comment_counter_textView);
-
-            view.setOnClickListener(this);
-            view.setTag(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            //todo open fragment to show all post data plus comments
+        public JokesViewHolder(GenericPostBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 
@@ -109,19 +80,22 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     @Override
     public JokesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
+        GenericPostBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.generic_post, parent, false);
         switch  (viewType){
             case Constants.TEXT:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_post, parent, false);
-                return new TextPostViewHolder(view);
-             case Constants.IMAGE:
-                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_post, parent, false);
-                 return new ImagePostViewHolder(view);
-             case Constants.VIDEO:
-                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_post, parent, false);
-                 return new VideoPostViewHolder(view);
+                binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
+                binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
+                return new TextPostViewHolder(binding);
+            case Constants.IMAGE:
+                binding.textLayout.textRootLayout.setVisibility(View.GONE);
+                binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
+                return new ImagePostViewHolder(binding);
+            case Constants.VIDEO:
+                binding.textLayout.textRootLayout.setVisibility(View.GONE);
+                binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
+                return new VideoPostViewHolder(binding);
         }
-       return null;
+        return null;
     }
 
     @Override
@@ -129,12 +103,12 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         final Joke joke = jokes.get(position);
 
         if (holder instanceof TextPostViewHolder) {
-            ((TextPostViewHolder) holder).title.setText(joke.getJokeTitle());
-            ((TextPostViewHolder) holder).body.setText(joke.getJokeBody());
-            ((TextPostViewHolder) holder).tagline.setText(joke.getTagline());
+            ((TextPostViewHolder) holder).binding.textLayout.jokeTitleTextView.setText(joke.getJokeTitle());
+            ((TextPostViewHolder) holder).binding.textLayout.jokeBodyTextView.setText(joke.getJokeBody());
+            ((TextPostViewHolder) holder).binding.textLayout.taglineTextView.setText(joke.getTagline());
         } else if (holder instanceof ImagePostViewHolder) {
-            Glide.with(context).load(joke.getMediaURL()).into(((ImagePostViewHolder) holder).post);
-            ((ImagePostViewHolder) holder).tagline.setText(joke.getTagline());
+            Glide.with(context).load(joke.getMediaURL()).into(((ImagePostViewHolder) holder).binding.imageLayout.postImageview);
+            ((ImagePostViewHolder) holder).binding.imageLayout.taglineTextView.setText(joke.getTagline());
         } else {
             DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             // Produces DataSource instances through which media data is loaded.
@@ -142,73 +116,66 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     Util.getUserAgent(context, "Hilarity"), bandwidthMeter);
             // Produces Extractor instances for parsing the media data.
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            if (((VideoPostViewHolder) holder).post.getPlayer() != null) {
-                ((VideoPostViewHolder) holder).post.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(joke.getMediaURL()),
+            if (((VideoPostViewHolder) holder).binding.videoLayout.postVideoView.getPlayer() != null) {
+                ((VideoPostViewHolder) holder).binding.videoLayout.postVideoView.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(joke.getMediaURL()),
                         dataSourceFactory, extractorsFactory, null, null), false, false);
                 Log.i("Hoe8","position for view holder " + position);
             }
         }
 
-        holder.userName.setText(joke.getUser());
+        holder.binding.usernameTextView.setText(joke.getUser());
 
         Constants.DATABASE.child("users/" + joke.getUID() + "/urlString")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String url = dataSnapshot.getValue(String.class);
-                        Glide.with(context).load(url).into(holder.profileImg);
+                        Glide.with(context).load(url).into(holder.binding.profileImageview);
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
         Constants.DATABASE.child("userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/num")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Integer num = dataSnapshot.getValue(Integer.class);
-                        holder.likeCounterTextView.setText(Integer.toString(0));
+                        holder.binding.likesCounterTextView.setText(Integer.toString(0));
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
         Constants.DATABASE.child("userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/comments/num")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Integer num = dataSnapshot.getValue(Integer.class);
-                        holder.commentCounterTextView.setText(Integer.toString(0));
+                        holder.binding.commentCounterTextView.setText(Integer.toString(0));
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
         Constants.DATABASE.child("userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            holder.likeButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+                            holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_black_24dp);
                         } else {
-                            holder.likeButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                            holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                         }
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
+                    public void onCancelled(DatabaseError databaseError) {}
                 });
 
-        holder.timeStampTextView.setText(joke.getTimeStamp());
+        holder.binding.timeDateTextView.setText(joke.getTimeStamp());
 
-        holder.likeButton.setOnClickListener(new View.OnClickListener() {
+        holder.binding.favoriteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;
@@ -218,21 +185,20 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     Constants.DATABASE.child(path).removeValue();
-                                    holder.likeButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                                    holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                                 } else {
                                     Constants.DATABASE.child(path).setValue(true);
-                                    holder.likeButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+                                    holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_black_24dp);
                                 }
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
+                            public void onCancelled(DatabaseError databaseError) {}
                         });
             }
         });
 
-        holder.comments.setOnClickListener(new View.OnClickListener() {
+        holder.binding.commentImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //todo start animation between fragments
@@ -242,10 +208,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 bundle.putString("uid", joke.getUID());
                 bundle.putString("post id", joke.getPushId());
                 cf.setArguments(bundle);
-                ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
+                Constants.changeFragment(R.id.hilarity_content_frame,cf);
+                /*((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.hilarity_content_frame, cf)
                         .addToBackStack(null)
-                        .commit();
+                        .commit();*/
             }
         });
     }
@@ -253,52 +220,50 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
 
     public class TextPostViewHolder extends JokesViewHolder{
-        TextView title;
-        TextView body;
+        GenericPostBinding binding;
 
-        public TextPostViewHolder(View view) {
-            super(view);
-            title = view.findViewById(R.id.jokeTitle_textView);
-            body = view.findViewById(R.id.jokeBody_textView);
+        public TextPostViewHolder(GenericPostBinding bind) {
+            super(bind);
+            this.binding = bind;
         }
 
     }
 
     public class ImagePostViewHolder extends JokesViewHolder{
-        ImageView post;
+        GenericPostBinding binding;
 
-        public ImagePostViewHolder(View view){
-            super(view);
-            post = view.findViewById(R.id.post_imageview);
+        public ImagePostViewHolder(GenericPostBinding binding){
+            super(binding);
+            this.binding = binding;
         }
     }
 
     public class VideoPostViewHolder extends JokesViewHolder implements ExoPlayer.ExoPlayerComponent{
-        SimpleExoPlayerView post;
         VideoLifeCyclerObserver vlco;
         long playPosition = 0L;
         boolean isPlaying = false;
         boolean hasStarted = false;
         long id;
+        GenericPostBinding binding;
 
         //todo when video is started check to see if another video is playing
 
-        public VideoPostViewHolder(View view){
-            super(view);
-            post = view.findViewById(R.id.post_videoView);
+        public VideoPostViewHolder(GenericPostBinding binding){
+            super(binding);
+            this.binding = binding;
             vc.onNewVideoPost(getItemId());
             Log.i("Hoe8", "vid post created");
-           // setVlco();
+            // setVlco();
 
         }
 
         public void setVlco(){
             Log.i("Hoe8",""+(this==null));
-            vlco = new VideoLifeCyclerObserver((AppCompatActivity) context, post, this);
+            vlco = new VideoLifeCyclerObserver((AppCompatActivity) context, binding.videoLayout.postVideoView, this);
         }
 
         public SimpleExoPlayerView getPost(){
-            return post;
+            return binding.videoLayout.postVideoView;
         }
 
         public long getPlayerPosition(){

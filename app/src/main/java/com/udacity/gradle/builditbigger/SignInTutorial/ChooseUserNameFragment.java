@@ -79,7 +79,7 @@ public class ChooseUserNameFragment extends SlideFragment {
                         List<String> languageList = new ArrayList<String>();
                         languageList.add(Locale.getDefault().getDisplayLanguage());
                         Constants.DATABASE.child("users/" + firebaseUser.getUid())
-                                .setValue(new HilarityUser(userName, "https://developer.android.com/_static/2f20c0c6d8/images/android/touchicon-180.png", languageList));
+                                .setValue(new HilarityUser(userName, "https://developer.android.com/_static/2f20c0c6d8/images/android/touchicon-180.png"));
                         Constants.DATABASE.child("following/" + firebaseUser.getUid() + "/num").setValue(0);
                         Constants.DATABASE.child("followers/" + firebaseUser.getUid() + "/num").setValue(0);
                         Constants.DATABASE.child("userlist/" + firebaseUser.getUid()).setValue(userName);
