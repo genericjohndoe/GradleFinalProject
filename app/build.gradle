@@ -58,9 +58,10 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:11.8.0'
     compile 'com.google.firebase:firebase-database:11.8.0'
     compile 'com.google.firebase:firebase-auth:11.8.0'
+    compile 'com.google.firebase:firebase-messaging:11.8.0'
     compile 'com.firebaseui:firebase-ui-auth:3.0.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
-
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.android.support:design:27.0.2'
@@ -84,8 +85,8 @@ dependencies {
     compile 'com.github.pchmn:MaterialChipsInput:1.0.8'
 
     // ViewModel and LiveData
-    implementation "android.arch.lifecycle:extensions:1.0.0"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    implementation "android.arch.lifecycle:extensions:1.1.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
 
     // Room
     implementation "android.arch.persistence.room:runtime:1.0.0"
