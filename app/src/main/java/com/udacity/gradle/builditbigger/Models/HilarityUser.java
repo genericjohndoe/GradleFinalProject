@@ -1,5 +1,8 @@
 package com.udacity.gradle.builditbigger.Models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 import java.util.List;
@@ -7,14 +10,14 @@ import java.util.List;
 /**
  * Created by joeljohnson on 10/2/17.
  */
-
+@Entity(tableName = "hilarityusers")
 public class HilarityUser {
     private String userName;
     private String urlString;
+    @PrimaryKey
     private String uid;
 
-    public HilarityUser() {
-    }
+    public HilarityUser() {}
 
     public HilarityUser(String userName, String urlString) {
         this.userName = userName;

@@ -6,37 +6,25 @@ package com.udacity.gradle.builditbigger.Models;
 
 public class Message {
 
-    private String uid;
     private String contents;
-    private String userProfileImagePath;
     private String timeDateString;
-    private String userName;
+    private HilarityUser hilarityUser;
 
-    public Message(String uid, String contents, String userProfileImagePath, String timeDateString, String userName){
-        this.uid = uid;
+    public Message(HilarityUser user, String contents, String timeDateString){
+        hilarityUser = user;
         this.contents = contents;
-        this.userProfileImagePath = userProfileImagePath;
         this.timeDateString = timeDateString;
-        this.userName = userName;
+    }
+
+    public HilarityUser getHilarityUser() {
+        return hilarityUser;
     }
 
     public String getContents() {
         return contents;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public String getUserProfileImagePath(){
-        return userProfileImagePath;
-    }
-
     public String getTimeDateString() {
         return timeDateString;
-    }
-
-    public String getUserName() {
-        return userName;
     }
 }

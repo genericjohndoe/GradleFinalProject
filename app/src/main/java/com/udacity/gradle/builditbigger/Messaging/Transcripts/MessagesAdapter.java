@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Messaging;
+package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -55,8 +55,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.SentMe
         holder.content.setText(message.getContents());
         holder.timeSent.setText(message.getTimeDateString());
         if (holder instanceof RecievedMessagesViewHolder){
-            ((RecievedMessagesViewHolder) holder).user.setText(message.getUserName());
-            Glide.with(context).load(message.getUserProfileImagePath())
+            ((RecievedMessagesViewHolder) holder).user.setText(message.getHilarityUser().getUserName());
+            Glide.with(context).load(message.getHilarityUser().getUrlString())
                     .into(((RecievedMessagesViewHolder) holder).profileImg);
         }
 
@@ -69,7 +69,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.SentMe
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).getUid() == Constants.UID) return TYPE_SENT;
+        if (messages.get(position).getHilarityUser().getUID() == Constants.UID) return TYPE_SENT;
 
         return TYPE_RECEIVED;
     }

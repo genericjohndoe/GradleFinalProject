@@ -1,23 +1,20 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.udacity.gradle.builditbigger.Messaging.ComposeMessageFragment">
+    tools:context="com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <com.pchmn.materialchips.ChipsInput
+    <com.example.chipslibrary.ChipsInput
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/chips_input"
         android:background="@color/accent"
         app:chip_deletable="true"
          />
-    <!--<android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/chip_recyclerview"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -42,3 +39,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</layout>

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.udacity.gradle.builditbigger.Messaging.ComposeMessageFragment;
+import com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment;
 import com.udacity.gradle.builditbigger.R;
 
 
@@ -16,6 +16,7 @@ import com.udacity.gradle.builditbigger.R;
  *
  */
 public class MessagesFragment extends Fragment {
+    //todo populate recyclerview with reverse chronological messages
 
     ImageButton composeButton;
     RecyclerView recyclerView;

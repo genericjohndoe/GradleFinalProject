@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.CloudMessaging;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +15,7 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
+import com.udacity.gradle.builditbigger.R;
 
 /**
  * Created by joeljohnson on 1/28/18.
