@@ -91,9 +91,9 @@ public class Profile extends Fragment implements HideFAB {
 
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
 
-        binding.subscribersTv.setOnClickListener(view -> SubscribersFragment.newInstance(uid));
+        //binding.subscribersTv.setOnClickListener(view -> SubscribersFragment.newInstance(uid));
 
-        binding.subscriptionsTv.setOnClickListener(view -> changeFragment(new SubscriptionsFragment()));
+        //binding.subscriptionsTv.setOnClickListener(view -> changeFragment(new SubscriptionsFragment()));
 
         //binding.searchFab.setOnClickListener(view ->  showSearchDialog());
 
