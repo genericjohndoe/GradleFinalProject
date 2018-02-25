@@ -14,8 +14,8 @@ public class UserName {
     @NonNull
     public String userName;
 
-    public UserName(@NonNull String key,@NonNull String value){
-        uid = key;
-        userName = value;
+    public UserName(@NonNull String uid,@NonNull String userName){
+        this.uid = uid;
+        this.userName = userName;
     }
 }

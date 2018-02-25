@@ -70,7 +70,7 @@ public class ExploreFragment extends Fragment implements VideoCallback {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, this, false);
     }
 
     @Override

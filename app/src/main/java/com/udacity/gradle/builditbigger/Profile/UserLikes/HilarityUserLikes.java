@@ -63,7 +63,7 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
         conFam = (HideFAB) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
-        jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, this, false);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
         });
         binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
             if(keyCode == KeyEvent.KEYCODE_BACK && searched){
-                jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
+                jokeAdapter = new JokesAdapter(getActivity(), jokes, this, false);
                 jokeAdapter.notifyDataSetChanged();
                 searched = false;
                 configureUI();
@@ -125,7 +125,7 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
                             String[] splitSearchKeyword = searchKeyword.split(" |\\,");
                             List<Joke> searches = new ArrayList<>();
-                            jokeAdapter = new JokesAdapter(getActivity(),searches, HilarityUserLikes.this);
+                            jokeAdapter = new JokesAdapter(getActivity(),searches, HilarityUserLikes.this, false);
                             ViewModelProviders.of(this,
                                     new SearchUserLikesViewModelFactory(uid, splitSearchKeyword))
                                     .get(SearchUserLikesViewModel.class).getSearchUserLikesLiveData()

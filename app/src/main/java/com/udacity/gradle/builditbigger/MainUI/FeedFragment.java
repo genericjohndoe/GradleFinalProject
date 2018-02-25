@@ -78,7 +78,7 @@ public class FeedFragment extends Fragment implements VideoCallback {
 
                     }
                 });
-        jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, this,false);
     }
 
     @Override

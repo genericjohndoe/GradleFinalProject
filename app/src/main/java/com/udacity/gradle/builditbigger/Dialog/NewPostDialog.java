@@ -26,6 +26,7 @@ public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRe
 
     private TabLayout tabLayout;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    //todo change dialog to include viewpager with image text to enable
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRe
                 if (tab.getPosition() == 0) changeFragment(new NewTextPost(), "new text post");
                 if (tab.getPosition() == 1) changeFragment(new NewImagePost(), "new image post");
                 if (tab.getPosition() == 2) changeFragment(new NewVideoPost(), "new video post");
+                if (tab.getPosition() == 3) changeFragment(new NewGifPost(),"new tag post");
             }
 
             @Override

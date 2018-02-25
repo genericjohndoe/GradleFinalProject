@@ -54,7 +54,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
-        jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, this, true);
         conFam = (HideFAB) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
     }
 
@@ -93,7 +93,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
         });
         binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
             if(keyCode == KeyEvent.KEYCODE_BACK && searched){
-                jokeAdapter = new JokesAdapter(getActivity(), jokes, this);
+                jokeAdapter = new JokesAdapter(getActivity(), jokes, this, true);
                 jokeAdapter.notifyDataSetChanged();
                 searched = false;
                 configureUI();
@@ -107,7 +107,9 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
                 new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
         userPostsViewModel.getUserPostsLiveData().observe(this, joke -> {
-            jokes.add(joke);
+            //when switching back and forth between fragments in viewpager
+            //the last joke is readded to the list, only on client side
+            if (!jokes.contains(joke)) jokes.add(joke);
             if (!searched) {
                 Log.i("joke size", jokes.size() + "");
                 jokeAdapter.notifyDataSetChanged();
@@ -135,7 +137,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
                             String[] splitSearchKeyword = searchKeyword.split(" |\\,");
                             List<Joke> searches = new ArrayList<>();
-                            jokeAdapter = new JokesAdapter(getActivity(),searches, HilarityUserJokes.this);
+                            jokeAdapter = new JokesAdapter(getActivity(),searches, HilarityUserJokes.this, true);
                             ViewModelProviders.of(this,
                                     new SearchUserPostsViewModelFactory(uid, splitSearchKeyword))
                                     .get(SearchUserViewModel.class).getSearchUserPostsLiveData()

@@ -9,23 +9,17 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_hilarity"
+        layout="@layout/app_bar_main2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/activity_hilarity_drawer"
         android:fitsSystemWindows="true"
-        android:background="@color/theme_primary"
-        app:itemIconTint="@color/dark_gray"
-        app:itemTextColor="@color/dark_gray"
-        android:layout_marginTop="60dp"/>
+        app:headerLayout="@layout/nav_header_main2"
+        app:menu="@menu/activity_main2_drawer" />
 
 </android.support.v4.widget.DrawerLayout>
-
-
-

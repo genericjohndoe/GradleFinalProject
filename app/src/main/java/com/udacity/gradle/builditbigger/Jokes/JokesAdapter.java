@@ -28,18 +28,23 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.hendraanggrian.socialview.SocialView;
+import com.hendraanggrian.widget.SocialTextView;
 import com.udacity.gradle.builditbigger.Comments.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
-import com.udacity.gradle.builditbigger.databinding.VideoPostBinding;
+
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 
 /**
  * Created by joeljohnson on 7/17/17.
@@ -50,21 +55,40 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     List<Joke> jokes;
     int id = 1;
     VideoCallback vc;
+    boolean isUserProfile;
 
 
-    public JokesAdapter(Context context, List<Joke> objects, VideoCallback vc) {
+    public JokesAdapter(Context context, List<Joke> objects, VideoCallback vc, boolean isUserProfile) {
         this.context = context;
         this.jokes = objects;
         this.vc = vc;
+        this.isUserProfile = isUserProfile;
         setHasStableIds(true);
     }
 
     public class JokesViewHolder extends RecyclerView.ViewHolder {
         GenericPostBinding binding;
+        SocialTextView socialTextView;
 
         public JokesViewHolder(GenericPostBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.socialTextView = (SocialTextView) binding.getRoot().findViewById(R.id.tagline_textView);
+            socialTextView.setOnMentionClickListener(new Function2<SocialView, String, Unit>() {
+                @Override
+                public Unit invoke(SocialView socialView, String s) {
+                    //todo get uid from username
+                    Constants.changeFragment(R.id.hilarity_content_frame,Profile.newInstance("uid"));
+                    return null;
+                }
+            });
+            socialTextView.setOnHashtagClickListener(new Function2<SocialView, String, Unit>() {
+                @Override
+                public Unit invoke(SocialView socialView, String s) {
+                    //todo send to search page
+                    return null;
+                }
+            });
         }
     }
 
@@ -81,19 +105,28 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     @Override
     public JokesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         GenericPostBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.generic_post, parent, false);
+        if (isUserProfile) binding.userInfoConstraintLayout.setVisibility(View.GONE);
         switch  (viewType){
             case Constants.TEXT:
                 binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
                 binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
+                binding.gifLayout.gifRootlayout.setVisibility(View.GONE);
                 return new TextPostViewHolder(binding);
             case Constants.IMAGE:
                 binding.textLayout.textRootLayout.setVisibility(View.GONE);
                 binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
+                binding.gifLayout.gifRootlayout.setVisibility(View.GONE);
                 return new ImagePostViewHolder(binding);
             case Constants.VIDEO:
                 binding.textLayout.textRootLayout.setVisibility(View.GONE);
                 binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
+                binding.gifLayout.gifRootlayout.setVisibility(View.GONE);
                 return new VideoPostViewHolder(binding);
+            case Constants.GIF:
+                binding.textLayout.textRootLayout.setVisibility(View.GONE);
+                binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
+                binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
+                return new GifPostViewHolder(binding);
         }
         return null;
     }
@@ -105,11 +138,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         if (holder instanceof TextPostViewHolder) {
             ((TextPostViewHolder) holder).binding.textLayout.jokeTitleTextView.setText(joke.getJokeTitle());
             ((TextPostViewHolder) holder).binding.textLayout.jokeBodyTextView.setText(joke.getJokeBody());
-            ((TextPostViewHolder) holder).binding.textLayout.taglineTextView.setText(joke.getTagline());
         } else if (holder instanceof ImagePostViewHolder) {
             Glide.with(context).load(joke.getMediaURL()).into(((ImagePostViewHolder) holder).binding.imageLayout.postImageview);
-            ((ImagePostViewHolder) holder).binding.imageLayout.taglineTextView.setText(joke.getTagline());
-        } else {
+        } else if (holder instanceof VideoPostViewHolder) {
             DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             // Produces DataSource instances through which media data is loaded.
             DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
@@ -121,7 +152,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                         dataSourceFactory, extractorsFactory, null, null), false, false);
                 Log.i("Hoe8","position for view holder " + position);
             }
+        } else {
+            Glide.with(context).asGif().load(joke.getMediaURL())
+                    .into(((GifPostViewHolder) holder).binding.gifLayout.postGifimageview);
         }
+        holder.socialTextView.setText(joke.getTagline());
 
         holder.binding.usernameTextView.setText(joke.getUser());
 
@@ -303,6 +338,15 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             }else {
                 vc.getVideoInfo(false, getLayoutPosition());
             }
+        }
+    }
+
+    public class GifPostViewHolder extends JokesViewHolder{
+        GenericPostBinding binding;
+
+        public GifPostViewHolder(GenericPostBinding bind){
+            super(bind);
+            this.binding = bind;
         }
     }
 
