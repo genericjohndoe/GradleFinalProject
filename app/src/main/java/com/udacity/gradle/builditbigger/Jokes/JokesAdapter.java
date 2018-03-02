@@ -1,9 +1,14 @@
 package com.udacity.gradle.builditbigger.Jokes;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -56,6 +61,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     int id = 1;
     VideoCallback vc;
     boolean isUserProfile;
+    private LifecycleRegistry mLifecycleRegistry;
 
 
     public JokesAdapter(Context context, List<Joke> objects, VideoCallback vc, boolean isUserProfile) {
@@ -66,12 +72,16 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         setHasStableIds(true);
     }
 
-    public class JokesViewHolder extends RecyclerView.ViewHolder {
+    public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
         GenericPostBinding binding;
         SocialTextView socialTextView;
+        private LifecycleRegistry mLifecycleRegistry;
+        private boolean isLiked = false;
 
         public JokesViewHolder(GenericPostBinding binding) {
             super(binding.getRoot());
+            mLifecycleRegistry = new LifecycleRegistry(this);
+            mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
             this.binding = binding;
             this.socialTextView = (SocialTextView) binding.getRoot().findViewById(R.id.tagline_textView);
             socialTextView.setOnMentionClickListener(new Function2<SocialView, String, Unit>() {
@@ -89,6 +99,24 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     return null;
                 }
             });
+        }
+
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return mLifecycleRegistry;
+        }
+
+        public LifecycleRegistry getmLifecycleRegistry(){
+            return mLifecycleRegistry;
+        }
+
+        public void setIsLiked(boolean liked){
+            isLiked = liked;
+        }
+
+        public boolean getIsLiked(){
+            return isLiked;
         }
     }
 
@@ -133,6 +161,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     @Override
     public void onBindViewHolder(final JokesViewHolder holder, int position) {
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         final Joke joke = jokes.get(position);
 
         if (holder instanceof TextPostViewHolder) {
@@ -160,96 +189,47 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         holder.binding.usernameTextView.setText(joke.getUser());
 
-        Constants.DATABASE.child("users/" + joke.getUID() + "/urlString")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String url = dataSnapshot.getValue(String.class);
-                        Glide.with(context).load(url).into(holder.binding.profileImageview);
-                    }
+        ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(joke);
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
-        Constants.DATABASE.child("userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/num")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Integer num = dataSnapshot.getValue(Integer.class);
-                        holder.binding.likesCounterTextView.setText(Integer.toString(0));
-                    }
+        viewHolderViewModel.getProfileImgLiveData().observe(holder, url ->{
+            Glide.with(context).load(url).into(holder.binding.profileImageview);
+        });
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
-        Constants.DATABASE.child("userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/comments/num")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Integer num = dataSnapshot.getValue(Integer.class);
-                        holder.binding.commentCounterTextView.setText(Integer.toString(0));
-                    }
+        viewHolderViewModel.getNumLikesLiveData().observe(holder, num -> {
+            holder.binding.likesCounterTextView.setText(num+"");
+        });
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
-        Constants.DATABASE.child("userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_black_24dp);
-                        } else {
-                            holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                        }
-                    }
+        viewHolderViewModel.getNumCommentsLiveData().observe(holder, num -> {
+            holder.binding.commentCounterTextView.setText(num+"");
+        });
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
+        viewHolderViewModel.getIsLikedLiveData().observe(holder, aBoolean -> {
+            if (aBoolean){
+                Glide.with(context).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
+            } else{
+                Glide.with(context).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
+            }
+            holder.setIsLiked(aBoolean);
+            Log.i("likes", "automatic liked value set "+ aBoolean);
+        });
 
         holder.binding.timeDateTextView.setText(joke.getTimeStamp());
 
-        holder.binding.favoriteImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.binding.favoriteImageButton.setOnClickListener(view -> {
                 final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;
-                Constants.DATABASE.child(path)
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    Constants.DATABASE.child(path).removeValue();
-                                    holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                                } else {
-                                    Constants.DATABASE.child(path).setValue(true);
-                                    holder.binding.favoriteImageButton.setImageResource(R.drawable.ic_favorite_black_24dp);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {}
-                        });
-            }
+                if (holder.getIsLiked()){
+                    Constants.DATABASE.child(path).removeValue();
+                    Glide.with(context).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
+                } else {
+                    Constants.DATABASE.child(path).setValue(true);
+                    Glide.with(context).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
+                }
         });
 
-        holder.binding.commentImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //todo start animation between fragments
-                //todo show recyclerview of comments
-                CommentFragment cf = new CommentFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("uid", joke.getUID());
-                bundle.putString("post id", joke.getPushId());
-                cf.setArguments(bundle);
-                Constants.changeFragment(R.id.hilarity_content_frame,cf);
-                /*((AppCompatActivity) context).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.hilarity_content_frame, cf)
-                        .addToBackStack(null)
-                        .commit();*/
+        holder.binding.commentImageButton.setOnClickListener(view -> {
+                Constants.changeFragment(R.id.hilarity_content_frame,CommentFragment.newInstance(joke.getUID(),joke.getPushId()),(AppCompatActivity) context);
             }
-        });
+        );
     }
 
 
@@ -288,7 +268,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             this.binding = binding;
             vc.onNewVideoPost(getItemId());
             Log.i("Hoe8", "vid post created");
-            // setVlco();
+            setVlco();
 
         }
 
@@ -325,7 +305,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         }
 
         public void setHasStarted(boolean started){
-
             Log.i("Hoe8", "vh hasStarted called");
             hasStarted = started;
         }
@@ -351,8 +330,21 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     }
 
     @Override
+    public void onViewAttachedToWindow(JokesViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(JokesViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+    }
+
+    @Override
     public void onViewRecycled(JokesViewHolder holder) {
         Log.i("Hoe8","onViewRecycled");
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         if (holder instanceof VideoPostViewHolder){
             vc.onVideoPostRecycled(holder.getItemId());
         }
@@ -362,5 +354,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     @Override
     public long getItemId(int position) {
         return (long) position;
+    }
+
+    public void returnLiked(boolean bool1, boolean bool2){
+        bool1 = bool2;
     }
 }

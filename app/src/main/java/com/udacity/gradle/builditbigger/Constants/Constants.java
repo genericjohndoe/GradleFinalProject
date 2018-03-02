@@ -2,6 +2,8 @@ package com.udacity.gradle.builditbigger.Constants;
 
 
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -9,6 +11,8 @@ import com.google.firebase.storage.StorageReference;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
 import org.webrtc.PeerConnection;
+
+import java.util.Calendar;
 
 
 /**
@@ -31,5 +35,16 @@ public class Constants {
                 .replace(viewId, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+    public static void changeFragment(int viewId, Fragment fragment, AppCompatActivity activity){
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(viewId, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+    public static String timeStampString(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        return cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
     }
 }

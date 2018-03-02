@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Profile;
+package com.udacity.gradle.builditbigger.Jokes;
 
 import android.arch.lifecycle.LiveData;
 
@@ -9,36 +9,38 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 1/20/18.
+ * Created by joeljohnson on 3/1/18.
  */
 
-public class NumPostLiveData extends LiveData<Long> {
+public class ProfileImgLiveData extends LiveData<String> {
 
     private DatabaseReference databaseReference;
 
-    public NumPostLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/num");
+    public ProfileImgLiveData(String uid){
+        databaseReference = Constants.DATABASE.child("users/" + uid + "/urlString");
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            setValue(dataSnapshot.getValue(Long.class));
+            setValue(dataSnapshot.getValue(String.class));
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {}
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
     };
 
     @Override
     protected void onActive() {
-        databaseReference.addValueEventListener(valueEventListener);
         super.onActive();
+        databaseReference.addValueEventListener(valueEventListener);
     }
 
     @Override
     protected void onInactive() {
-        databaseReference.removeEventListener(valueEventListener);
         super.onInactive();
+        databaseReference.removeEventListener(valueEventListener);
     }
 }

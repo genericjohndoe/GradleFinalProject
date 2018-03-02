@@ -1,0 +1,26 @@
+package com.udacity.gradle.builditbigger.Comments;
+
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
+
+/**
+ * Created by joeljohnson on 3/1/18.
+ */
+
+public class CommentViewModelFactory implements ViewModelProvider.Factory {
+
+    private String uid;
+    private String postId;
+
+    public CommentViewModelFactory(String uid, String postId){
+        this.uid = uid;
+        this.postId = postId;
+    }
+
+    @NonNull
+    @Override
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        return (T) new CommentViewModel(uid,postId);
+    }
+}
