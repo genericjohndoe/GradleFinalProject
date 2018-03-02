@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Comments.CommentsAdapter;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Comment;
@@ -74,10 +75,11 @@ public class CommentFragment extends Fragment {
 
         bind.submitImageButton.setOnClickListener(view -> {
                 if (bind.commentEditText.getText().toString() != ""){
+                    DatabaseReference db = Constants.DATABASE.child("userpostslikescomments/"+uid+"/"+postId+"/comments/commentlist").push();
                     Comment comment = new Comment(Constants.UID, Constants.timeStampString(), Constants.USER.getUserName(), Constants.USER.getUrlString(),
-                            bind.commentEditText.getText().toString());
+                            bind.commentEditText.getText().toString(),uid,postId,db.getKey());
 
-                    Constants.DATABASE.child("userpostslikescomments/"+uid+"/"+postId+"/comments/commentlist").push().setValue(comment);
+                    db.setValue(comment);
 
                     InputMethodManager inputManager = (InputMethodManager)
                             getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
