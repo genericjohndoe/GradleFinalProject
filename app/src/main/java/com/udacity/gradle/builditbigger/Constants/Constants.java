@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Constants;
 
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
@@ -12,7 +13,9 @@ import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
 import org.webrtc.PeerConnection;
 
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 
 /**
@@ -46,5 +49,11 @@ public class Constants {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         return cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
+    }
+
+    public static CharSequence formattedTimeString(Context context, long timeInMillis){
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault(), context.getResources().getConfiguration().locale);
+        cal.setTimeInMillis(timeInMillis);
+        return android.text.format.DateFormat.format("d MMM yyyy HH:mm",cal);
     }
 }

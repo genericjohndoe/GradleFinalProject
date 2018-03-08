@@ -11,12 +11,14 @@ public class ViewHolderViewModel {
     private NumLikesLiveData numLikesLiveData;
     private NumCommentsLiveData numCommentsLiveData;
     private IsLikedLiveData isLikedLiveData;
+    private UserNameLiveData userNameLiveData;
 
     public ViewHolderViewModel(Joke joke){
         profileImgLiveData = new ProfileImgLiveData(joke.getUID());
         numLikesLiveData = new NumLikesLiveData(joke.getUID(),joke.getPushId());
         numCommentsLiveData = new NumCommentsLiveData(joke.getUID(),joke.getPushId());
         isLikedLiveData = new IsLikedLiveData(joke.getUID(),joke.getPushId());
+        userNameLiveData = new UserNameLiveData(joke.getUID());
     }
 
     public ProfileImgLiveData getProfileImgLiveData() {
@@ -33,5 +35,9 @@ public class ViewHolderViewModel {
 
     public IsLikedLiveData getIsLikedLiveData() {
         return isLikedLiveData;
+    }
+
+    public UserNameLiveData getUserNameLiveData() {
+        return userNameLiveData;
     }
 }

@@ -26,4 +26,6 @@ public interface HilarityUserDao {
     LiveData<HilarityUser> getUsersFromName(String userName);
     @Query("SELECT * FROM hilarityusers WHERE uid in :uidList")
     HilarityUser[] getUsersFromUidList(String[] uid);
+    @Query("SELECT userName FROM hilarityusers WHERE uid = :uid")
+    String getUserName(String uid);
 }

@@ -9,9 +9,8 @@ import java.util.List;
 
 public class Joke {
     private String jokeTitle;
-    private String user;
     private String jokeBody;
-    private String timeStamp;
+    private Long timeStamp;
     private String genre;
     private String uid;
     private String mediaURL;
@@ -19,16 +18,16 @@ public class Joke {
     private String tagline;
     private Integer type;
     private List<String> taglist;
+    private MetaData metaData;
 
 
     public Joke() {
     }
 
     //TODO modify constructor to include image/video url
-    public Joke(String jokeTitle, String user, String body, String time, String genre,
+    public Joke(String jokeTitle, String body, Long time, String genre,
                 String url, String uid, String pushId, String tagline, Integer type) {
         this.jokeTitle = jokeTitle;
-        this.user = user;
         jokeBody = body;
         timeStamp = time;
         this.genre = genre;
@@ -48,10 +47,6 @@ public class Joke {
         jokeTitle = text;
     }
 
-    public String getUser() {
-        return user;
-    }
-
     public String getJokeBody() {
         return jokeBody;
     }
@@ -60,7 +55,7 @@ public class Joke {
         jokeBody = body;
     }
 
-    public String getTimeStamp() {
+    public Long getTimeStamp() {
         return timeStamp;
     }
 
@@ -90,4 +85,16 @@ public class Joke {
         return taglist;
     }
 
+    public MetaData getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(MetaData metaData){
+        this.metaData = metaData;
+    }
+
+    @Override
+    public boolean equals(Object object){
+        return pushId.equals(((Joke) object).getPushId());
+    }
 }

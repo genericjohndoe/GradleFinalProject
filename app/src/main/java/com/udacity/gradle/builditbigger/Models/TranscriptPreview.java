@@ -8,31 +8,21 @@ import java.util.List;
 
 public class TranscriptPreview {
 
-    private List<Message> messagelist;
+    private Message message;
     private List<String> conversationalists;
-    private String timestampString;
-    private Long timeInMillis;
 
-    public TranscriptPreview(List<Message> messages, List<String> conversationalists, String timestampString, Long timeInMillis){
-        messagelist = messages;
+
+    public TranscriptPreview(Message messages, List<String> conversationalists){
+        message = messages;
         this.conversationalists = conversationalists;
-        this.timestampString = timestampString;
-        this.timeInMillis = timeInMillis;
     }
 
-    public List<Message> getMessagelist() {
-        return messagelist;
+    public Message getMessage() {
+        return message;
     }
 
     public List<String> getConversationalists() {
         return conversationalists;
     }
 
-    public Long getTimeInMillis() {
-        return timeInMillis;
-    }
-
-    public String getTimestampString() {
-        return timestampString;
-    }
 }

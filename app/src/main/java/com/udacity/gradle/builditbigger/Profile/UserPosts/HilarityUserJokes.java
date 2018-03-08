@@ -36,7 +36,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
     List<Long> videosOnScreen = new ArrayList<>();
     long currentlyPlaying;
     JokesAdapter jokeAdapter;
-    List<Joke> jokes = new ArrayList<>();
+    List<Joke> jokes;
     HideFAB conFam;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
@@ -54,6 +54,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
+        jokes = new ArrayList<>();
         jokeAdapter = new JokesAdapter(getActivity(), jokes, this, true);
         conFam = (HideFAB) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
     }
@@ -107,15 +108,19 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
                 new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
         userPostsViewModel.getUserPostsLiveData().observe(this, joke -> {
+            //todo find way to keep the livedata from firing when it doesn't need to, find firebase article
             //when switching back and forth between fragments in viewpager
             //the last joke is readded to the list, only on client side
-            if (!jokes.contains(joke)) jokes.add(joke);
+            if (!jokes.contains(joke)) {
+                jokes.add(joke);
+                Log.i("joke added", ""+joke.getPushId());
+            }
             if (!searched) {
-                Log.i("joke size", jokes.size() + "");
                 jokeAdapter.notifyDataSetChanged();
                 configureUI();
                 binding.recyclerView.scrollToPosition(jokes.size() - 1);
             }
+            Log.i("joke size", jokes.size() + "");
         });
 
         FloatingActionButton fab = conFam.getFAB();
@@ -149,8 +154,7 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
                                         binding.recyclerView.scrollToPosition(searches.size() - 1);
                                         binding.recyclerView.requestFocus();
                             });
-                        }
-                )
+                        })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show().setCanceledOnTouchOutside(false);
     }
@@ -188,12 +192,12 @@ public class HilarityUserJokes extends Fragment implements VideoCallback {
             currentlyPlaying = id;
             Log.i("Hoe8", "video 1 id after " + currentlyPlaying);
         } else if (currentlyPlaying != id) {
-            JokesAdapter.VideoPostViewHolder holder = (JokesAdapter.VideoPostViewHolder) binding.recyclerView.findViewHolderForItemId((long) currentlyPlaying);
-            if (holder != null) {
+            //JokesAdapter.VideoPostViewHolder holder = (JokesAdapter.VideoPostViewHolder) binding.recyclerView.findViewHolderForItemId((long) currentlyPlaying);
+            /*if (holder != null) {
                 holder.getPost().getPlayer().stop();
             } else {
                 Log.i("Hoe8", "holder is null");
-            }
+            }*/
             currentlyPlaying = id;
             Log.i("Hoe8", "video 2 id after " + currentlyPlaying);
         }

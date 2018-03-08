@@ -89,15 +89,10 @@ public class NewImageSubmission extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                String formattedDate = cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-                Joke newImagePost = new Joke("", Constants.USER.getUserName(), "", formattedDate,
+                Joke newImagePost = new Joke("", "", System.currentTimeMillis(),
                         genre.getText().toString(), filePath, Constants.UID, db.getKey(), tagline.getText().toString(),Constants.IMAGE);
                 db.setValue(newImagePost);
-                Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/likes/num").setValue(0);
-                Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/comments/num").setValue(0);
                 ((NewPostDialog) getActivity().getSupportFragmentManager().findFragmentByTag("dialog")).dismiss();
             }
         });

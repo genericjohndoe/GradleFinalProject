@@ -80,15 +80,10 @@ public class NewTextPost extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(System.currentTimeMillis());
-                String formattedDate = cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-                Joke newJoke = new Joke(title.getText().toString(), Constants.USER.getUserName(), body.getText().toString(), formattedDate,
+                Joke newJoke = new Joke(title.getText().toString(), body.getText().toString(), System.currentTimeMillis(),
                         genreTV.getText().toString(), "", Constants.UID, db.getKey(), tagline.getText().toString(),Constants.TEXT);
                 db.setValue(newJoke);
-                Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/likes/num").setValue(0);
-                Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + db.getKey() + "/comments/num").setValue(0);
                 //todo find out why code doesn't work, fragment is null
                 ((NewPostDialog) getActivity().getSupportFragmentManager().findFragmentByTag("dialog")).dismiss();
             }

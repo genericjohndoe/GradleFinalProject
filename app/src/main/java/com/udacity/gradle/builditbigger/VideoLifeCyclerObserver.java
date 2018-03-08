@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Context;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -33,69 +34,71 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
 
     MediaSessionCompat mMediaSession;
     PlaybackStateCompat.Builder mStateBuilder;
-    AppCompatActivity activity;
     SimpleExoPlayerView playerView;
     SimpleExoPlayer player;
-    ExoPlayer.ExoPlayerComponent rv;
     MediaSessionConnector mediaSessionConnector;
+    Context context;
+    long position;
 
-    public VideoLifeCyclerObserver(AppCompatActivity activity, SimpleExoPlayerView playerView, ExoPlayer.ExoPlayerComponent rv){
-        this.activity = activity;
+    public VideoLifeCyclerObserver(Context context, SimpleExoPlayerView playerView){
         this.playerView = playerView;
-        this.activity.getLifecycle().addObserver(this);
-        this.rv = rv;
-        player.addListener(new ExoEventPlayer(rv));
-        Log.i("Hoe8","video lco created");
-        Log.i("Hoe8", "2 "+(this.rv == null));
+        this.context = context;
     }
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void setUp(LifecycleOwner lifecycleOwner){
         // Create a MediaSessionCompat
-        Log.i("Hoe8", "lco setup called");
-        mMediaSession = new MediaSessionCompat(activity, "this");
-
+        Log.i("Video playback", "setup called");
+        mMediaSession = new MediaSessionCompat(context, "this");
         // Create a MediaControllerCompat
-        MediaControllerCompat mediaController =
-                new MediaControllerCompat(activity, mMediaSession);
-
-        MediaControllerCompat.setMediaController(activity, mediaController);
-
-        mediaSessionConnector =
-                new MediaSessionConnector(mMediaSession, new PlayBackController());
+        MediaControllerCompat mediaController = new MediaControllerCompat(context, mMediaSession);
+        MediaControllerCompat.setMediaController((AppCompatActivity) context, mediaController);
+        mediaSessionConnector = new MediaSessionConnector(mMediaSession, new PlayBackController());
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void startPlayer(LifecycleOwner lifecycleOwner){
-        Log.i("Hoe8", "startPlayer called");
+        Log.i("Video playback", "startPlayer called");
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector =
                 new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = ExoPlayerFactory.newSimpleInstance(activity, trackSelector);
-        Log.i("Hoe8", "3 "+(this.rv == null));
-        //player.addListener(new ExoEventPlayer(rv));
+        player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+
+        player.addListener(new ExoEventPlayer());
         playerView.setPlayer(player);
         mediaSessionConnector.setPlayer(player, null,null);
         mMediaSession.setActive(true);
+        Log.i("Video playback", "startPlayer finished");
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void resume(LifecycleOwner lifecycleOwner){
+        player.seekTo(position);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public void tearDown(LifecycleOwner lifecycleOwner){
-        Log.i("Hoe8", "tearDown called");
+        Log.i("Video playback", "tearDown called");
         player.stop();
+        position = player.getCurrentPosition();
         player.release();
-        player.sendMessages(new ExoPlayer.ExoPlayerMessage(rv,1,player.getContentPosition()));
+        //player.sendMessages(new ExoPlayer.ExoPlayerMessage(rv,1,player.getContentPosition()));
         mMediaSession.setActive(false);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void destroy(LifecycleOwner lifecycleOwner){
+        Log.i("Video playback", "destroy called");
     }
 
     public class PlayBackController extends DefaultPlaybackController{
         @Override
         public void onPause(Player player) {
             Log.i("Hoe8", "onPause called");
-            ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
+            //((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
             super.onPause(player);
         }
 
@@ -103,8 +106,8 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
         public void onPlay(Player player) {
             Log.i("Hoe8", "MediaSession callback play called 2");
             mMediaSession.setActive(true);
-            ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(true);
-            ((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(true);
+            //((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(true);
+            //((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(true);
             super.onPlay(player);
         }
 
@@ -112,11 +115,9 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
         public void onStop(Player player) {
             Log.i("Hoe8", "onStop called");
             mMediaSession.setActive(false);
-            ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
-            ((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(false);
+            //((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
+            //((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(false);
             super.onStop(player);
         }
-
-
     }
 }

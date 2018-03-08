@@ -17,67 +17,52 @@ import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 
 public class ExoEventPlayer implements Player.EventListener {
 
-    private ExoPlayer.ExoPlayerComponent rv;
+    //private ExoPlayer.ExoPlayerComponent rv;
 
-    public ExoEventPlayer(ExoPlayer.ExoPlayerComponent rv){
-        this.rv = rv;
+    public ExoEventPlayer(){
+        /*this.rv = rv;*/
     }
 
     @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-    }
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {}
 
     @Override
-    public void onRepeatModeChanged(int repeatMode) {
-
-    }
+    public void onRepeatModeChanged(int repeatMode) {}
 
     @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
+    public void onLoadingChanged(boolean isLoading) {}
 
     @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-    }
+    public void onPlayerError(ExoPlaybackException error) {}
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
         if (playWhenReady && playbackState == Player.STATE_READY){
             Log.i("Hoe8", "play called");
-            if (rv !=null) {
-                ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(true);
-                ((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(true);
-            }
+            /*if (rv !=null) {
+               //  ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(true);
+               // ((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(true);
+            }*/
         } else if (!playWhenReady && playbackState == Player.STATE_READY){
             Log.i("Hoe8", "onPause called");
-            if (rv != null)
-            ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
+            //if (rv != null)((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
         } else if (playbackState == Player.STATE_ENDED){
-            if (rv != null) {
+            /*if (rv != null) {
                 ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
                 ((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(false);
-            }
+            }*/
         }
 
     }
 
     @Override
-    public void onPositionDiscontinuity() {
-
-    }
+    public void onPositionDiscontinuity() {}
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-    }
+    public void onTimelineChanged(Timeline timeline, Object manifest) {}
 
     @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {}
 
 }

@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -91,11 +92,13 @@ public class Profile extends Fragment implements HideFAB {
 
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
 
-        //binding.subscribersTv.setOnClickListener(view -> SubscribersFragment.newInstance(uid));
+        binding.subscribersTv.setOnClickListener(view ->
+                Constants.changeFragment(R.id.hilarity_content_frame,SubscribersFragment.newInstance(uid))
+        );
 
-        //binding.subscriptionsTv.setOnClickListener(view -> changeFragment(new SubscriptionsFragment()));
-
-        //binding.searchFab.setOnClickListener(view ->  showSearchDialog());
+        binding.subscriptionsTv.setOnClickListener(view ->
+                Constants.changeFragment(R.id.hilarity_content_frame,SubscriptionsFragment.newInstance(uid))
+        );
 
         binding.newPostFab.setOnClickListener(view -> showNewJokeDialog());
 
@@ -175,18 +178,15 @@ public class Profile extends Fragment implements HideFAB {
                                 android.R.layout.simple_dropdown_item_1line, languages);
                         AutoCompleteTextView genreLanguage = view.findViewById(R.id.languageAutoCompleteTextView);
                         genreLanguage.setAdapter(adapter);
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTimeInMillis(System.currentTimeMillis());
-                        String formattedDate = cal.get(Calendar.MONTH) + 1 + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
+
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference("usergenres/" + Constants.UID).push();
                         Genre newGenre = new Genre(genreTitle, Constants.USER.getUserName(), isRestricted, genreLanguage.toString(),
-                                formattedDate, Constants.USER.getUID(), db.getKey());
+                                Constants.timeStampString(), Constants.USER.getUID(), db.getKey());
                         db.setValue(newGenre);
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show().setCanceledOnTouchOutside(false);
     }
-
 
     private class ProfilePagerAdapter extends FragmentPagerAdapter {
         public ProfilePagerAdapter(FragmentManager fm) {
@@ -212,17 +212,6 @@ public class Profile extends Fragment implements HideFAB {
         public Fragment getItem(int position) {
             return fragmentArray[position];
         }
-    }
-
-    /**
-     * replaces fragment currently shown with another
-     * @param fragment is the new fragment to be shown
-     */
-    public void changeFragment(Fragment fragment) {
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.hilarity_content_frame, fragment)
-                .addToBackStack(null)
-                .commit();
     }
 
     /**

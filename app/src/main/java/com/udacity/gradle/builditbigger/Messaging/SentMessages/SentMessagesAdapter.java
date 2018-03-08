@@ -35,7 +35,7 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
     public void onBindViewHolder(SentMessagesViewHolder holder, int position) {
         TranscriptPreview preview = transcriptPreviews.get(position);
         holder.preview = preview;
-        holder.binding.lastMessageTextView.setText(preview.getTimestampString());
+        holder.binding.lastMessageTextView.setText(preview.getMessage().getTimeDateString());
         String users = "";
         for(int x = 0; x < preview.getConversationalists().size(); x++){
             String name = preview.getConversationalists().get(x);
@@ -45,7 +45,7 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
             }
         }
         holder.binding.userNameTextView.setText(users);
-        holder.binding.lastMessageTextView.setText(preview.getMessagelist().get(preview.getMessagelist().size()-1).getContents());
+        holder.binding.lastMessageTextView.setText(preview.getMessage().getContents());
     }
 
     @Override
