@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
             super(fm);
         }
 
-        Fragment[] fragmentArray = new Fragment[]{};
+        Fragment[] fragmentArray = new Fragment[]{SearchUserFragment.newInstance()};
 
         String[] tabTitles = new String[]{"Users", "Collections", "Tags", "Text", "Image", "Video", "Gif"};
 

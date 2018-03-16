@@ -14,19 +14,19 @@
             android:id="@+id/text_joke_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_text" />
+            android:icon="@drawable/ic_text_format_black_24dp" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/photo_post_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_camera" />
+            android:icon="@drawable/ic_camera_alt_black_24dp" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/video_post_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/ic_videocam" />
+            android:icon="@drawable/ic_videocam_black_24dp" />
     </android.support.design.widget.TabLayout>
 
     <FrameLayout

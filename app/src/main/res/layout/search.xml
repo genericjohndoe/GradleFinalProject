@@ -3,7 +3,7 @@
     android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:drawableStart="@drawable/ic_search"
+    android:drawableStart="@drawable/ic_search_black_24dp"
     android:hint="type tag"
     android:inputType="textMultiLine">
 
