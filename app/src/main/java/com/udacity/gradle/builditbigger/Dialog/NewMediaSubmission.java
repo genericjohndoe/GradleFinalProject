@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.udacity.gradle.builditbigger.R;
 
 /**
- * Created by joeljohnson on 11/21/17.
+ * DEPRECATED
  */
 
 public class NewMediaSubmission extends Fragment {

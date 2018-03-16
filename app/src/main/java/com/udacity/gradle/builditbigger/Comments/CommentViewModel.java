@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.Comments;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 3/1/18.
+ * provides comment objects to fragment
  */
 
 public class CommentViewModel extends ViewModel {

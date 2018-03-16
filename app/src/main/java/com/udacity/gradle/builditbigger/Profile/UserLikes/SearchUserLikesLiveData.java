@@ -10,7 +10,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
 
 /**
- * Created by joeljohnson on 1/22/18.
+ * SearchUserLikesLiveData class DEPRECATED
  */
 
 public class SearchUserLikesLiveData extends LiveData<Joke> {

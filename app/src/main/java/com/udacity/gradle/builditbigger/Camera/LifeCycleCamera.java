@@ -56,11 +56,10 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by joeljohnson on 11/8/17.
+ * class enables camera functionality
  */
 
 public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequestPermissionsResultCallback {
-  //todo ensure camera object is deleted when fragment dies
   //photo only variables
   private static final int REQUEST_CAMERA_PERMISSION = 1;
   private static final int STATE_PREVIEW = 0;

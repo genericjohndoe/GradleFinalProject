@@ -19,7 +19,7 @@ import java.util.TimeZone;
 
 
 /**
- * Created by joeljohnson on 10/5/17.
+ * provides a number of methods/constants/variables used in a number of other classes
  */
 
 public class Constants {

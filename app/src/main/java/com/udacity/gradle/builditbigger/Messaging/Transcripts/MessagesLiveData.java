@@ -10,7 +10,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Message;
 
 /**
- * Created by joeljohnson on 2/15/18.
+ * MessagesLiveData class retrieves messages from database
  */
 
 public class MessagesLiveData extends LiveData<Message> {

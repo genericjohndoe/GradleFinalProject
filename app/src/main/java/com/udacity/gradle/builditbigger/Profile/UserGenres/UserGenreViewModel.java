@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.Profile.UserGenres;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * UserGenreViewModel class provides fragment with user generated genres
  */
 
 public class UserGenreViewModel extends ViewModel {

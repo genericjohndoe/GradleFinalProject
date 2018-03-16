@@ -1,28 +1,41 @@
 package com.udacity.gradle.builditbigger.Messaging.SentMessages;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.SentMessagesCellBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * Created by joeljohnson on 1/31/18.
+ * SentMessagesAdapter class styles and provides message data for recyckerview
  */
 
 public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapter.SentMessagesViewHolder> {
+    //todo find way to show multiple profile images
     private List<TranscriptPreview> transcriptPreviews;
+    private Context context;
 
-    public SentMessagesAdapter(List<TranscriptPreview> transcriptPreviews){
+
+    public SentMessagesAdapter(List<TranscriptPreview> transcriptPreviews, Context context){
         this.transcriptPreviews = transcriptPreviews;
+        this.context = context;
     }
 
     @Override
@@ -35,17 +48,14 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
     public void onBindViewHolder(SentMessagesViewHolder holder, int position) {
         TranscriptPreview preview = transcriptPreviews.get(position);
         holder.preview = preview;
-        holder.binding.lastMessageTextView.setText(preview.getMessage().getTimeDateString());
-        String users = "";
-        for(int x = 0; x < preview.getConversationalists().size(); x++){
-            String name = preview.getConversationalists().get(x);
-            if (!name.equals(Constants.USER.getUserName())) {
-                users += name;
-                if (x != preview.getConversationalists().size() - 1) users += " ";
-            }
+        if (preview != null) {
+            holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, preview.getMessage().getTimeStamp()));
+            holder.binding.userNameTextView.setText(preview.getMessage().getHilarityUser().getUserName());
+            Glide.with(context).load(preview.getMessage().getHilarityUser().getUrlString()).into(holder.binding.profileImageview);
+            holder.binding.lastMessageTextView.setText(preview.getMessage().getContents());
+        } else {
+            Log.i("Hilarity","preview is null");
         }
-        holder.binding.userNameTextView.setText(users);
-        holder.binding.lastMessageTextView.setText(preview.getMessage().getContents());
     }
 
     @Override
@@ -60,11 +70,14 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
         public SentMessagesViewHolder(SentMessagesCellBinding binding){
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            //todo use information in preview to change fragment to the transcripts fragment
+            Constants.changeFragment(R.id.hilarity_content_frame, TranscriptFragment.newInstance(Constants.UID, preview.getPath()), (AppCompatActivity) context);
+            Log.i("Hilarity", "SentMessagesViewHolder clicked ");
         }
+
     }
 }

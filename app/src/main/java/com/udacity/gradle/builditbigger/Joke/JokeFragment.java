@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.udacity.gradle.builditbigger.R;
 
 /**
- * Created by joeljohnson on 7/25/17.
+ * DEPRECATED
  */
 
 public class JokeFragment extends Fragment {

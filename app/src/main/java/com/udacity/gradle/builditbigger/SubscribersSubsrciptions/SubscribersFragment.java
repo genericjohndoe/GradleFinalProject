@@ -25,13 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 11/27/17.
+ * shows list of subscribers for given user
  */
 
 public class SubscribersFragment extends Fragment {
     //todo if button in cell and cell have different on clicks, which is registered first does clicking in different
     //todo provide the desired effect
-    private List<HilarityUser> subscribers;
     private String uid;
 
 
@@ -47,13 +46,13 @@ public class SubscribersFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
-        subscribers = new ArrayList<>();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentJokeslistGenrelistBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
+        List<HilarityUser> subscribers = new ArrayList<>();
         SubsAdapter subsAdapter = new SubsAdapter(subscribers, getActivity());
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerView.setAdapter(subsAdapter);

@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.R;
 
 /**
- * Created by joeljohnson on 12/2/17.
+ * DEPRECATED
  */
 
 public class ImagePostContent extends Fragment {

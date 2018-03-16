@@ -9,7 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 1/23/18.
+ * CLASS responsible for seeing if user follows a given user
  */
 
 public class IsFollowingLiveData extends LiveData<Boolean> {
@@ -22,11 +22,7 @@ public class IsFollowingLiveData extends LiveData<Boolean> {
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            if (dataSnapshot.exists()) {
-                setValue(true);
-            } else {
-                setValue(false);
-            }
+            setValue(dataSnapshot.exists());
         }
 
         @Override

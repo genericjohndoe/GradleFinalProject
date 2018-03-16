@@ -38,7 +38,7 @@ import java.util.Calendar;
 
 public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor> {
     //todo replace texture view with image if one is clicked in recyclerview
-    //todo create way to go back to texture view
+    //todo create way to go back to texture view, PLACE IN RECYCLER VIEW after texture view swapped with imageview
     //todo upon screen rotation, ensure texture view takes up entire screen
     //todo enable saving to firebase storage
     //todo change UI  to show snap button over texture view
@@ -91,19 +91,6 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
         });
         return root;
     }
-
-//    private void createImageGallery() {
-//        //todo ensure all folders in dcim are shown
-//        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            requestStorageWritePermission();
-//            return;
-//        }
-//        File storageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-//        mGalleryFolder = new File(storageDirectory.toString());
-//        if (!mGalleryFolder.exists()) {
-//            mGalleryFolder.mkdirs();
-//        }
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

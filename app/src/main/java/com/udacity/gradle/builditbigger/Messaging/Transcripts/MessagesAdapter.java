@@ -17,17 +17,14 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by joeljohnson on 1/14/18.
+ * MessagesAdapter class used to format Message objects for UI
  */
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.SentMessagesViewHolder> {
-
-    //todo create viewholder for sent and recieved messages
-    //todo create xml layout for viewholder
-    List<Message> messages;
-    Context context;
-    public static final int TYPE_SENT = 0;
-    public static final int TYPE_RECEIVED = 1;
+    private List<Message> messages;
+    private Context context;
+    private static final int TYPE_SENT = 0;
+    private static final int TYPE_RECEIVED = 1;
 
     public MessagesAdapter(List<Message> messages, Context context){
         this.messages = messages;
@@ -51,9 +48,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.SentMe
     @Override
     public void onBindViewHolder(SentMessagesViewHolder holder, int position) {
         Message message = messages.get(position);
-
         holder.content.setText(message.getContents());
-        holder.timeSent.setText(message.getTimeDateString());
+        holder.timeSent.setText(Constants.formattedTimeString(context,message.getTimeStamp()));
         if (holder instanceof RecievedMessagesViewHolder){
             ((RecievedMessagesViewHolder) holder).user.setText(message.getHilarityUser().getUserName());
             Glide.with(context).load(message.getHilarityUser().getUrlString())
@@ -69,13 +65,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.SentMe
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).getHilarityUser().getUID() == Constants.UID) return TYPE_SENT;
-
+        if (messages.get(position).getHilarityUser().getUID().equals(Constants.UID)) return TYPE_SENT;
         return TYPE_RECEIVED;
     }
 
-    public class SentMessagesViewHolder extends RecyclerView.ViewHolder {
 
+    public class SentMessagesViewHolder extends RecyclerView.ViewHolder {
         TextView content;
         TextView timeSent;
 
@@ -87,7 +82,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.SentMe
     }
 
     public class RecievedMessagesViewHolder extends SentMessagesViewHolder{
-
         TextView user;
         CircleImageView profileImg;
 

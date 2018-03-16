@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 /**
- * Created by joeljohnson on 3/1/18.
+ * aids in commentviewmodel creation
  */
 
 public class CommentViewModelFactory implements ViewModelProvider.Factory {

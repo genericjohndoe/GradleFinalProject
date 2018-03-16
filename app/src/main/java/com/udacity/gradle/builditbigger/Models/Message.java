@@ -1,19 +1,21 @@
 package com.udacity.gradle.builditbigger.Models;
 
 /**
- * Created by joeljohnson on 1/16/18.
+ * Message class serves as model for direct messages sent among users
  */
 
 public class Message {
 
     private String contents;
-    private String timeDateString;
+    private Long timeStamp;
     private HilarityUser hilarityUser;
 
-    public Message(HilarityUser user, String contents, String timeDateString){
+    public Message(){}
+
+    public Message(HilarityUser user, String contents, long timeStamp){
         hilarityUser = user;
         this.contents = contents;
-        this.timeDateString = timeDateString;
+        this.timeStamp = timeStamp;
     }
 
     public HilarityUser getHilarityUser() {
@@ -24,7 +26,7 @@ public class Message {
         return contents;
     }
 
-    public String getTimeDateString() {
-        return timeDateString;
+    public Long getTimeStamp() {
+        return timeStamp;
     }
 }

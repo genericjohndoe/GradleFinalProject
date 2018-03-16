@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.SearchUserViewModel;
 
 /**
- * Created by joeljohnson on 1/22/18.
+ * SearchUserLikesViewModelFactory CLASS DEPRECATED
  */
 
 public class SearchUserLikesViewModelFactory implements ViewModelProvider.Factory {

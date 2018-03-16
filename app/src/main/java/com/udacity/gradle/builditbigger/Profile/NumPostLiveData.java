@@ -9,7 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 1/20/18.
+ * NumPostLiveData class keeps track of the number of post a user created
  */
 
 public class NumPostLiveData extends LiveData<Long> {

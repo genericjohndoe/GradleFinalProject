@@ -11,7 +11,7 @@ import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Joke;
 
 /**
- * Created by joeljohnson on 1/23/18.
+ * retrieves list of subscribers from database
  */
 
 public class SubscribersLiveData extends LiveData<HilarityUser> {

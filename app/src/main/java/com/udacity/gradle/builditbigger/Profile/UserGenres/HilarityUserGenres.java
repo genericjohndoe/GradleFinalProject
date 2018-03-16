@@ -50,11 +50,12 @@ public class HilarityUserGenres extends Fragment {
     private HideFAB conFam;
     private boolean searched = false;
 
-    public static HilarityUserGenres newInstance(String uid) {
+    public static HilarityUserGenres newInstance(String uid, HideFAB conFam) {
         HilarityUserGenres hilarityUserGenres = new HilarityUserGenres();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserGenres.setArguments(bundle);
+        hilarityUserGenres.conFam = conFam;
         return hilarityUserGenres;
     }
 
@@ -65,7 +66,6 @@ public class HilarityUserGenres extends Fragment {
         genres = new ArrayList<>();
         uid = getArguments().getString("uid");
         genreAdapter = new GenreAdapter(getActivity(), genres);
-        conFam = (HideFAB) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
     }
 
     @Override
@@ -80,19 +80,16 @@ public class HilarityUserGenres extends Fragment {
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0) {
-                    conFam.hideFAB();
-                }
+                if (dy > 0 || dy < 0) conFam.hideFAB();
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    conFam.showFAB();
-                }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) conFam.showFAB();
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+        //returns original list after search
         binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
             if(keyCode == KeyEvent.KEYCODE_BACK && searched){
                 genreAdapter = new GenreAdapter(getActivity(), genres);
@@ -109,12 +106,11 @@ public class HilarityUserGenres extends Fragment {
                 new UserGenreViewModelFactory(uid))
                 .get(UserGenreViewModel.class);
         userGenreViewModel.getUserGenreLiveData().observe(this, genre -> {
-            genres.add(genre);
+            if (!genres.contains(genre))genres.add(genre);
             if (!searched) {
                 genreAdapter.notifyDataSetChanged();
-                configureUI();
-                if (binding.recyclerView != null)
-                    binding.recyclerView.scrollToPosition(genres.size() - 1);
+                configureUI();//needed?
+                binding.recyclerView.scrollToPosition(genres.size() - 1);
             }
         });
         FloatingActionButton fab = conFam.getFAB();
@@ -135,16 +131,7 @@ public class HilarityUserGenres extends Fragment {
                             String[] splitSearchKeyword = searchKeyword.split(" |\\,");
                             List<Genre> searches = new ArrayList<>();
                             genreAdapter = new GenreAdapter(getActivity(),searches);
-                            ViewModelProviders.of(this,
-                                    new SearchUserGenreViewModelFactory(uid, splitSearchKeyword))
-                                    .get(SearchUserGenreViewModel.class).getSearchUserGenreLiveData()
-                                    .observe(this, genre -> {
-                                        if (!searches.contains(genre)) searches.add(genre);
-                                        genreAdapter.notifyDataSetChanged();
-                                        configureUI();
-                                        binding.recyclerView.scrollToPosition(searches.size() - 1);
-                                        binding.recyclerView.requestFocus();
-                                    });
+                            //parse titles, set new list
                         }
                 )
                 .onNegative((dialog, which) -> dialog.dismiss())

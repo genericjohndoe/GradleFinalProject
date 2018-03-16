@@ -23,7 +23,7 @@ import java.util.List;
 
 
 /**
- * A placeholder fragment containing a simple view.
+ * deprecated
  */
 public class MainActivityFragment extends Fragment implements RecyclerViewCallback {
 

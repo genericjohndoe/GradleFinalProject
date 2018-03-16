@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.udacity.gradle.builditbigger.R;
 
 /**
- * Created by joeljohnson on 7/25/17.
+ * DEPRECATED
  */
 
 public class JokeActivity extends AppCompatActivity {

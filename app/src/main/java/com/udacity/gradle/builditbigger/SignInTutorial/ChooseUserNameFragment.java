@@ -25,7 +25,7 @@ import java.util.Locale;
 import agency.tango.materialintroscreen.SlideFragment;
 
 /**
- * Created by joeljohnson on 10/3/17.
+ * allows user to choose user name
  */
 
 public class ChooseUserNameFragment extends SlideFragment {
@@ -79,18 +79,13 @@ public class ChooseUserNameFragment extends SlideFragment {
                         List<String> languageList = new ArrayList<String>();
                         languageList.add(Locale.getDefault().getDisplayLanguage());
                         Constants.DATABASE.child("users/" + firebaseUser.getUid())
-                                .setValue(new HilarityUser(userName, "https://developer.android.com/_static/2f20c0c6d8/images/android/touchicon-180.png"));
-                        Constants.DATABASE.child("following/" + firebaseUser.getUid() + "/num").setValue(0);
-                        Constants.DATABASE.child("followers/" + firebaseUser.getUid() + "/num").setValue(0);
-                        Constants.DATABASE.child("userlist/" + firebaseUser.getUid()).setValue(userName);
-                        Constants.DATABASE.child("userposts/" + firebaseUser.getUid() + "/NumPosts").setValue(0);
+                                .setValue(new HilarityUser(userName, "https://developer.android.com/_static/2f20c0c6d8/images/android/touchicon-180.png",firebaseUser.getUid()));
                         userNameCreated = true;
                     }
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             });
         }
         return userNameCreated;

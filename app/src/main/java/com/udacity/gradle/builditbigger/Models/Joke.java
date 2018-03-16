@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 7/17/17.
+ * Joke class serves as model for user generated content
  */
 
 public class Joke {

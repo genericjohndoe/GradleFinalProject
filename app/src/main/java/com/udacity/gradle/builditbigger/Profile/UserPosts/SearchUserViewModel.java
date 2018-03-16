@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * earchUserViewModel class DEPRECATED
  */
 
 public class SearchUserViewModel extends ViewModel {

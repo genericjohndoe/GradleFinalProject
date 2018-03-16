@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by joeljohnson on 12/2/17.
+ * DEPRECATED
  */
 
 public class VideoPostContent extends Fragment {

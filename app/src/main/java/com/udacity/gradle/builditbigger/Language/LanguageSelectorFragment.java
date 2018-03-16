@@ -22,7 +22,7 @@ import java.util.List;
 import agency.tango.materialintroscreen.SlideFragment;
 
 /**
- * Created by joeljohnson on 10/3/17.
+ * DEPRECATED
  */
 
 public class LanguageSelectorFragment extends SlideFragment implements RecyclerViewCallback {

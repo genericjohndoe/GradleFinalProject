@@ -8,7 +8,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 10/2/17.
+ * HilarityUser class serves as model for user
  */
 @Entity(tableName = "hilarityusers")
 public class HilarityUser {
@@ -19,10 +19,10 @@ public class HilarityUser {
 
     public HilarityUser() {}
 
-    public HilarityUser(String userName, String urlString) {
+    public HilarityUser(String userName, String urlString, String uid) {
         this.userName = userName;
         this.urlString = urlString;
-        uid = Constants.UID;
+        this.uid = uid;
     }
 
     public String getUserName() {
@@ -44,6 +44,11 @@ public class HilarityUser {
 
     public void setUrlString(String urlString) {
         this.urlString = urlString;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return uid.equals(((HilarityUser) obj).getUID());
     }
 }
 

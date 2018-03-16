@@ -9,14 +9,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 3/4/18.
+ * Class retrieves the user name for a post
  */
 
 public class UserNameLiveData extends LiveData<String> {
     private DatabaseReference databaseReference;
 
     public UserNameLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("userslist/"+uid);
+        databaseReference = Constants.DATABASE.child("userlist/"+uid);
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {

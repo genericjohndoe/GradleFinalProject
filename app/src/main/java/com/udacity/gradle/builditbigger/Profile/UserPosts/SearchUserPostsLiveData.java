@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * SearchUserPostsLiveData class DEPRECATED
  */
 
 public class SearchUserPostsLiveData extends LiveData<Joke> {

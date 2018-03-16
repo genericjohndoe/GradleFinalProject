@@ -3,13 +3,15 @@ package com.udacity.gradle.builditbigger.Models;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 3/4/18.
+ * MetaData class serves as model for post meta data
  */
 
 public class MetaData {
     private String type;
     private int number;
     private List<String> tags;
+
+    public MetaData(){}
 
     public MetaData(String type, int number, List<String> tags){
         this.type = type;

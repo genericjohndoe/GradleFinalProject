@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.UserPostsViewModel;
 
 /**
- * Created by joeljohnson on 1/23/18.
+ * SubscribersViewModelFactory aids in creation of SubscribersViewModel
  */
 
 public class SubscribersViewModelFactory implements ViewModelProvider.Factory {

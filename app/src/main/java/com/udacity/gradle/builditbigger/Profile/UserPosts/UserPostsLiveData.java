@@ -9,17 +9,29 @@ import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
 
-/**
- * Created by joeljohnson on 1/21/18.
- */
+import  android.os.Handler;
 
+/**
+ * UserPostsLiveData class provides references to user generated posts
+ */
+//are the use of handlers necessary? yes, to keep from doing extra network request
 public class UserPostsLiveData extends LiveData<Joke> {
     private DatabaseReference databaseReference;
 
     public UserPostsLiveData(String uid){
         databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts");
+        //databaseReference.keepSynced(true); does not lead to fragment being repopulated with posts
     }
 
+    private boolean listenerRemovePending = false;
+    private final Runnable removeListener = new Runnable() {
+        @Override
+        public void run() {
+            databaseReference.removeEventListener(childEventListener);
+            listenerRemovePending = false;
+        }
+    };
+    private final Handler handler = new Handler();
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -41,13 +53,20 @@ public class UserPostsLiveData extends LiveData<Joke> {
 
     @Override
     protected void onActive() {
-        databaseReference.addChildEventListener(childEventListener);
+        if (listenerRemovePending) {
+            handler.removeCallbacks(removeListener);
+        }
+        else {
+            databaseReference.addChildEventListener(childEventListener);
+        }
+        listenerRemovePending = false;
         super.onActive();
     }
 
     @Override
     protected void onInactive() {
-        databaseReference.removeEventListener(childEventListener);
+        handler.postDelayed(removeListener, 2000);
+        listenerRemovePending = true;
         super.onInactive();
     }
 }

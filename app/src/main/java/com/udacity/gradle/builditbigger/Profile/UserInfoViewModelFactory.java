@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.udacity.gradle.builditbigger.Profile.UserInfoViewModel;
 
 /**
- * Created by joeljohnson on 1/20/18.
+ * UserInfoViewModelFactory class used to provide viewmodel object to fragment
  */
 
 public class UserInfoViewModelFactory implements ViewModelProvider.Factory {

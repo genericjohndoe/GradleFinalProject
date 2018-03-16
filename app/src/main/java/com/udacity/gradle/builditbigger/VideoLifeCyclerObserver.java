@@ -27,7 +27,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 
 /**
- * Created by joeljohnson on 12/26/17.
+ * class controls video playback
  */
 
 public class VideoLifeCyclerObserver implements LifecycleObserver {

@@ -10,7 +10,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
 /**
- * Created by joeljohnson on 1/23/18.
+ * class retrieves list of user subscriptions
  */
 
 public class SubscriptionsLiveData extends LiveData<HilarityUser> {

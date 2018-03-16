@@ -9,11 +9,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
+import java.util.List;
+
 /**
- * Created by joeljohnson on 1/21/18.
+ * LanguagesLiveData Class used to provide all the languages supported by the app
  */
 
-public class LanguagesLiveData extends LiveData<String> {
+public class LanguagesLiveData extends LiveData {
 
     private DatabaseReference databaseReference;
 
@@ -21,8 +23,18 @@ public class LanguagesLiveData extends LiveData<String> {
         databaseReference = Constants.DATABASE.child("Languages");
     }
 
+    private ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            //todo remember to cast to List<String>
+            setValue(dataSnapshot.getValue());
+        }
 
-    private ChildEventListener childEventListener = new ChildEventListener() {
+        @Override
+        public void onCancelled(DatabaseError databaseError) {}
+    };
+
+    /*private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             setValue(dataSnapshot.getValue(String.class));
@@ -39,17 +51,19 @@ public class LanguagesLiveData extends LiveData<String> {
 
         @Override
         public void onCancelled(DatabaseError databaseError) {}
-    };
+    };*/
 
     @Override
     protected void onActive() {
-        databaseReference.addChildEventListener(childEventListener);
+        //databaseReference.addChildEventListener(childEventListener);
+        databaseReference.addListenerForSingleValueEvent(valueEventListener);
         super.onActive();
     }
 
     @Override
     protected void onInactive() {
-        databaseReference.removeEventListener(childEventListener);
+        //databaseReference.removeEventListener(childEventListener);
+        databaseReference.removeEventListener(valueEventListener);
         super.onInactive();
     }
 }

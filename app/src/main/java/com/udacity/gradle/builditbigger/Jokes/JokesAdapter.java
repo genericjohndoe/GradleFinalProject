@@ -54,22 +54,17 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
 /**
- * Created by joeljohnson on 7/17/17.
+ * Class styles posts for recyclerview
  */
 
 public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHolder> {
     Context context;
     List<Joke> jokes;
-    int id = 1;
-    VideoCallback vc;
     boolean isUserProfile;
-    private LifecycleRegistry mLifecycleRegistry;
 
-
-    public JokesAdapter(Context context, List<Joke> objects, VideoCallback vc, boolean isUserProfile) {
+    public JokesAdapter(Context context, List<Joke> objects, boolean isUserProfile) {
         this.context = context;
         this.jokes = objects;
-        this.vc = vc;
         this.isUserProfile = isUserProfile;
         setHasStableIds(true);
     }
@@ -87,21 +82,26 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
             this.binding = binding;
             this.socialTextView = (SocialTextView) binding.getRoot().findViewById(R.id.tagline_textView);
-            socialTextView.setOnMentionClickListener(new Function2<SocialView, String, Unit>() {
-                @Override
-                public Unit invoke(SocialView socialView, String s) {
-                    //todo get uid from username
-                    Constants.changeFragment(R.id.hilarity_content_frame,Profile.newInstance("uid"));
-                    return null;
-                }
-            });
-            socialTextView.setOnHashtagClickListener(new Function2<SocialView, String, Unit>() {
-                @Override
-                public Unit invoke(SocialView socialView, String s) {
-                    //todo send to search page
-                    return null;
-                }
-            });
+            socialTextView.setOnMentionClickListener((socialView, s) -> {
+                        Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Constants.changeFragment(R.id.hilarity_content_frame, Profile.newInstance(dataSnapshot.getValue(String.class)));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                        return null;
+                    }
+            );
+            socialTextView.setOnHashtagClickListener((socialView, s) -> {
+                        //todo send to search page
+                        Log.i("HilarityTag", s);
+                        return null;
+                    }
+            );
         }
 
         @NonNull
@@ -110,23 +110,23 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             return mLifecycleRegistry;
         }
 
-        public LifecycleRegistry getmLifecycleRegistry(){
+        public LifecycleRegistry getmLifecycleRegistry() {
             return mLifecycleRegistry;
         }
 
-        public void setIsLiked(boolean liked){
+        public void setIsLiked(boolean liked) {
             isLiked = liked;
         }
 
-        public boolean getIsLiked(){
+        public boolean getIsLiked() {
             return isLiked;
         }
 
-        public void setJoke(Joke joke){
+        public void setJoke(Joke joke) {
             this.joke = joke;
         }
 
-        public Joke getJoke(){
+        public Joke getJoke() {
             return joke;
         }
     }
@@ -143,9 +143,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     @Override
     public JokesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        GenericPostBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.generic_post, parent, false);
+        GenericPostBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.generic_post, parent, false);
         if (isUserProfile) binding.userInfoConstraintLayout.setVisibility(View.GONE);
-        switch  (viewType){
+        switch (viewType) {
             case Constants.TEXT:
                 binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
                 binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
@@ -193,141 +193,57 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(joke);
 
-        viewHolderViewModel.getUserNameLiveData().observe(holder, name -> {
-            holder.binding.usernameTextView.setText(name);
-        });
+        if (!isUserProfile) {
+            viewHolderViewModel.getUserNameLiveData().observe(holder, name -> {
+                holder.binding.usernameTextView.setText(name);
+            });
 
-        viewHolderViewModel.getProfileImgLiveData().observe(holder, url -> {
-            Glide.with(context).load(url).into(holder.binding.profileImageview);
-        });
+            viewHolderViewModel.getProfileImgLiveData().observe(holder, url -> {
+                Glide.with(context).load(url).into(holder.binding.profileImageview);
+            });
+        }
 
         viewHolderViewModel.getNumLikesLiveData().observe(holder, num -> {
-            holder.binding.likesCounterTextView.setText(num+"");
+            holder.binding.likesCounterTextView.setText(num + "");
         });
 
         viewHolderViewModel.getNumCommentsLiveData().observe(holder, num -> {
-            holder.binding.commentCounterTextView.setText(num+"");
+            holder.binding.commentCounterTextView.setText(num + "");
         });
 
         viewHolderViewModel.getIsLikedLiveData().observe(holder, aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 Glide.with(context).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
-            } else{
+            } else {
                 Glide.with(context).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
             }
             holder.setIsLiked(aBoolean);
-            Log.i("likes", "automatic liked value set "+ aBoolean);
         });
 
         holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, joke.getTimeStamp()));
 
         holder.binding.favoriteImageButton.setOnClickListener(view -> {
-                final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;
-                if (holder.getIsLiked()){
-                    Constants.DATABASE.child(path).removeValue();
-                    Glide.with(context).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
-                } else {
-                    Constants.DATABASE.child(path).setValue(true);
-                    Glide.with(context).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
-                }
+            final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;
+            if (holder.getIsLiked()) {
+                Constants.DATABASE.child(path).removeValue();
+                Glide.with(context).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
+            } else {
+                Constants.DATABASE.child(path).setValue(true);
+                Glide.with(context).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
+            }
         });
 
         holder.binding.commentImageButton.setOnClickListener(view -> {
-                Constants.changeFragment(R.id.hilarity_content_frame,CommentFragment.newInstance(joke.getUID(),joke.getPushId()),(AppCompatActivity) context);
-            }
+                    Constants.changeFragment(R.id.hilarity_content_frame, CommentFragment.newInstance(joke.getUID(), joke.getPushId()), (AppCompatActivity) context);
+                }
         );
-    }
-
-    public class TextPostViewHolder extends JokesViewHolder{
-        GenericPostBinding binding;
-
-        public TextPostViewHolder(GenericPostBinding bind) {
-            super(bind);
-            this.binding = bind;
-        }
-
-    }
-
-    public class ImagePostViewHolder extends JokesViewHolder{
-        GenericPostBinding binding;
-
-        public ImagePostViewHolder(GenericPostBinding binding){
-            super(binding);
-            this.binding = binding;
-        }
-    }
-
-    public class VideoPostViewHolder extends JokesViewHolder {
-        VideoLifeCyclerObserver vlco;
-        long playPosition = 0L;
-        boolean isPlaying = false;
-        boolean hasStarted = false;
-        long id;
-        GenericPostBinding binding;
-
-        //todo when video is started check to see if another video is playing
-
-        public VideoPostViewHolder(GenericPostBinding binding){
-            super(binding);
-            this.binding = binding;
-            vc.onNewVideoPost(getItemId());
-            Log.i("Hoe8", "vid post created");
-            setVlco();
-
-        }
-
-        public void setVlco(){
-            Log.i("Hoe8",""+(this==null));
-            //vlco = new VideoLifeCyclerObserver( context, binding.videoLayout.postVideoView, this);
-        }
-
-        public SimpleExoPlayerView getPost(){
-            return binding.videoLayout.postVideoView;
-        }
-
-        public long getPlayerPosition(){
-            return playPosition;
-        }
-
-        public void setPlayerPosition(long position){
-            playPosition = position;
-        }
-
-        public void setIsPlaying(boolean playing){
-            Log.i("Hoe8", "VideoPostViewHolder.setIsPlaying called");
-            if (playing) vc.setCurrentlyPlaying((int) getItemId());
-            Log.i("Hoe8","item id " + getItemId());
-            isPlaying = playing;
-        }
-
-        public boolean isPlaying(){
-            return isPlaying;
-        }
-
-        public boolean hasStarted(){
-            return hasStarted;
-        }
-
-        public void setHasStarted(boolean started){
-            Log.i("Hoe8", "vh hasStarted called");
-            hasStarted = started;
-        }
-    }
-
-    public class GifPostViewHolder extends JokesViewHolder{
-        GenericPostBinding binding;
-
-        public GifPostViewHolder(GenericPostBinding bind){
-            super(bind);
-            this.binding = bind;
-        }
     }
 
     @Override
     public void onViewAttachedToWindow(JokesViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
-        if (holder.getJoke().getType() == Constants.VIDEO){
+        if (holder.getJoke() != null && holder.getJoke().getType() == Constants.VIDEO) {
             prepareVideoPlayback(holder);
         }
     }
@@ -340,11 +256,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     @Override
     public void onViewRecycled(JokesViewHolder holder) {
-        Log.i("Hoe8","onViewRecycled");
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
-        /*if (holder instanceof VideoPostViewHolder){
-            vc.onVideoPostRecycled(holder.getItemId());
-        }*/
         super.onViewRecycled(holder);
     }
 
@@ -353,7 +265,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         return (long) position;
     }
 
-    public void prepareVideoPlayback(JokesViewHolder holder){
+    public void prepareVideoPlayback(JokesViewHolder holder) {
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         // Produces DataSource instances through which media data is loaded.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
@@ -363,10 +275,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         if (holder.binding.videoLayout.postVideoView.getPlayer() != null) {
             holder.binding.videoLayout.postVideoView.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(holder.getJoke().getMediaURL()),
                     dataSourceFactory, extractorsFactory, null, null), false, false);
-            Log.i("Video playback","position for view holder ");
-            Log.i("Video playback", "holder " + holder.binding.videoLayout.postVideoView.getPlayer().toString());
-        } else {
-            Log.i("Video playback","getPlayer() return null");
         }
+    }
+
+    public void setJokes(List<Joke> jokes) {
+        this.jokes = jokes;
+        notifyDataSetChanged();
     }
 }

@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.udacity.gradle.builditbigger.Messaging.MessagesFragment">
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageButton

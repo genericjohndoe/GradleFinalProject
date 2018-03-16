@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 /**
- * Created by joeljohnson on 1/31/18.
+ * used in creation of SentMessagesViewModel
  */
 
 public class SentMessagesViewModelFactory implements ViewModelProvider.Factory {

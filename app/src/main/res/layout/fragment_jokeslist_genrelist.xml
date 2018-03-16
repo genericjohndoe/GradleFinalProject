@@ -5,21 +5,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<EditText-->
-        <!--android:id="@+id/search_et"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:drawableStart="@drawable/ic_search"-->
-        <!--android:ems="10"-->
-        <!--android:hint="tag"-->
-        <!--android:inputType="textPersonName"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="0dp"

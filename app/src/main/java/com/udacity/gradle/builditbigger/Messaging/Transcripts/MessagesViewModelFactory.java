@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 /**
- * Created by joeljohnson on 2/15/18.
+ * MessagesViewModelFactory class aids in creation of MessagesViewModel
  */
 
 public class MessagesViewModelFactory implements ViewModelProvider.Factory {

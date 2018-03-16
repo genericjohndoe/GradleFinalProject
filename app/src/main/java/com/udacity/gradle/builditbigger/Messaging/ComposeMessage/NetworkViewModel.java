@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.Messaging.ComposeMessage;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 2/5/18.
+ * DEPRECATED
  */
 
 public class NetworkViewModel extends ViewModel {

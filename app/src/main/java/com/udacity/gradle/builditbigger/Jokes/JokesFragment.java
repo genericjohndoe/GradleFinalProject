@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 7/25/17.
+ * DEPRECATED
  */
 
 public class JokesFragment extends Fragment {

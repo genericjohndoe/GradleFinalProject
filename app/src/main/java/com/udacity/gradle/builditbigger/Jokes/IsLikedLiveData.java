@@ -9,7 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 3/1/18.
+ * class retrieves boolean indicating whether user liked post
  */
 
 public class IsLikedLiveData extends LiveData<Boolean> {

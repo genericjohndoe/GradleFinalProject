@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * SearchUserPostsViewModelFactory DEPRECATED
  */
 
 public class SearchUserPostsViewModelFactory implements ViewModelProvider.Factory {

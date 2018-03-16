@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.isFollowing;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 1/23/18.
+ * DEPRECATED
  */
 
 public class IsFollowingViewHolder extends ViewModel {

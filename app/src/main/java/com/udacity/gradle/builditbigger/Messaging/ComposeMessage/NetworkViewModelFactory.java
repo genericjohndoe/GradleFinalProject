@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 /**
- * Created by joeljohnson on 2/5/18.
+ * DEPRECATED
  */
 
 public class NetworkViewModelFactory implements ViewModelProvider.Factory {

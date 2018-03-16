@@ -3,18 +3,22 @@ package com.udacity.gradle.builditbigger.Models;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 1/31/18.
+ * TranscriptPreview class serves as model for sent messages preview
  */
 
 public class TranscriptPreview {
 
     private Message message;
     private List<String> conversationalists;
+    private String path;
+
+    public TranscriptPreview(){}
 
 
-    public TranscriptPreview(Message messages, List<String> conversationalists){
-        message = messages;
+    public TranscriptPreview(Message message, List<String> conversationalists, String path){
+        this.message = message;
         this.conversationalists = conversationalists;
+        this.path = path;
     }
 
     public Message getMessage() {
@@ -25,4 +29,7 @@ public class TranscriptPreview {
         return conversationalists;
     }
 
+    public String getPath() {
+        return path;
+    }
 }

@@ -24,7 +24,7 @@ public class SentMessagesLiveData extends LiveData<TranscriptPreview> {
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot.getValue(TranscriptPreview.class));
+            setValue(dataSnapshot.child("transcriptPreview").getValue(TranscriptPreview.class));
         }
 
         @Override

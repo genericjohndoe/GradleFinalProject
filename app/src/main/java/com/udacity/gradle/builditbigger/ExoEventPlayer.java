@@ -12,7 +12,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 
 /**
- * Created by joeljohnson on 1/4/18.
+ * class reacts to changes in state of video
  */
 
 public class ExoEventPlayer implements Player.EventListener {

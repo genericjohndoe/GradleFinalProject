@@ -1,7 +1,9 @@
 package com.udacity.gradle.builditbigger.Messaging.ComposeMessage;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
+import com.udacity.gradle.builditbigger.databinding.HilarityUserNetworkBinding;
 
 import java.util.List;
 
@@ -23,9 +26,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersToMessageAdapter extends RecyclerView.Adapter<UsersToMessageAdapter.HilarityUserViewHolder> {
 
-    List<HilarityUser> hilarityUserList;
-    CreateChip cc;
-    Context context;
+    private List<HilarityUser> hilarityUserList;
+    private CreateChip cc;
+    private Context context;
 
     UsersToMessageAdapter(List<HilarityUser> hilarityUserList, CreateChip cc, Context context){
         this.hilarityUserList = hilarityUserList;
@@ -35,15 +38,18 @@ public class UsersToMessageAdapter extends RecyclerView.Adapter<UsersToMessageAd
 
     @Override
     public HilarityUserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.text_post, parent, false);
-        return new HilarityUserViewHolder(view);
+        HilarityUserNetworkBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.hilarity_user_network, parent, false);
+        return new HilarityUserViewHolder(bind);
     }
 
     @Override
     public void onBindViewHolder(HilarityUserViewHolder holder, int position) {
         HilarityUser hu = hilarityUserList.get(position);
-        Glide.with(context).load(hu.getUrlString()).into(holder.profileImg);
-        holder.userName.setText(hu.getUserName());
+        Log.i("Hilarity","hu is null? "+ Boolean.toString(hu == (null)));
+        holder.hu = hu;
+        Glide.with(context).load(hu.getUrlString()).into(holder.bind.profileImageview);
+        holder.bind.usernameTextView.setText(hu.getUserName());
+        Log.i("Hilarity", "onBindViewHolder");
     }
 
     @Override
@@ -51,22 +57,28 @@ public class UsersToMessageAdapter extends RecyclerView.Adapter<UsersToMessageAd
         return hilarityUserList.size();
     }
 
-    public class HilarityUserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        CircleImageView profileImg;
-        TextView userName;
-        CheckBox isPicked;
+    public void setHilarityUserList(List<HilarityUser> list){
+        this.hilarityUserList = list;
+        notifyDataSetChanged();
+        Log.i("Hilarity","setHilarityUserList");
+    }
 
-        public HilarityUserViewHolder(View view){
-            super(view);
-            profileImg = view.findViewById(R.id.profile_imageview);
-            userName = view.findViewById(R.id.username_textView);
-            isPicked = view.findViewById(R.id.is_picked_checkBox);
-        }
+    public class HilarityUserViewHolder extends RecyclerView.ViewHolder {
+        HilarityUserNetworkBinding bind;
+        HilarityUser hu;
 
-        @Override
-        public void onClick(View view) {
-            isPicked.setChecked(true);
-            cc.addChipView(hilarityUserList.get(getAdapterPosition()));
+        public HilarityUserViewHolder(HilarityUserNetworkBinding bind) {
+            super(bind.getRoot());
+            Log.i("Hilarity", "HVH created");
+            this.bind = bind;
+            this.bind.isPickedCheckBox.setOnClickListener(view -> {
+                Log.i("Hilarity","hu is null in onClick? "+ Boolean.toString(hu == (null)));
+                cc.addChipView(hu);
+            });
+            if (hu !=null && cc.getSelectedUsers().contains(hu)){
+                bind.isPickedCheckBox.setChecked(true);
+            }
         }
     }
+
 }

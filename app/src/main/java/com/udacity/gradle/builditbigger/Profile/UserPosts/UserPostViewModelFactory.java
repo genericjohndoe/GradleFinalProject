@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * UserPostViewModelFactory class used to provide ViewModel to fragment
  */
 
 public class UserPostViewModelFactory implements ViewModelProvider.Factory {

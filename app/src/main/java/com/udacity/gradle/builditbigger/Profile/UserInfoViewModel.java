@@ -3,7 +3,9 @@ package com.udacity.gradle.builditbigger.Profile;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 1/20/18.
+ * Class responsible for populating views in profile fragment with user data
+ * data provided: user name, profile image, number of posts, number of followers
+ * number of following
  */
 
 public class UserInfoViewModel extends ViewModel {

@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.SubscribersSubsrciptions;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 1/23/18.
+ * provides list of subscribers to fragment
  */
 
 public class SubscribersViewModel extends ViewModel {

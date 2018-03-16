@@ -17,7 +17,7 @@ import com.udacity.gradle.builditbigger.R;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 7/26/17.
+ * CLASS FOR STYLING GENRE for recyclerview
  */
 
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
@@ -77,5 +77,10 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
         holder.genreTitle.setText(genre.getTitle());
         //todo check if genre is restricted, set appropriate image
         Log.i("genre adapter", genre + " at " + position);
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+        notifyDataSetChanged();
     }
 }

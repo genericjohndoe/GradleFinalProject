@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 /**
- * Created by joeljohnson on 1/23/18.
+ * SubscriptionsViewModelFactory aids in creation of SubscriptionsViewModel
  */
 
 public class SubscriptionsViewModelFactory implements ViewModelProvider.Factory {

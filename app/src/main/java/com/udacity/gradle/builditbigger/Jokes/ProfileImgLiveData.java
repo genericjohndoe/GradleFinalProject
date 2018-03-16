@@ -9,7 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 3/1/18.
+ * Class retrieves the profile image url for a post
  */
 
 public class ProfileImgLiveData extends LiveData<String> {

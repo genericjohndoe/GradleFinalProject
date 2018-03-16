@@ -44,6 +44,10 @@ public class DataRepository {
         return tagDatabase.dao().searchForTags(tag);
     }
 
+    public HilarityUserLiveData getHilarityUserLiveData() {
+        return hilarityUserLiveData;
+    }
+
     /*public String getUID(String userName){
         return userNameDatabase.dao().getSpecificUID(userName);
     }

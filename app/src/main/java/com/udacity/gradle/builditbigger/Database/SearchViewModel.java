@@ -15,18 +15,28 @@ import java.util.List;
 
 public class SearchViewModel extends AndroidViewModel {
     DataRepository dataRepository;
+    TempUserLiveData tempUserLiveData;
 
     public SearchViewModel(Application application){
         super(application);
-        dataRepository = DataRepository.getInstance(application.getApplicationContext());
+        //dataRepository = DataRepository.getInstance(application.getApplicationContext());
+        tempUserLiveData = new TempUserLiveData();
     }
 
-    public LiveData<HilarityUser> getUsersFromName(String name){
+    /*public LiveData<HilarityUser> getUsersFromName(String name){
         return dataRepository.getUsers(name);
     }
 
     public LiveData<String> getTags(String tag){
         return dataRepository.getTags(tag);
+    }*/
+
+    public DataRepository getDataRepository() {
+        return dataRepository;
+    }
+
+    public TempUserLiveData getTempUserLiveData() {
+        return tempUserLiveData;
     }
 
     /*public LiveData<String> getUserName(String uid){

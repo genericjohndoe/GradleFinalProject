@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.UserPostsViewModel;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * UserGenreViewModelFactory class provides ViewModel object to fragment
  */
 
 public class UserGenreViewModelFactory implements ViewModelProvider.Factory {

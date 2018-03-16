@@ -89,7 +89,10 @@ public class ChipsInput extends ScrollViewMaxHeight {
      */
     private void init(AttributeSet attrs) {
         // inflate layout
-        ChipsInputBinding binding = DataBindingUtil.bind(inflate(getContext(), R.layout.chips_input, this));
+        //ChipsInputBinding binding = DataBindingUtil.bind(inflate(getContext(), R.layout.chips_input, this));
+        View rootView = inflate(getContext(), R.layout.chips_input, this);
+        RecyclerView recyclerView = rootView.findViewById(R.id.chips_recycler);
+
 
         // attributes
         if(attrs != null) {
@@ -133,13 +136,13 @@ public class ChipsInput extends ScrollViewMaxHeight {
         }
 
         // adapter
-        mChipsAdapter = new ChipsAdapter(mContext, this, binding.chipsRecycler);
+        mChipsAdapter = new ChipsAdapter(mContext, this, recyclerView);
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(mContext)
                 .setOrientation(ChipsLayoutManager.HORIZONTAL)
                 .build();
-        binding.chipsRecycler.setLayoutManager(chipsLayoutManager);
-        binding.chipsRecycler.setNestedScrollingEnabled(false);
-        binding.chipsRecycler.setAdapter(mChipsAdapter);
+        recyclerView.setLayoutManager(chipsLayoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setAdapter(mChipsAdapter);
 
         // set window callback
         // will hide DetailedOpenView and hide keyboard on touch outside

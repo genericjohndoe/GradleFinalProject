@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Created by joeljohnson on 7/25/17.
+ * DEPRECATED
  */
 
 public class GenreFragment extends Fragment {

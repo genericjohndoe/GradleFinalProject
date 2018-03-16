@@ -13,7 +13,7 @@ import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 
 /**
- * Created by joeljohnson on 7/25/17.
+ * DEPRECATED
  */
 
 public class GenreActivity extends AppCompatActivity {

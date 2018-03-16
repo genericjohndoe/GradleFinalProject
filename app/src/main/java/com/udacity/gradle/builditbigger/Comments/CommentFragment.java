@@ -31,11 +31,10 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 12/13/17.
+ * Class shows comment posts
  */
 
 public class CommentFragment extends Fragment {
-    //todo get comment to show without clicking on the edittext
     String uid;
     String postId;
     List<Comment> comments;
@@ -70,7 +69,7 @@ public class CommentFragment extends Fragment {
         commentViewModel.getCommentLiveData().observe(this, comment -> {
             comments.add(comment);
             commentsAdapter.notifyDataSetChanged();
-            if (bind.commentsRecyclerView != null) bind.commentsRecyclerView.scrollToPosition(comments.size()-1);
+            bind.commentsRecyclerView.scrollToPosition(comments.size()-1);
         });
 
         bind.submitImageButton.setOnClickListener(view -> {

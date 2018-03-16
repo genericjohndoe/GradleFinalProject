@@ -11,7 +11,7 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Interfaces.RecyclerViewCallback;
 
 /**
- * Created by joeljohnson on 7/25/17.
+ * DEPRECATED
  */
 
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder> {

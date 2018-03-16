@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 2/15/18.
+ * MessagesViewModel class used to provide fragment with message objects
  */
 
 public class MessagesViewModel extends ViewModel {

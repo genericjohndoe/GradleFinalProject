@@ -1,7 +1,7 @@
 package com.udacity.gradle.builditbigger.Models;
 
 /**
- * Created by joeljohnson on 12/13/17.
+ * Comment class serves as model for comments under posts
  */
 
 public class Comment {

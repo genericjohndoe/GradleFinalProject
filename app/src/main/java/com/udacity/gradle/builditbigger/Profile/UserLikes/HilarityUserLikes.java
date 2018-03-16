@@ -38,10 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 10/12/17.
+ * HilarityUserLikes class shows posts liked by the user
  */
 
-public class HilarityUserLikes extends Fragment implements VideoCallback {
+public class HilarityUserLikes extends Fragment {
     //todo test search
     HideFAB conFam;
     JokesAdapter jokeAdapter;
@@ -50,11 +50,12 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserLikes newInstance(String uid){
+    public static HilarityUserLikes newInstance(String uid, HideFAB conFam){
         HilarityUserLikes hilarityUserLikes = new HilarityUserLikes();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserLikes.setArguments(bundle);
+        hilarityUserLikes.conFam = conFam;
         return hilarityUserLikes;
     }
 
@@ -62,8 +63,7 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
-        conFam = (HideFAB) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
-        jokeAdapter = new JokesAdapter(getActivity(), jokes, this, false);
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, false);
     }
 
     @Override
@@ -85,9 +85,10 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+        //returns original list after search
         binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
             if(keyCode == KeyEvent.KEYCODE_BACK && searched){
-                jokeAdapter = new JokesAdapter(getActivity(), jokes, this, false);
+                jokeAdapter = new JokesAdapter(getActivity(), jokes, false);
                 jokeAdapter.notifyDataSetChanged();
                 searched = false;
                 configureUI();
@@ -96,13 +97,12 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
             }
             return false;
         });
-        UserLikesViewModel userLikesViewModel = ViewModelProviders.of(this,
-                new UserLikesViewModelFactory(uid))
+        UserLikesViewModel userLikesViewModel = ViewModelProviders.of(this, new UserLikesViewModelFactory(uid))
                 .get(UserLikesViewModel.class);
+
         userLikesViewModel.getUserLikesLiveData().observe(this, joke -> {
-            jokes.add(joke);
+            if (!jokes.contains(joke))jokes.add(joke);
             if (!searched) {
-                Log.i("joke size", jokes.size() + "");
                 jokeAdapter.notifyDataSetChanged();
                 configureUI();
                 binding.recyclerView.scrollToPosition(jokes.size() - 1);
@@ -125,18 +125,9 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
                             String[] splitSearchKeyword = searchKeyword.split(" |\\,");
                             List<Joke> searches = new ArrayList<>();
-                            jokeAdapter = new JokesAdapter(getActivity(),searches, HilarityUserLikes.this, false);
-                            ViewModelProviders.of(this,
-                                    new SearchUserLikesViewModelFactory(uid, splitSearchKeyword))
-                                    .get(SearchUserLikesViewModel.class).getSearchUserLikesLiveData()
-                                    .observe(this, joke -> {
-                                        if (!searches.contains(joke))
-                                            searches.add(joke);
-                                        jokeAdapter.notifyDataSetChanged();
-                                        configureUI();
-                                        binding.recyclerView.scrollToPosition(searches.size() - 1);
-                                        binding.recyclerView.requestFocus();
-                                    });
+                            jokeAdapter = new JokesAdapter(getActivity(),searches, false);
+                    //go through jokes list, search metadata, if metadata contains search term add 2 new list
+                    //then call setList
                         }
                 )
                 .onNegative((dialog, which) -> dialog.dismiss())
@@ -151,25 +142,5 @@ public class HilarityUserLikes extends Fragment implements VideoCallback {
             binding.recyclerView.setVisibility(View.VISIBLE);
             binding.noItemImageview.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void getVideoInfo(boolean started, int position) {
-
-    }
-
-    @Override
-    public void setCurrentlyPlaying(long id) {
-
-    }
-
-    @Override
-    public void onNewVideoPost(long id) {
-
-    }
-
-    @Override
-    public void onVideoPostRecycled(long id) {
-
     }
 }

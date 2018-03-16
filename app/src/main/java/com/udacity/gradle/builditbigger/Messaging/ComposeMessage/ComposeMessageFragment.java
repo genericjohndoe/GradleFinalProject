@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,6 +22,7 @@ import com.example.chipslibrary.models.ChipInterface;
 import com.example.chipslibrary.views.ChipsInputEditText;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Database.SearchViewModel;
+import com.udacity.gradle.builditbigger.Database.SearchViewModelFactory;
 import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
 import com.udacity.gradle.builditbigger.Messaging.SentMessages.SentMessagesFragment;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
@@ -41,11 +44,13 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
     //todo connect edit text and other recycler view show that before typing user sees
     //todo chron list of people messaged, then people in network, then queries master list of user
     //todo once user is picked from bottom recyclerview, add user chips to top recycler view
+    //todo give recyclerview focus so it could be pop with options
 
     private List<HilarityUser> networkChipList;
     private String uid;
     private FragmentComposeMessageBinding bind;
     private UsersToMessageAdapter usersToMessageAdapter;
+    private List<HilarityUser> hilarityUsers;
 
     public static ComposeMessageFragment newInstance(String uid){
         ComposeMessageFragment composeMessageFragment = new ComposeMessageFragment();
@@ -59,6 +64,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         networkChipList = new ArrayList<>();
+        hilarityUsers = new ArrayList<>();
         usersToMessageAdapter = new UsersToMessageAdapter(networkChipList,this, getActivity());
         uid = getArguments().getString("uid");
     }
@@ -75,21 +81,15 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //todo if user isn't in network query inverse user list path
-                //todo when cell is clicked in recyclerview, add chip
-                ArrayList<HilarityUser> newList = filter(""+s, networkChipList);
-                if (newList.size() > 0) {
-                    //todo add a set list method
-                    usersToMessageAdapter = new UsersToMessageAdapter(newList, ComposeMessageFragment.this, getActivity());
-                    usersToMessageAdapter.notifyDataSetChanged();
-                }else{
-                    usersToMessageAdapter = new UsersToMessageAdapter(newList, ComposeMessageFragment.this, getActivity());
-                    SearchViewModel searchViewModel = ViewModelProviders.of(ComposeMessageFragment.this).get(SearchViewModel.class);
-                    searchViewModel.getUsersFromName("%"+s+"%").observe(ComposeMessageFragment.this, user -> {
+               /* List<HilarityUser> newList = new ArrayList<>();
+                SearchViewModel searchViewModel = ViewModelProviders.of(ComposeMessageFragment.this).get(SearchViewModel.class);
+                searchViewModel.getUsersFromName("%"+s+"%").observe(ComposeMessageFragment.this, user -> {
+                    if (!newList.contains(user)) {
                         newList.add(user);
-                        usersToMessageAdapter.notifyDataSetChanged();
-                    });
-                }
+                        usersToMessageAdapter.setHilarityUserList(newList);
+                    }
+                });*/
+                usersToMessageAdapter.setHilarityUserList(filter("%"+s+"%", networkChipList));
             }
 
             @Override
@@ -97,24 +97,28 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
         });
 
         bind.userMessageRecyclerview.setAdapter(usersToMessageAdapter);
+        bind.userMessageRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         bind.incomingMessageEdittext.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
                 // If the event is a key-down event on the "enter" button
-            //todo add to make time stamp, create constant method for timestamp
-                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     List<String> sendTo = new ArrayList<>();
-                    List<HilarityUserChip> list = (List<HilarityUserChip>) bind.chipsInput.getSelectedChipList();
-                    for (HilarityUserChip chip: list){
-                        sendTo.add((String) chip.getId());
+                    //bind.chipsInput.getSelectedChipList()
+                    //todo find out why HilarityUser object is null
+                    for (HilarityUser chip: hilarityUsers){
+                        sendTo.add(chip.getUID());
+                        Log.i("Hilarity", "when message sent uid is " + chip.getUID());
+                        Log.i("HilaritySentToSize", "" + sendTo.size());
                     }
-                    Collections.sort(sendTo);
+                    sendTo.add(Constants.UID);
+                    Log.i("HilaritySentToSize", "" + sendTo.size());
+                    //Collections.sort(sendTo);
                     String text = bind.incomingMessageEdittext.getText().toString();
                     String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
                     Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push()
-                            .setValue(new Message(Constants.USER,text,"02/01/2018"));
+                            .setValue(new Message(Constants.USER,text,System.currentTimeMillis()));
                     InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
-                    Constants.changeFragment(R.id.hilarity_content_frame, TranscriptFragment.newInstance(Constants.UID,path));
+                    Constants.changeFragment(R.id.hilarity_content_frame, TranscriptFragment.newInstance(Constants.UID,path),(AppCompatActivity) getActivity());
                     return true;
                 }
                 return false;
@@ -123,16 +127,20 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
             usersToMessageAdapter = new UsersToMessageAdapter(new ArrayList<>(), ComposeMessageFragment.this, getActivity());
             usersToMessageAdapter.notifyDataSetChanged();
         });
-        NetworkViewModel networkViewModel = ViewModelProviders.of(this, new NetworkViewModelFactory(uid)).get(NetworkViewModel.class);
-        networkViewModel.getNetworkLiveData().observe(this, user -> {
-            networkChipList.add(user);
-            usersToMessageAdapter.notifyDataSetChanged();
+        SearchViewModel searchViewModel = ViewModelProviders.of(ComposeMessageFragment.this, new SearchViewModelFactory(getActivity().getApplication())).get(SearchViewModel.class);
+        searchViewModel.getTempUserLiveData().observe(this, (user) -> {
+            Log.i("Hilarity", "observe called");
+            if (!networkChipList.contains(user)) {
+                networkChipList.add(user);
+                usersToMessageAdapter.notifyDataSetChanged();
+                Log.i("Hilarity", "user added");
+            }
         });
         return bind.getRoot();
     }
 
 
-    class HilarityUserChip implements ChipInterface {
+    public class HilarityUserChip implements ChipInterface {
         HilarityUser hilarityUser;
 
         HilarityUserChip(HilarityUser hilarityUser){
@@ -163,14 +171,25 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
         public Uri getAvatarUri() {
             return Uri.parse(hilarityUser.getUrlString());
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            return getId().equals(((HilarityUser) obj).getUID());
+        }
     }
 
     @Override
     public void addChipView(HilarityUser hu) {
         bind.chipsInput.addChip(new HilarityUserChip(hu));
+        hilarityUsers.add(hu);
     }
 
-    private ArrayList<HilarityUser> filter(String str, List<HilarityUser> list){
+    @Override
+    public List<HilarityUserChip> getSelectedUsers() {
+        return (List<HilarityUserChip>) bind.chipsInput.getSelectedChipList();
+    }
+
+    private List<HilarityUser> filter(String str, List<HilarityUser> list){
         ArrayList<HilarityUser> newList = new ArrayList<>();
         for (HilarityUser user: list){
             if (user.getUserName().contains(str)) newList.add(user);

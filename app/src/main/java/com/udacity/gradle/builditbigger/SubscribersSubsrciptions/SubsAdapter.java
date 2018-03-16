@@ -1,11 +1,15 @@
 package com.udacity.gradle.builditbigger.SubscribersSubsrciptions;
 
 import android.app.Activity;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +26,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.SubsItemBinding;
+import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
 import com.udacity.gradle.builditbigger.isFollowing.IsFollowingViewHolder;
 import com.udacity.gradle.builditbigger.isFollowing.IsFollowingViewModelFactory;
 
@@ -34,7 +40,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by joeljohnson on 11/27/17.
+ * class preps hilarityuser objects for recyclerview
  */
 
 public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder> {
@@ -55,26 +61,15 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
 
     @Override
     public void onBindViewHolder(final SubsViewHolder holder, int position) {
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         Glide.with(context).load(subscribersList.get(position).getUrlString()).into(holder.binding.subsProfileImageview);
         holder.binding.usernameTextView.setText(subscribersList.get(position).getUserName());
         holder.setUid(subscribersList.get(position).getUID());
-        Constants.DATABASE.child("followers/" + holder.getUid() + "/list/"+ Constants.UID)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            holder.setIsFollowed(true);
-                            //todo follow button state set to "followed"
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-        holder.binding.executePendingBindings();
-
+        new IsFollowingLiveData(holder.getUid()).observe(holder, bool ->{
+            holder.setIsFollowed(bool);
+            //todo set UI
+        });
+        //holder.binding.executePendingBindings();
     }
 
     @Override
@@ -82,28 +77,37 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
         return subscribersList.size();
     }
 
-    public class SubsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class SubsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LifecycleOwner {
         private String uid;
         public SubsItemBinding binding;
         private boolean isFollowed = false;
+        private LifecycleRegistry mLifecycleRegistry;
 
         public SubsViewHolder(SubsItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            mLifecycleRegistry = new LifecycleRegistry(this);
+            mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
             binding.followButton.setOnClickListener(view2 -> {
                 if (!isFollowed) {
                     Constants.DATABASE.child("followers/" + getUid() + "/list/" + Constants.UID).setValue(Constants.USER);
-                    //todo set UI
+
                 } else {
                     Constants.DATABASE.child("followers/" + getUid() + "/list/" + Constants.UID).removeValue();
-                    //todo set UI
                 }
             });
+            binding.getRoot().setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             Constants.changeFragment(R.id.hilarity_content_frame, Profile.newInstance(uid));
+        }
+
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return mLifecycleRegistry;
         }
 
         public void setUid(String uid){
@@ -113,6 +117,27 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
         public String getUid(){return uid;}
 
         public void setIsFollowed(boolean isFollowed){this.isFollowed = isFollowed;}
+
+        public LifecycleRegistry getmLifecycleRegistry() {
+            return mLifecycleRegistry;
+        }
     }
 
+    @Override
+    public void onViewAttachedToWindow(SubsViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(SubsViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+    }
+
+    @Override
+    public void onViewRecycled(SubsViewHolder holder) {
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        super.onViewRecycled(holder);
+    }
 }

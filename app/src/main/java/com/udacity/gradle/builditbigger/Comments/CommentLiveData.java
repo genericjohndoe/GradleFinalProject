@@ -10,7 +10,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Comment;
 
 /**
- * Created by joeljohnson on 3/1/18.
+ * retrieves comments from database
  */
 
 public class CommentLiveData extends LiveData<Comment> {
@@ -27,24 +27,16 @@ public class CommentLiveData extends LiveData<Comment> {
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-        }
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-        }
+        public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
         @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-        }
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
+        public void onCancelled(DatabaseError databaseError) {}
     };
 
     @Override

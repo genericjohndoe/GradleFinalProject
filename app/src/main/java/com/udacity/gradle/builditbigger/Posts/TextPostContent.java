@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.udacity.gradle.builditbigger.R;
 
 /**
- * Created by joeljohnson on 11/27/17.
+ * DEPRECATED
  */
 
 public class TextPostContent extends Fragment {

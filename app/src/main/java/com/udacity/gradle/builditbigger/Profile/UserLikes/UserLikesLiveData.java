@@ -10,7 +10,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
 
 /**
- * Created by joeljohnson on 1/22/18.
+ * UserLikesLiveData class retrieves liked post from database
  */
 
 public class UserLikesLiveData extends LiveData<Joke> {

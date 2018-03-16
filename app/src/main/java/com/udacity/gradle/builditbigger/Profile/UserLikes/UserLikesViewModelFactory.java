@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.UserPostsViewModel;
 
 /**
- * Created by joeljohnson on 1/22/18.
+ * UserLikesViewModelFactory class used to provide ViewModel object to fragment
  */
 
 public class UserLikesViewModelFactory implements ViewModelProvider.Factory {

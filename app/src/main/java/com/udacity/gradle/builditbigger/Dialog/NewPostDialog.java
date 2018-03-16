@@ -19,7 +19,7 @@ import android.view.Window;
 import com.udacity.gradle.builditbigger.R;
 
 /**
- * Created by joeljohnson on 11/3/17.
+ * class shows fragments for new posts of different types. soon to be deprecated
  */
 
 public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRequestPermissionsResultCallback {

@@ -14,7 +14,7 @@ import com.udacity.gradle.builditbigger.R;
 import java.io.File;
 
 /**
- * Created by joeljohnson on 11/15/17.
+ * formats media to be shown in recyclerview
  */
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {

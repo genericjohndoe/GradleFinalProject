@@ -9,14 +9,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 1/20/18.
+ * NumFollowingLiveData class keeps reference to database path with the number of users followed by
+ * a given user
  */
 
 public class NumFollowingLiveData extends LiveData<Long> {
     private DatabaseReference databaseReference;
 
     public NumFollowingLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("following/" + Constants.UID + "/num");
+        databaseReference = Constants.DATABASE.child("following/" + uid + "/num");
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {

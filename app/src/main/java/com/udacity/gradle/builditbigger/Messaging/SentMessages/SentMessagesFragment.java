@@ -5,11 +5,14 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentSentMessageBinding;
@@ -25,20 +28,11 @@ import java.util.List;
  */
 public class SentMessagesFragment extends Fragment {
     private String uid;
-    private List<TranscriptPreview> transcriptPreviews;
-    private SentMessagesAdapter sentMessagesAdapter;
 
     public SentMessagesFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param uid the id for a user
-     * @return A new instance of fragment SentMessageFragment.
-     */
     public static SentMessagesFragment newInstance(String uid) {
         SentMessagesFragment fragment = new SentMessagesFragment();
         Bundle args = new Bundle();
@@ -51,8 +45,6 @@ public class SentMessagesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) uid = getArguments().getString("uid");
-        transcriptPreviews = new ArrayList<>();
-        sentMessagesAdapter = new SentMessagesAdapter(transcriptPreviews);
     }
 
     @Override
@@ -60,17 +52,20 @@ public class SentMessagesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         getActivity().setTitle("Sent Messages");
+        List<TranscriptPreview> transcriptPreviews = new ArrayList<>();
+        SentMessagesAdapter sentMessagesAdapter = new SentMessagesAdapter(transcriptPreviews, getActivity());
         FragmentSentMessageBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_sent_message, container, false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
-        llm.setStackFromEnd(true);
+        //llm.setStackFromEnd(true);
         binding.sentMessagesRecyclerview.setLayoutManager(llm);
         binding.sentMessagesRecyclerview.setAdapter(sentMessagesAdapter);
+
         binding.newMessageFab.setOnClickListener(view -> {
-            //todo change fragments to search for users to message
+            Constants.changeFragment(R.id.hilarity_content_frame, ComposeMessageFragment.newInstance(Constants.UID), (AppCompatActivity) getActivity());
         });
+
         SentMessagesViewModel sentMessagesViewModel = ViewModelProviders.of(this, new SentMessagesViewModelFactory(uid)).get(SentMessagesViewModel.class);
         sentMessagesViewModel.getSentMessagesLiveData().observe(this, transcriptPreview -> {
-            //todo add item to array list update adapter
             transcriptPreviews.add(transcriptPreview);
             sentMessagesAdapter.notifyDataSetChanged();
         });

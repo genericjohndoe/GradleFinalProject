@@ -17,21 +17,9 @@
             android:icon="@drawable/ic_explore_image"
             android:title="Explore" />
         <item
-            android:id="@+id/meme_creator_page"
-            android:icon="@drawable/ic_meme_creator"
-            android:title="Meme Creator" />
-        <item
-            android:id="@+id/live_stream_page"
-            android:icon="@drawable/ic_live_stream"
-            android:title="Live Stream" />
-        <item
             android:id="@+id/forums_page"
             android:icon="@drawable/ic_action_name"
             android:title="Forums" />
-        <item
-            android:id="@+id/paypal_page"
-            android:icon="@drawable/ic_payment"
-            android:title="Paypal" />
         <item
             android:id="@+id/settings_page"
             android:icon="@drawable/ic_settings"

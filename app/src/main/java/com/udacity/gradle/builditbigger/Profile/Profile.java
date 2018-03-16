@@ -40,14 +40,14 @@ import java.util.List;
 
 
 /**
- * Created by joeljohnson on 9/28/17.
+ * Profile Class responsible for showing user data seen in profile page
  */
 
 public class Profile extends Fragment implements HideFAB {
     //todo populate UI with info from database
     //todo find out why viewpager fragments don't immediately show when profile page is reloaded
     //todo convert svg to text use in viewpager
-    private List<String> languages = new ArrayList<>();
+    //private List<String> languages = new ArrayList<>();
     private String uid;
     private FragmentProfileBinding binding;
 
@@ -76,6 +76,7 @@ public class Profile extends Fragment implements HideFAB {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_profile,container,false);
 
         binding.profileViewPager.setAdapter(new ProfilePagerAdapter(getActivity().getSupportFragmentManager()));
+        //changes function of floating action menu based on what fragment is shown in the profile viewpager
         binding.profileViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -89,7 +90,6 @@ public class Profile extends Fragment implements HideFAB {
             public void onPageScrollStateChanged(int state) {}
         });
 
-
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
 
         binding.subscribersTv.setOnClickListener(view ->
@@ -99,9 +99,10 @@ public class Profile extends Fragment implements HideFAB {
         binding.subscriptionsTv.setOnClickListener(view ->
                 Constants.changeFragment(R.id.hilarity_content_frame,SubscriptionsFragment.newInstance(uid))
         );
-
+        //originally calls new post dialog, changed when configureFAB is called
+        //todo remove dialog boxes and replace with fragments
         binding.newPostFab.setOnClickListener(view -> showNewJokeDialog());
-
+        //object beneath provides data to fragment
         UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this,
                 new UserInfoViewModelFactory(uid))
                 .get(UserInfoViewModel.class);
@@ -117,7 +118,7 @@ public class Profile extends Fragment implements HideFAB {
                     .into(binding.profileImageview);
             }
         );
-
+        //todo replace text with image text
         userInfoViewModel.getNumPostLiveData().observe(this, numPosts -> {
             binding.postsTv.setText(numPosts + " posts");
             }
@@ -130,17 +131,17 @@ public class Profile extends Fragment implements HideFAB {
         userInfoViewModel.getNumFollowersLiveData().observe(this, numFollowers -> {
             binding.subscribersTv.setText(numFollowers + " subscribers");
         });
-
-        userInfoViewModel.getLanguagesLiveData().observe(this, lang -> {
+        //todo add languages to cloud settings
+        /*userInfoViewModel.getLanguagesLiveData().observe(this, lang -> {
             languages.add(lang);
-        });
+        });*/
 
         return binding.getRoot();
     }
 
     /**
      * dictates the function and look of the FloatingActionMenu object
-     * @param state is the viewpager page selected
+     * @param state is related to the viewpager page selected
      */
     private void configureFAB(int state) {
         if (state == 0) {
@@ -150,7 +151,7 @@ public class Profile extends Fragment implements HideFAB {
             binding.fam.showMenu(true);
             binding.newPostFab.setOnClickListener(view -> showNewGenreDialog());
         } else {
-            binding.fam.showMenu(true);
+            binding.fam.showMenu(true);//showMenu(true);
             binding.newPostFab.setOnClickListener(null);
         }
     }
@@ -158,6 +159,8 @@ public class Profile extends Fragment implements HideFAB {
     /**
      * shows new post dialog from profile when user posts are shown
      */
+    //todo replace with method that generates FragmentTransaction
+    //todo allow for post to be added to collection upon creation
     private void showNewJokeDialog() {
         new NewPostDialog().show(getActivity().getSupportFragmentManager(), "dialog");
     }
@@ -165,6 +168,8 @@ public class Profile extends Fragment implements HideFAB {
     /**
      * shows new genre dialog from profile when user created genres are shown
      */
+    //todo replace with method that generates FragmentTransaction
+    //todo allow privacy? if yes, remember to do on server side too
     private void showNewGenreDialog() {
         new MaterialDialog.Builder(getActivity())
                 .customView(R.layout.dialog_new_genre, true)
@@ -174,13 +179,13 @@ public class Profile extends Fragment implements HideFAB {
                         View view = dialog.getCustomView();
                         String genreTitle = ((EditText) view.findViewById(R.id.new_genre_title_et)).getText().toString();
                         boolean isRestricted = ((CheckBox) view.findViewById(R.id.restricted_checkBox)).isChecked();
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                        /*ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                                 android.R.layout.simple_dropdown_item_1line, languages);
                         AutoCompleteTextView genreLanguage = view.findViewById(R.id.languageAutoCompleteTextView);
-                        genreLanguage.setAdapter(adapter);
-
+                        genreLanguage.setAdapter(adapter);*/
+                        //todo use server to determine language
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference("usergenres/" + Constants.UID).push();
-                        Genre newGenre = new Genre(genreTitle, Constants.USER.getUserName(), isRestricted, genreLanguage.toString(),
+                        Genre newGenre = new Genre(genreTitle, Constants.USER.getUserName(), isRestricted, "English",
                                 Constants.timeStampString(), Constants.USER.getUID(), db.getKey());
                         db.setValue(newGenre);
                 })
@@ -188,13 +193,16 @@ public class Profile extends Fragment implements HideFAB {
                 .show().setCanceledOnTouchOutside(false);
     }
 
+    /**
+     * ProfilePagerAdapter Class used to enable for horizontal scrolling between user posts, collections and liked posts
+     */
     private class ProfilePagerAdapter extends FragmentPagerAdapter {
         public ProfilePagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid), HilarityUserGenres.newInstance(uid),
-                HilarityUserLikes.newInstance(uid)};
+        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid, Profile.this), HilarityUserGenres.newInstance(uid, Profile.this),
+                HilarityUserLikes.newInstance(uid, Profile.this)};
 
         String[] tabTitles = new String[]{"Posts", "Genres", "Likes"};
 
@@ -228,6 +236,9 @@ public class Profile extends Fragment implements HideFAB {
         binding.fam.showMenu(true);
     }
 
+    /**
+     * @return a reference to the search FAB in the menu
+     */
     public FloatingActionButton getFAB(){
         return binding.searchFab;
     }

@@ -22,15 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by joeljohnson on 2/13/18.
+ * TranscriptFragment class shows messages exchanged between users
  */
 
 public class TranscriptFragment extends Fragment {
-    //todo create adapter to show data
-
     private String uid;
     private String path;
-    private String[] users;
+    private String[] usersUidList;
 
     public static TranscriptFragment newInstance(String uid, String path){
         TranscriptFragment transcriptFragment = new TranscriptFragment();
@@ -47,8 +45,8 @@ public class TranscriptFragment extends Fragment {
         if (getArguments() != null){
             uid = getArguments().getString("uid");
             path = getArguments().getString("path");
+            usersUidList = path.split(", ");
         }
-        users = path.split(", ");
 
     }
 
@@ -56,10 +54,13 @@ public class TranscriptFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentTranscriptBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_transcript,container,false);
-        bind.usersRecyclerView.setAdapter(new MessagedUsersAdapter(users, getActivity()));
+        getActivity().setTitle("Transcript");
+        //shows horizontal list of users
+        bind.usersRecyclerView.setAdapter(new MessagedUsersAdapter(usersUidList, getActivity()));
         bind.usersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         List<Message> messages = new ArrayList<>();
         MessagesAdapter messagesAdapter = new MessagesAdapter(messages, getActivity());
+        //shows list of messages
         bind.messagesRecyclerView.setAdapter(messagesAdapter);
         bind.messagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false));
         MessagesViewModel messagesViewModel = ViewModelProviders.of(this,new MessagesViewModelFactory(uid,path)).get(MessagesViewModel.class);
@@ -67,13 +68,12 @@ public class TranscriptFragment extends Fragment {
             messages.add(message);
             messagesAdapter.notifyDataSetChanged();
         });
+        //adds new message to database
         bind.messageEditText.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
-            if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                    && (keyCode == KeyEvent.KEYCODE_ENTER)){
-                //todo get text, add new message, add code for timestamp
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                 String text = bind.messageEditText.getText().toString();
                 Constants.DATABASE.child("messages/"+uid+"/"+path+"/messagelist").push()
-                        .setValue(new Message(Constants.USER,text,"02/01/2018"));
+                        .setValue(new Message(Constants.USER,text,System.currentTimeMillis()));
                 bind.messageEditText.setText("");
                 return true;
             }

@@ -10,7 +10,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Genre;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * UserGenreLiveData class retrieves list of genres from database
  */
 
 public class UserGenreLiveData extends LiveData<Genre> {

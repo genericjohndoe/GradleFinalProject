@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.Profile.UserGenres;
 import android.arch.lifecycle.ViewModel;
 
 /**
- * Created by joeljohnson on 1/21/18.
+ * DEPRECATED
  */
 
 public class SearchUserGenreViewModel extends ViewModel {

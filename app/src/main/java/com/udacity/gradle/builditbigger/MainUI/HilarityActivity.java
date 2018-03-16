@@ -12,18 +12,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Messaging.MessagesFragment;
+import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
+import com.udacity.gradle.builditbigger.Feed.FeedFragment;
+import com.udacity.gradle.builditbigger.Messaging.SentMessages.SentMessagesFragment;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscribersFragment;
-import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscriptionsFragment;
 
+/**
+ * shows pertinent information to the user
+ */
 public class HilarityActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     //todo replace imgs with gifs in left nav
@@ -78,7 +80,8 @@ public class HilarityActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.action_message){
-            changeFragment(new MessagesFragment(), "messages");
+            Constants.changeFragment(R.id.hilarity_content_frame, SentMessagesFragment.newInstance(Constants.UID), this);
+            //changeFragment(new MessagesFragment(), "messages");
         }
 
         return super.onOptionsItemSelected(item);
@@ -94,20 +97,14 @@ public class HilarityActivity extends AppCompatActivity
             changeFragment(Profile.newInstance(Constants.UID), "profile");
             //this.setTitle("Profile");
         } else if (id == R.id.feed_page) {
-            changeFragment(new FeedFragment(), "feed");
+            changeFragment(FeedFragment.newInstance(Constants.UID), "feed");
             setTitle("Feed");
         } else if (id == R.id.explore_page) {
-            changeFragment(new ExploreFragment(), "explore");
+            changeFragment(ExploreFragment.newInstance(Constants.UID), "explore");
             setTitle("Explore");
-        } else if (id == R.id.meme_creator_page) {
+        }  else if (id == R.id.forums_page) {
 
-        } else if (id == R.id.live_stream_page) {
-
-        } else if (id == R.id.forums_page) {
-
-        } else if (id == R.id.paypal_page) {
-
-        } else if (id == R.id.settings_page) {
+        }  else if (id == R.id.settings_page) {
 
         } else if (id == R.id.logout) {
             //todo check to see if works

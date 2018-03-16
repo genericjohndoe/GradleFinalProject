@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.Jokes;
 import com.udacity.gradle.builditbigger.Models.Joke;
 
 /**
- * Created by joeljohnson on 3/1/18.
+ * Class provides post information to viewholder
  */
 
 public class ViewHolderViewModel {

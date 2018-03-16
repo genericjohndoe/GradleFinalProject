@@ -11,7 +11,7 @@ import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 
 /**
- * Created by joeljohnson on 2/5/18.
+ * DEPRECATED
  */
 
 public class NetworkLiveData extends LiveData<HilarityUser> {

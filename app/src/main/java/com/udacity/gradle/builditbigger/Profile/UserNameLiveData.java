@@ -10,7 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
 /**
- * Created by joeljohnson on 1/20/18.
+ * UserNameLiveData class keeps track of user name for a given user
  */
 
 public class UserNameLiveData extends LiveData<String> {

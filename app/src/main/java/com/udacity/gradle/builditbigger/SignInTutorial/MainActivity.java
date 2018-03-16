@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,7 +25,9 @@ import java.util.Arrays;
 import agency.tango.materialintroscreen.MaterialIntroActivity;
 import agency.tango.materialintroscreen.SlideFragmentBuilder;
 
-
+/**
+ * sign in and on boarding
+ */
 public class MainActivity extends MaterialIntroActivity {
 
     private FirebaseAuth mFirebaseAuth;
@@ -36,13 +39,9 @@ public class MainActivity extends MaterialIntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
+        //todo find why app fails when closed out from profile page and try to reopen
         Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
         Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
-        /*todo change intro screen to show legal stuff, prompts new user to pick user name
-        runs query on database when user stops typing, okay'd by animation
-        show introduction page then load app activity
-        do test to see where Constants.UID gets initialize
-        todo*/
         mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -60,18 +59,9 @@ public class MainActivity extends MaterialIntroActivity {
                                                     new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                                     .build(),
                             RC_SIGN_IN);
-
-                    addSlide(new SlideFragmentBuilder()
-                            .backgroundColor(R.color.primary)
-                            .buttonsColor(R.color.accent)
-                            .title("Test title")
-                            .description("test description")
-                            .build());
-                    addSlide(new ChooseUserNameFragment());
                 }
             }
         };
-
     }
 
 
@@ -95,6 +85,42 @@ public class MainActivity extends MaterialIntroActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Constants.DATABASE.child("userlist/" + user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            configureApp(user);
+                        } else {
+                            addSlide(new SlideFragmentBuilder()
+                                    .backgroundColor(R.color.primary)
+                                    .buttonsColor(R.color.accent)
+                                    .title("Test title")
+                                    .description("test description")
+                                    .build());
+                            addSlide(new ChooseUserNameFragment());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+            } else {
+                Log.i("login failed", response.getError().toString());
+            }
+        }
     }
 
     @Override
@@ -122,17 +148,15 @@ public class MainActivity extends MaterialIntroActivity {
     public void configureApp(FirebaseUser user) {
         //Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
         Constants.UID = user.getUid();
-        Constants.DATABASE.child("users/" + Constants.UID).addValueEventListener(new ValueEventListener() {
+        Constants.DATABASE.child("users/" + Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Constants.USER = dataSnapshot.getValue(HilarityUser.class);
-                if (Constants.USER != null)
-                    startActivity(new Intent(getBaseContext(), HilarityActivity.class));
+                if (Constants.USER != null) startActivity(new Intent(getBaseContext(), HilarityActivity.class));
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 }

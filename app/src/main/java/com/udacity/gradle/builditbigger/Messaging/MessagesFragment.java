@@ -13,7 +13,7 @@ import com.udacity.gradle.builditbigger.R;
 
 
 /**
- *
+ * DEPRECATED
  */
 public class MessagesFragment extends Fragment {
     //todo populate recyclerview with reverse chronological messages
