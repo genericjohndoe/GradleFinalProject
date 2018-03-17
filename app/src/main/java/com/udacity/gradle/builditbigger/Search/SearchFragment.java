@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.gradle.builditbigger.Profile.Profile;
-import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
-import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.Search.SearchCollections.SearchCollectionsFragment;
+import com.udacity.gradle.builditbigger.Search.SearchGifPosts.SearchGifPostsFragment;
+import com.udacity.gradle.builditbigger.Search.SearchImagePosts.SearchImagePostsFragment;
+import com.udacity.gradle.builditbigger.Search.SearchTags.SearchTagsFragment;
+import com.udacity.gradle.builditbigger.Search.SearchTextPosts.SearchTextPostsFragment;
+import com.udacity.gradle.builditbigger.Search.SearchUsers.SearchUserFragment;
+import com.udacity.gradle.builditbigger.Search.SearchVideoPosts.SearchVideoPostsFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchBinding;
 
 /**
@@ -41,6 +46,18 @@ public class SearchFragment extends Fragment {
         FragmentSearchBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search, container, false);
         bind.viewPager.setAdapter(new SearchPagerAdapter(getActivity().getSupportFragmentManager()));
         bind.tabLayout.setupWithViewPager(bind.viewPager);
+        bind.searcheditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
         return bind.getRoot();
     }
 
@@ -49,7 +66,9 @@ public class SearchFragment extends Fragment {
             super(fm);
         }
 
-        Fragment[] fragmentArray = new Fragment[]{SearchUserFragment.newInstance()};
+        Fragment[] fragmentArray = new Fragment[]{SearchUserFragment.newInstance(), SearchCollectionsFragment.newInstance(),
+                SearchTagsFragment.newInstance(), SearchTextPostsFragment.newInstance(), SearchImagePostsFragment.newInstance(),
+                SearchVideoPostsFragment.newInstance(), SearchGifPostsFragment.newInstance()};
 
         String[] tabTitles = new String[]{"Users", "Collections", "Tags", "Text", "Image", "Video", "Gif"};
 
