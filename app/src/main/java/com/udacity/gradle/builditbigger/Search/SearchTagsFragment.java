@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Search.SearchTags;
+package com.udacity.gradle.builditbigger.Search;
 
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -9,8 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Search.SearchHilarityViewModel;
+import com.udacity.gradle.builditbigger.Tags.TagAdapter;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchTagsBinding;
 
 import java.util.ArrayList;
@@ -46,9 +50,21 @@ public class SearchTagsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentSearchTagsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_tags, container, false);
-        List<String> tags = new ArrayList<>();
-        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchTagsLiveData().observe(this, tag -> {
-            tags.add(tag);
+        TagAdapter tagAdapter = new TagAdapter(new ArrayList<>(), getActivity());
+        ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query ->{
+            Constants.DATABASE.child("taglist").orderByKey().startAt(query).endAt(query+"\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<String> tags = new ArrayList<>();
+                    for (DataSnapshot snap: dataSnapshot.getChildren()){
+                        tags.add(snap.getValue(String.class));
+                    }
+                    tagAdapter.setTags(tags);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
         });
         return bind.getRoot();
     }

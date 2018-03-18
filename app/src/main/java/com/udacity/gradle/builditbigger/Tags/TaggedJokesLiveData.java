@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Search.SearchVideoPosts;
+package com.udacity.gradle.builditbigger.Tags;
 
 import android.arch.lifecycle.LiveData;
 
@@ -10,11 +10,15 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
 
 /**
- * Created by joeljohnson on 3/16/18.
+ * Created by joeljohnson on 3/18/18.
  */
 
-public class SearchVideoPostsLiveData extends LiveData<Joke> {
-    DatabaseReference databaseReference = Constants.DATABASE.child("posttype/video");
+public class TaggedJokesLiveData extends LiveData<Joke> {
+    DatabaseReference databaseReference;
+
+    public TaggedJokesLiveData(String tag){
+        databaseReference = Constants.DATABASE.child("tags/"+tag);
+    }
 
     ChildEventListener childEventListener = new ChildEventListener() {
         @Override
@@ -23,24 +27,16 @@ public class SearchVideoPostsLiveData extends LiveData<Joke> {
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-        }
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-        }
+        public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
         @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-        }
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
+        public void onCancelled(DatabaseError databaseError) {}
     };
 
     @Override

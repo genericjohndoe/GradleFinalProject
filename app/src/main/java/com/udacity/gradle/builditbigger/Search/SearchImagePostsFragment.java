@@ -1,17 +1,17 @@
-package com.udacity.gradle.builditbigger.Search.SearchImagePosts;
+package com.udacity.gradle.builditbigger.Search;
 
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Search.SearchHilarityViewModel;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchImagePostsBinding;
 
 import java.util.ArrayList;
@@ -48,9 +48,13 @@ public class SearchImagePostsFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentSearchImagePostsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_image_posts, container, false);
         List<Joke> imagePosts = new ArrayList<>();
-        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchImagePostsLiveData().observe(this, post ->{
+        JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), imagePosts, false);
+        bind.recyclerview.setAdapter(jokesAdapter);
+        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
+        /*ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchImagePostsLiveData().observe(this, post ->{
             imagePosts.add(post);
-        });
+            jokesAdapter.notifyDataSetChanged();
+        });*/
         return bind.getRoot();
     }
 

@@ -1,18 +1,21 @@
-package com.udacity.gradle.builditbigger.Search.SearchCollections;
+package com.udacity.gradle.builditbigger.Search;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Genres.GenreAdapter;
 import com.udacity.gradle.builditbigger.Models.Genre;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Search.SearchHilarityViewModel;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchCollectionsBinding;
 
 import java.util.ArrayList;
@@ -47,9 +50,23 @@ public class SearchCollectionsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentSearchCollectionsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_collections, container, false);
-        List<Genre> genres = new ArrayList<>();
-        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchCollectionsLiveData().observe(this, collection ->{
-            genres.add(collection);
+        GenreAdapter genreAdapter = new GenreAdapter(getActivity(), new ArrayList<>());
+        bind.recyclerview.setAdapter(genreAdapter);
+        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
+            Constants.DATABASE.child("allcollections").orderByChild("title").startAt(query).endAt(query+"\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<Genre> genres = new ArrayList<>();
+                    for (DataSnapshot snap: dataSnapshot.getChildren()){
+                        genres.add(snap.getValue(Genre.class));
+                    }
+                    genreAdapter.setGenres(genres);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
         });
         return bind.getRoot();
     }

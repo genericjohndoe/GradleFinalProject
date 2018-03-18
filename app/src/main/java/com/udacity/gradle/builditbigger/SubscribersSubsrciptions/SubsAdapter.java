@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,5 +140,10 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
     public void onViewRecycled(SubsViewHolder holder) {
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         super.onViewRecycled(holder);
+    }
+
+    public void setSubscribersList(List<HilarityUser> list){
+        subscribersList = list;
+        notifyDataSetChanged();
     }
 }

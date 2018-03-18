@@ -21,14 +21,10 @@ public class IsFollowingLiveData extends LiveData<Boolean> {
 
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            setValue(dataSnapshot.exists());
-        }
+        public void onDataChange(DataSnapshot dataSnapshot) {setValue(dataSnapshot.exists());}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
+        public void onCancelled(DatabaseError databaseError) {}
     };
 
     @Override

@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Search;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,18 +9,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Search.SearchCollections.SearchCollectionsFragment;
-import com.udacity.gradle.builditbigger.Search.SearchGifPosts.SearchGifPostsFragment;
-import com.udacity.gradle.builditbigger.Search.SearchImagePosts.SearchImagePostsFragment;
-import com.udacity.gradle.builditbigger.Search.SearchTags.SearchTagsFragment;
-import com.udacity.gradle.builditbigger.Search.SearchTextPosts.SearchTextPostsFragment;
-import com.udacity.gradle.builditbigger.Search.SearchUsers.SearchUserFragment;
-import com.udacity.gradle.builditbigger.Search.SearchVideoPosts.SearchVideoPostsFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchBinding;
 
 /**
@@ -46,13 +41,15 @@ public class SearchFragment extends Fragment {
         FragmentSearchBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search, container, false);
         bind.viewPager.setAdapter(new SearchPagerAdapter(getActivity().getSupportFragmentManager()));
         bind.tabLayout.setupWithViewPager(bind.viewPager);
+        SearchHilarityViewModel searchHilarityViewModel = ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class);
+        Log.i("HilarityQuery4", searchHilarityViewModel.toString());
         bind.searcheditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                searchHilarityViewModel.getSearchQuery().setValue(""+s);
             }
 
             @Override

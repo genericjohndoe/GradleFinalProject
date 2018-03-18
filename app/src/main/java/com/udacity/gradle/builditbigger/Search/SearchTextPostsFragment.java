@@ -1,17 +1,19 @@
-package com.udacity.gradle.builditbigger.Search.SearchTextPosts;
+package com.udacity.gradle.builditbigger.Search;
 
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Search.SearchHilarityViewModel;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchTextPostsBinding;
 
 import java.util.ArrayList;
@@ -49,8 +51,11 @@ public class SearchTextPostsFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentSearchTextPostsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_text_posts, container, false);
         List<Joke> textPosts = new ArrayList<>();
-        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchTextPostsLiveData().observe(this, post ->{
-            textPosts.add(post);
+        JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), textPosts, false);
+        bind.recyclerview.setAdapter(jokesAdapter);
+        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
+        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query ->{
+            Constants.DATABASE.child("posttype/text").orderByChild("metadata");
         });
         return bind.getRoot();
     }
