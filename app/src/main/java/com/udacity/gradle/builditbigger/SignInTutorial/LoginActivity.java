@@ -53,6 +53,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -66,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private FirebaseUser user;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -116,6 +119,28 @@ public class LoginActivity extends AppCompatActivity {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
+
+        mAuthStateListener = firebaseAuth -> {
+            user = firebaseAuth.getCurrentUser();
+            if (user != null) { // User is signed in
+                configureApp(user);
+                Log.i(HILARITY, "user");
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        auth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            auth.removeAuthStateListener(mAuthStateListener);
+        }
     }
 
 
@@ -220,9 +245,9 @@ public class LoginActivity extends AppCompatActivity {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                             if (task.isSuccessful()) {
-                                FirebaseUser user = auth.getCurrentUser();
+                                /*FirebaseUser user = auth.getCurrentUser();
                                 Constants.UID = user.getUid();
-                                startActivity(new Intent(this, HilarityActivity.class));
+                                startActivity(new Intent(this, HilarityActivity.class));*/
                             } else {
                                 createAccount(email, password);
                             }
@@ -234,9 +259,9 @@ public class LoginActivity extends AppCompatActivity {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                             if (task.isSuccessful()) {
-                                FirebaseUser user = auth.getCurrentUser();
+                                /*FirebaseUser user = auth.getCurrentUser();
                                 Constants.UID = user.getUid();
-                                startActivity(new Intent(this, UserNameActivity.class));
+                                startActivity(new Intent(this, UserNameActivity.class));*/
                             } else {
                                 Log.i(HILARITY, "sign up failed");
                             }
@@ -263,8 +288,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
+        auth.signInWithCredential(credential);
+                /*.addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
@@ -286,7 +311,26 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                         }
                     }
-                );
+                );*/
+    }
+
+    public void configureApp(FirebaseUser user) {
+        //Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
+        Constants.UID = user.getUid();
+        Constants.DATABASE.child("users/" + Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Constants.USER = dataSnapshot.getValue(HilarityUser.class);
+                if (Constants.USER != null) {
+                    startActivity(new Intent(getBaseContext(), HilarityActivity.class));
+                }else {
+                    startActivity(new Intent(LoginActivity.this, UserNameActivity.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 }
 

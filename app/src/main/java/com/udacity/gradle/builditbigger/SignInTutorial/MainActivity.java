@@ -63,22 +63,6 @@ public class MainActivity extends MaterialIntroActivity {
                                                     new AuthUI.IdpConfig.GoogleBuilder().build()))
                                     .build(),
                             RC_SIGN_IN);*/
-
-                    Intent intent  = AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setIsSmartLockEnabled(false)
-                            .setTheme(R.style.GreenTheme)
-                            .setAvailableProviders(
-                                    Arrays.asList( new AuthUI.IdpConfig.EmailBuilder().build(),
-                                            new AuthUI.IdpConfig.GoogleBuilder().build()))
-                            .build();
-                    try {
-                        //startActivityForResult(intent, RC_SIGN_IN);
-                    } catch (Throwable e){
-                        Log.i(HILARITY, e.toString());
-                        Log.i(HILARITY, e.getMessage());
-                        Log.i(HILARITY, e.getCause().toString());
-                    }
                 }
         };
     }
