@@ -9,15 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Tags.TagAdapter;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchTagsBinding;
 
 import java.util.ArrayList;

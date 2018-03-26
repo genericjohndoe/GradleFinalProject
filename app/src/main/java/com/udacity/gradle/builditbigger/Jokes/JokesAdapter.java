@@ -1,13 +1,11 @@
 package com.udacity.gradle.builditbigger.Jokes;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -15,17 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -33,25 +25,16 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.hendraanggrian.socialview.SocialView;
 import com.hendraanggrian.widget.SocialTextView;
 import com.udacity.gradle.builditbigger.Comments.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Database.HilarityUserDatabase;
-import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
 
-
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
 
 /**
  * Class styles posts for recyclerview

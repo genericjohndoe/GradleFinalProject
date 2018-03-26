@@ -4,8 +4,6 @@ import android.app.Activity;
 
 import org.junit.Test;
 
-import static junit.framework.Assert.assertNotNull;
-
 /**
  * Created by joeljohnson on 2/26/17.
  */

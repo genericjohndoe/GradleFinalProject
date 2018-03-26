@@ -2,14 +2,12 @@ package com.udacity.gradle.builditbigger.Profile;
 
 import android.arch.lifecycle.LiveData;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
-import java.util.List;
 
 /**
  * LanguagesLiveData Class used to provide all the languages supported by the app

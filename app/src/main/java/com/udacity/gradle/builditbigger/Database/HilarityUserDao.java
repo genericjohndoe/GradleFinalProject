@@ -9,8 +9,6 @@ import android.arch.persistence.room.Update;
 
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
-import java.util.List;
-
 /**
  * Created by joeljohnson on 2/13/18.
  */
@@ -24,8 +22,8 @@ public interface HilarityUserDao {
     void delete(HilarityUser hu);
     @Query("SELECT * FROM hilarityusers WHERE userName LIKE :userName")
     LiveData<HilarityUser> getUsersFromName(String userName);
-    @Query("SELECT * FROM hilarityusers WHERE uid in :uidList")
-    HilarityUser[] getUsersFromUidList(String[] uid);
+    /*@Query("SELECT * FROM hilarityusers WHERE uid in :uidList")
+    HilarityUser[] getUsersFromUidList(String[] uidList);*/
     @Query("SELECT userName FROM hilarityusers WHERE uid = :uid")
     String getUserName(String uid);
 }

@@ -3,7 +3,6 @@ package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Database.HilarityUserDatabase;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
@@ -53,7 +51,7 @@ public class MessagedUsersAdapter extends RecyclerView.Adapter<MessagedUsersAdap
     @Override
     public void onBindViewHolder(MessagedUserViewHolder holder, int position) {
         Glide.with(context).load(hilarityUsers.get(position).getUrlString()).into(holder.bind.profileImageview);
-        holder.uid = hilarityUsers.get(position).getUID();
+        holder.uid = hilarityUsers.get(position).getUid();
     }
 
     @Override

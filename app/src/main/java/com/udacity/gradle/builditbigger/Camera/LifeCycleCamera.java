@@ -28,7 +28,6 @@ import android.media.ImageReader;
 import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -43,7 +42,6 @@ import android.view.TextureView;
 import android.widget.Toast;
 
 import com.udacity.gradle.builditbigger.NewPost.NewVideoPost;
-import com.udacity.gradle.builditbigger.NewPost.NewImagePost;
 
 import java.io.File;
 import java.io.FileOutputStream;

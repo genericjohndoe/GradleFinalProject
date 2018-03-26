@@ -12,11 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -24,21 +21,16 @@ import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Dialog.NewPostDialog;
-import com.udacity.gradle.builditbigger.Models.Genre;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
+import com.udacity.gradle.builditbigger.Models.Genre;
 import com.udacity.gradle.builditbigger.NewPost.NewPostFragment;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscribersFragment;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscriptionsFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 
 /**
@@ -188,7 +180,7 @@ public class Profile extends Fragment implements HideFAB {
                         //todo use server to determine language
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference("usergenres/" + Constants.UID).push();
                         Genre newGenre = new Genre(genreTitle, Constants.USER.getUserName(), isRestricted, "English",
-                                Constants.timeStampString(), Constants.USER.getUID(), db.getKey());
+                                Constants.timeStampString(), Constants.USER.getUid(), db.getKey());
                         db.setValue(newGenre);
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())

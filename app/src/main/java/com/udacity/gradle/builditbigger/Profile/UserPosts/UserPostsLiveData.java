@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Profile.UserPosts;
 
 import android.arch.lifecycle.LiveData;
+import android.os.Handler;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -8,8 +9,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
-
-import  android.os.Handler;
 
 /**
  * UserPostsLiveData class provides references to user generated posts

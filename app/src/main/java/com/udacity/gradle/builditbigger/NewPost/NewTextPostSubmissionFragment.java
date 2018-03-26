@@ -19,9 +19,6 @@ import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostSubmissionBinding;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link NewTextPostSubmissionFragment#newInstance} factory method to

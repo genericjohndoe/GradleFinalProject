@@ -7,7 +7,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Profile.UserLikes.UserLikesLiveData;
 
 /**
  * Created by joeljohnson on 2/8/18.

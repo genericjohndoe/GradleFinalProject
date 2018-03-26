@@ -2,7 +2,6 @@ package com.udacity.gradle.builditbigger.MainUI;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -14,9 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
 import com.udacity.gradle.builditbigger.Feed.FeedFragment;
@@ -109,12 +106,9 @@ public class HilarityActivity extends AppCompatActivity
         }  else if (id == R.id.settings_page) {
 
         } else if (id == R.id.logout) {
-            AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) startActivity(new Intent(this, LoginActivity.class));
-                        }
-                    );
+            FirebaseAuth.getInstance()
+                    .signOut();
+            startActivity(new Intent(this, LoginActivity.class));
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

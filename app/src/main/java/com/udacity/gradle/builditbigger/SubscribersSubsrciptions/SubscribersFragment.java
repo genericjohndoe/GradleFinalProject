@@ -10,14 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.UserPostViewModelFactory;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.UserPostsViewModel;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 

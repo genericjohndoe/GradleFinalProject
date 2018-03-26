@@ -2,8 +2,6 @@ package com.udacity.gradle.builditbigger.Profile.UserPosts;
 
 import android.arch.lifecycle.ViewModel;
 
-import java.util.List;
-
 /**
  * earchUserViewModel class DEPRECATED
  */

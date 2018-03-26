@@ -4,9 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Constants.Constants;
@@ -14,9 +12,9 @@ import com.udacity.gradle.builditbigger.Models.Comment;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.CommentCellBinding;
 
+
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * styles comments for recyclerview

@@ -15,10 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.gradle.builditbigger.Profile.Profile;
-import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
-import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewPostBinding;
 

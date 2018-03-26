@@ -65,7 +65,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.SentMe
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).getHilarityUser().getUID().equals(Constants.UID)) return TYPE_SENT;
+        if (messages.get(position).getHilarityUser().getUid().equals(Constants.UID)) return TYPE_SENT;
         return TYPE_RECEIVED;
     }
 

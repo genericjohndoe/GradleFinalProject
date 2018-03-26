@@ -1,31 +1,19 @@
 package com.udacity.gradle.builditbigger.Feed;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
-import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.databinding.FeedExplorePageBinding;
 
 import java.util.ArrayList;

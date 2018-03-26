@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
-import java.util.List;
-
 /**
  * Created by joeljohnson on 2/8/18.
  */

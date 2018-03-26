@@ -10,18 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.SentMessagesCellBinding;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 /**
  * SentMessagesAdapter class styles and provides message data for recyckerview

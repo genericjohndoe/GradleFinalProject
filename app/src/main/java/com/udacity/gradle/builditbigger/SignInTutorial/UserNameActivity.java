@@ -1,15 +1,10 @@
 package com.udacity.gradle.builditbigger.SignInTutorial;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.EditText;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;

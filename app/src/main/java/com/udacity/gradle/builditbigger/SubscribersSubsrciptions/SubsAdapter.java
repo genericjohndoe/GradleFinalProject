@@ -1,44 +1,26 @@
 package com.udacity.gradle.builditbigger.SubscribersSubsrciptions;
 
-import android.app.Activity;
+
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.SubsItemBinding;
 import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
-import com.udacity.gradle.builditbigger.isFollowing.IsFollowingViewHolder;
-import com.udacity.gradle.builditbigger.isFollowing.IsFollowingViewModelFactory;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * class preps hilarityuser objects for recyclerview
@@ -65,7 +47,7 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         Glide.with(context).load(subscribersList.get(position).getUrlString()).into(holder.binding.subsProfileImageview);
         holder.binding.usernameTextView.setText(subscribersList.get(position).getUserName());
-        holder.setUid(subscribersList.get(position).getUID());
+        holder.setUid(subscribersList.get(position).getUid());
         new IsFollowingLiveData(holder.getUid()).observe(holder, bool ->{
             holder.setIsFollowed(bool);
             //todo set UI

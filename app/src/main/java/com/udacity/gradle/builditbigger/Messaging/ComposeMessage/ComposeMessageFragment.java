@@ -18,21 +18,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+
 import com.example.chipslibrary.models.ChipInterface;
 import com.example.chipslibrary.views.ChipsInputEditText;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Database.SearchViewModel;
 import com.udacity.gradle.builditbigger.Database.SearchViewModelFactory;
 import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
-import com.udacity.gradle.builditbigger.Messaging.SentMessages.SentMessagesFragment;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.databinding.FragmentComposeMessageBinding;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -105,8 +104,8 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
                     //bind.chipsInput.getSelectedChipList()
                     //todo find out why HilarityUser object is null
                     for (HilarityUser chip: hilarityUsers){
-                        sendTo.add(chip.getUID());
-                        Log.i("Hilarity", "when message sent uid is " + chip.getUID());
+                        sendTo.add(chip.getUid());
+                        Log.i("Hilarity", "when message sent uid is " + chip.getUid());
                         Log.i("HilaritySentToSize", "" + sendTo.size());
                     }
                     sendTo.add(Constants.UID);
@@ -154,7 +153,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
 
         @Override
         public Object getId() {
-            return hilarityUser.getUID();
+            return hilarityUser.getUid();
         }
 
         @Override
@@ -174,7 +173,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
 
         @Override
         public boolean equals(Object obj) {
-            return getId().equals(((HilarityUser) obj).getUID());
+            return getId().equals(((HilarityUser) obj).getUid());
         }
     }
 

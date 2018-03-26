@@ -2,12 +2,6 @@ package com.udacity.gradle.builditbigger.Database;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-
-import com.udacity.gradle.builditbigger.Models.HilarityUser;
-
-import java.util.List;
 
 /**
  * Created by joeljohnson on 2/8/18.

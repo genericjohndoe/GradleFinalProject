@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger.Explore;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -13,18 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Feed.FeedViewModel;
-import com.udacity.gradle.builditbigger.Feed.FeedViewModelProvider;
-import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Search.SearchFragment;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
-import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.databinding.FeedExplorePageBinding;
 
 import java.util.ArrayList;

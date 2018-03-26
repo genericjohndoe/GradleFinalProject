@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
-import com.udacity.gradle.builditbigger.Models.Joke;
+
 
 /**
  * retrieves list of subscribers from database

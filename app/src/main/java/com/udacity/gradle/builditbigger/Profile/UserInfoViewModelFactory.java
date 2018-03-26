@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import com.udacity.gradle.builditbigger.Profile.UserInfoViewModel;
 
 /**
  * UserInfoViewModelFactory class used to provide viewmodel object to fragment

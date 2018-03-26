@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,10 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
-import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Interfaces.VideoCallback;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
 import java.util.ArrayList;

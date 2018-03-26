@@ -13,13 +13,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
-import org.webrtc.PeerConnection;
-
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 

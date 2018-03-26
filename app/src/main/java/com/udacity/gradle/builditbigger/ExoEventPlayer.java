@@ -3,13 +3,11 @@ package com.udacity.gradle.builditbigger;
 import android.util.Log;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 
 /**
  * class reacts to changes in state of video

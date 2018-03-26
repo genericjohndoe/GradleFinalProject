@@ -9,9 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Joke;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * SearchUserPostsLiveData class DEPRECATED
  */
