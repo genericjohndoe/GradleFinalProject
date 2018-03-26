@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger.MainUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,7 @@ import com.udacity.gradle.builditbigger.Feed.FeedFragment;
 import com.udacity.gradle.builditbigger.Messaging.SentMessages.SentMessagesFragment;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.SignInTutorial.LoginActivity;
 
 /**
  * shows pertinent information to the user
@@ -107,16 +109,13 @@ public class HilarityActivity extends AppCompatActivity
         }  else if (id == R.id.settings_page) {
 
         } else if (id == R.id.logout) {
-            //todo check to see if works
             AuthUI.getInstance()
                     .signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        public void onComplete(@NonNull Task<Void> task) {
-                            // ...
+                    .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) startActivity(new Intent(this, LoginActivity.class));
                         }
-                    });
+                    );
         }
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

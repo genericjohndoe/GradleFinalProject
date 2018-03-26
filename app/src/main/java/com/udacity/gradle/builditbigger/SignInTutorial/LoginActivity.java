@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
         //todo find why app fails when closed out from profile page and try to reopen
-        Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
+        //Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
         Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
         // Set up the login form.
         mEmailView = findViewById(R.id.email);
@@ -138,9 +138,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mAuthStateListener != null) {
-            auth.removeAuthStateListener(mAuthStateListener);
-        }
+        if (mAuthStateListener != null) auth.removeAuthStateListener(mAuthStateListener);
     }
 
 
@@ -244,35 +242,18 @@ public class LoginActivity extends AppCompatActivity {
     private void signIn(String email, String password) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
-                            if (task.isSuccessful()) {
-                                /*FirebaseUser user = auth.getCurrentUser();
-                                Constants.UID = user.getUid();
-                                startActivity(new Intent(this, HilarityActivity.class));*/
-                            } else {
-                                createAccount(email, password);
-                            }
+                            if (!task.isSuccessful()) createAccount(email, password);
                         }
                 );
     }
 
     private void createAccount(String email, String password) {
-        auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
-                            if (task.isSuccessful()) {
-                                /*FirebaseUser user = auth.getCurrentUser();
-                                Constants.UID = user.getUid();
-                                startActivity(new Intent(this, UserNameActivity.class));*/
-                            } else {
-                                Log.i(HILARITY, "sign up failed");
-                            }
-                        }
-                );
+        auth.createUserWithEmailAndPassword(email, password);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -289,29 +270,6 @@ public class LoginActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential);
-                /*.addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = auth.getCurrentUser();
-                            Constants.UID = user.getUid();
-                            Constants.DATABASE.child("users/"+user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()){
-                                        startActivity(new Intent(LoginActivity.this, HilarityActivity.class));
-                                    } else {
-                                        startActivity(new Intent(LoginActivity.this, UserNameActivity.class));
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {}
-                            });
-                        } else {
-                            // If sign in fails, display a message to the user.
-                        }
-                    }
-                );*/
     }
 
     public void configureApp(FirebaseUser user) {
