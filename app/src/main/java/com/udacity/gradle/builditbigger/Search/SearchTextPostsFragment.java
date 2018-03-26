@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Joke;
@@ -33,6 +34,7 @@ public class SearchTextPostsFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment SearchTextPostsFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -48,14 +50,19 @@ public class SearchTextPostsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        FragmentSearchTextPostsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_text_posts, container, false);
-        List<Joke> textPosts = new ArrayList<>();
-        JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), textPosts, false);
+        FragmentSearchTextPostsBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_search_text_posts, container, false);
+        JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), new ArrayList<>(), false);
         bind.recyclerview.setAdapter(jokesAdapter);
-        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
-        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query ->{
-            Constants.DATABASE.child("posttype/text").orderByChild("metadata");
+        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
+            Constants.FIRESTORE.collection("posts").whereEqualTo("type", Constants.TEXT).whereGreaterThanOrEqualTo("jokeTitle", query).get()
+                    .addOnSuccessListener(documentSnapshots -> {
+                        List<Joke> textPosts = new ArrayList<>();
+                        for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
+                            textPosts.add(snap.toObject(Joke.class));
+                        }
+                        jokesAdapter.setJokes(textPosts);
+                    });
         });
         return bind.getRoot();
     }

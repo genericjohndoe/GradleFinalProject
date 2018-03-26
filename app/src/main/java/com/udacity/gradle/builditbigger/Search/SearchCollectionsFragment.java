@@ -9,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Genres.GenreAdapter;
 import com.udacity.gradle.builditbigger.Models.Genre;
@@ -28,12 +31,12 @@ import java.util.List;
  */
 public class SearchCollectionsFragment extends Fragment {
     public SearchCollectionsFragment() {
-        // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment SearchCollectionsFragment.
      */
     public static SearchCollectionsFragment newInstance() {
@@ -48,25 +51,19 @@ public class SearchCollectionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        FragmentSearchCollectionsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_collections, container, false);
+        FragmentSearchCollectionsBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_search_collections, container, false);
         GenreAdapter genreAdapter = new GenreAdapter(getActivity(), new ArrayList<>());
         bind.recyclerview.setAdapter(genreAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
-            Constants.DATABASE.child("allcollections").orderByChild("title").startAt(query).endAt(query+"\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+            Constants.FIRESTORE.collection("collections").whereGreaterThanOrEqualTo("title", query).get().addOnSuccessListener(documentSnapshots-> {
                     List<Genre> genres = new ArrayList<>();
-                    for (DataSnapshot snap: dataSnapshot.getChildren()){
-                        genres.add(snap.getValue(Genre.class));
+                    for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
+                        genres.add(snap.toObject(Genre.class));
                     }
                     genreAdapter.setGenres(genres);
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            });
+            );
         });
         return bind.getRoot();
     }

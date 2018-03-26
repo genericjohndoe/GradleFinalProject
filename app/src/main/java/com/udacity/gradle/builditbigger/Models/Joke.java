@@ -26,7 +26,7 @@ public class Joke {
 
     //TODO modify constructor to include image/video url
     public Joke(String jokeTitle, String body, Long time, String genre,
-                String url, String uid, String pushId, String tagline, Integer type) {
+                String url, String uid, String pushId, String tagline, Integer type, MetaData metaData) {
         this.jokeTitle = jokeTitle;
         jokeBody = body;
         timeStamp = time;
@@ -37,6 +37,7 @@ public class Joke {
         this.tagline = tagline;
         this.type = type;
         taglist = new ArrayList<>();
+        this.metaData = metaData;
     }
 
     public String getJokeTitle() {

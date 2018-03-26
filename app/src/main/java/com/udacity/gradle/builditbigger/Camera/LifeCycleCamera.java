@@ -35,11 +35,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
+
+import com.udacity.gradle.builditbigger.NewPost.NewVideoPost;
+import com.udacity.gradle.builditbigger.NewPost.NewImagePost;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -346,8 +350,15 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
   @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
   public void onActivityCreated(LifecycleOwner lifecycleOwner) {
-    if (mode == PHOTO)
-      mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/" + getCurrentDateAndTime() + ".jpg");
+    if (mode == PHOTO) {
+      //mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/" + getCurrentDateAndTime() + ".jpg");
+      try {
+        mFile = File.createTempFile("temp file", ".png", fragment.getActivity().getCacheDir());
+      } catch (IOException e) {
+        Log.d("error", e.toString());
+      }
+    }
+
   }
 
   @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -872,6 +883,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         if (null != output) {
           try {
             output.close();
+            //((NewImagePost) fragment).moveFile(mFile);
             makeFileAvailible(mFile);
           } catch (IOException e) {
             e.printStackTrace();
@@ -911,7 +923,12 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
   }
 
   private String getVideoFilePath(Context context) {
-    mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/" + getCurrentDateAndTime() + ".mp4");
+    //mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/" + getCurrentDateAndTime() + ".mp4");
+    try {
+      mFile = File.createTempFile("temp file", ".png", fragment.getActivity().getCacheDir());
+    } catch (IOException e) {
+      Log.d("error", e.toString());
+    }
     //Constants.STORAGE.child("users/"+Constants.UID).putFile(mFile.toURI());
     makeFileAvailible(mFile);
     return mFile.toString();
@@ -997,6 +1014,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     }
     mNextVideoAbsolutePath = null;
     startVideoPreview();
+    getFilePath();
   }
 
   private void startVideoPreview() {
@@ -1071,14 +1089,12 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
   public static void makeFileAvailible(File file) {
     MediaScannerConnection.scanFile(fragment.getActivity(), new String[]{file.toString()}
-            , null, new MediaScannerConnection.OnScanCompletedListener() {
-              public void onScanCompleted(String path, Uri uri) {
-              }
-            });
+            , null, (String path, Uri uri) ->{}
+    );
   }
 
-  public Uri getFilePath() {
-    return Uri.fromFile(mFile);
+  public void getFilePath() {
+    ((NewVideoPost) fragment).moveFile(mFile);
   }
 
   public void switchCamera(){

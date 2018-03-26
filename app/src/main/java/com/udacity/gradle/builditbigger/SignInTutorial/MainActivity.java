@@ -3,7 +3,9 @@ package com.udacity.gradle.builditbigger.SignInTutorial;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -30,6 +32,7 @@ import agency.tango.materialintroscreen.SlideFragmentBuilder;
  */
 public class MainActivity extends MaterialIntroActivity {
 
+    public static final String HILARITY  = "Hilarity";
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;
@@ -38,29 +41,45 @@ public class MainActivity extends MaterialIntroActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
         //todo find why app fails when closed out from profile page and try to reopen
         Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
         Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        mAuthStateListener = firebaseAuth -> {
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) { // User is signed in
                     configureApp(user);
+                    Log.i(HILARITY, "user");
                 } else { //user isn't signed in, prompts user to sign in
-                    startActivityForResult(
+                    Log.i(HILARITY, "no user");
+                    /*startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(
-                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                                            Arrays.asList( new AuthUI.IdpConfig.EmailBuilder().build(),
+                                                    new AuthUI.IdpConfig.GoogleBuilder().build()))
                                     .build(),
-                            RC_SIGN_IN);
+                            RC_SIGN_IN);*/
+
+                    Intent intent  = AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setIsSmartLockEnabled(false)
+                            .setTheme(R.style.GreenTheme)
+                            .setAvailableProviders(
+                                    Arrays.asList( new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            new AuthUI.IdpConfig.GoogleBuilder().build()))
+                            .build();
+                    try {
+                        //startActivityForResult(intent, RC_SIGN_IN);
+                    } catch (Throwable e){
+                        Log.i(HILARITY, e.toString());
+                        Log.i(HILARITY, e.getMessage());
+                        Log.i(HILARITY, e.getCause().toString());
+                    }
                 }
-            }
         };
     }
 
@@ -118,7 +137,7 @@ public class MainActivity extends MaterialIntroActivity {
                 });
 
             } else {
-                Log.i("login failed", response.getError().toString());
+                Log.i("login failed", "");
             }
         }
     }

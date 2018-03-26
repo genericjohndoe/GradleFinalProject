@@ -94,34 +94,7 @@ public class JokesFragment extends Fragment {
         recyclerview = root.findViewById(R.id.recycler_view);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-        recyclerview.setAdapter(jokeAdapter);
-//        root.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new MaterialDialog.Builder(getActivity()).title(R.string.add_joke)
-//                        .customView(R.layout.dialog_new_text_joke, true)
-//                        .positiveText("Submit")
-//                        .negativeText("Cancel")
-//                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                            @Override
-//                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-////                                View view = dialog.getCustomView();
-////                                String jokeBody = ((EditText) view.findViewById(R.id.title_edittext)).getText().toString();
-////                                String jokeTitle = ((EditText) view.findViewById(R.id.joke_body_edittext)).getText().toString();
-////                                Joke joke = new Joke(jokeTitle, Constants.user.getUserName(), jokeBody, ServerValue.TIMESTAMP, genre);
-////                                mjokesDatabaseReference.push().setValue(joke, 0);
-////                                mPersonaljokesDatabaseReference.child(Constants.UID + " Jokes").push().setValue(joke,0);
-//                            }
-//                        })
-//                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-//                            @Override
-//                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                                dialog.dismiss();
-//                            }
-//                        })
-//                        .show().setCanceledOnTouchOutside(false);
-//            }
-//        });
+        recyclerview.setAdapter(jokeAdapter);;
         return root;
     }
 }

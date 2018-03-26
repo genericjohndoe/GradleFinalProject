@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.NewPost.NewImagePost;
+import com.udacity.gradle.builditbigger.NewPost.NewVideoPost;
 import com.udacity.gradle.builditbigger.R;
 
 /**

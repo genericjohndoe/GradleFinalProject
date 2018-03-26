@@ -1,1 +1,1 @@
-include ':app', ':chipslibrary', ':chipslibrary', ':chipslibrary'
+include ':app', ':chipslibrary', ':auth'

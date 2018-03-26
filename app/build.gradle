@@ -24,6 +24,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -34,16 +37,16 @@ android {
     }
 }
 
-configurations.all {
+/*configurations.all {
     resolutionStrategy.eachDependency { details ->
         def requested = details.requested
         if (requested.group == 'com.android.support') {
             if (!requested.name.startsWith("multidex")) {
-                details.useVersion '26.1.0'
+                details.useVersion '27.1.0'
             }
         }
     }
-}
+}*/
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -56,19 +59,24 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.7'
     //chips library
     compile project(path: ':chipslibrary')
+    //imported firebaseUI library
+    compile project(path: ':auth')
     //Firebase
-    compile 'com.google.firebase:firebase-storage:11.8.0'
-    compile 'com.google.firebase:firebase-database:11.8.0'
-    compile 'com.google.firebase:firebase-auth:11.8.0'
-    compile 'com.google.firebase:firebase-messaging:11.8.0'
-    compile 'com.firebaseui:firebase-ui-auth:3.2.2'
-    compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'com.google.firebase:firebase-storage:12.0.0'
+    compile 'com.google.firebase:firebase-database:12.0.0'
+    compile 'com.google.firebase:firebase-auth:12.0.0'
+    compile 'com.google.firebase:firebase-messaging:12.0.0'
+    compile 'com.google.firebase:firebase-firestore:12.0.0'
+    //compile 'com.firebaseui:firebase-ui-auth:3.2.2'
+    compile 'com.google.android.gms:play-services-auth:12.0.0'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     //support library
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta5'
     compile 'com.android.support:appcompat-v7:27.1.0'
+    compile 'com.android.support:support-v13:27.1.0'
     compile 'com.android.support:support-v4:27.1.0'
     compile 'com.android.support:design:27.1.0'
+    compile 'com.android.support:cardview-v7:27.1.0'
     //lifecycle aware objects
     implementation "android.arch.lifecycle:runtime:1.1.0"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.0"

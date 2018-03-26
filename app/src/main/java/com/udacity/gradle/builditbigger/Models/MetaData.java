@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Models;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * MetaData class serves as model for post meta data
@@ -9,11 +10,11 @@ import java.util.List;
 public class MetaData {
     private String type;
     private int number;
-    private List<String> tags;
+    private Map<String, Boolean> tags;
 
     public MetaData(){}
 
-    public MetaData(String type, int number, List<String> tags){
+    public MetaData(String type, int number, Map<String, Boolean> tags){
         this.type = type;
         this.number = number;
         this.tags = tags;
@@ -23,7 +24,7 @@ public class MetaData {
         return number;
     }
 
-    public List<String> getTags() {
+    public Map<String, Boolean> getTags() {
         return tags;
     }
 

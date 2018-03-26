@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Tags.TagAdapter;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchTagsBinding;
@@ -48,22 +51,16 @@ public class SearchTagsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         FragmentSearchTagsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_tags, container, false);
-        TagAdapter tagAdapter = new TagAdapter(new ArrayList<>(), getActivity());
+        JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), new ArrayList<>(), false);
+        bind.recyclerview.setAdapter(jokesAdapter);
         ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query ->{
-            Constants.DATABASE.child("taglist").orderByKey().startAt(query).endAt(query+"\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<String> tags = new ArrayList<>();
-                    for (DataSnapshot snap: dataSnapshot.getChildren()){
-                        tags.add(snap.getValue(String.class));
-                    }
-                    tagAdapter.setTags(tags);
+            Constants.FIRESTORE.collection("posts").whereGreaterThanOrEqualTo("metaData.tags."+query, true).get().addOnSuccessListener(documentSnapshots -> {
+                List<Joke> tags = new ArrayList<>();
+                for (DocumentSnapshot snap: documentSnapshots.getDocuments()){
+                    tags.add(snap.toObject(Joke.class));
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                jokesAdapter.setJokes(tags);
             });
         });
         return bind.getRoot();

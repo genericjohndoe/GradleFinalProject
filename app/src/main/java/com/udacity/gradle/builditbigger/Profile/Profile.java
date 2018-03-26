@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Dialog.NewPostDialog;
 import com.udacity.gradle.builditbigger.Models.Genre;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
+import com.udacity.gradle.builditbigger.NewPost.NewPostFragment;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
@@ -101,7 +103,7 @@ public class Profile extends Fragment implements HideFAB {
         );
         //originally calls new post dialog, changed when configureFAB is called
         //todo remove dialog boxes and replace with fragments
-        binding.newPostFab.setOnClickListener(view -> showNewJokeDialog());
+        binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
         //object beneath provides data to fragment
         UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this,
                 new UserInfoViewModelFactory(uid))
@@ -146,7 +148,7 @@ public class Profile extends Fragment implements HideFAB {
     private void configureFAB(int state) {
         if (state == 0) {
             binding.fam.showMenu(true);
-            binding.newPostFab.setOnClickListener(view -> showNewJokeDialog());
+            binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
         } else if (state == 1) {
             binding.fam.showMenu(true);
             binding.newPostFab.setOnClickListener(view -> showNewGenreDialog());
@@ -161,8 +163,8 @@ public class Profile extends Fragment implements HideFAB {
      */
     //todo replace with method that generates FragmentTransaction
     //todo allow for post to be added to collection upon creation
-    private void showNewJokeDialog() {
-        new NewPostDialog().show(getActivity().getSupportFragmentManager(), "dialog");
+    private void showNewPostFragment() {
+        Constants.changeFragment(R.id.hilarity_content_frame, NewPostFragment.newInstance(binding.postsTv.getText().toString().split(" ")[0]), (AppCompatActivity) getActivity());
     }
 
     /**

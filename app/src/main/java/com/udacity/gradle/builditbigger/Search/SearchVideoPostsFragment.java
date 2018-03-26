@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Search;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
@@ -47,14 +50,19 @@ public class SearchVideoPostsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentSearchVideoPostsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_video_posts, container, false);
-        List<Joke> videoPosts = new ArrayList<>();
-        JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), videoPosts, false);
+        JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), new ArrayList<>(), false);
         bind.recyclerview.setAdapter(jokesAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
-        /*ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchVideoPostsLiveData().observe(this, post -> {
-            videoPosts.add(post);
-            jokesAdapter.notifyDataSetChanged();
-        });*/
+        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
+            Constants.FIRESTORE.collection("posts").whereEqualTo("type", Constants.VIDEO).whereGreaterThanOrEqualTo("metaData.tags."+query, true).get()
+                    .addOnSuccessListener(documentSnapshots -> {
+                        List<Joke> videoPosts = new ArrayList<>();
+                        for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
+                            videoPosts.add(snap.toObject(Joke.class));
+                        }
+                        jokesAdapter.setJokes(videoPosts);
+                    });
+        });
         return bind.getRoot();
     }
 

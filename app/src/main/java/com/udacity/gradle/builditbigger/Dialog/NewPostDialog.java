@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.udacity.gradle.builditbigger.NewPost.NewImagePost;
+import com.udacity.gradle.builditbigger.NewPost.NewTextPostEditFragment;
+import com.udacity.gradle.builditbigger.NewPost.NewVideoPost;
 import com.udacity.gradle.builditbigger.R;
 
 /**
@@ -41,12 +44,12 @@ public class NewPostDialog extends DialogFragment implements ActivityCompat.OnRe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_new_post, container, false);
-        changeFragment(new NewTextPost(), "new post");
+        changeFragment(new NewTextPostEditFragment(), "new post");
         tabLayout = root.findViewById(R.id.tablayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 0) changeFragment(new NewTextPost(), "new text post");
+                if (tab.getPosition() == 0) changeFragment(new NewTextPostEditFragment(), "new text post");
                 if (tab.getPosition() == 1) changeFragment(new NewImagePost(), "new image post");
                 if (tab.getPosition() == 2) changeFragment(new NewVideoPost(), "new video post");
                 if (tab.getPosition() == 3) changeFragment(new NewGifPost(),"new tag post");

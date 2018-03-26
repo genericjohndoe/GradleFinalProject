@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
@@ -30,9 +31,7 @@ import java.util.List;
  */
 public class SearchUserFragment extends Fragment {
 
-    public SearchUserFragment() {
-        // Required empty public constructor
-    }
+    public SearchUserFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -50,26 +49,18 @@ public class SearchUserFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         FragmentSearchUserBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_user, container, false);
-
         SubsAdapter subsAdapter = new SubsAdapter(new ArrayList<>(),getActivity());
         bind.recyclerview.setAdapter(subsAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
         SearchHilarityViewModel searchHilarityViewModel = ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class);
         searchHilarityViewModel.getSearchQuery().observe(this, query -> {
-            Constants.DATABASE.child("users").orderByChild("userName").startAt(query).endAt(query+"\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<HilarityUser> allUsers = new ArrayList<>();
-                    for (DataSnapshot item: dataSnapshot.getChildren()){
-                        allUsers.add(item.getValue(HilarityUser.class));
-                    }
-                    subsAdapter.setSubscribersList(allUsers);
+            Constants.FIRESTORE.collection("users").whereGreaterThanOrEqualTo("userName", query).get().addOnSuccessListener(documentSnapshots -> {
+                List<HilarityUser> allUsers = new ArrayList<>();
+                for (DocumentSnapshot item: documentSnapshots.getDocuments()){
+                    allUsers.add(item.toObject(HilarityUser.class));
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {Log.i("HilarityQuery", databaseError.getMessage() + " error");}
+                subsAdapter.setSubscribersList(allUsers);
             });
         });
         return bind.getRoot();
