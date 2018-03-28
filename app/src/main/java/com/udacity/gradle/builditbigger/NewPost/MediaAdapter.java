@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.NewPost;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.NewPost.ImagePost.ImagePostSubmissionActivity;
+import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImageSubmission;
+import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoSubmission;
+import com.udacity.gradle.builditbigger.NewPost.VideoPost.VideoPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.R;
 
 import java.io.File;
@@ -47,8 +52,8 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         cursor.moveToPosition(position);
         String path = cursor.getString(0);
-        holder.file = new File(path);
-        Glide.with(fragment).load(holder.file)
+        holder.filepath = path;
+        Glide.with(fragment).load(new File(path))
                 .into(holder.getImageView());
     }
 
@@ -59,7 +64,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView imageView;
-        private File file;
+        private String filepath;
 
         public ViewHolder(View view) {
             super(view);
@@ -74,12 +79,17 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             if (!isVideo) {
-                Constants.changeFragment(R.id.hilarity_content_frame, NewImageSubmission.newInstance(file, number),(AppCompatActivity) context);
-                Log.i("Hilarity", "photo");
+                createIntent(ImagePostSubmissionActivity.class, filepath,number);
             } else {
-                Constants.changeFragment(R.id.hilarity_content_frame, NewVideoSubmission.newInstance(file, number),(AppCompatActivity) context);
-                Log.i("Hilarity", "video");
+                createIntent(VideoPostSubmissionActivity.class,filepath, number);
             }
+        }
+
+        private void createIntent(Class activity, String filepath, String number){
+            Intent intent = new Intent(context, activity);
+            intent.putExtra("filepath", filepath);
+            intent.putExtra("number", number);
+            context.startActivity(intent);
         }
     }
 
@@ -87,4 +97,5 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         cursor = newCursor;
         notifyDataSetChanged();
     }
+
 }

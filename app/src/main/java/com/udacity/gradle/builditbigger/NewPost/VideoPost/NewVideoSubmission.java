@@ -1,5 +1,6 @@
-package com.udacity.gradle.builditbigger.NewPost;
+package com.udacity.gradle.builditbigger.NewPost.VideoPost;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Models.MetaData;
 import com.udacity.gradle.builditbigger.R;
@@ -38,9 +40,9 @@ public class NewVideoSubmission extends Fragment {
     private String number;
     FragmentNewVideoSubmissionBinding bind;
 
-    public static NewVideoSubmission newInstance(File file, String number) {
+    public static NewVideoSubmission newInstance(String filepath, String number) {
         NewVideoSubmission fragment = new NewVideoSubmission();
-        fragment.file = file;
+        fragment.file = new File(filepath);
         fragment.number = number;
         return fragment;
     }
@@ -54,7 +56,7 @@ public class NewVideoSubmission extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_video_submission, container, false);
-        Log.i("filepath", file.getParent());
+
         bind.submitButton.setOnClickListener(view -> {
             Constants.STORAGE.child("users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4").putFile(Uri.fromFile(file))
                     .addOnFailureListener(exception -> {
@@ -65,7 +67,9 @@ public class NewVideoSubmission extends Fragment {
                                 Joke newVideoPost = new Joke("", "", System.currentTimeMillis(),
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), bind.videoTagline.getText().toString(), Constants.VIDEO,
                                         new MetaData("video", Integer.parseInt(number) + 1, Constants.getTags(bind.videoTagline.getText().toString())));
-                                db.setValue(newVideoPost);
+                                db.setValue(newVideoPost, ((databaseError, databaseReference) -> {
+                                    if (databaseError == null) getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                }));
                             }
                     );
         });

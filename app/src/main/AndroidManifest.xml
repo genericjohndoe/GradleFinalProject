@@ -82,7 +82,7 @@
 
         <activity
             android:name=".SignInTutorial.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -93,7 +93,17 @@
             android:name=".SignInTutorial.UserNameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_user_name"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Messaging.SentMessages.MessagesActivity" />
+        <activity android:name=".Messaging.Transcripts.TranscriptActivity" />
+        <activity android:name=".NewPost.NewPostActivity" />
+        <activity android:name=".Messaging.ComposeMessage.ComposeMessageActivity" />
+        <activity android:name=".NewPost.TextPost.TextPostSubmissionActivity" />
+        <activity android:name=".NewPost.ImagePost.ImagePostSubmissionActivity" />
+        <activity android:name=".NewPost.VideoPost.VideoPostSubmissionActivity" />
+        <activity android:name=".Search.SearchActivity" />
+        <activity android:name=".Comments.CommentActivity" />
+        <activity android:name=".SubscribersSubsrciptions.SubsActivity"></activity>
     </application>
 
 </manifest>

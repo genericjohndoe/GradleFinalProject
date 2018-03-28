@@ -41,7 +41,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
 
-import com.udacity.gradle.builditbigger.NewPost.NewVideoPost;
+import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoPost;
 
 import java.io.File;
 import java.io.FileOutputStream;

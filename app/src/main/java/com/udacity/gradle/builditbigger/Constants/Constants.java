@@ -35,7 +35,7 @@ public class Constants {
     public static final int IMAGE = 2;
     public static final int VIDEO = 3;
     public static final int GIF = 4;
-    public static void changeFragment(int viewId, Fragment fragment) {
+    /*public static void changeFragment(int viewId, Fragment fragment) {
         fragment.getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(viewId, fragment)
                 .addToBackStack(null)
@@ -46,7 +46,7 @@ public class Constants {
                 .replace(viewId, fragment)
                 .addToBackStack(null)
                 .commit();
-    }
+    }*/
     public static String timeStampString(){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());

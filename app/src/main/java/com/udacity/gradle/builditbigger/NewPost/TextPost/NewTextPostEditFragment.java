@@ -1,16 +1,15 @@
-package com.udacity.gradle.builditbigger.NewPost;
+package com.udacity.gradle.builditbigger.NewPost.TextPost;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Profile.Profile;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostBinding;
 
@@ -70,15 +69,18 @@ public class NewTextPostEditFragment extends Fragment {
             bind.taglineEditText.setText(tagline);
         }
         bind.continuebutton.setOnClickListener(view -> {
-            Constants.changeFragment(R.id.hilarity_content_frame, NewTextPostSubmissionFragment.newInstance(bind.titleEditText.getText().toString(),
-                    bind.bodyEditText.getText().toString(), bind.taglineEditText.getText().toString(), number), (AppCompatActivity) getActivity());
+            Intent intent = new Intent(getActivity(), TextPostSubmissionActivity.class);
+            intent.putExtra("title", bind.titleEditText.getText().toString());
+            intent.putExtra("body", bind.bodyEditText.getText().toString());
+            intent.putExtra("tagline", bind.taglineEditText.getText().toString());
+            intent.putExtra("number", number);
+            getActivity().startActivity(intent);
         });
         bind.saveDraftButton.setOnClickListener(view -> {//todo add path for saved drafts in database
         });
         bind.discardButton.setOnClickListener(view -> {
             wasDiscarded = true;
-            Constants.changeFragment(R.id.hilarity_content_frame,
-                    Profile.newInstance(Constants.UID), (AppCompatActivity) getActivity());
+            getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
         });
         return bind.getRoot();
     }

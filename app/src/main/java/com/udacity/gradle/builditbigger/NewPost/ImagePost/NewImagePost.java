@@ -1,6 +1,7 @@
-package com.udacity.gradle.builditbigger.NewPost;
+package com.udacity.gradle.builditbigger.NewPost.ImagePost;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewImagePostBinding;
 
@@ -89,9 +91,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     }
 
     private void requestStorageWritePermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            //new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-        } else {
+        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
         }
     }
@@ -114,6 +114,9 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     }
 
     public void moveFile(File file){
-        Constants.changeFragment(R.id.hilarity_content_frame, NewImageSubmission.newInstance(file, number), (AppCompatActivity) getActivity());
+        Intent intent = new Intent(getActivity(), ImagePostSubmissionActivity.class);
+        intent.putExtra("filepath", file.getPath());
+        intent.putExtra("number", number);
+        getActivity().startActivity(intent);
     }
 }

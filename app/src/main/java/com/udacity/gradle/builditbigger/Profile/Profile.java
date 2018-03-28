@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Profile;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Genre;
-import com.udacity.gradle.builditbigger.NewPost.NewPostFragment;
+import com.udacity.gradle.builditbigger.NewPost.NewPostActivity;
 import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
 import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubsActivity;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscribersFragment;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscriptionsFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
@@ -41,7 +42,6 @@ public class Profile extends Fragment implements HideFAB {
     //todo populate UI with info from database
     //todo find out why viewpager fragments don't immediately show when profile page is reloaded
     //todo convert svg to text use in viewpager
-    //private List<String> languages = new ArrayList<>();
     private String uid;
     private FragmentProfileBinding binding;
 
@@ -86,13 +86,10 @@ public class Profile extends Fragment implements HideFAB {
 
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
 
-        binding.subscribersTv.setOnClickListener(view ->
-                Constants.changeFragment(R.id.hilarity_content_frame,SubscribersFragment.newInstance(uid))
-        );
+        binding.subscribersTv.setOnClickListener(view -> createSubsIntent(1));
 
-        binding.subscriptionsTv.setOnClickListener(view ->
-                Constants.changeFragment(R.id.hilarity_content_frame,SubscriptionsFragment.newInstance(uid))
-        );
+        binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(2));
+
         //originally calls new post dialog, changed when configureFAB is called
         //todo remove dialog boxes and replace with fragments
         binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
@@ -145,9 +142,16 @@ public class Profile extends Fragment implements HideFAB {
             binding.fam.showMenu(true);
             binding.newPostFab.setOnClickListener(view -> showNewGenreDialog());
         } else {
-            binding.fam.showMenu(true);//showMenu(true);
+            binding.fam.showMenu(true);
             binding.newPostFab.setOnClickListener(null);
         }
+    }
+
+    private void createSubsIntent(int fragmenttype){
+        Intent intent = new Intent(getActivity(), SubsActivity.class);
+        intent.putExtra("uid", uid);
+        intent.putExtra("fragment", fragmenttype);
+        getActivity().startActivity(intent);
     }
 
     /**
@@ -156,7 +160,9 @@ public class Profile extends Fragment implements HideFAB {
     //todo replace with method that generates FragmentTransaction
     //todo allow for post to be added to collection upon creation
     private void showNewPostFragment() {
-        Constants.changeFragment(R.id.hilarity_content_frame, NewPostFragment.newInstance(binding.postsTv.getText().toString().split(" ")[0]), (AppCompatActivity) getActivity());
+        Intent intent = new Intent(getActivity(), NewPostActivity.class);
+        intent.putExtra("number", binding.postsTv.getText().toString().split(" ")[0]);
+        startActivity(intent);
     }
 
     /**
@@ -173,11 +179,6 @@ public class Profile extends Fragment implements HideFAB {
                         View view = dialog.getCustomView();
                         String genreTitle = ((EditText) view.findViewById(R.id.new_genre_title_et)).getText().toString();
                         boolean isRestricted = ((CheckBox) view.findViewById(R.id.restricted_checkBox)).isChecked();
-                        /*ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                                android.R.layout.simple_dropdown_item_1line, languages);
-                        AutoCompleteTextView genreLanguage = view.findViewById(R.id.languageAutoCompleteTextView);
-                        genreLanguage.setAdapter(adapter);*/
-                        //todo use server to determine language
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference("usergenres/" + Constants.UID).push();
                         Genre newGenre = new Genre(genreTitle, Constants.USER.getUserName(), isRestricted, "English",
                                 Constants.timeStampString(), Constants.USER.getUid(), db.getKey());

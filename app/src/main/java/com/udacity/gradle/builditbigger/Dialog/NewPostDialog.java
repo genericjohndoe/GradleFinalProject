@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.udacity.gradle.builditbigger.NewPost.NewImagePost;
-import com.udacity.gradle.builditbigger.NewPost.NewTextPostEditFragment;
-import com.udacity.gradle.builditbigger.NewPost.NewVideoPost;
+import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
+import com.udacity.gradle.builditbigger.NewPost.TextPost.NewTextPostEditFragment;
+import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoPost;
 import com.udacity.gradle.builditbigger.R;
 
 /**

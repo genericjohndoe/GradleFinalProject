@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
 import com.udacity.gradle.builditbigger.Feed.FeedFragment;
-import com.udacity.gradle.builditbigger.Messaging.SentMessages.SentMessagesFragment;
+import com.udacity.gradle.builditbigger.Messaging.SentMessages.MessagesActivity;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SignInTutorial.LoginActivity;
@@ -33,12 +32,32 @@ public class HilarityActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("Hoe8", "activity created");
         setContentView(R.layout.activity_hilarity);
+        int fragmentNumber = getIntent().getIntExtra("number", 0);
+        String otherUid = getIntent().getStringExtra("uid");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Fragment fragment;
+        switch(fragmentNumber){
+            case 1:
+                fragment = Profile.newInstance(Constants.UID);
+                break;
+            case 2:
+                fragment = FeedFragment.newInstance(Constants.UID);
+                break;
+            case 3:
+                fragment = ExploreFragment.newInstance(Constants.UID);
+                break;
+            case 4:
+                fragment = Profile.newInstance(otherUid);
+                break;
+            default:
+                fragment = Profile.newInstance(Constants.UID);
+                break;
+        }
+
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.hilarity_content_frame, Profile.newInstance(Constants.UID), "profile")
+                .add(R.id.hilarity_content_frame, fragment, "profile")
                 .commit();
 
         drawer = findViewById(R.id.drawer_layout);
@@ -79,8 +98,7 @@ public class HilarityActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.action_message){
-            Constants.changeFragment(R.id.hilarity_content_frame, SentMessagesFragment.newInstance(Constants.UID), this);
-            //changeFragment(new MessagesFragment(), "messages");
+            startActivity(new Intent(this, MessagesActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -93,13 +111,18 @@ public class HilarityActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.profile_page) {
-            changeFragment(Profile.newInstance(Constants.UID), "profile");
-            //this.setTitle("Profile");
+            Intent intent = new Intent(this, HilarityActivity.class);
+            intent.putExtra("number", 1);
+            startActivity(intent);
         } else if (id == R.id.feed_page) {
-            changeFragment(FeedFragment.newInstance(Constants.UID), "feed");
+            Intent intent = new Intent(this, HilarityActivity.class);
+            intent.putExtra("number", 2);
+            startActivity(intent);
             setTitle("Feed");
         } else if (id == R.id.explore_page) {
-            changeFragment(ExploreFragment.newInstance(Constants.UID), "explore");
+            Intent intent = new Intent(this, HilarityActivity.class);
+            intent.putExtra("number", 3);
+            startActivity(intent);
             setTitle("Explore");
         }  else if (id == R.id.forums_page) {
 
@@ -113,15 +136,6 @@ public class HilarityActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    public void changeFragment(Fragment fragment, String tag) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.hilarity_content_frame, fragment, tag)
-                .addToBackStack(null)
-                .commit();
-    }
-
-
 }
 
 

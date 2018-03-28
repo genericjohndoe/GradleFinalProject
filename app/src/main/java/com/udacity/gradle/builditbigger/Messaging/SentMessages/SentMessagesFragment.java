@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger.Messaging.SentMessages;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageActivity;
 import com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
@@ -55,13 +57,12 @@ public class SentMessagesFragment extends Fragment {
         List<TranscriptPreview> transcriptPreviews = new ArrayList<>();
         SentMessagesAdapter sentMessagesAdapter = new SentMessagesAdapter(transcriptPreviews, getActivity());
         FragmentSentMessageBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_sent_message, container, false);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
-        //llm.setStackFromEnd(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         binding.sentMessagesRecyclerview.setLayoutManager(llm);
         binding.sentMessagesRecyclerview.setAdapter(sentMessagesAdapter);
 
         binding.newMessageFab.setOnClickListener(view -> {
-            Constants.changeFragment(R.id.hilarity_content_frame, ComposeMessageFragment.newInstance(Constants.UID), (AppCompatActivity) getActivity());
+            getActivity().startActivity(new Intent(getActivity(), ComposeMessageActivity.class));
         });
 
         SentMessagesViewModel sentMessagesViewModel = ViewModelProviders.of(this, new SentMessagesViewModelFactory(uid)).get(SentMessagesViewModel.class);

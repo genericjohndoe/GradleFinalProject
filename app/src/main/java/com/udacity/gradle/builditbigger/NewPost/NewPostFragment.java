@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
+import com.udacity.gradle.builditbigger.NewPost.TextPost.NewTextPostEditFragment;
+import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoPost;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewPostBinding;
 
@@ -62,7 +65,7 @@ public class NewPostFragment extends Fragment implements ActivityCompat.OnReques
             super(fm);
         }
 
-        Fragment[] fragmentArray = new Fragment[]{NewTextPostEditFragment.newInstance(number),NewImagePost.newInstance(number), NewVideoPost.newInstance(number)};
+        Fragment[] fragmentArray = new Fragment[]{NewTextPostEditFragment.newInstance(number), NewImagePost.newInstance(number), NewVideoPost.newInstance(number)};
 
         String[] tabTitles = new String[]{"Text", "Image", "Video", "Gif"};
 
@@ -91,9 +94,7 @@ public class NewPostFragment extends Fragment implements ActivityCompat.OnReques
     }
 
     private void requestStorageWritePermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            //new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-        } else {
+        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
         }
     }

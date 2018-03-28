@@ -2,13 +2,13 @@ package com.udacity.gradle.builditbigger.Messaging.ComposeMessage;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,7 +25,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Database.SearchViewModel;
 import com.udacity.gradle.builditbigger.Database.SearchViewModelFactory;
 import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
-import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
+import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
 import com.udacity.gradle.builditbigger.R;
@@ -80,14 +80,6 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               /* List<HilarityUser> newList = new ArrayList<>();
-                SearchViewModel searchViewModel = ViewModelProviders.of(ComposeMessageFragment.this).get(SearchViewModel.class);
-                searchViewModel.getUsersFromName("%"+s+"%").observe(ComposeMessageFragment.this, user -> {
-                    if (!newList.contains(user)) {
-                        newList.add(user);
-                        usersToMessageAdapter.setHilarityUserList(newList);
-                    }
-                });*/
                 usersToMessageAdapter.setHilarityUserList(filter("%"+s+"%", networkChipList));
             }
 
@@ -102,7 +94,6 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     List<String> sendTo = new ArrayList<>();
                     //bind.chipsInput.getSelectedChipList()
-                    //todo find out why HilarityUser object is null
                     for (HilarityUser chip: hilarityUsers){
                         sendTo.add(chip.getUid());
                         Log.i("Hilarity", "when message sent uid is " + chip.getUid());
@@ -117,7 +108,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
                             .setValue(new Message(Constants.USER,text,System.currentTimeMillis()));
                     InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
-                    Constants.changeFragment(R.id.hilarity_content_frame, TranscriptFragment.newInstance(Constants.UID,path),(AppCompatActivity) getActivity());
+                    startActivity(new Intent(getActivity(), TranscriptActivity.class));
                     return true;
                 }
                 return false;

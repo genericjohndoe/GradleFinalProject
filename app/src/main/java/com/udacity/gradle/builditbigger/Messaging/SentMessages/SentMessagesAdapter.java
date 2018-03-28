@@ -1,8 +1,8 @@
 package com.udacity.gradle.builditbigger.Messaging.SentMessages;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
+import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.SentMessagesCellBinding;
@@ -70,8 +70,9 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
 
         @Override
         public void onClick(View v) {
-            Constants.changeFragment(R.id.hilarity_content_frame, TranscriptFragment.newInstance(Constants.UID, preview.getPath()), (AppCompatActivity) context);
-            Log.i("Hilarity", "SentMessagesViewHolder clicked ");
+            Intent intent = new Intent(context, TranscriptActivity.class);
+            intent.putExtra("preview", preview.getPath());
+            context.startActivity(intent);
         }
 
     }

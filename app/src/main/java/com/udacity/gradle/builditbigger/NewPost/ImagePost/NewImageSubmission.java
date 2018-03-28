@@ -1,5 +1,6 @@
-package com.udacity.gradle.builditbigger.NewPost;
+package com.udacity.gradle.builditbigger.NewPost.ImagePost;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Models.MetaData;
 import com.udacity.gradle.builditbigger.R;
@@ -33,9 +35,9 @@ public class NewImageSubmission extends Fragment {
     public NewImageSubmission() {
     }
 
-    public static NewImageSubmission newInstance(File file, String number) {
+    public static NewImageSubmission newInstance(String filepath, String number) {
         NewImageSubmission fragment = new NewImageSubmission();
-        fragment.file = file;
+        fragment.file = new File(filepath);
         fragment.number = number;
         return fragment;
     }
@@ -65,7 +67,9 @@ public class NewImageSubmission extends Fragment {
                                                 "genre push id", downloadUrl, Constants.UID,
                                                 db.getKey(), bind.imageTagline.getText().toString(), Constants.IMAGE,
                                                 new MetaData("image", Integer.parseInt(number)+1,Constants.getTags(bind.imageTagline.getText().toString())));
-                                        db.setValue(newImagePost);
+                                        db.setValue(newImagePost, ((databaseError, databaseReference) -> {
+                                            if (databaseError == null) getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                        }));
                                     }
                             );
                 }

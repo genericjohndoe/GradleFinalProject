@@ -41,7 +41,6 @@ import com.udacity.gradle.builditbigger.R;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String HILARITY = "Hilarity";
     public static final int RC_SIGN_IN = 1;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
@@ -57,11 +56,21 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
         Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
-        //todo find why app fails when closed out from profile page and try to reopen
-        //Constants.FIREBASEDATABASE.setPersistenceEnabled(true);
         Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        mAuthStateListener = firebaseAuth -> {
+            user = firebaseAuth.getCurrentUser();
+            if (user != null) configureApp(user);
+        };
+
+        setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = findViewById(R.id.email);
 
@@ -83,12 +92,6 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
@@ -97,14 +100,6 @@ public class LoginActivity extends AppCompatActivity {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
-
-        mAuthStateListener = firebaseAuth -> {
-            user = firebaseAuth.getCurrentUser();
-            if (user != null) { // User is signed in
-                configureApp(user);
-                Log.i(HILARITY, "user");
-            }
-        };
     }
 
     @Override
@@ -126,10 +121,6 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        /*if (mAuthTask != null) {
-            return;
-        }*/
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);

@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
@@ -80,7 +82,10 @@ public class MessagedUsersAdapter extends RecyclerView.Adapter<MessagedUsersAdap
 
         @Override
         public void onClick(View v) {
-            Constants.changeFragment(R.id.hilarity_content_frame, Profile.newInstance(uid));
+            Intent intent = new Intent(context, HilarityActivity.class);
+            intent.putExtra("number", 4);
+            intent.putExtra("uid", uid);
+            context.startActivity(intent);
         }
     }
 }

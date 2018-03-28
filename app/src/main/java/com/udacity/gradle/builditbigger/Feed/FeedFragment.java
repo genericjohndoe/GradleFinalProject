@@ -62,7 +62,7 @@ public class FeedFragment extends Fragment {
                 jokeAdapter.notifyDataSetChanged();
                 bind.recyclerView.scrollToPosition(jokes.size() - 1);
             }
-            //configureUI();
+            if (jokes.size() > 0) configureUI();
         });
         configureUI();
         return bind.getRoot();

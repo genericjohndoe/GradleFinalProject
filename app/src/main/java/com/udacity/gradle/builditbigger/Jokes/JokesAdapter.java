@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -26,8 +27,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.hendraanggrian.widget.SocialTextView;
+import com.udacity.gradle.builditbigger.Comments.CommentActivity;
 import com.udacity.gradle.builditbigger.Comments.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
@@ -69,7 +72,10 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                         Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                Constants.changeFragment(R.id.hilarity_content_frame, Profile.newInstance(dataSnapshot.getValue(String.class)));
+                                Intent intent = new Intent(context, HilarityActivity.class);
+                                intent.putExtra("uid", dataSnapshot.getValue(String.class));
+                                intent.putExtra("number", 4);
+                                context.startActivity(intent);
                             }
 
                             @Override
@@ -217,8 +223,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         });
 
         holder.binding.commentImageButton.setOnClickListener(view -> {
-                    Constants.changeFragment(R.id.hilarity_content_frame, CommentFragment.newInstance(joke.getUID(), joke.getPushId()), (AppCompatActivity) context);
-                }
+            Intent intent = new Intent(context, CommentActivity.class);
+            intent.putExtra("uid", joke.getUID());
+            intent.putExtra("pushId", joke.getPushId());
+            context.startActivity(intent);
+            }
         );
     }
 

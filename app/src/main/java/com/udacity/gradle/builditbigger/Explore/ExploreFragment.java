@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Explore;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.Search.SearchActivity;
 import com.udacity.gradle.builditbigger.Search.SearchFragment;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FeedExplorePageBinding;
@@ -75,8 +78,7 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        bind.fab.setOnClickListener(view ->{Constants.changeFragment(R.id.hilarity_content_frame,
-                SearchFragment.newInstance(), (AppCompatActivity) getActivity());});
+        bind.fab.setOnClickListener(view -> {getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));});
         ExploreViewModel exploreViewModel = ViewModelProviders.of(this).get(ExploreViewModel.class);
         exploreViewModel.getExploreLiveData().observe(this, joke -> {
             if (!jokes.contains(joke)) {
@@ -84,6 +86,7 @@ public class ExploreFragment extends Fragment {
                 jokeAdapter.notifyDataSetChanged();
                 bind.recyclerView.scrollToPosition(jokes.size() - 1);
             }
+            if (jokes.size() == 1 || jokes.size() == 0) configureUI();
         });
         configureUI();
         return bind.getRoot();

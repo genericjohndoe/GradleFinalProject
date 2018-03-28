@@ -1,6 +1,7 @@
-package com.udacity.gradle.builditbigger.NewPost;
+package com.udacity.gradle.builditbigger.NewPost.TextPost;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Models.MetaData;
 import com.udacity.gradle.builditbigger.Profile.Profile;
@@ -83,16 +85,14 @@ public class NewTextPostSubmissionFragment extends Fragment {
             db.setValue(newJoke, (databaseError, databaseReference) -> {
                 if (databaseError != null)
                     Log.i("Hilarity", "database error " + databaseError.getMessage());
-                Constants.changeFragment(R.id.hilarity_content_frame,
-                        Profile.newInstance(Constants.UID), (AppCompatActivity) getActivity());
+                getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
             });
         });
         bind.editButton.setOnClickListener(view -> {
             getActivity().onBackPressed();
         });
         bind.discardButton.setOnClickListener(view -> {
-            Constants.changeFragment(R.id.hilarity_content_frame,
-                    Profile.newInstance(Constants.UID), (AppCompatActivity) getActivity());
+            getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
         });
         return bind.getRoot();
     }

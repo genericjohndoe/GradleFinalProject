@@ -1,6 +1,7 @@
-package com.udacity.gradle.builditbigger.NewPost;
+package com.udacity.gradle.builditbigger.NewPost.VideoPost;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewVideoPostBinding;
 
@@ -83,7 +85,6 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
                         + String.format("%03d", MilliSeconds));
                 handler.postDelayed(this, 0);
             }
-
         };
         bind.videoThumbnailRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         bind.videoThumbnailRecyclerview.setAdapter(mediaAdapter);
@@ -116,9 +117,7 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void requestStorageWritePermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            //new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-        } else {
+        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
         }
     }
@@ -147,14 +146,10 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
         mediaAdapter.swapCursor(null);
     }
 
-    private String getCurrentDateAndTime() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
-    }
-
     public void moveFile(File file){
-        Constants.changeFragment(R.id.hilarity_content_frame, NewVideoSubmission.newInstance(file, number), (AppCompatActivity) getActivity());
+        Intent intent = new Intent(getActivity(), VideoPostSubmissionActivity.class);
+        intent.putExtra("filepath", file.getPath());
+        intent.putExtra("number", number);
+        getActivity().startActivity(intent);
     }
 }
