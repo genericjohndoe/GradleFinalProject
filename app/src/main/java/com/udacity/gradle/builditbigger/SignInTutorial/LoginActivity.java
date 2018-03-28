@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
             user = firebaseAuth.getCurrentUser();
             if (user != null) configureApp(user);
         };
-
+        //todo add
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = findViewById(R.id.email);
