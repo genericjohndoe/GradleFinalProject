@@ -90,7 +90,7 @@ dependencies {
     compile 'com.hendraanggrian:socialview-core:0.17'
     compile 'com.hendraanggrian:socialview-commons:0.17'
     //gif support
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     //multidex
     compile 'com.android.support:multidex:1.0.3'
 

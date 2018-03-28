@@ -58,8 +58,7 @@ public class NewImageSubmission extends Fragment {
                     Constants.STORAGE.child("users/" + Constants.UID + "/images/" + getCurrentDateAndTime() + ".png").putFile(Uri.fromFile(file))
                             .addOnFailureListener(exception -> {
                                 Log.i("cloud storage exception", exception.toString());
-                                    }
-                            )
+                            })
                             .addOnSuccessListener((taskSnapshot) -> {
                                         String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                                         DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
@@ -70,10 +69,8 @@ public class NewImageSubmission extends Fragment {
                                         db.setValue(newImagePost, ((databaseError, databaseReference) -> {
                                             if (databaseError == null) getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
                                         }));
-                                    }
-                            );
-                }
-        );
+                            });
+        });
         return bind.getRoot();
     }
 

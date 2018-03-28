@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -922,13 +923,15 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
   }
 
   private String getVideoFilePath(Context context) {
-    //mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "/Camera/" + getCurrentDateAndTime() + ".mp4");
     try {
-      mFile = File.createTempFile("temp file", ".png", fragment.getActivity().getCacheDir());
+      if (fragment instanceof NewVideoPost) {
+        mFile = File.createTempFile("temp file", ".mp4", fragment.getActivity().getCacheDir());
+      }else {
+        mFile = File.createTempFile("temp file", ".gif", fragment.getActivity().getCacheDir());
+      }
     } catch (IOException e) {
       Log.d("error", e.toString());
     }
-    //Constants.STORAGE.child("users/"+Constants.UID).putFile(mFile.toURI());
     makeFileAvailible(mFile);
     return mFile.toString();
   }

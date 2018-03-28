@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifPost;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
 import com.udacity.gradle.builditbigger.NewPost.TextPost.NewTextPostEditFragment;
 import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoPost;
@@ -65,7 +66,8 @@ public class NewPostFragment extends Fragment implements ActivityCompat.OnReques
             super(fm);
         }
 
-        Fragment[] fragmentArray = new Fragment[]{NewTextPostEditFragment.newInstance(number), NewImagePost.newInstance(number), NewVideoPost.newInstance(number)};
+        Fragment[] fragmentArray = new Fragment[]{NewTextPostEditFragment.newInstance(number), NewImagePost.newInstance(number),
+                NewVideoPost.newInstance(number), NewGifPost.newInstance(number)};
 
         String[] tabTitles = new String[]{"Text", "Image", "Video", "Gif"};
 

@@ -65,23 +65,22 @@ public class NewGifSubmission extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentNewGifSubmissionBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_gif_submission, container, false);
-        Glide.with(this).load(new File(filepath)).into(bind.gifImageview);
+        Glide.with(this).asGif().load(new File(filepath)).into(bind.gifImageview);
         bind.submitButton.setOnClickListener(view -> {
-            Constants.STORAGE.child("users/" + Constants.UID + "/images/" + getCurrentDateAndTime() + ".gif").putFile(Uri.fromFile(new File(filepath)))
+            Constants.STORAGE.child("users/" + Constants.UID + "/gifs/" + getCurrentDateAndTime() + ".gif").putFile(Uri.fromFile(new File(filepath)))
                     .addOnFailureListener(exception -> {
                                 Log.i("cloud storage exception", exception.toString());
-                            }
-                    )
-                    .addOnSuccessListener((taskSnapshot) ->{
+                    })
+                    .addOnSuccessListener(taskSnapshot -> {
                         String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                         String tagline = bind.socialEditText.getText().toString();
                         DatabaseReference db = Constants.DATABASE.child("userposts/"+Constants.UID).push();
                         MetaData metaData = new MetaData("gif", Integer.parseInt(number), Constants.getTags(tagline));
                         Joke joke = new Joke("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.GIF,metaData);
-                        db.setValue(joke, ((databaseError, databaseReference) -> {
+                        db.setValue(joke, (databaseError, databaseReference) -> {
                             if (databaseError == null)
                             getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
-                        }));
+                        });
                     });
         });
         return bind.getRoot();

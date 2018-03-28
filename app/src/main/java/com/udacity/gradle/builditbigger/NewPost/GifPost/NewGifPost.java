@@ -44,6 +44,7 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
     MediaAdapter mediaAdapter;
     LifeCycleCamera camera;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private  static final int REQUEST_EXTERNAL_STORAGE_READ = 2;
     private String number;
     boolean startrecording = true;
     public NewGifPost() {}
@@ -68,7 +69,11 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
             requestStorageWritePermission();
             return;
         }
-        number = getArguments().getString("number");
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestStorageReadPermission();
+            return;
+        }
+        if (getArguments() != null) number = getArguments().getString("number");
         mediaAdapter = new MediaAdapter(getActivity(), number, this);
     }
 
@@ -143,6 +148,12 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
     private void requestStorageWritePermission() {
         if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE);
+        }
+    }
+
+    private void requestStorageReadPermission() {
+        if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_READ);
         }
     }
 
