@@ -47,6 +47,7 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
     private  static final int REQUEST_EXTERNAL_STORAGE_READ = 2;
     private String number;
     boolean startrecording = true;
+    FragmentNewGifPostBinding bind;
     public NewGifPost() {}
 
     /**
@@ -67,11 +68,11 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
         super.onCreate(savedInstanceState);
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestStorageWritePermission();
-            return;
+            //return;
         }
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestStorageReadPermission();
-            return;
+            //return;
         }
         if (getArguments() != null) number = getArguments().getString("number");
         mediaAdapter = new MediaAdapter(getActivity(), number, this);
@@ -80,7 +81,7 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentNewGifPostBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_gif_post, container, false);
+        bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_gif_post, container, false);
         camera = new LifeCycleCamera(this, bind.textureview, LifeCycleCamera.VIDEO);
         CountDownTimer cdt = new CountDownTimer(15000,1) {
             @Override
@@ -116,7 +117,7 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
 
         bind.recyclerview.setAdapter(mediaAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
+        bind.textureview.setVisibility(View.GONE);
         return bind.getRoot();
     }
 
@@ -124,6 +125,18 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(0, null, this);
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bind.textureview.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        bind.textureview.setVisibility(View.GONE);
     }
 
     @Override @NonNull

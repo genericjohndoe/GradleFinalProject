@@ -62,6 +62,7 @@ public class NewVideoSubmission extends Fragment {
                     .addOnFailureListener(exception -> {
                     })
                     .addOnSuccessListener(taskSnapshot -> {
+                                file.delete();
                                 String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                 Joke newVideoPost = new Joke("", "", System.currentTimeMillis(),

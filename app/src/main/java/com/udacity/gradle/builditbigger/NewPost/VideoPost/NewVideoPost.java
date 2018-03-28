@@ -50,6 +50,7 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     int Seconds, Minutes, MilliSeconds;
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
     private String number;
+    FragmentNewVideoPostBinding bind;
 
     public static NewVideoPost newInstance(String number) {
         NewVideoPost newVideoPost = new NewVideoPost();
@@ -71,7 +72,7 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentNewVideoPostBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_video_post, container, false);
+        bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_video_post, container, false);
         handler = new Handler();
         final Runnable runnable = new Runnable() {
             public void run() {
@@ -105,7 +106,20 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
                 }
         });
         bind.switchcameraImageButton.setOnClickListener(view -> {camera.switchCamera();});
+        bind.textureView.setVisibility(View.GONE);
         return bind.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bind.textureView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        bind.textureView.setVisibility(View.GONE);
     }
 
     @Override

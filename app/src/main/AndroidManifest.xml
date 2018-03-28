@@ -13,7 +13,6 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -84,11 +83,6 @@
         <activity
             android:name=".SignInTutorial.LoginActivity"
             android:label="@string/title_activity_login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".SignInTutorial.UserNameActivity"
@@ -105,7 +99,14 @@
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Comments.CommentActivity" />
         <activity android:name=".SubscribersSubsrciptions.SubsActivity" />
-        <activity android:name=".NewPost.GifPost.NewGifSubmissionActivity"></activity>
+        <activity android:name=".NewPost.GifPost.NewGifSubmissionActivity" />
+        <activity android:name=".SignInTutorial.AuthActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

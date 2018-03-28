@@ -60,6 +60,7 @@ public class NewImageSubmission extends Fragment {
                                 Log.i("cloud storage exception", exception.toString());
                             })
                             .addOnSuccessListener((taskSnapshot) -> {
+                                        file.delete();
                                         String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                                         DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                         Joke newImagePost = new Joke("", "", System.currentTimeMillis(),

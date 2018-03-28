@@ -41,6 +41,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     private String[] mediaColumns = {MediaStore.Images.ImageColumns.DATA, MediaStore.Images.ImageColumns.DATE_TAKEN};
     private MediaAdapter mediaAdapter;
     private String number;
+    FragmentNewImagePostBinding bind;
 
     public static NewImagePost newInstance(String number) {
         NewImagePost newImagePost = new NewImagePost();
@@ -62,7 +63,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //todo texttureview not rendering, fragment freezes
-        FragmentNewImagePostBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_image_post, container, false);
+        bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_image_post, container, false);
         bind.photoThumbnailRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         bind.photoThumbnailRecyclerview.setAdapter(mediaAdapter);
         camera = new LifeCycleCamera(this, bind.textureView, LifeCycleCamera.PHOTO);
@@ -74,7 +75,20 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
                     camera.switchCamera();
                 }
         );
+        bind.textureView.setVisibility(View.GONE);
         return bind.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bind.textureView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        bind.textureView.setVisibility(View.GONE);
     }
 
     @Override

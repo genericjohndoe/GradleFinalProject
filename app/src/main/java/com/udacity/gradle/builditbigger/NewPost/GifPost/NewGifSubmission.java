@@ -21,8 +21,11 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewGifSubmissionBinding;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import pl.droidsonroids.gif.GifDrawable;
 
 
 /**
@@ -65,13 +68,19 @@ public class NewGifSubmission extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentNewGifSubmissionBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_gif_submission, container, false);
-        Glide.with(this).asGif().load(new File(filepath)).into(bind.gifImageview);
+        try {
+            bind.gifImageview.setImageDrawable(new GifDrawable(new File(filepath)));
+        } catch(IOException e){
+
+        }
+        //Glide.with(this).asGif().load(new File(filepath)).into(bind.gifImageview);
         bind.submitButton.setOnClickListener(view -> {
             Constants.STORAGE.child("users/" + Constants.UID + "/gifs/" + getCurrentDateAndTime() + ".gif").putFile(Uri.fromFile(new File(filepath)))
                     .addOnFailureListener(exception -> {
                                 Log.i("cloud storage exception", exception.toString());
                     })
                     .addOnSuccessListener(taskSnapshot -> {
+                        new File(filepath).delete();
                         String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                         String tagline = bind.socialEditText.getText().toString();
                         DatabaseReference db = Constants.DATABASE.child("userposts/"+Constants.UID).push();
