@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewImagePostBinding;
@@ -33,7 +34,7 @@ import java.io.File;
  * Created by joeljohnson on 11/3/17.
  */
 
-public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor> {
+public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor>, IntentCreator {
     //todo upon screen rotation, ensure texture view takes up entire screen
     LifeCycleCamera camera;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -54,7 +55,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
             requestStorageWritePermission();
             return;
         }
-        mediaAdapter = new MediaAdapter(this, false, getActivity(), number);
+        mediaAdapter = new MediaAdapter(getActivity(), number, this);
     }
 
     @Nullable
@@ -116,6 +117,14 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     public void moveFile(File file){
         Intent intent = new Intent(getActivity(), ImagePostSubmissionActivity.class);
         intent.putExtra("filepath", file.getPath());
+        intent.putExtra("number", number);
+        getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void createIntent(String filepath, String number) {
+        Intent intent = new Intent(getActivity(), ImagePostSubmissionActivity.class);
+        intent.putExtra("filepath", filepath);
         intent.putExtra("number", number);
         getActivity().startActivity(intent);
     }

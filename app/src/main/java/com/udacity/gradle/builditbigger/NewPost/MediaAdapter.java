@@ -14,6 +14,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
+import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifSubmissionActivity;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.ImagePostSubmissionActivity;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImageSubmission;
 import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoSubmission;
@@ -28,17 +30,15 @@ import java.io.File;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
     //todo implement ContentResolver.openFileDescriptor to gain access to files without permissions
-    private Fragment fragment;
     private Cursor cursor;
-    private static boolean isVideo;
-    private static Context context;
+    private Context context;
     private static String number;
+    private static IntentCreator creator;
 
-    public MediaAdapter(Fragment fragment, boolean isVideo, Context context, String number) {
-        this.fragment = fragment;
-        this.isVideo = isVideo;
+    public MediaAdapter(Context context, String number, IntentCreator creator) {
         this.context = context;
         this.number = number;
+        this.creator = creator;
     }
 
     @Override
@@ -53,8 +53,8 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         cursor.moveToPosition(position);
         String path = cursor.getString(0);
         holder.filepath = path;
-        Glide.with(fragment).load(new File(path))
-                .into(holder.getImageView());
+        Glide.with(context).load(new File(path))
+                .into(holder.imageView);
     }
 
     @Override
@@ -72,26 +72,12 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             view.setOnClickListener(this);
         }
 
-        public ImageView getImageView() {
-            return imageView;
-        }
-
         @Override
         public void onClick(View v) {
-            if (!isVideo) {
-                createIntent(ImagePostSubmissionActivity.class, filepath,number);
-            } else {
-                createIntent(VideoPostSubmissionActivity.class,filepath, number);
-            }
-        }
-
-        private void createIntent(Class activity, String filepath, String number){
-            Intent intent = new Intent(context, activity);
-            intent.putExtra("filepath", filepath);
-            intent.putExtra("number", number);
-            context.startActivity(intent);
+            creator.createIntent(filepath, number);
         }
     }
+
 
     public void swapCursor(Cursor newCursor) {
         cursor = newCursor;

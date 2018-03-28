@@ -103,7 +103,8 @@
         <activity android:name=".NewPost.VideoPost.VideoPostSubmissionActivity" />
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Comments.CommentActivity" />
-        <activity android:name=".SubscribersSubsrciptions.SubsActivity"></activity>
+        <activity android:name=".SubscribersSubsrciptions.SubsActivity" />
+        <activity android:name=".NewPost.GifPost.NewGifSubmissionActivity"></activity>
     </application>
 
 </manifest>

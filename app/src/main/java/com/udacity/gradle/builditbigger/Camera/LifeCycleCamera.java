@@ -41,6 +41,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
 
+import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifPost;
 import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoPost;
 
 import java.io.File;
@@ -1092,7 +1093,11 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
   }
 
   public void getFilePath() {
-    ((NewVideoPost) fragment).moveFile(mFile);
+    if (fragment instanceof NewVideoPost) {
+      ((NewVideoPost) fragment).moveFile(mFile);
+    } else if (fragment instanceof NewGifPost){
+      ((NewGifPost) fragment).moveFile(mFile);
+    }
   }
 
   public void switchCamera(){
