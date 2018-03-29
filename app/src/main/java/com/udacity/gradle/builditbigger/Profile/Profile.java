@@ -24,6 +24,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Genre;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity;
+import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
 import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
@@ -160,7 +161,7 @@ public class Profile extends Fragment implements HideFAB {
     //todo replace with method that generates FragmentTransaction
     //todo allow for post to be added to collection upon creation
     private void showNewPostFragment() {
-        Intent intent = new Intent(getActivity(), NewPostActivity.class);
+        Intent intent = new Intent(getActivity(), NewPostActivity2.class);
         intent.putExtra("number", binding.postsTv.getText().toString().split(" ")[0]);
         startActivity(intent);
     }
