@@ -3,7 +3,9 @@ package com.udacity.gradle.builditbigger.SignInTutorial;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.CircularPropagation;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -13,15 +15,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
+import com.udacity.gradle.builditbigger.R;
 
 public class AuthActivity extends AppCompatActivity {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;
+    CircularProgressView circularProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_auth);
+        circularProgressView = findViewById(R.id.progress);
         Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
         Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
         mAuthStateListener = firebaseAuth -> {
@@ -38,12 +44,14 @@ public class AuthActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         auth.addAuthStateListener(mAuthStateListener);
+        circularProgressView.startAnimation();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         if (mAuthStateListener != null) auth.removeAuthStateListener(mAuthStateListener);
+        circularProgressView.stopAnimation();
     }
 
     public void configureApp(FirebaseUser user) {
@@ -54,7 +62,7 @@ public class AuthActivity extends AppCompatActivity {
                 Constants.USER = dataSnapshot.getValue(HilarityUser.class);
                 if (Constants.USER != null) {
                     startActivity(new Intent(getBaseContext(), HilarityActivity.class));
-                }else {
+                } else {
                     startActivity(new Intent(AuthActivity.this, LoginActivity.class));
                 }
             }
