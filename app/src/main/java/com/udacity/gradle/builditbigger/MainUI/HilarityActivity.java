@@ -109,20 +109,15 @@ public class HilarityActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Intent intent = new Intent(this, HilarityActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if (id == R.id.profile_page) {
-            Intent intent = new Intent(this, HilarityActivity.class);
             intent.putExtra("number", 1);
-            startActivity(intent);
         } else if (id == R.id.feed_page) {
-            Intent intent = new Intent(this, HilarityActivity.class);
             intent.putExtra("number", 2);
-            startActivity(intent);
             setTitle("Feed");
         } else if (id == R.id.explore_page) {
-            Intent intent = new Intent(this, HilarityActivity.class);
             intent.putExtra("number", 3);
-            startActivity(intent);
             setTitle("Explore");
         }  else if (id == R.id.forums_page) {
 
@@ -134,6 +129,7 @@ public class HilarityActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
         }
         drawer.closeDrawer(GravityCompat.START);
+        startActivity(intent);
         return true;
     }
 }
