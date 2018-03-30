@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,15 +31,14 @@ import java.util.List;
  * shows random posts
  */
 
-public class ExploreFragment extends Fragment {
+public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     FeedExplorePageBinding bind;
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
     private String uid;
 
-    public ExploreFragment() {
-    }
+    public ExploreFragment() {}
 
     public static ExploreFragment newInstance(String uid){
         ExploreFragment exploreFragment = new ExploreFragment();
@@ -100,5 +100,10 @@ public class ExploreFragment extends Fragment {
             bind.recyclerView.setVisibility(View.VISIBLE);
             bind.noItemImageview.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+
     }
 }

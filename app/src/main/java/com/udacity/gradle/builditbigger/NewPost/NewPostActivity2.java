@@ -76,7 +76,7 @@ public class NewPostActivity2 extends AppCompatActivity
 
         int[] location = new int[2];
         drawer.getLocationInWindow(location);
-        //correction factor to get spotlight light in correct location
+        //correction factor added to get spotlight in correct location
         float oneX = location[0] + drawer.getWidth() / 2f + 75;
         float oneY = location[1] + drawer.getHeight() / 2f + 75;
 
@@ -119,10 +119,6 @@ public class NewPostActivity2 extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,10 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Jokes.SwipeToDeleteCallback;
 import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
@@ -88,6 +91,18 @@ public class HilarityUserJokes extends Fragment {
             }
             return false;
         });
+
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                Joke joke = ((JokesAdapter.JokesViewHolder) viewHolder).getJoke();
+                jokes.remove(joke);
+                jokeAdapter.notifyDataSetChanged();
+                Constants.DATABASE.child("userposts/"+Constants.UID+"/"+joke.getPushId()).removeValue();
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         UserPostsViewModel userPostsViewModel = ViewModelProviders.of(this,
                 new UserPostViewModelFactory(uid))

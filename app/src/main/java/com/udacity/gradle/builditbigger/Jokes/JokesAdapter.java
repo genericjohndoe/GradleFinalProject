@@ -163,6 +163,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     public void onBindViewHolder(final JokesViewHolder holder, int position) {
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         final Joke joke = jokes.get(position);
+        holder.joke = joke;
 
 
         if (joke.getType() == Constants.TEXT) {

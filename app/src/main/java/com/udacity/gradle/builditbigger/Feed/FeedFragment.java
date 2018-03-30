@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ import java.util.List;
  * CLASS SHOWS post of followed users
  */
 
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
@@ -76,5 +77,10 @@ public class FeedFragment extends Fragment {
             bind.recyclerView.setVisibility(View.VISIBLE);
             bind.noItemImageview.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        jokeAdapter.notifyDataSetChanged();
     }
 }
