@@ -33,10 +33,10 @@ public class HilarityActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hilarity);
-        int fragmentNumber = getIntent().getIntExtra("number", 0);
-        String otherUid = getIntent().getStringExtra("uid");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        int fragmentNumber = getIntent().getIntExtra("number", 0);
+        String otherUid = getIntent().getStringExtra("uid");
         Fragment fragment;
         switch(fragmentNumber){
             case 1:
@@ -44,9 +44,11 @@ public class HilarityActivity extends AppCompatActivity
                 break;
             case 2:
                 fragment = FeedFragment.newInstance(Constants.UID);
+                setTitle("Feed");
                 break;
             case 3:
                 fragment = ExploreFragment.newInstance(Constants.UID);
+                setTitle("Explore");
                 break;
             case 4:
                 fragment = Profile.newInstance(otherUid);
@@ -55,7 +57,6 @@ public class HilarityActivity extends AppCompatActivity
                 fragment = Profile.newInstance(Constants.UID);
                 break;
         }
-
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.hilarity_content_frame, fragment, "profile")
                 .commit();
@@ -110,28 +111,53 @@ public class HilarityActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Intent intent = new Intent(this, HilarityActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if (id == R.id.profile_page) {
             intent.putExtra("number", 1);
         } else if (id == R.id.feed_page) {
             intent.putExtra("number", 2);
-            setTitle("Feed");
         } else if (id == R.id.explore_page) {
             intent.putExtra("number", 3);
-            setTitle("Explore");
         }  else if (id == R.id.forums_page) {
 
         }  else if (id == R.id.settings_page) {
 
         } else if (id == R.id.logout) {
-            FirebaseAuth.getInstance()
-                    .signOut();
+            FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
         }
         drawer.closeDrawer(GravityCompat.START);
         startActivity(intent);
+        finish();
         return true;
     }
+
+    /*@Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int fragmentNumber = intent.getIntExtra("number", 0);
+        String otherUid = intent.getStringExtra("uid");
+        Fragment fragment;
+        switch(fragmentNumber){
+            case 1:
+                fragment = Profile.newInstance(Constants.UID);
+                break;
+            case 2:
+                fragment = FeedFragment.newInstance(Constants.UID);
+                break;
+            case 3:
+                fragment = ExploreFragment.newInstance(Constants.UID);
+                break;
+            case 4:
+                fragment = Profile.newInstance(otherUid);
+                break;
+            default:
+                fragment = Profile.newInstance(Constants.UID);
+                break;
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.hilarity_content_frame, fragment, "profile")
+                .commit();
+    }*/
 }
 
 

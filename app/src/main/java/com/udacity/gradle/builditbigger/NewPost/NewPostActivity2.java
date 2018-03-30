@@ -110,7 +110,6 @@ public class NewPostActivity2 extends AppCompatActivity
         int id = item.getItemId();
         Intent intent = new Intent(this, NewPostActivity2.class);
         intent.putExtra("number", number);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if (id == R.id.nav_text) {
             intent.putExtra("posttype",1);
         } else if (id == R.id.nav_image) {
@@ -120,9 +119,10 @@ public class NewPostActivity2 extends AppCompatActivity
         } else if (id == R.id.nav_gif) {
             intent.putExtra("posttype",4);
         }
-        //todo
         drawer.closeDrawer(GravityCompat.START);
         startActivity(intent);
         return true;
     }
+
+
 }
