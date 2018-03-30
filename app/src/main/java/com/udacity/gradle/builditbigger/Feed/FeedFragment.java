@@ -3,10 +3,13 @@ package com.udacity.gradle.builditbigger.Feed;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * CLASS SHOWS post of followed users
+ * CLASS SHOWS posts of followed users
  */
 
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -30,6 +33,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     List<Joke> jokes;
     FeedExplorePageBinding bind;
     private String uid;
+    private boolean enableSwipeToRefresh = false;
 
     public static FeedFragment newInstance(String uid){
         FeedFragment feedFragment = new FeedFragment();
@@ -56,15 +60,37 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         bind.recyclerView.setLayoutManager(llm);
         bind.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         bind.recyclerView.setAdapter(jokeAdapter);
+        bind.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0){
+                    bind.fab.hide(true);
+                    enableSwipeToRefresh = true;
+                    bind.refreshButton.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) bind.fab.show(true);
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+        bind.fab.setOnClickListener(view ->{});//todo search on feed
         FeedViewModel feedViewModel = ViewModelProviders.of(this, new FeedViewModelProvider(uid)).get(FeedViewModel.class);
         feedViewModel.getFeedLiveData().observe(this, joke -> {
             if (!jokes.contains(joke)) {
                 jokes.add(joke);
-                jokeAdapter.notifyDataSetChanged();
-                bind.recyclerView.scrollToPosition(jokes.size() - 1);
+                if (!enableSwipeToRefresh){
+                    refreshLayout();
+                } else {
+                    bind.refreshButton.setVisibility(View.VISIBLE);
+                }
             }
-            if (jokes.size() > 0) configureUI();
+            if (jokes.size() == 0 || jokes.size() == 1) configureUI();
         });
+        bind.refreshButton.setOnClickListener(view -> refreshLayout());
+        bind.swipe.setOnRefreshListener(this);
         configureUI();
         return bind.getRoot();
     }
@@ -81,6 +107,11 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
+        refreshLayout();
+    }
+
+    public void refreshLayout(){
         jokeAdapter.notifyDataSetChanged();
+        bind.recyclerView.scrollToPosition(jokes.size() - 1);
     }
 }

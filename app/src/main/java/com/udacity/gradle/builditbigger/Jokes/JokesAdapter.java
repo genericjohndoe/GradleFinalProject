@@ -165,7 +165,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         final Joke joke = jokes.get(position);
         holder.joke = joke;
 
-
         if (joke.getType() == Constants.TEXT) {
             holder.binding.textLayout.jokeTitleTextView.setText(joke.getJokeTitle());
             holder.binding.textLayout.jokeBodyTextView.setText(joke.getJokeBody());

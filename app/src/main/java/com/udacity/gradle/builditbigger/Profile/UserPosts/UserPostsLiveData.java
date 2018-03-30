@@ -19,7 +19,6 @@ public class UserPostsLiveData extends LiveData<Joke> {
 
     public UserPostsLiveData(String uid){
         databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts");
-        //databaseReference.keepSynced(true); does not lead to fragment being repopulated with posts
     }
 
     private boolean listenerRemovePending = false;

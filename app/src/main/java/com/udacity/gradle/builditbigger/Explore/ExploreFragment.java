@@ -37,6 +37,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
     private String uid;
+    private boolean enableSwipeToRefresh = false;
 
     public ExploreFragment() {}
 
@@ -62,13 +63,18 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         bind = DataBindingUtil.inflate(inflater,R.layout.feed_explore_page, container, false);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        //llm.setStackFromEnd(true);
         bind.recyclerView.setLayoutManager(llm);
         bind.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         bind.recyclerView.setAdapter(jokeAdapter);
         bind.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0) bind.fab.hide(true);
+                if (dy > 0 || dy < 0){
+                    bind.fab.hide(true);
+                    enableSwipeToRefresh = true;
+                    bind.refreshButton.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -83,11 +89,16 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         exploreViewModel.getExploreLiveData().observe(this, joke -> {
             if (!jokes.contains(joke)) {
                 jokes.add(joke);
-                jokeAdapter.notifyDataSetChanged();
-                bind.recyclerView.scrollToPosition(jokes.size() - 1);
+                if (!enableSwipeToRefresh){
+                    refreshLayout();
+                } else {
+                    bind.refreshButton.setVisibility(View.VISIBLE);
+                }
             }
             if (jokes.size() == 1 || jokes.size() == 0) configureUI();
         });
+
+        bind.refreshButton.setOnClickListener(view -> refreshLayout());
         configureUI();
         return bind.getRoot();
     }
@@ -104,6 +115,11 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
+        refreshLayout();
+    }
 
+    public void refreshLayout(){
+        jokeAdapter.notifyDataSetChanged();
+        bind.recyclerView.scrollToPosition(jokes.size() - 1);
     }
 }
