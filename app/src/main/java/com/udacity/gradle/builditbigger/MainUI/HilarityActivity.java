@@ -117,17 +117,20 @@ public class HilarityActivity extends AppCompatActivity
             intent.putExtra("number", 2);
         } else if (id == R.id.explore_page) {
             intent.putExtra("number", 3);
-        }  else if (id == R.id.forums_page) {
+        } else if (id == R.id.forums_page) {
 
-        }  else if (id == R.id.settings_page) {
+        } else if (id == R.id.settings_page) {
 
         } else if (id == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+        if (id == R.id.profile_page || id == R.id.feed_page || id == R.id.explore_page ){
+            startActivity(intent);
+            finish();
         }
         drawer.closeDrawer(GravityCompat.START);
-        startActivity(intent);
-        finish();
         return true;
     }
 
