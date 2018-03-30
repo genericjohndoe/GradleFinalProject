@@ -6,10 +6,4 @@
         android:icon="@drawable/ic_mail_black_24dp"
         android:title="messages"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 </menu>

@@ -71,6 +71,7 @@ public class NewPostActivity2 extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {

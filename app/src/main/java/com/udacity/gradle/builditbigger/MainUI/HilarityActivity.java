@@ -28,6 +28,8 @@ public class HilarityActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     //todo replace imgs with gifs in left nav
     DrawerLayout drawer;
+    int fragmentNumber;
+    String otherUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +37,13 @@ public class HilarityActivity extends AppCompatActivity
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        int fragmentNumber = getIntent().getIntExtra("number", 0);
-        String otherUid = getIntent().getStringExtra("uid");
+        fragmentNumber = getIntent().getIntExtra("number", 0);
+        otherUid = getIntent().getStringExtra("uid");
         Fragment fragment;
+        /*if (savedInstanceState !=null) {
+            fragmentNumber = savedInstanceState.getInt("number", 0);
+            otherUid = savedInstanceState.getString("uid");
+        }*/
         switch(fragmentNumber){
             case 1:
                 fragment = Profile.newInstance(Constants.UID);
@@ -71,6 +77,13 @@ public class HilarityActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /*@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("number", fragmentNumber);
+        outState.putString("uid", otherUid);
+        super.onSaveInstanceState(outState);
+    }*/
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -95,11 +108,9 @@ public class HilarityActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_message){
             startActivity(new Intent(this, MessagesActivity.class));
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -133,34 +144,6 @@ public class HilarityActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    /*@Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        int fragmentNumber = intent.getIntExtra("number", 0);
-        String otherUid = intent.getStringExtra("uid");
-        Fragment fragment;
-        switch(fragmentNumber){
-            case 1:
-                fragment = Profile.newInstance(Constants.UID);
-                break;
-            case 2:
-                fragment = FeedFragment.newInstance(Constants.UID);
-                break;
-            case 3:
-                fragment = ExploreFragment.newInstance(Constants.UID);
-                break;
-            case 4:
-                fragment = Profile.newInstance(otherUid);
-                break;
-            default:
-                fragment = Profile.newInstance(Constants.UID);
-                break;
-        }
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.hilarity_content_frame, fragment, "profile")
-                .commit();
-    }*/
 }
 
 
