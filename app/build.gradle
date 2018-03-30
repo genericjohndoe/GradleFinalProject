@@ -93,8 +93,10 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     //multidex
     compile 'com.android.support:multidex:1.0.3'
-    //indicator
+    //circular indicator
     compile 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
+    //for tutorials
+    implementation 'com.github.takusemba:spotlight:1.3.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

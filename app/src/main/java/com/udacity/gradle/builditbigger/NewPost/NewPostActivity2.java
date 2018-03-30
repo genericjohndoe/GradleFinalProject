@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,7 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.DecelerateInterpolator;
 
+import com.takusemba.spotlight.SimpleTarget;
+import com.takusemba.spotlight.Spotlight;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifPost;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
@@ -39,8 +43,8 @@ public class NewPostActivity2 extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        drawer.requestFocus();
         toggle.syncState();
-        drawer.openDrawer(GravityCompat.START);
         int posttype = getIntent().getIntExtra("posttype", 1);
         number = getIntent().getStringExtra("number");
         Fragment fragment;
@@ -69,6 +73,25 @@ public class NewPostActivity2 extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        int[] location = new int[2];
+        drawer.getLocationInWindow(location);
+        //correction factor to get spotlight light in correct location
+        float oneX = location[0] + drawer.getWidth() / 2f + 75;
+        float oneY = location[1] + drawer.getHeight() / 2f + 75;
+
+        SimpleTarget target = new SimpleTarget.Builder(this).setPoint(oneX,oneY)
+                .setRadius(60f)
+                .build();
+
+        Spotlight.with(this)
+                .setOverlayColor(ContextCompat.getColor(this, R.color.background))
+                .setDuration(500L)
+                .setAnimation(new DecelerateInterpolator(2f))
+                .setTargets(target)
+                .setClosedOnTouchedOutside(true)
+                .setOnSpotlightEndedListener(()-> {drawer.openDrawer(GravityCompat.START);})
+                .start();
     }
 
 
