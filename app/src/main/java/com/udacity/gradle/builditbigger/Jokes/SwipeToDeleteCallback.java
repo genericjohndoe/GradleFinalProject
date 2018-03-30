@@ -76,14 +76,11 @@ public abstract class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallba
     }
 
     private final void clearCanvas(Canvas c, float left, float top, float right, float bottom) {
-        if (c != null) {
-            c.drawRect(left, top, right, bottom, this.clearPaint);
-        }
-
+        if (c != null) c.drawRect(left, top, right, bottom, this.clearPaint);
     }
 
     public SwipeToDeleteCallback(@NotNull Context context) {
-        super(0, 4);
+        super(ItemTouchHelper.START, ItemTouchHelper.START);
         Intrinsics.checkParameterIsNotNull(context, "context");
         this.deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete_black_24dp);
         Drawable var10001 = this.deleteIcon;
@@ -96,7 +93,6 @@ public abstract class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallba
         if (this.deleteIcon == null) {
             Intrinsics.throwNpe();
         }
-
         this.intrinsicHeight = var10001.getIntrinsicHeight();
         this.background = new ColorDrawable();
         this.backgroundColor = Color.parseColor("#f44336");
