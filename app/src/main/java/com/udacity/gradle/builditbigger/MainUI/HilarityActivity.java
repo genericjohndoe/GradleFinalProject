@@ -20,6 +20,7 @@ import com.udacity.gradle.builditbigger.Forums.Questions.ForumFragment;
 import com.udacity.gradle.builditbigger.Messaging.SentMessages.MessagesActivity;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.Settings.SettingsFragment;
 import com.udacity.gradle.builditbigger.SignInTutorial.LoginActivity;
 
 /**
@@ -63,6 +64,10 @@ public class HilarityActivity extends AppCompatActivity
             case 5:
                 fragment = ForumFragment.newInstance();
                 setTitle("Forums");
+                break;
+            case 6:
+                fragment = SettingsFragment.newInstance();
+                setTitle("Settings");
                 break;
             default:
                 fragment = Profile.newInstance(Constants.UID);
@@ -136,13 +141,13 @@ public class HilarityActivity extends AppCompatActivity
         } else if (id == R.id.forums_page) {
             intent.putExtra("number", 5);
         } else if (id == R.id.settings_page) {
-
+            intent.putExtra("number", 6);
         } else if (id == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-        if (id == R.id.profile_page || id == R.id.feed_page || id == R.id.explore_page || id == R.id.forums_page){
+        if (id != R.id.logout){
             startActivity(intent);
             finish();
         }
