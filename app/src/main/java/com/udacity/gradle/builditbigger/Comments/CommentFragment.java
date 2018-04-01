@@ -66,7 +66,7 @@ public class CommentFragment extends Fragment {
         bind.submitImageButton.setOnClickListener(view -> {
                 if (bind.commentEditText.getText().toString() != ""){
                     DatabaseReference db = Constants.DATABASE.child("userpostslikescomments/"+uid+"/"+postId+"/comments/commentlist").push();
-                    Comment comment = new Comment(Constants.UID, Constants.timeStampString(), Constants.USER.getUserName(), Constants.USER.getUrlString(),
+                    Comment comment = new Comment(Constants.USER, System.currentTimeMillis(),
                             bind.commentEditText.getText().toString(),uid,postId,db.getKey());
 
                     db.setValue(comment);

@@ -121,7 +121,10 @@
             android:name=".NewPost.NewPostActivity2"
             android:label="@string/title_activity_new_post2"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Settings.SettingsActivity"></activity>
+        <activity android:name=".Settings.SettingsActivity" />
+        <activity android:name=".Forums.Replies.ForumQuestionActivity" />
+        <activity android:name=".Forums.CreateQuestion.NewQuestionActivity"
+            android:parentActivityName=".MainUI.HilarityActivity"></activity>
     </application>
 
 </manifest>

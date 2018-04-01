@@ -6,38 +6,30 @@ package com.udacity.gradle.builditbigger.Models;
 
 public class Comment {
 
-    private String uid;
-    private String timeDate;
-    private String userName;
-    private String profilePictureURL;
+    private Long timeDate;
     private String commentContent;
     private String postUid;
     private String postPushId;
     private String commentId;
+    HilarityUser hilarityUser;
 
-    public Comment(){
+    public Comment(){}
 
-    }
-
-    public Comment(String uid, String timeDate, String userName, String profilePictureURL, String commentContent,
+    public Comment(HilarityUser hilarityUser, Long timeDate, String commentContent,
                    String postUid, String postPushId, String commentId){
         this.timeDate = timeDate;
-        this.userName = userName;
-        this.profilePictureURL = profilePictureURL;
+        this.hilarityUser = hilarityUser;
         this.commentContent = commentContent;
-        this.uid = uid;
         this.postUid = postUid;
         this.postPushId = postPushId;
         this.commentId = commentId;
     }
 
-    public String getUid(){return uid;}
+    public HilarityUser getHilarityUser() {
+        return hilarityUser;
+    }
 
-    public String getTimeDate(){return timeDate;}
-
-    public String getUserName(){return userName;}
-
-    public String getProfilePictureURL(){return profilePictureURL;}
+    public Long getTimeDate(){return timeDate;}
 
     public String getCommentContent(){return commentContent;}
 

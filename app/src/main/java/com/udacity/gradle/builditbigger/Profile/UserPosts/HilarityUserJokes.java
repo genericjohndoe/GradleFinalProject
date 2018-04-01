@@ -100,31 +100,11 @@ public class HilarityUserJokes extends Fragment {
                     if (databaseError == null) {
                         jokes.remove(joke);
                         jokeAdapter.notifyDataSetChanged();
-                        Log.i("hilaritydelete", "removed");
                     }
                 });
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
-
-        /*ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.START, ItemTouchHelper.START) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Joke joke = ((JokesAdapter.JokesViewHolder) viewHolder).getJoke();
-                Constants.DATABASE.child("/userposts/"+Constants.UID+"/posts/"+joke.getPushId()).removeValue((databaseError, databaseReference) -> {
-                    if (databaseError == null) {
-                        jokes.remove(joke);
-                        jokeAdapter.notifyDataSetChanged();
-                        Log.i("hilaritydelete", "removed");
-                    }
-                });
-            }
-        });*/
         itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         UserPostsViewModel userPostsViewModel = ViewModelProviders.of(this,

@@ -2,13 +2,15 @@ package com.udacity.gradle.builditbigger.Models;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
  * HilarityUser class serves as model for user
  */
 @Entity(tableName = "hilarityusers")
-public class HilarityUser {
+public class HilarityUser implements Parcelable {
     private String userName;
     private String urlString;
     @PrimaryKey @NonNull
@@ -20,6 +22,12 @@ public class HilarityUser {
         this.userName = userName;
         this.urlString = urlString;
         this.uid = uid;
+    }
+
+    public HilarityUser(Parcel in){
+        userName = in.readString();
+        urlString = in.readString();
+        uid = in.readString();
     }
 
     public String getUserName() {
@@ -46,5 +54,30 @@ public class HilarityUser {
     public boolean equals(Object obj) {
             return (obj instanceof HilarityUser) && uid.equals(((HilarityUser) obj).getUid());
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(userName);
+        dest.writeString(urlString);
+        dest.writeString(uid);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<HilarityUser> CREATOR = new Parcelable.Creator<HilarityUser>() {
+        @Override
+        public HilarityUser createFromParcel(Parcel parcel) {
+            return new HilarityUser(parcel);
+        }
+
+        @Override
+        public HilarityUser[] newArray(int i) {
+            return new HilarityUser[i];
+        }
+
+    };
 }
 

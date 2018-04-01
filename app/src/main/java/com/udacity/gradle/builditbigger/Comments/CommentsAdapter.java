@@ -53,9 +53,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public void onBindViewHolder(CommentsViewHolder holder, int position) {
         final Comment comment = comments.get(position);
 
-        Glide.with(context).load(comment.getProfilePictureURL()).into(holder.bind.profileImageview);
-        holder.bind.userNameTextView.setText(comment.getUserName() + " " + comment.getCommentContent());
-        holder.bind.timeDateTextView.setText(comment.getTimeDate());
+        Glide.with(context).load(comment.getHilarityUser().getUrlString()).into(holder.bind.profileImageview);
+        holder.bind.userNameTextView.setText(comment.getHilarityUser().getUserName() + " " + comment.getCommentContent());
+        holder.bind.timeDateTextView.setText(Constants.formattedTimeString(context, comment.getTimeDate()));
         holder.bind.deleteTextView.setOnClickListener(view ->{
             Constants.DATABASE
                     .child("userpostslikescomments/"+comment.getPostUid()+"/"+comment.getPostPushId()

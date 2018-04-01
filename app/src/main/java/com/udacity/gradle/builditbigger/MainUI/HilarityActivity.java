@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
 import com.udacity.gradle.builditbigger.Feed.FeedFragment;
+import com.udacity.gradle.builditbigger.Forums.Questions.ForumFragment;
 import com.udacity.gradle.builditbigger.Messaging.SentMessages.MessagesActivity;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
@@ -58,6 +59,10 @@ public class HilarityActivity extends AppCompatActivity
                 break;
             case 4:
                 fragment = Profile.newInstance(otherUid);
+                break;
+            case 5:
+                fragment = ForumFragment.newInstance();
+                setTitle("Forums");
                 break;
             default:
                 fragment = Profile.newInstance(Constants.UID);
@@ -129,7 +134,7 @@ public class HilarityActivity extends AppCompatActivity
         } else if (id == R.id.explore_page) {
             intent.putExtra("number", 3);
         } else if (id == R.id.forums_page) {
-
+            intent.putExtra("number", 5);
         } else if (id == R.id.settings_page) {
 
         } else if (id == R.id.logout) {
@@ -137,7 +142,7 @@ public class HilarityActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-        if (id == R.id.profile_page || id == R.id.feed_page || id == R.id.explore_page ){
+        if (id == R.id.profile_page || id == R.id.feed_page || id == R.id.explore_page || id == R.id.forums_page){
             startActivity(intent);
             finish();
         }

@@ -48,15 +48,18 @@ public class Constants {
         return android.text.format.DateFormat.format("d MMM yyyy HH:mm",cal);
     }
 
-    public static Map<String, Boolean> getTags(String tagline){
-        String[] array = tagline.split(" ,;:.!?");
-        Map<String, Boolean> tags = new HashMap<>();
-        for (String string: array){
-            if (string.substring(0,1).equals("#")){
-                tags.put(string.substring(1), true);
-                Log.i("Hilarity", "tag added " + string);
+    public static Map<String, Boolean> getTags(String tagline) {
+        if (!(tagline.equals(""))) {
+            String[] array = tagline.split(" ,;:.!?");
+            Map<String, Boolean> tags = new HashMap<>();
+            for (String string : array) {
+                if (string.substring(0, 1).equals("#")) {
+                    tags.put(string.substring(1), true);
+                    Log.i("Hilarity", "tag added " + string);
+                }
             }
+            return tags;
         }
-        return tags;
+        return null;
     }
 }

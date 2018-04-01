@@ -23,7 +23,6 @@ import com.udacity.gradle.builditbigger.databinding.FragmentSearchBinding;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
-    //todo stuff
     public SearchFragment() {}
 
     public static SearchFragment newInstance() {
