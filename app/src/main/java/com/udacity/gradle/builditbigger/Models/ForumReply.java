@@ -11,6 +11,8 @@ public class ForumReply {
     private Long timeStamp;
     private String key;
 
+    public ForumReply(){}
+
     public ForumReply(HilarityUser hilarityUser, String content, Long timeStamp, String key){
         this.hilarityUser = hilarityUser;
         this.content = content;

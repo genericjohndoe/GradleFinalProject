@@ -61,7 +61,7 @@ public class ForumQuestionFragment extends Fragment {
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         bind.addButton.setOnClickListener(view -> {
             String contents = bind.answerEditText.getText().toString();
-            DatabaseReference db = Constants.DATABASE.child("forumquestions/"+forumQuestion.getKey()).push();
+            DatabaseReference db = Constants.DATABASE.child("forumquestionreplies/"+forumQuestion.getKey()).push();
             ForumReply forumReply = new ForumReply(Constants.USER, contents, System.currentTimeMillis(), db.getKey());
             db.setValue(forumReply);
         });
