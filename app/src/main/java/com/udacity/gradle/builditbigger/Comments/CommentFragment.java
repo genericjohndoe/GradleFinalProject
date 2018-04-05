@@ -12,14 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Comment;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentCommentBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class shows comment posts
@@ -69,7 +75,13 @@ public class CommentFragment extends Fragment {
                     Comment comment = new Comment(Constants.USER, System.currentTimeMillis(),
                             bind.commentEditText.getText().toString(),uid,postId,db.getKey());
 
-                    db.setValue(comment);
+                    db.setValue(comment, (databaseError, databaseReference) -> {
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("userNameList", bind.commentEditText.getMentions());
+                        //how to get access to list of mentions on server side
+                        FirebaseFunctions.getInstance().getHttpsCallable("onCommentMentionCreated")
+                                .call(data);
+                    });
 
                     InputMethodManager inputManager = (InputMethodManager)
                             getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

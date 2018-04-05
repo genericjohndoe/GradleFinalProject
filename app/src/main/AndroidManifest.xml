@@ -30,6 +30,14 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
         <activity
             android:name=".Genres.GenreActivity"
             android:label="@string/genres"
@@ -94,7 +102,12 @@
         <activity android:name=".Messaging.SentMessages.MessagesActivity" />
         <activity
             android:name=".Messaging.Transcripts.TranscriptActivity"
-            android:parentActivityName=".Messaging.SentMessages.MessagesActivity" />
+            android:parentActivityName=".Messaging.SentMessages.MessagesActivity" >
+            <intent-filter>
+                <action android:name="com.udacity.gradle.builditbigger.ACTION_MESSAGE" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".NewPost.NewPostActivity" />
         <activity
             android:name=".Messaging.ComposeMessage.ComposeMessageActivity"

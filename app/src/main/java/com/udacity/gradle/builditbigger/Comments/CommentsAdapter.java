@@ -55,6 +55,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
         Glide.with(context).load(comment.getHilarityUser().getUrlString()).into(holder.bind.profileImageview);
         holder.bind.userNameTextView.setText(comment.getHilarityUser().getUserName() + " " + comment.getCommentContent());
+        holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
+            //todo create intent for profile
+            return null;
+        });
         holder.bind.timeDateTextView.setText(Constants.formattedTimeString(context, comment.getTimeDate()));
         holder.bind.deleteTextView.setOnClickListener(view ->{
             Constants.DATABASE

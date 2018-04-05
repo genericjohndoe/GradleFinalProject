@@ -92,20 +92,7 @@ public class HilarityUserJokes extends Fragment {
             }
             return false;
         });
-        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Joke joke = ((JokesAdapter.JokesViewHolder) viewHolder).getJoke();
-                Constants.DATABASE.child("/userposts/"+Constants.UID+"/posts/"+joke.getPushId()).removeValue((databaseError, databaseReference) -> {
-                    if (databaseError == null) {
-                        jokes.remove(joke);
-                        jokeAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeToDeleteCallback);
-        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
+
 
         UserPostsViewModel userPostsViewModel = ViewModelProviders.of(this,
                 new UserPostViewModelFactory(uid))
@@ -113,7 +100,6 @@ public class HilarityUserJokes extends Fragment {
         userPostsViewModel.getUserPostsLiveData().observe(this, joke -> {
 
             if (!jokes.contains(joke)) jokes.add(joke);
-
             if (!searched) {
                 jokeAdapter.notifyDataSetChanged();
                 configureUI();

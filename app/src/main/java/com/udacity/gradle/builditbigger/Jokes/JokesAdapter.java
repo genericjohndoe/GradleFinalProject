@@ -9,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,8 +80,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
+                            public void onCancelled(DatabaseError databaseError) {}
                         });
                         return null;
                     }
@@ -91,6 +91,24 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                         return null;
                     }
             );
+            binding.optionsImageButton.setOnClickListener(view ->{
+                PopupMenu popup = new PopupMenu(context, binding.optionsImageButton);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.menu_post, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(item ->{
+                        if (joke != null){
+                            Constants.DATABASE.child("userposts/"+joke.getUID()+"/posts/"+joke.getPushId()).removeValue((databaseError, databaseReference) -> {
+                                jokes.remove(joke);
+                                notifyDataSetChanged();
+                            });
+                        }
+                        return true;
+                });
+
+                popup.show();
+
+            });
         }
 
         @NonNull

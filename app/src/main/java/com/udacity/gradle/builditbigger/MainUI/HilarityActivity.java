@@ -13,6 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
 import com.udacity.gradle.builditbigger.Feed.FeedFragment;
@@ -39,6 +44,7 @@ public class HilarityActivity extends AppCompatActivity
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        messagingToken();
         fragmentNumber = getIntent().getIntExtra("number", 0);
         otherUid = getIntent().getStringExtra("uid");
         Fragment fragment;
@@ -153,6 +159,20 @@ public class HilarityActivity extends AppCompatActivity
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void messagingToken(){
+        Constants.DATABASE.child("messagingtokens/"+Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) Constants.DATABASE.child("messagingtokens/"+Constants.UID).setValue(FirebaseInstanceId.getInstance().getToken());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 
