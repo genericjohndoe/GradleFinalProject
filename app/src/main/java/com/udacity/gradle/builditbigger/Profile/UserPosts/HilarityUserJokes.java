@@ -34,7 +34,6 @@ import java.util.List;
 
 public class HilarityUserJokes extends Fragment {
     //todo test search and back press
-    //todo allow for delete by swipe
     JokesAdapter jokeAdapter;
     List<Joke> jokes;
     HideFAB conFam;

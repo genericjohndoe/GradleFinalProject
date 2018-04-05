@@ -58,7 +58,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
     public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
         GenericPostBinding binding;
-        SocialTextView socialTextView;
+
         private LifecycleRegistry mLifecycleRegistry;
         private boolean isLiked = false;
         private Joke joke;
@@ -68,8 +68,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             mLifecycleRegistry = new LifecycleRegistry(this);
             mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
             this.binding = binding;
-            this.socialTextView = (SocialTextView) binding.getRoot().findViewById(R.id.tagline_textView);
-            socialTextView.setOnMentionClickListener((socialView, s) -> {
+            binding.taglineTextView.setOnMentionClickListener((socialView, s) -> {
                         Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -85,7 +84,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                         return null;
                     }
             );
-            socialTextView.setOnHashtagClickListener((socialView, s) -> {
+            binding.taglineTextView.setOnHashtagClickListener((socialView, s) -> {
                         //todo send to search page
                         Log.i("HilarityTag", s);
                         return null;
@@ -196,7 +195,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             Glide.with(context).asGif().load(joke.getMediaURL())
                     .into(holder.binding.gifLayout.postGifimageview);
         }
-        holder.socialTextView.setText(joke.getTagline());
+        holder.binding.taglineTextView.setText(joke.getTagline());
 
         ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(joke);
 
