@@ -22,7 +22,9 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * HilarityUserJokes class shows user generated posts
@@ -57,9 +59,8 @@ public class HilarityUserJokes extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
-
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
-        llm.setStackFromEnd(true);
+        //llm.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.setAdapter(jokeAdapter);
 
@@ -94,7 +95,13 @@ public class HilarityUserJokes extends Fragment {
                 .get(UserPostsViewModel.class);
         userPostsViewModel.getUserPostsLiveData().observe(this, joke -> {
 
-            if (!jokes.contains(joke)) jokes.add(joke);
+            if (!jokes.contains(joke)){
+                jokes.add(joke);
+            } else {
+                int index = jokes.indexOf(joke);
+                jokes.remove(joke);
+                jokes.add(index,joke);
+            }
             if (!searched) {
                 jokeAdapter.notifyDataSetChanged();
                 configureUI();
@@ -109,7 +116,6 @@ public class HilarityUserJokes extends Fragment {
         return binding.getRoot();
     }
 
-    //todo place in user jokes fragment
     public void showSearchDialog() {
         new MaterialDialog.Builder(getActivity())
                 .customView(R.layout.search, true)
@@ -119,10 +125,14 @@ public class HilarityUserJokes extends Fragment {
                             searched = true;
                             View view2 = dialog.getCustomView();
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
-                            String[] splitSearchKeyword = searchKeyword.split(" |\\,");
                             List<Post> searches = new ArrayList<>();
-                            //go through jokes list, search metadata, if metadata contains search term add 2 new list
-                            //then call setList
+                            List<String> splitSearchKeyword = Arrays.asList(searchKeyword.split(" "));
+                            for (Post post: jokes){
+                                Set<String> tags = post.getMetaData().getTags().keySet();
+                                if (tags.retainAll(splitSearchKeyword) && tags.size() > 0) searches.add(post);
+                            }
+                            jokeAdapter.setJokes(searches);
+                            binding.recyclerView.scrollToPosition(searches.size() - 1);
                         })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show().setCanceledOnTouchOutside(false);

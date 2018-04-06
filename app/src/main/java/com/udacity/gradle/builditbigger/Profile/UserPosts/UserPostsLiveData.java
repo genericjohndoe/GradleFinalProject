@@ -37,7 +37,9 @@ public class UserPostsLiveData extends LiveData<Post> {
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            setValue(dataSnapshot.getValue(Post.class));
+        }
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {}
@@ -53,8 +55,7 @@ public class UserPostsLiveData extends LiveData<Post> {
     protected void onActive() {
         if (listenerRemovePending) {
             handler.removeCallbacks(removeListener);
-        }
-        else {
+        } else {
             databaseReference.addChildEventListener(childEventListener);
         }
         listenerRemovePending = false;

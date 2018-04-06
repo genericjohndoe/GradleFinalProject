@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
@@ -21,7 +23,9 @@ import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FeedExplorePageBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * CLASS SHOWS posts of followed users
@@ -34,6 +38,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     FeedExplorePageBinding bind;
     private String uid;
     private boolean enableSwipeToRefresh = false;
+    private boolean searched = false;
 
     public static FeedFragment newInstance(String uid){
         FeedFragment feedFragment = new FeedFragment();
@@ -76,7 +81,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
-        bind.fab.setOnClickListener(view ->{});//todo search on feed
+        bind.fab.setOnClickListener(view -> showSearchDialog());
         FeedViewModel feedViewModel = ViewModelProviders.of(this, new FeedViewModelProvider(uid)).get(FeedViewModel.class);
         feedViewModel.getFeedLiveData().observe(this, joke -> {
             if (!jokes.contains(joke)) {
@@ -113,5 +118,27 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void refreshLayout(){
         jokeAdapter.notifyDataSetChanged();
         bind.recyclerView.scrollToPosition(jokes.size() - 1);
+    }
+
+    public void showSearchDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .customView(R.layout.search, true)
+                .positiveText("Search")
+                .negativeText("Cancel")
+                .onPositive((dialog, which) -> {
+                    searched = true;
+                    View view2 = dialog.getCustomView();
+                    String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
+                    List<Post> searches = new ArrayList<>();
+                    List<String> splitSearchKeyword = Arrays.asList(searchKeyword.split(" "));
+                    for (Post post: jokes){
+                        Set<String> tags = post.getMetaData().getTags().keySet();
+                        if (tags.retainAll(splitSearchKeyword) && tags.size() > 0) searches.add(post);
+                    }
+                    jokeAdapter.setJokes(searches);
+                    bind.recyclerView.scrollToPosition(searches.size() - 1);
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show().setCanceledOnTouchOutside(false);
     }
 }
