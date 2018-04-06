@@ -62,7 +62,6 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //todo texttureview not rendering, fragment freezes
         bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_image_post, container, false);
         bind.photoThumbnailRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         bind.photoThumbnailRecyclerview.setAdapter(mediaAdapter);

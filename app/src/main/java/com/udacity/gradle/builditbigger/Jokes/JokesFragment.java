@@ -15,7 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 
@@ -36,7 +36,7 @@ public class JokesFragment extends Fragment {
 
     RecyclerView recyclerview;
     JokesAdapter jokeAdapter;
-    List<Joke> jokes;
+    List<Post> jokes;
     String genre;
     String language;
 
@@ -63,7 +63,7 @@ public class JokesFragment extends Fragment {
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Joke joke = dataSnapshot.getValue(Joke.class);
+                Post joke = dataSnapshot.getValue(Post.class);
                 jokes.add(0, joke);
                 jokeAdapter.notifyDataSetChanged();
             }

@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
-import com.udacity.gradle.builditbigger.Models.Genre;
+import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
@@ -181,7 +181,7 @@ public class Profile extends Fragment implements HideFAB {
                         String genreTitle = ((EditText) view.findViewById(R.id.new_genre_title_et)).getText().toString();
                         boolean isRestricted = ((CheckBox) view.findViewById(R.id.restricted_checkBox)).isChecked();
                         DatabaseReference db = FirebaseDatabase.getInstance().getReference("usergenres/" + Constants.UID).push();
-                        Genre newGenre = new Genre(genreTitle, Constants.USER.getUserName(), isRestricted, "English",
+                        Collection newGenre = new Collection(genreTitle, Constants.USER.getUserName(), isRestricted, "English",
                                 Constants.timeStampString(), Constants.USER.getUid(), db.getKey());
                         db.setValue(newGenre);
                 })

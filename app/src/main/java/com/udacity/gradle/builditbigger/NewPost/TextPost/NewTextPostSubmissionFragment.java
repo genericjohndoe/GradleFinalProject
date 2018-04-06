@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
-import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Models.MetaData;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostSubmissionBinding;
@@ -79,7 +79,7 @@ public class NewTextPostSubmissionFragment extends Fragment {
         bind.socialTextView.setText(tagline);
         bind.submitButton.setOnClickListener(view -> {
             DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-            Joke newJoke = new Joke(title, body, System.currentTimeMillis(),
+            Post newJoke = new Post(title, body, System.currentTimeMillis(),
                     "genre push id", "", Constants.UID, db.getKey(), tagline, Constants.TEXT,
                     new MetaData("text", Integer.parseInt(number) + 1,Constants.getTags(tagline)));
             db.setValue(newJoke, (databaseError, databaseReference) -> {

@@ -15,8 +15,9 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
-import com.udacity.gradle.builditbigger.Models.Joke;
+
 import com.udacity.gradle.builditbigger.Models.MetaData;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewImagePostSubmissionBinding;
 
@@ -63,7 +64,7 @@ public class NewImageSubmission extends Fragment {
                                         file.delete();
                                         String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                                         DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-                                        Joke newImagePost = new Joke("", "", System.currentTimeMillis(),
+                                        Post newImagePost = new Post("", "", System.currentTimeMillis(),
                                                 "genre push id", downloadUrl, Constants.UID,
                                                 db.getKey(), bind.imageTagline.getText().toString(), Constants.IMAGE,
                                                 new MetaData("image", Integer.parseInt(number)+1,Constants.getTags(bind.imageTagline.getText().toString())));

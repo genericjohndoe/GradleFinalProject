@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Search.SearchActivity;
 import com.udacity.gradle.builditbigger.Search.SearchFragment;
@@ -35,7 +35,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     FeedExplorePageBinding bind;
     JokesAdapter jokeAdapter;
-    List<Joke> jokes;
+    List<Post> jokes;
     private String uid;
     private boolean enableSwipeToRefresh = false;
 

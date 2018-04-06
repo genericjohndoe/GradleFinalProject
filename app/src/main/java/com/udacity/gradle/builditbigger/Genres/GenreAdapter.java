@@ -11,7 +11,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.udacity.gradle.builditbigger.Jokes.JokesActivity;
-import com.udacity.gradle.builditbigger.Models.Genre;
+import com.udacity.gradle.builditbigger.Models.Collection;
+
 import com.udacity.gradle.builditbigger.R;
 
 import java.util.List;
@@ -23,10 +24,10 @@ import java.util.List;
 public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHolder> {
 
     Context context;
-    List<Genre> genres;
+    List<Collection> genres;
 
 
-    public GenreAdapter(Context context, List<Genre> genres) {
+    public GenreAdapter(Context context, List<Collection> genres) {
         this.context = context;
         this.genres = genres;
     }
@@ -73,13 +74,13 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.GenreViewHol
 
     @Override
     public void onBindViewHolder(GenreViewHolder holder, int position) {
-        Genre genre = genres.get(position);
+        Collection genre = genres.get(position);
         holder.genreTitle.setText(genre.getTitle());
         //todo check if genre is restricted, set appropriate image
         Log.i("genre adapter", genre + " at " + position);
     }
 
-    public void setGenres(List<Genre> genres) {
+    public void setGenres(List<Collection> genres) {
         this.genres = genres;
         notifyDataSetChanged();
     }

@@ -7,13 +7,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Models.Genre;
+import com.udacity.gradle.builditbigger.Models.Collection;
+
 
 /**
  * UserGenreLiveData class retrieves list of genres from database
  */
 
-public class UserGenreLiveData extends LiveData<Genre> {
+public class UserGenreLiveData extends LiveData<Collection> {
     DatabaseReference databaseReference;
 
     public UserGenreLiveData(String uid){
@@ -23,7 +24,7 @@ public class UserGenreLiveData extends LiveData<Genre> {
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot.getValue(Genre.class));
+            setValue(dataSnapshot.getValue(Collection.class));
         }
 
         @Override

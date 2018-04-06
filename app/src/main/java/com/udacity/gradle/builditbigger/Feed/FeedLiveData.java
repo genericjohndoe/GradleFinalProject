@@ -7,13 +7,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 
 /**
  * retrieves post for user feed
  */
 
-public class FeedLiveData extends LiveData<Joke> {
+public class FeedLiveData extends LiveData<Post> {
     DatabaseReference databaseReference;
 
     public FeedLiveData(String uid){
@@ -23,7 +23,7 @@ public class FeedLiveData extends LiveData<Joke> {
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot.getValue(Joke.class));
+            setValue(dataSnapshot.getValue(Post.class));
         }
 
         @Override

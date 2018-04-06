@@ -32,9 +32,10 @@ import com.udacity.gradle.builditbigger.Comments.CommentActivity;
 import com.udacity.gradle.builditbigger.Comments.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.Search.SearchActivity;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
 
@@ -46,10 +47,10 @@ import java.util.List;
 
 public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHolder> {
     Context context;
-    List<Joke> jokes;
+    List<Post> jokes;
     boolean isUserProfile;
 
-    public JokesAdapter(Context context, List<Joke> objects, boolean isUserProfile) {
+    public JokesAdapter(Context context, List<Post> objects, boolean isUserProfile) {
         this.context = context;
         this.jokes = objects;
         this.isUserProfile = isUserProfile;
@@ -61,7 +62,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         private LifecycleRegistry mLifecycleRegistry;
         private boolean isLiked = false;
-        private Joke joke;
+        private Post joke;
 
         public JokesViewHolder(GenericPostBinding binding) {
             super(binding.getRoot());
@@ -85,27 +86,30 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     }
             );
             binding.taglineTextView.setOnHashtagClickListener((socialView, s) -> {
-                        //todo send to search page
-                        Log.i("HilarityTag", s);
+                        Intent intent = new Intent(context, SearchActivity.class);
+                        intent.putExtra("searchTerm", s);
+                        intent.putExtra("position", 2);
+                        context.startActivity(intent);
                         return null;
                     }
             );
             binding.optionsImageButton.setOnClickListener(view ->{
-                PopupMenu popup = new PopupMenu(context, binding.optionsImageButton);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.menu_post, popup.getMenu());
+                if(isUserProfile) {
+                    PopupMenu popup = new PopupMenu(context, binding.optionsImageButton);
+                    //Inflating the Popup using xml file
+                    popup.getMenuInflater().inflate(R.menu.menu_post, popup.getMenu());
 
-                popup.setOnMenuItemClickListener(item ->{
-                        if (joke != null){
-                            Constants.DATABASE.child("userposts/"+joke.getUID()+"/posts/"+joke.getPushId()).removeValue((databaseError, databaseReference) -> {
+                    popup.setOnMenuItemClickListener(item -> {
+                        if (joke != null) {
+                            Constants.DATABASE.child("userposts/" + joke.getUID() + "/posts/" + joke.getPushId()).removeValue((databaseError, databaseReference) -> {
                                 jokes.remove(joke);
                                 notifyDataSetChanged();
                             });
                         }
                         return true;
-                });
-
-                popup.show();
+                    });
+                    popup.show();
+                }
 
             });
         }
@@ -128,11 +132,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             return isLiked;
         }
 
-        public void setJoke(Joke joke) {
+        public void setJoke(Post joke) {
             this.joke = joke;
         }
 
-        public Joke getJoke() {
+        public Post getJoke() {
             return joke;
         }
     }
@@ -179,7 +183,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     @Override
     public void onBindViewHolder(final JokesViewHolder holder, int position) {
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
-        final Joke joke = jokes.get(position);
+        final Post joke = jokes.get(position);
         holder.joke = joke;
 
         if (joke.getType() == Constants.TEXT) {
@@ -287,7 +291,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         }
     }
 
-    public void setJokes(List<Joke> jokes) {
+    public void setJokes(List<Post> jokes) {
         this.jokes = jokes;
         notifyDataSetChanged();
     }

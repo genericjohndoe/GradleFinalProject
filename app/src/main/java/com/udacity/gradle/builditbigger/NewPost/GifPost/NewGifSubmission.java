@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
-import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Models.MetaData;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewGifSubmissionBinding;
 
@@ -85,7 +85,7 @@ public class NewGifSubmission extends Fragment {
                         String tagline = bind.socialEditText.getText().toString();
                         DatabaseReference db = Constants.DATABASE.child("userposts/"+Constants.UID).push();
                         MetaData metaData = new MetaData("gif", Integer.parseInt(number), Constants.getTags(tagline));
-                        Joke joke = new Joke("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.GIF,metaData);
+                        Post joke = new Post("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.GIF,metaData);
                         db.setValue(joke, (databaseError, databaseReference) -> {
                             if (databaseError == null)
                             getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));

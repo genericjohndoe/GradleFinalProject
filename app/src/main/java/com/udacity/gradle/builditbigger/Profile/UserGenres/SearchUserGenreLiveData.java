@@ -7,13 +7,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Models.Genre;
+import com.udacity.gradle.builditbigger.Models.Collection;
 
 /**
  * DEPRECATED
  */
 
-public class SearchUserGenreLiveData extends LiveData<Genre> {
+public class SearchUserGenreLiveData extends LiveData<Collection> {
     private DatabaseReference databaseReference;
     private String[] tags;
 
@@ -27,7 +27,7 @@ public class SearchUserGenreLiveData extends LiveData<Genre> {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             String title = dataSnapshot.getValue(String.class);
             for (String tag: tags){
-                if (title.contains(tag)) setValue(dataSnapshot.getValue(Genre.class));
+                if (title.contains(tag)) setValue(dataSnapshot.getValue(Collection.class));
             }
         }
 

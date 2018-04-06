@@ -1,13 +1,18 @@
 package com.udacity.gradle.builditbigger.Comments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Comment;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.CommentCellBinding;
@@ -56,7 +61,20 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         Glide.with(context).load(comment.getHilarityUser().getUrlString()).into(holder.bind.profileImageview);
         holder.bind.userNameTextView.setText(comment.getHilarityUser().getUserName() + " " + comment.getCommentContent());
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
-            //todo create intent for profile
+            Constants.DATABASE.child("inverseuserslist/"+s).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        Intent intent = new Intent(context, HilarityActivity.class);
+                        intent.putExtra("number", 4);
+                        intent.putExtra("uid", dataSnapshot.getValue(String.class));
+                        context.startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
             return null;
         });
         holder.bind.timeDateTextView.setText(Constants.formattedTimeString(context, comment.getTimeDate()));

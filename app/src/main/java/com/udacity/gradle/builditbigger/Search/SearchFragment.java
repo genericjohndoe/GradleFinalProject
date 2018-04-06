@@ -23,15 +23,33 @@ import com.udacity.gradle.builditbigger.databinding.FragmentSearchBinding;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
+    int position;
+    String searchTerm;
+    boolean fromTag;
+
     public SearchFragment() {}
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
 
+    public static SearchFragment newInstance(int position, String searchTerm) {
+        Bundle args = new Bundle();
+        args.putInt("position", position);
+        args.putString("searchTerm", searchTerm);
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null){
+            position = getArguments().getInt("position");
+            searchTerm = getArguments().getString("searchTerm");
+            fromTag = true;
+        }
     }
 
     @Override
@@ -54,6 +72,10 @@ public class SearchFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+        if (fromTag){
+            bind.viewPager.setCurrentItem(position);
+            bind.searcheditText.setText(searchTerm);
+        }
         return bind.getRoot();
     }
 

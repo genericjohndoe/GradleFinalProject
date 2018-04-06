@@ -7,8 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +15,9 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
-import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Jokes.SwipeToDeleteCallback;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
@@ -35,7 +31,7 @@ import java.util.List;
 public class HilarityUserJokes extends Fragment {
     //todo test search and back press
     JokesAdapter jokeAdapter;
-    List<Joke> jokes;
+    List<Post> jokes;
     HideFAB conFam;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
@@ -124,7 +120,7 @@ public class HilarityUserJokes extends Fragment {
                             View view2 = dialog.getCustomView();
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
                             String[] splitSearchKeyword = searchKeyword.split(" |\\,");
-                            List<Joke> searches = new ArrayList<>();
+                            List<Post> searches = new ArrayList<>();
                             //go through jokes list, search metadata, if metadata contains search term add 2 new list
                             //then call setList
                         })

@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FeedExplorePageBinding;
@@ -30,7 +30,7 @@ import java.util.List;
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     JokesAdapter jokeAdapter;
-    List<Joke> jokes;
+    List<Post> jokes;
     FeedExplorePageBinding bind;
     private String uid;
     private boolean enableSwipeToRefresh = false;

@@ -4,7 +4,7 @@ package com.udacity.gradle.builditbigger.Models;
  * Genre serves as model for collections of posts
  */
 
-public class Genre {
+public class Collection {
     private String title;
     private String author;
     private Boolean restricted;
@@ -13,10 +13,10 @@ public class Genre {
     private String language;
     private String genreId;
 
-    public Genre() {
+    public Collection() {
     }
 
-    public Genre(String title, String userName, Boolean restricted,
+    public Collection(String title, String userName, Boolean restricted,
                  String language, String time, String uid, String genreId) {
         this.title = title;
         this.author = userName;

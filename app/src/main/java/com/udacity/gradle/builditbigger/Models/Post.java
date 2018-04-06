@@ -7,7 +7,7 @@ import java.util.List;
  * Joke class serves as model for user generated content
  */
 
-public class Joke {
+public class Post {
     private String jokeTitle;
     private String jokeBody;
     private Long timeStamp;
@@ -21,11 +21,11 @@ public class Joke {
     private MetaData metaData;
 
 
-    public Joke() {
+    public Post() {
     }
 
     //TODO modify constructor to include image/video url
-    public Joke(String jokeTitle, String body, Long time, String genre,
+    public Post(String jokeTitle, String body, Long time, String genre,
                 String url, String uid, String pushId, String tagline, Integer type, MetaData metaData) {
         this.jokeTitle = jokeTitle;
         jokeBody = body;
@@ -96,6 +96,6 @@ public class Joke {
 
     @Override
     public boolean equals(Object object){
-        return pushId.equals(((Joke) object).getPushId());
+        return pushId.equals(((Post) object).getPushId());
     }
 }

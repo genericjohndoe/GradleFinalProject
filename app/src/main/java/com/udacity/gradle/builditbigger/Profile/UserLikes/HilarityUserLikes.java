@@ -17,7 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
@@ -33,7 +33,7 @@ public class HilarityUserLikes extends Fragment {
     //todo test search
     HideFAB conFam;
     JokesAdapter jokeAdapter;
-    List<Joke> jokes = new ArrayList<>();
+    List<Post> jokes = new ArrayList<>();
     FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
@@ -112,7 +112,7 @@ public class HilarityUserLikes extends Fragment {
                             View view2 = dialog.getCustomView();
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
                             String[] splitSearchKeyword = searchKeyword.split(" |\\,");
-                            List<Joke> searches = new ArrayList<>();
+                            List<Post> searches = new ArrayList<>();
                             jokeAdapter = new JokesAdapter(getActivity(),searches, false);
                     //go through jokes list, search metadata, if metadata contains search term add 2 new list
                     //then call setList

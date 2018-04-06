@@ -32,6 +32,7 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentComposeMessageBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -43,7 +44,6 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
     //todo connect edit text and other recycler view show that before typing user sees
     //todo chron list of people messaged, then people in network, then queries master list of user
     //todo once user is picked from bottom recyclerview, add user chips to top recycler view
-    //todo give recyclerview focus so it could be pop with options
 
     private List<HilarityUser> networkChipList;
     private String uid;
@@ -89,19 +89,16 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
 
         bind.userMessageRecyclerview.setAdapter(usersToMessageAdapter);
         bind.userMessageRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        bind.userMessageRecyclerview.requestFocus();
         bind.incomingMessageEdittext.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     List<String> sendTo = new ArrayList<>();
-                    //bind.chipsInput.getSelectedChipList()
                     for (HilarityUser chip: hilarityUsers){
                         sendTo.add(chip.getUid());
-                        Log.i("Hilarity", "when message sent uid is " + chip.getUid());
-                        Log.i("HilaritySentToSize", "" + sendTo.size());
                     }
                     sendTo.add(Constants.UID);
-                    Log.i("HilaritySentToSize", "" + sendTo.size());
-                    //Collections.sort(sendTo);
+                    Collections.sort(sendTo);
                     String text = bind.incomingMessageEdittext.getText().toString();
                     String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
                     Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push()
@@ -119,11 +116,9 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
         });
         SearchViewModel searchViewModel = ViewModelProviders.of(ComposeMessageFragment.this, new SearchViewModelFactory(getActivity().getApplication())).get(SearchViewModel.class);
         searchViewModel.getTempUserLiveData().observe(this, (user) -> {
-            Log.i("Hilarity", "observe called");
             if (!networkChipList.contains(user)) {
                 networkChipList.add(user);
                 usersToMessageAdapter.notifyDataSetChanged();
-                Log.i("Hilarity", "user added");
             }
         });
         return bind.getRoot();

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Forums.ForumQuestionsViewModel;
 import com.udacity.gradle.builditbigger.Models.ForumQuestion;
@@ -19,7 +20,9 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentForumQuestionBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +66,15 @@ public class ForumQuestionFragment extends Fragment {
             String contents = bind.answerEditText.getText().toString();
             DatabaseReference db = Constants.DATABASE.child("forumquestionreplies/"+forumQuestion.getKey()).push();
             ForumReply forumReply = new ForumReply(Constants.USER, contents, System.currentTimeMillis(), db.getKey());
-            db.setValue(forumReply);
+            db.setValue(forumReply, (databaseError, databaseReference) -> {
+                if (databaseError == null){
+                    if (bind.answerEditText.getMentions().size() > 0){
+                        Map<String, List<String>> data = new HashMap<>();
+                        data.put("userNameList",bind.answerEditText.getMentions());
+                        FirebaseFunctions.getInstance().getHttpsCallable("onReplyMentionCreated").call(data);
+                    }
+                }
+            });
         });
         ViewModelProviders.of(this).get(ForumQuestionsViewModel.class)
                 .getForumQuestionReplyLiveData(forumQuestion.getKey()).observe(this, reply ->{

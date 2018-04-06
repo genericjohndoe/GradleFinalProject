@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchTextPostsBinding;
 
@@ -57,9 +57,9 @@ public class SearchTextPostsFragment extends Fragment {
         ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
             Constants.FIRESTORE.collection("posts").whereEqualTo("type", Constants.TEXT).whereGreaterThanOrEqualTo("jokeTitle", query).get()
                     .addOnSuccessListener(documentSnapshots -> {
-                        List<Joke> textPosts = new ArrayList<>();
+                        List<Post> textPosts = new ArrayList<>();
                         for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
-                            textPosts.add(snap.toObject(Joke.class));
+                            textPosts.add(snap.toObject(Post.class));
                         }
                         jokesAdapter.setJokes(textPosts);
                     });

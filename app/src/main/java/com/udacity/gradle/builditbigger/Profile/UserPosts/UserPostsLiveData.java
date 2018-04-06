@@ -8,13 +8,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 
 /**
  * UserPostsLiveData class provides references to user generated posts
  */
 //are the use of handlers necessary? yes, to keep from doing extra network request
-public class UserPostsLiveData extends LiveData<Joke> {
+public class UserPostsLiveData extends LiveData<Post> {
     private DatabaseReference databaseReference;
 
     public UserPostsLiveData(String uid){
@@ -33,7 +33,7 @@ public class UserPostsLiveData extends LiveData<Joke> {
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot.getValue(Joke.class));
+            setValue(dataSnapshot.getValue(Post.class));
         }
 
         @Override

@@ -11,13 +11,16 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.ForumReply;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.CellForumReplyBinding;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by joeljohnson on 3/31/18.
@@ -77,13 +80,12 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
         public ForumReplyViewHolder(CellForumReplyBinding bind){
             super(bind.getRoot());
             this.bind = bind;
-            bind.editButton.setOnClickListener(view -> {
-                //todo send to activity that allows for editting
-            });
             bind.deleteButton.setOnClickListener(view -> {
                 Constants.DATABASE.child("forumreplies/"+key+"/"+forumReply.getKey()).removeValue((databaseError, databaseReference) -> {
-                    forumReplies.remove(forumReply);
-                    notifyDataSetChanged();
+                    if (databaseError == null) {
+                        forumReplies.remove(forumReply);
+                        notifyDataSetChanged();
+                    }
                 });
             });
         }

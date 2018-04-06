@@ -21,8 +21,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
-import com.udacity.gradle.builditbigger.Models.Joke;
 import com.udacity.gradle.builditbigger.Models.MetaData;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewVideoSubmissionBinding;
@@ -65,7 +65,7 @@ public class NewVideoSubmission extends Fragment {
                                 file.delete();
                                 String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-                                Joke newVideoPost = new Joke("", "", System.currentTimeMillis(),
+                                Post newVideoPost = new Post("", "", System.currentTimeMillis(),
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), bind.videoTagline.getText().toString(), Constants.VIDEO,
                                         new MetaData("video", Integer.parseInt(number) + 1, Constants.getTags(bind.videoTagline.getText().toString())));
                                 db.setValue(newVideoPost, ((databaseError, databaseReference) -> {

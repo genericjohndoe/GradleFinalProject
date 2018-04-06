@@ -90,7 +90,6 @@ public class CommentFragment extends Fragment {
                     bind.commentEditText.setText("");
                 }
         });
-        //todo set up functionality for liking, replying to comments
         return bind.getRoot();
     }
 }

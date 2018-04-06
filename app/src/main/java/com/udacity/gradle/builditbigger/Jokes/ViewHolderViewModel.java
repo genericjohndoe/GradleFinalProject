@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.Jokes;
 
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 
 /**
  * Class provides post information to viewholder
@@ -13,7 +13,7 @@ public class ViewHolderViewModel {
     private IsLikedLiveData isLikedLiveData;
     private UserNameLiveData userNameLiveData;
 
-    public ViewHolderViewModel(Joke joke){
+    public ViewHolderViewModel(Post joke){
         profileImgLiveData = new ProfileImgLiveData(joke.getUID());
         numLikesLiveData = new NumLikesLiveData(joke.getUID(),joke.getPushId());
         numCommentsLiveData = new NumCommentsLiveData(joke.getUID(),joke.getPushId());

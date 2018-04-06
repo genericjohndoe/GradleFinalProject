@@ -17,7 +17,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.udacity.gradle.builditbigger.Genres.GenreAdapter;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
-import com.udacity.gradle.builditbigger.Models.Genre;
+import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
@@ -32,7 +32,7 @@ import java.util.List;
 public class HilarityUserGenres extends Fragment {
     //todo test search
     GenreAdapter genreAdapter;
-    List<Genre> genres;
+    List<Collection> genres;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private HideFAB conFam;
@@ -117,7 +117,7 @@ public class HilarityUserGenres extends Fragment {
                             View view2 = dialog.getCustomView();
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
                             String[] splitSearchKeyword = searchKeyword.split(" |\\,");
-                            List<Genre> searches = new ArrayList<>();
+                            List<Collection> searches = new ArrayList<>();
                             genreAdapter = new GenreAdapter(getActivity(),searches);
                             //parse titles, set new list
                         }

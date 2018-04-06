@@ -7,13 +7,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Models.Joke;
+import com.udacity.gradle.builditbigger.Models.Post;
 
 /**
  * SearchUserPostsLiveData class DEPRECATED
  */
 
-public class SearchUserPostsLiveData extends LiveData<Joke> {
+public class SearchUserPostsLiveData extends LiveData<Post> {
     private DatabaseReference databaseReference;
     private String[] tags;
 
@@ -29,7 +29,7 @@ public class SearchUserPostsLiveData extends LiveData<Joke> {
            for (DataSnapshot snap: snaps){
                for (String tag: tags){
                    if (snap.getValue(String.class).equals(tag)){
-                       setValue(dataSnapshot.getValue(Joke.class));
+                       setValue(dataSnapshot.getValue(Post.class));
                    }
                }
            }
