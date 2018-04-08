@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Profile.UserGenres;
+package com.udacity.gradle.builditbigger.Profile.UserCollections;
 
 import android.arch.lifecycle.LiveData;
 
@@ -9,22 +9,26 @@ import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Collection;
 
-
 /**
- * UserGenreLiveData class retrieves list of genres from database
+ * DEPRECATED
  */
 
-public class UserGenreLiveData extends LiveData<Collection> {
-    DatabaseReference databaseReference;
+public class SearchUserCollectionLiveData extends LiveData<Collection> {
+    private DatabaseReference databaseReference;
+    private String[] tags;
 
-    public UserGenreLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("usergenres/" + uid);
+    public SearchUserCollectionLiveData(String uid, String[] tags){
+        databaseReference = Constants.DATABASE.child("usercollections/" + uid);
+        this.tags = tags;
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot.getValue(Collection.class));
+            String title = dataSnapshot.getValue(String.class);
+            for (String tag: tags){
+                if (title.contains(tag)) setValue(dataSnapshot.getValue(Collection.class));
+            }
         }
 
         @Override

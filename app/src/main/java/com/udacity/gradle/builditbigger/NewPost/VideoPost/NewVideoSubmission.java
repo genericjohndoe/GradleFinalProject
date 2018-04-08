@@ -69,7 +69,12 @@ public class NewVideoSubmission extends Fragment {
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), bind.videoTagline.getText().toString(), Constants.VIDEO,
                                         new MetaData("video", Integer.parseInt(number) + 1, Constants.getTags(bind.videoTagline.getText().toString())));
                                 db.setValue(newVideoPost, ((databaseError, databaseReference) -> {
-                                    if (databaseError == null) getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                    if (databaseError == null){
+                                        getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                        Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
+                                        Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
+                                        Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
+                                    }
                                 }));
                             }
                     );

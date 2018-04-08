@@ -7,20 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Search.SearchActivity;
-import com.udacity.gradle.builditbigger.Search.SearchFragment;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FeedExplorePageBinding;
 

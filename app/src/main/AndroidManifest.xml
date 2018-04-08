@@ -39,7 +39,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
         <activity
-            android:name=".Genres.GenreActivity"
+            android:name=".Collections.CollectionActivity"
             android:label="@string/genres"
             android:theme="@style/AppTheme">
 
@@ -50,14 +50,14 @@
         <activity
             android:name=".Jokes.JokesActivity"
             android:label="@string/jokes_list"
-            android:parentActivityName=".Genres.GenreActivity"
+            android:parentActivityName=".Collections.CollectionActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Genres.GenreActivity" />
+                android:value=".Collections.CollectionActivity" />
         </activity>
         <activity
-            android:name=".Joke.JokeActivity"
+            android:name=".Post.PostActivity"
             android:label="@string/jokes_list"
             android:parentActivityName=".Jokes.JokesActivity"
             android:theme="@style/AppTheme">

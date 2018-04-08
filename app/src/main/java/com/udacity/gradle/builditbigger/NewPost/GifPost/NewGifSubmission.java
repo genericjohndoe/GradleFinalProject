@@ -84,11 +84,15 @@ public class NewGifSubmission extends Fragment {
                         String downloadUrl = taskSnapshot.getDownloadUrl().toString();
                         String tagline = bind.socialEditText.getText().toString();
                         DatabaseReference db = Constants.DATABASE.child("userposts/"+Constants.UID).push();
-                        MetaData metaData = new MetaData("gif", Integer.parseInt(number), Constants.getTags(tagline));
+                        MetaData metaData = new MetaData("gif", Integer.parseInt(number)+1, Constants.getTags(tagline));
                         Post joke = new Post("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.GIF,metaData);
                         db.setValue(joke, (databaseError, databaseReference) -> {
-                            if (databaseError == null)
-                            getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                            if (databaseError == null) {
+                                getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
+                                Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
+                                Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
+                            }
                         });
                     });
         });

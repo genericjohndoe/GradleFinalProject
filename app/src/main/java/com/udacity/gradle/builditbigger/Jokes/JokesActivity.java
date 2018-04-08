@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.udacity.gradle.builditbigger.Collections.CollectionFragment;
 import com.udacity.gradle.builditbigger.R;
 
 /**
@@ -17,6 +18,10 @@ public class JokesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jokes);
+        String collectionId = getIntent().getStringExtra("collectionId");
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.collection_posts_framelayout, CollectionFragment.newInstance(collectionId))
+                .commit();
     }
 
 

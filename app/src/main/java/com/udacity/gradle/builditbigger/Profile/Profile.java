@@ -23,15 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Collection;
-import com.udacity.gradle.builditbigger.NewPost.NewPostActivity;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
-import com.udacity.gradle.builditbigger.Profile.UserGenres.HilarityUserGenres;
+import com.udacity.gradle.builditbigger.Profile.UserCollections.HilarityUserCollections;
 import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubsActivity;
-import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscribersFragment;
-import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubscriptionsFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
 
 
@@ -180,9 +177,9 @@ public class Profile extends Fragment implements HideFAB {
                         View view = dialog.getCustomView();
                         String genreTitle = ((EditText) view.findViewById(R.id.new_genre_title_et)).getText().toString();
                         boolean isRestricted = ((CheckBox) view.findViewById(R.id.restricted_checkBox)).isChecked();
-                        DatabaseReference db = FirebaseDatabase.getInstance().getReference("usergenres/" + Constants.UID).push();
-                        Collection newGenre = new Collection(genreTitle, Constants.USER.getUserName(), isRestricted, "English",
-                                Constants.timeStampString(), Constants.USER.getUid(), db.getKey());
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference("usercollections/" + Constants.UID).push();
+                        Collection newGenre = new Collection(genreTitle, Constants.USER.getUserName(), isRestricted,
+                                System.currentTimeMillis(), Constants.USER.getUid(), db.getKey());
                         db.setValue(newGenre);
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
@@ -197,7 +194,7 @@ public class Profile extends Fragment implements HideFAB {
             super(fm);
         }
 
-        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid, Profile.this), HilarityUserGenres.newInstance(uid, Profile.this),
+        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid, Profile.this), HilarityUserCollections.newInstance(uid, Profile.this),
                 HilarityUserLikes.newInstance(uid, Profile.this)};
 
         String[] tabTitles = new String[]{"Posts", "Genres", "Likes"};

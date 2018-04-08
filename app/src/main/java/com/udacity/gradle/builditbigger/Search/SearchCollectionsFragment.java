@@ -10,14 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.udacity.gradle.builditbigger.Collections.CollectionAdapter;
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Genres.GenreAdapter;
+
 
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchCollectionsBinding;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,7 +48,7 @@ public class SearchCollectionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentSearchCollectionsBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_search_collections, container, false);
-        GenreAdapter genreAdapter = new GenreAdapter(getActivity(), new ArrayList<>());
+        CollectionAdapter genreAdapter = new CollectionAdapter(getActivity(), new ArrayList<>());
         bind.recyclerview.setAdapter(genreAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {

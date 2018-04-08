@@ -83,9 +83,12 @@ public class NewTextPostSubmissionFragment extends Fragment {
                     "genre push id", "", Constants.UID, db.getKey(), tagline, Constants.TEXT,
                     new MetaData("text", Integer.parseInt(number) + 1,Constants.getTags(tagline)));
             db.setValue(newJoke, (databaseError, databaseReference) -> {
-                if (databaseError != null)
-                    Log.i("Hilarity", "database error " + databaseError.getMessage());
-                getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                if (databaseError == null) {
+                    getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                    Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
+                    Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
+                    Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
+                }
             });
         });
         bind.editButton.setOnClickListener(view -> {

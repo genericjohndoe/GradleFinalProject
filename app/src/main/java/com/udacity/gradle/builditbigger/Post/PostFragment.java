@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Joke;
+package com.udacity.gradle.builditbigger.Post;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import com.udacity.gradle.builditbigger.R;
  * DEPRECATED
  */
 
-public class JokeFragment extends Fragment {
+public class PostFragment extends Fragment {
     String body;
     String title;
     String author;

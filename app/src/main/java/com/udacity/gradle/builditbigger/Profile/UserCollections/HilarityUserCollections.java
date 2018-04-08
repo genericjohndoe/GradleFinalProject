@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Profile.UserGenres;
+package com.udacity.gradle.builditbigger.Profile.UserCollections;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
@@ -14,8 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.github.clans.fab.FloatingActionButton;
-import com.udacity.gradle.builditbigger.Genres.GenreAdapter;
+import com.udacity.gradle.builditbigger.Collections.CollectionAdapter;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.R;
@@ -29,17 +28,17 @@ import java.util.List;
  * Created by joeljohnson on 10/12/17.
  */
 
-public class HilarityUserGenres extends Fragment {
+public class HilarityUserCollections extends Fragment {
     //todo test search
-    GenreAdapter genreAdapter;
+    CollectionAdapter genreAdapter;
     List<Collection> genres;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private HideFAB conFam;
     private boolean searched = false;
 
-    public static HilarityUserGenres newInstance(String uid, HideFAB conFam) {
-        HilarityUserGenres hilarityUserGenres = new HilarityUserGenres();
+    public static HilarityUserCollections newInstance(String uid, HideFAB conFam) {
+        HilarityUserCollections hilarityUserGenres = new HilarityUserCollections();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserGenres.setArguments(bundle);
@@ -53,7 +52,7 @@ public class HilarityUserGenres extends Fragment {
         super.onCreate(savedInstanceState);
         genres = new ArrayList<>();
         uid = getArguments().getString("uid");
-        genreAdapter = new GenreAdapter(getActivity(), genres);
+        genreAdapter = new CollectionAdapter(getActivity(), genres);
     }
 
     @Override
@@ -80,8 +79,7 @@ public class HilarityUserGenres extends Fragment {
         //returns original list after search
         binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
             if(keyCode == KeyEvent.KEYCODE_BACK && searched){
-                genreAdapter = new GenreAdapter(getActivity(), genres);
-                genreAdapter.notifyDataSetChanged();
+                genreAdapter.setGenres(genres);
                 searched = false;
                 configureUI();
                 binding.recyclerView.scrollToPosition(genres.size() - 1);
@@ -90,19 +88,18 @@ public class HilarityUserGenres extends Fragment {
             return false;
         });
 
-        UserGenreViewModel userGenreViewModel = ViewModelProviders.of(this,
-                new UserGenreViewModelFactory(uid))
-                .get(UserGenreViewModel.class);
-        userGenreViewModel.getUserGenreLiveData().observe(this, genre -> {
+        UserCollectionViewModel userCollectionViewModel = ViewModelProviders.of(this,
+                new UserCollectionViewModelFactory(uid))
+                .get(UserCollectionViewModel.class);
+        userCollectionViewModel.getUserCollectionLiveData().observe(this, genre -> {
             if (!genres.contains(genre))genres.add(genre);
             if (!searched) {
                 genreAdapter.notifyDataSetChanged();
-                configureUI();//needed?
+                configureUI();
                 binding.recyclerView.scrollToPosition(genres.size() - 1);
             }
         });
-        FloatingActionButton fab = conFam.getFAB();
-        fab.setOnClickListener(view -> showSearchDialog());
+        conFam.getFAB().setOnClickListener(view -> showSearchDialog());
         configureUI();
         return binding.getRoot();
     }
@@ -116,10 +113,11 @@ public class HilarityUserGenres extends Fragment {
                             searched = true;
                             View view2 = dialog.getCustomView();
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
-                            String[] splitSearchKeyword = searchKeyword.split(" |\\,");
                             List<Collection> searches = new ArrayList<>();
-                            genreAdapter = new GenreAdapter(getActivity(),searches);
-                            //parse titles, set new list
+                            for (Collection collection: genres){
+                                if (collection.getTitle().contains(searchKeyword)) searches.add(collection);
+                            }
+                            genreAdapter.setGenres(searches);
                         }
                 )
                 .onNegative((dialog, which) -> dialog.dismiss())

@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Joke;
+package com.udacity.gradle.builditbigger.Post;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +11,7 @@ import com.udacity.gradle.builditbigger.R;
  * DEPRECATED
  */
 
-public class JokeActivity extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

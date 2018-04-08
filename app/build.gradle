@@ -3,8 +3,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'*/
 
-
-
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
@@ -16,7 +14,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        resConfigs "auto"
         multiDexEnabled true
     }
     buildTypes {
@@ -38,65 +35,65 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //circular imageview
-    compile 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     //dialog boxes
-    compile 'com.afollestad.material-dialogs:core:0.9.4.7'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     //chips library
-    compile project(path: ':chipslibrary')
+    implementation project(path: ':chipslibrary')
     //Firebase
-    compile 'com.google.firebase:firebase-storage:12.0.1'
-    compile 'com.google.firebase:firebase-database:12.0.1'
-    compile 'com.google.firebase:firebase-auth:12.0.1'
-    compile 'com.google.firebase:firebase-messaging:12.0.1'
-    compile 'com.google.firebase:firebase-firestore:12.0.1'
-    compile 'com.google.firebase:firebase-functions:12.0.1'
-    compile 'com.google.android.gms:play-services-auth:12.0.1'
+    implementation "com.google.firebase:firebase-storage:$firebase_version"
+    implementation "com.google.firebase:firebase-database:$firebase_version"
+    implementation "com.google.firebase:firebase-auth:$firebase_version"
+    implementation "com.google.firebase:firebase-messaging:$firebase_version"
+    implementation "com.google.firebase:firebase-firestore:$firebase_version"
+    implementation "com.google.firebase:firebase-functions:$firebase_version"
+    implementation "com.google.android.gms:play-services-auth:$firebase_version"
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     //support library
-    compile 'com.android.support.constraint:constraint-layout:1.1.0-beta6'
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.android.support:support-v13:27.1.0'
-    compile 'com.android.support:support-v4:27.1.0'
-    implementation "com.android.support:support-compat:27.1.0"
-    compile 'com.android.support:design:27.1.0'
-    compile 'com.android.support:cardview-v7:27.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta6'
+    implementation "com.android.support:appcompat-v7:$support_lib_version"
+    implementation "com.android.support:support-v13:$support_lib_version"
+    implementation "com.android.support:support-v4:$support_lib_version"
+    implementation "com.android.support:support-compat:$support_lib_version"
+    implementation "com.android.support:design:$support_lib_version"
+    implementation "com.android.support:cardview-v7:$support_lib_version"
     //lifecycle aware objects ViewModel and LiveData
     implementation "android.arch.lifecycle:runtime:1.1.1"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     implementation "android.arch.lifecycle:common-java8:1.1.1"
     implementation "android.arch.lifecycle:extensions:1.1.1"
     //testing
-    compile 'com.google.code.findbugs:jsr305:3.0.1'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.google.code.findbugs:jsr305:3.0.1'
+    testImplementation 'junit:junit:4.12'
     //glide
-    compile 'com.github.bumptech.glide:glide:4.6.1'
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     //floating action menu
-    compile 'com.github.clans:fab:1.6.4'
+    implementation 'com.github.clans:fab:1.6.4'
     //video playback
-    compile 'com.google.android.exoplayer:exoplayer:r2.5.1'
-    compile 'com.google.android.exoplayer:extension-mediasession:r2.5.1'
+    implementation 'com.google.android.exoplayer:exoplayer:r2.5.1'
+    implementation 'com.google.android.exoplayer:extension-mediasession:r2.5.1'
     // Room
     implementation "android.arch.persistence.room:runtime:1.0.0"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     //kapt "android.arch.persistence.room:compiler:1.0.0"
     //vid chat
-    compile 'co.netguru.videochatguru:videochatguru:0.1.2@aar'
+    implementation 'co.netguru.videochatguru:videochatguru:0.1.2@aar'
     implementation 'org.webrtc:google-webrtc:1.0.22512'
     //socialtextview
-    compile 'com.hendraanggrian:socialview-core:0.17'
-    compile 'com.hendraanggrian:socialview-commons:0.17'
+    implementation 'com.hendraanggrian:socialview-core:0.17'
+    implementation 'com.hendraanggrian:socialview-commons:0.17'
     //gif support
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     //multidex
-    compile 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:multidex:1.0.3'
     //circular indicator
-    compile 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
+    implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
     //for tutorials
     implementation 'com.github.takusemba:spotlight:1.3.3'
 }

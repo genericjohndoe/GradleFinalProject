@@ -15,7 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
@@ -26,12 +31,15 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hendraanggrian.widget.SocialTextView;
 import com.udacity.gradle.builditbigger.Comments.CommentActivity;
 import com.udacity.gradle.builditbigger.Comments.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
+import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
@@ -39,6 +47,7 @@ import com.udacity.gradle.builditbigger.Search.SearchActivity;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,8 +111,22 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     popup.setOnMenuItemClickListener(item -> {
                         if (joke != null) {
                             Constants.DATABASE.child("userposts/" + joke.getUID() + "/posts/" + joke.getPushId()).removeValue((databaseError, databaseReference) -> {
-                                jokes.remove(joke);
-                                notifyDataSetChanged();
+                                if (databaseError == null) {
+                                    jokes.remove(joke);
+                                    notifyDataSetChanged();
+                                    Constants.DATABASE.child("userposts/" + joke.getUID() + "/num").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Constants.DATABASE.child("userposts/" + joke.getUID() + "/num")
+                                                    .setValue(dataSnapshot.getValue(Integer.class)-1);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
                             });
                         }
                         return true;
@@ -112,6 +135,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 }
 
             });
+
+            binding.collectionImageButton.setOnClickListener(view -> showAddToCollectionDialog());
         }
 
         @NonNull
@@ -139,6 +164,50 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         public Post getJoke() {
             return joke;
         }
+
+        public void showAddToCollectionDialog(){
+            List<String> collectionTitles = new ArrayList<>();
+            List<String> collectionKeys = new ArrayList<>();
+            Constants.DATABASE.child("usercollections/"+Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        collectionKeys.add(snapshot.getKey());
+                        collectionTitles.add(snapshot.getValue(Collection.class).getTitle());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+            MaterialDialog materialDialog = new MaterialDialog.Builder(context)
+                    .customView(R.layout.dialog_add_to_collection, true)
+                    .positiveText("Submit")
+                    .negativeText("Cancel")
+                    .onPositive((dialog, which) -> {
+                        View view = dialog.getCustomView();
+                        String genreTitle = ((AutoCompleteTextView) view.findViewById(R.id.autoCompleteTextView)).getText().toString();
+                        if (collectionTitles.contains(genreTitle)){
+                            int index = collectionTitles.indexOf(genreTitle);
+                            Constants.DATABASE
+                                    .child("usercollections/"+Constants.UID+"/"+collectionKeys.get(index)+"/posts/"+joke.getUID() + " " +joke.getPushId()).setValue(joke);
+                        } else {
+                            DatabaseReference db = FirebaseDatabase.getInstance().getReference("usercollections/" + Constants.UID).push();
+                            Collection newGenre = new Collection(genreTitle, Constants.USER.getUserName(), true,
+                                    System.currentTimeMillis(), Constants.USER.getUid(), db.getKey());
+                            db.setValue(newGenre, (databaseError, databaseReference) -> {
+                                if (databaseError == null) databaseReference.child("/posts/"+joke.getUID() + " " +joke.getPushId()).setValue(joke);
+                            });
+                        }
+                    })
+                    .onNegative((dialog, which) -> dialog.dismiss())
+                    .canceledOnTouchOutside(false)
+                    .build();
+            AutoCompleteTextView autoCompleteTextView = materialDialog.getCustomView().findViewById(R.id.autoCompleteTextView);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context,android.R.layout.simple_dropdown_item_1line, collectionTitles);
+            autoCompleteTextView.setAdapter(adapter);
+            materialDialog.show();
+        }
     }
 
     @Override
@@ -151,8 +220,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         return jokes.size();
     }
 
-    @Override
-    public JokesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override @NonNull
+    public JokesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         GenericPostBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.generic_post, parent, false);
         if (isUserProfile) binding.userInfoConstraintLayout.setVisibility(View.GONE);
         switch (viewType) {
@@ -177,7 +246,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
                 return new JokesViewHolder(binding);
         }
-        return null;
+        return new JokesViewHolder(binding);
     }
 
     @Override
@@ -295,4 +364,5 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         this.jokes = jokes;
         notifyDataSetChanged();
     }
+
 }

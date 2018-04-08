@@ -60,7 +60,7 @@ public class HilarityUserJokes extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
-        //llm.setStackFromEnd(true);
+        llm.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.setAdapter(jokeAdapter);
 

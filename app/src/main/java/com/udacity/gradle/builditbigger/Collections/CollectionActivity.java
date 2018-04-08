@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.Genres;
+package com.udacity.gradle.builditbigger.Collections;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +16,7 @@ import com.udacity.gradle.builditbigger.R;
  * DEPRECATED
  */
 
-public class GenreActivity extends AppCompatActivity {
+public class CollectionActivity extends AppCompatActivity {
 
     ViewPager viewPager;
 
@@ -62,7 +62,7 @@ public class GenreActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return new GenreFragment();
+                return new CollectionFragment();
             } else {
                 return new Profile();
             }
