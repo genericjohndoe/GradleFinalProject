@@ -6,11 +6,6 @@ package com.udacity.gradle.builditbigger.Interfaces;
 
 public interface VideoCallback {
 
-    void getVideoInfo(boolean started, int position);
+    boolean areVideosShown(int numVids);
 
-    void onNewVideoPost(long id);
-
-    void onVideoPostRecycled(long id);
-
-    void setCurrentlyPlaying(long id);
 }

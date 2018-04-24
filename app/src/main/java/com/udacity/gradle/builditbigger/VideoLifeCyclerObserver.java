@@ -23,6 +23,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 
 /**
  * class controls video playback
@@ -37,6 +38,15 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
     MediaSessionConnector mediaSessionConnector;
     Context context;
     long position;
+    JokesAdapter.JokesViewHolder viewHolder;
+    JokesAdapter jokesAdapter;
+
+    public VideoLifeCyclerObserver(Context context, JokesAdapter.JokesViewHolder viewHolder, JokesAdapter jokesAdapter){
+        this.playerView = viewHolder.getBinding().videoLayout.postVideoView;
+        this.context = context;
+        this.jokesAdapter = jokesAdapter;
+        this.viewHolder = viewHolder;
+    }
 
     public VideoLifeCyclerObserver(Context context, SimpleExoPlayerView playerView){
         this.playerView = playerView;
@@ -65,7 +75,7 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
                 new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
 
-        player.addListener(new ExoEventPlayer());
+        if (jokesAdapter != null && viewHolder != null) player.addListener(new ExoEventPlayer(jokesAdapter, viewHolder));
         playerView.setPlayer(player);
         mediaSessionConnector.setPlayer(player, null,null);
         mMediaSession.setActive(true);

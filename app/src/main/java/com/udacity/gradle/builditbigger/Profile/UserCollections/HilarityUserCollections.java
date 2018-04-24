@@ -1,12 +1,14 @@
 package com.udacity.gradle.builditbigger.Profile.UserCollections;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.udacity.gradle.builditbigger.Collections.CollectionAdapter;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Collection;
+import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
@@ -31,18 +34,17 @@ import java.util.List;
 public class HilarityUserCollections extends Fragment {
     //todo test search
     CollectionAdapter genreAdapter;
+    Profile profile;
     List<Collection> genres;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
-    private HideFAB conFam;
     private boolean searched = false;
 
-    public static HilarityUserCollections newInstance(String uid, HideFAB conFam) {
+    public static HilarityUserCollections newInstance(String uid) {
         HilarityUserCollections hilarityUserGenres = new HilarityUserCollections();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserGenres.setArguments(bundle);
-        hilarityUserGenres.conFam = conFam;
         return hilarityUserGenres;
     }
 
@@ -61,18 +63,21 @@ public class HilarityUserCollections extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
         llm.setStackFromEnd(true);
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         binding.recyclerView.setAdapter(genreAdapter);
+        profile = (Profile) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
+        Log.i("profilefragment", profile.toString() + " collections");
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0) conFam.hideFAB();
+                if (dy > 0 || dy < 0) profile.hideFAB();
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) conFam.showFAB();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) profile.showFAB();
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
@@ -99,9 +104,15 @@ public class HilarityUserCollections extends Fragment {
                 binding.recyclerView.scrollToPosition(genres.size() - 1);
             }
         });
-        conFam.getFAB().setOnClickListener(view -> showSearchDialog());
         configureUI();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        profile.getFAB().setOnClickListener(view -> showSearchDialog());
+        Log.i("profilefragment",profile.getFAB().toString() + " HUC");
     }
 
     public void showSearchDialog() {

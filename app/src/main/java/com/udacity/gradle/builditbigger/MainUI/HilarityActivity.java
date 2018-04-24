@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger.MainUI;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,8 +10,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +28,8 @@ import com.udacity.gradle.builditbigger.Feed.FeedFragment;
 import com.udacity.gradle.builditbigger.Forums.Questions.ForumFragment;
 import com.udacity.gradle.builditbigger.Messaging.SentMessages.MessagesActivity;
 import com.udacity.gradle.builditbigger.Profile.Profile;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Settings.SettingsFragment;
 import com.udacity.gradle.builditbigger.SignInTutorial.LoginActivity;
@@ -48,39 +54,43 @@ public class HilarityActivity extends AppCompatActivity
         fragmentNumber = getIntent().getIntExtra("number", 0);
         otherUid = getIntent().getStringExtra("uid");
         Fragment fragment;
-        /*if (savedInstanceState !=null) {
-            fragmentNumber = savedInstanceState.getInt("number", 0);
-            otherUid = savedInstanceState.getString("uid");
-        }*/
+        String tag;
         switch(fragmentNumber){
             case 1:
                 fragment = Profile.newInstance(Constants.UID);
+                tag = "profile";
                 break;
             case 2:
                 fragment = FeedFragment.newInstance(Constants.UID);
                 setTitle("Feed");
+                tag = "feed";
                 break;
             case 3:
                 fragment = ExploreFragment.newInstance(Constants.UID);
                 setTitle("Explore");
+                tag = "explore";
                 break;
             case 4:
                 fragment = Profile.newInstance(otherUid);
+                tag = "other profile";
                 break;
             case 5:
                 fragment = ForumFragment.newInstance();
                 setTitle("Forums");
+                tag = "forums";
                 break;
             case 6:
                 fragment = SettingsFragment.newInstance();
                 setTitle("Settings");
+                tag = "settings";
                 break;
             default:
                 fragment = Profile.newInstance(Constants.UID);
+                tag = "profile";
                 break;
         }
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.hilarity_content_frame, fragment, "profile")
+                .add(R.id.hilarity_content_frame, fragment, tag)
                 .commit();
 
         drawer = findViewById(R.id.drawer_layout);
@@ -91,14 +101,23 @@ public class HilarityActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
 
-    /*@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("number", fragmentNumber);
-        outState.putString("uid", otherUid);
-        super.onSaveInstanceState(outState);
-    }*/
+        OrientationControlViewModel orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
+        Log.i("numMovies", orientationControlViewModel.toString());
+        orientationControlViewModel.getNumVideosLiveData().observe(this, numVideos -> {
+            if (numVideos == 0){
+                toolbar.setVisibility(View.VISIBLE);
+            } else {
+                int orientation = getWindowManager().getDefaultDisplay().getRotation();
+                if (orientation == Surface.ROTATION_0 || orientation == Surface.ROTATION_180) {
+                    toolbar.setVisibility(View.VISIBLE);
+                } else {
+                    toolbar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+    }
 
     @Override
     public void onBackPressed() {

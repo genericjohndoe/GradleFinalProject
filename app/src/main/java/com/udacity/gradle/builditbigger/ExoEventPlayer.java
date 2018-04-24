@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 
 /**
  * class reacts to changes in state of video
@@ -15,10 +16,12 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 
 public class ExoEventPlayer implements Player.EventListener {
 
-    //private ExoPlayer.ExoPlayerComponent rv;
+    private JokesAdapter jokesAdapter;
+    private JokesAdapter.JokesViewHolder viewHolder;
 
-    public ExoEventPlayer(){
-        /*this.rv = rv;*/
+    public ExoEventPlayer(JokesAdapter jokesAdapter, JokesAdapter.JokesViewHolder viewHolder){
+        this.jokesAdapter = jokesAdapter;
+        this.viewHolder = viewHolder;
     }
 
     @Override
@@ -38,18 +41,14 @@ public class ExoEventPlayer implements Player.EventListener {
 
         if (playWhenReady && playbackState == Player.STATE_READY){
             Log.i("Hoe8", "play called");
-            /*if (rv !=null) {
-               //  ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(true);
-               // ((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(true);
-            }*/
-        } else if (!playWhenReady && playbackState == Player.STATE_READY){
-            Log.i("Hoe8", "onPause called");
-            //if (rv != null)((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
-        } else if (playbackState == Player.STATE_ENDED){
-            /*if (rv != null) {
-                ((JokesAdapter.VideoPostViewHolder) rv).setIsPlaying(false);
-                ((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(false);
-            }*/
+            if (jokesAdapter.getNowPlayingViewHolder() == null) {
+                jokesAdapter.setNowPlayingViewHolder(viewHolder);
+            } else {
+                jokesAdapter.getNowPlayingViewHolder().getBinding().videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
+                jokesAdapter.setNowPlayingViewHolder(viewHolder);
+            }
+        } else {
+            jokesAdapter.setNowPlayingViewHolder(null);
         }
 
     }

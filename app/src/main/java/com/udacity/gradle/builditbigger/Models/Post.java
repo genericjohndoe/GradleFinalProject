@@ -1,5 +1,8 @@
 package com.udacity.gradle.builditbigger.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +10,7 @@ import java.util.List;
  * Joke class serves as model for user generated content
  */
 
-public class Post {
+public class Post implements Parcelable {
     private String jokeTitle;
     private String jokeBody;
     private Long timeStamp;
@@ -38,6 +41,17 @@ public class Post {
         this.type = type;
         taglist = new ArrayList<>();
         this.metaData = metaData;
+    }
+
+    public Post(Parcel in){
+        jokeBody = in.readString();
+        jokeTitle = in.readString();
+        uid = in.readString();
+        mediaURL = in.readString();
+        tagline = in.readString();
+        metaData = in.readParcelable(MetaData.class.getClassLoader());
+        type = in.readInt();
+        timeStamp = in.readLong();
     }
 
     public String getJokeTitle() {
@@ -98,4 +112,30 @@ public class Post {
     public boolean equals(Object object){
         return pushId.equals(((Post) object).getPushId());
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(jokeTitle);
+        dest.writeString(jokeBody);
+        dest.writeString(uid);
+        dest.writeString(tagline);
+        dest.writeInt(type);
+        dest.writeString(pushId);
+        dest.writeLong(timeStamp);
+        dest.writeString(mediaURL);
+        dest.writeParcelable(metaData,PARCELABLE_WRITE_RETURN_VALUE);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel parcel) {return new Post(parcel);}
+
+        @Override
+        public Post[] newArray(int i) {return new Post[i];}
+    };
 }

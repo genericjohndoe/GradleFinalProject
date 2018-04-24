@@ -2,14 +2,21 @@ package com.udacity.gradle.builditbigger.Profile;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -22,11 +29,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.Profile.UserCollections.HilarityUserCollections;
 import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubsActivity;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
@@ -50,6 +61,7 @@ public class Profile extends Fragment implements HideFAB {
      */
     public static Profile newInstance(String uid){
         Profile profile = new Profile();
+
         Bundle bundle = new Bundle();
         bundle.putString("uid",uid);
         profile.setArguments(bundle);
@@ -60,13 +72,14 @@ public class Profile extends Fragment implements HideFAB {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
+        Log.i("profilefragment", toString() + "profile");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_profile,container,false);
-
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding.profileViewPager.setAdapter(new ProfilePagerAdapter(getActivity().getSupportFragmentManager()));
         //changes function of floating action menu based on what fragment is shown in the profile viewpager
         binding.profileViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -89,7 +102,6 @@ public class Profile extends Fragment implements HideFAB {
         binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(2));
 
         //originally calls new post dialog, changed when configureFAB is called
-        //todo remove dialog boxes and replace with fragments
         binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
         //object beneath provides data to fragment
         UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this,
@@ -120,10 +132,13 @@ public class Profile extends Fragment implements HideFAB {
         userInfoViewModel.getNumFollowersLiveData().observe(this, numFollowers -> {
             binding.subscribersTv.setText(numFollowers + " subscribers");
         });
-        //todo add languages to cloud settings
-        /*userInfoViewModel.getLanguagesLiveData().observe(this, lang -> {
-            languages.add(lang);
-        });*/
+
+        OrientationControlViewModel orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
+        Log.i("numMovies", orientationControlViewModel.toString());
+        orientationControlViewModel.getNumVideosLiveData().observe(this, numVideos -> {
+            setOrientation(numVideos);
+            Log.i("numMovies", numVideos+"");
+        });
 
         return binding.getRoot();
     }
@@ -190,12 +205,10 @@ public class Profile extends Fragment implements HideFAB {
      * ProfilePagerAdapter Class used to enable for horizontal scrolling between user posts, collections and liked posts
      */
     private class ProfilePagerAdapter extends FragmentPagerAdapter {
-        public ProfilePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+        public ProfilePagerAdapter(FragmentManager fm) {super(fm);}
 
-        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid, Profile.this), HilarityUserCollections.newInstance(uid, Profile.this),
-                HilarityUserLikes.newInstance(uid, Profile.this)};
+        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid), HilarityUserCollections.newInstance(uid),
+                HilarityUserLikes.newInstance(uid)};
 
         String[] tabTitles = new String[]{"Posts", "Genres", "Likes"};
 
@@ -235,4 +248,27 @@ public class Profile extends Fragment implements HideFAB {
     public FloatingActionButton getFAB(){
         return binding.searchFab;
     }
+
+    private void setOrientation(Integer numVideos){
+        Log.i("numMovies", "SetOrienation called");
+        if (numVideos == 0){
+            //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            binding.videoPlayer.setVisibility(View.GONE);
+            binding.coordinatorLayout.setVisibility(View.VISIBLE);
+            Log.i("numMovies", "SetOrienation numVideos is 0");
+        } else {
+            //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            int orientation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
+            if (orientation == Surface.ROTATION_0 || orientation == Surface.ROTATION_180) {
+                binding.videoPlayer.setVisibility(View.GONE);
+                binding.coordinatorLayout.setVisibility(View.VISIBLE);
+                Log.i("numMovies", "SetOrienation rot is 0 or 180");
+            } else {
+                binding.videoPlayer.setVisibility(View.VISIBLE);
+                binding.coordinatorLayout.setVisibility(View.GONE);
+                Log.i("numMovies", "SetOrienation rot is 90 or 270");
+            }
+        }
+    }
+
 }

@@ -3,11 +3,14 @@ package com.udacity.gradle.builditbigger.Jokes;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +25,8 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -42,6 +47,8 @@ import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Profile.Profile;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Search.SearchActivity;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
@@ -55,9 +62,12 @@ import java.util.List;
  */
 
 public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHolder> {
-    Context context;
-    List<Post> jokes;
-    boolean isUserProfile;
+    private Context context;
+    private List<Post> jokes;
+    private boolean isUserProfile;
+    private int numVideos = 0;
+    private JokesViewHolder nowPlayingViewHolder = null;
+
 
     public JokesAdapter(Context context, List<Post> objects, boolean isUserProfile) {
         this.context = context;
@@ -66,12 +76,13 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         setHasStableIds(true);
     }
 
-    public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
+    public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner, ExoPlayer.ExoPlayerComponent {
         GenericPostBinding binding;
 
         private LifecycleRegistry mLifecycleRegistry;
         private boolean isLiked = false;
         private Post joke;
+        private OrientationControlViewModel orientationControlViewModel;
 
         public JokesViewHolder(GenericPostBinding binding) {
             super(binding.getRoot());
@@ -137,6 +148,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             });
 
             binding.collectionImageButton.setOnClickListener(view -> showAddToCollectionDialog());
+
+            orientationControlViewModel = ViewModelProviders.of((FragmentActivity) context, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
         }
 
         @NonNull
@@ -208,6 +221,15 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             autoCompleteTextView.setAdapter(adapter);
             materialDialog.show();
         }
+
+        public GenericPostBinding getBinding(){
+            return binding;
+        }
+
+        @Override
+        public void handleMessage(int messageType, Object message) throws ExoPlaybackException {
+
+        }
     }
 
     @Override
@@ -250,7 +272,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     }
 
     @Override
-    public void onBindViewHolder(final JokesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final JokesViewHolder holder, int position) {
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         final Post joke = jokes.get(position);
         holder.joke = joke;
@@ -262,8 +284,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             Glide.with(context).load(joke.getMediaURL()).into((holder.binding.imageLayout.postImageview));
         } else if (joke.getType() == Constants.VIDEO) {
             holder.setJoke(joke);
-            holder.getLifecycle().addObserver(new VideoLifeCyclerObserver(context, holder.binding.videoLayout.postVideoView));
+            holder.getLifecycle().addObserver(new VideoLifeCyclerObserver(context, holder, this));
             prepareVideoPlayback(holder);
+            holder.orientationControlViewModel.getNumVideosLiveData().setValue(++numVideos);
+            Log.i("numMovies", holder.orientationControlViewModel.toString());
+            Log.i("numMovies", numVideos+"");
         } else {
             Glide.with(context).asGif().load(joke.getMediaURL())
                     .into(holder.binding.gifLayout.postGifimageview);
@@ -276,7 +301,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             viewHolderViewModel.getUserNameLiveData().observe(holder, name -> {
                 holder.binding.usernameTextView.setText(name);
             });
-
             viewHolderViewModel.getProfileImgLiveData().observe(holder, url -> {
                 Glide.with(context).load(url).into(holder.binding.profileImageview);
             });
@@ -292,9 +316,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         viewHolderViewModel.getIsLikedLiveData().observe(holder, aBoolean -> {
             if (aBoolean) {
-                Glide.with(context).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
             } else {
-                Glide.with(context).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
             }
             holder.setIsLiked(aBoolean);
         });
@@ -322,7 +346,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     }
 
     @Override
-    public void onViewAttachedToWindow(JokesViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull JokesViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
         if (holder.getJoke() != null && holder.getJoke().getType() == Constants.VIDEO) {
@@ -331,13 +355,17 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     }
 
     @Override
-    public void onViewDetachedFromWindow(JokesViewHolder holder) {
+    public void onViewDetachedFromWindow(@NonNull JokesViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+        if (holder.getJoke().getType() == Constants.VIDEO){
+            holder.orientationControlViewModel.getNumVideosLiveData().setValue(--numVideos);
+            Log.i("numMovies", numVideos+"");
+        }
     }
 
     @Override
-    public void onViewRecycled(JokesViewHolder holder) {
+    public void onViewRecycled(@NonNull JokesViewHolder holder) {
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         super.onViewRecycled(holder);
     }
@@ -347,7 +375,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         return (long) position;
     }
 
-    public void prepareVideoPlayback(JokesViewHolder holder) {
+    private void prepareVideoPlayback(JokesViewHolder holder) {
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         // Produces DataSource instances through which media data is loaded.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
@@ -365,4 +393,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         notifyDataSetChanged();
     }
 
+    public void setNowPlayingViewHolder(JokesViewHolder nowPlayingViewHolder) {
+        this.nowPlayingViewHolder = nowPlayingViewHolder;
+    }
+
+    public JokesViewHolder getNowPlayingViewHolder() {
+        return nowPlayingViewHolder;
+    }
 }

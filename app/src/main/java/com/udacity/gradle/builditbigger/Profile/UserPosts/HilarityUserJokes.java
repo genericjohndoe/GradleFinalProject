@@ -3,10 +3,13 @@ package com.udacity.gradle.builditbigger.Profile.UserPosts;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
+import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
@@ -32,27 +36,28 @@ import java.util.Set;
 
 public class HilarityUserJokes extends Fragment {
     //todo test search and back press
+    Profile profile;
     JokesAdapter jokeAdapter;
-    List<Post> jokes;
-    HideFAB conFam;
+    List<Post> jokes = new ArrayList<>();
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserJokes newInstance(String uid, HideFAB conFam) {
+    public static HilarityUserJokes newInstance(String uid) {
         HilarityUserJokes hilarityUserJokes = new HilarityUserJokes();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserJokes.setArguments(bundle);
-        hilarityUserJokes.conFam = conFam;
         return hilarityUserJokes;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uid = getArguments().getString("uid");
-        jokes = new ArrayList<>();
+        if (getArguments() != null) {
+            uid = getArguments().getString("uid");
+        }
+        if (savedInstanceState != null) jokes = savedInstanceState.getParcelableArrayList("posts");
         jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
     }
 
@@ -63,16 +68,19 @@ public class HilarityUserJokes extends Fragment {
         llm.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.setAdapter(jokeAdapter);
+        profile = (Profile) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
+        Log.i("profilefragment", profile.toString());
+
 
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 || dy < 0) conFam.hideFAB();
+                if (dy > 0 || dy < 0) profile.hideFAB();
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) conFam.showFAB();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) profile.showFAB();
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
@@ -89,7 +97,6 @@ public class HilarityUserJokes extends Fragment {
             return false;
         });
 
-
         UserPostsViewModel userPostsViewModel = ViewModelProviders.of(this,
                 new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
@@ -98,9 +105,11 @@ public class HilarityUserJokes extends Fragment {
             if (!jokes.contains(joke)){
                 jokes.add(joke);
             } else {
+                //if post gets modified
                 int index = jokes.indexOf(joke);
                 jokes.remove(joke);
                 jokes.add(index,joke);
+                jokeAdapter.notifyDataSetChanged();
             }
             if (!searched) {
                 jokeAdapter.notifyDataSetChanged();
@@ -109,11 +118,21 @@ public class HilarityUserJokes extends Fragment {
             }
         });
 
-        FloatingActionButton fab = conFam.getFAB();
-        fab.setOnClickListener(view -> showSearchDialog());
-
         configureUI();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        profile.getFAB().setOnClickListener(view -> showSearchDialog());
+        Log.i("profilefragment",profile.getFAB().toString() + " HUJ");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("posts",(ArrayList<? extends Parcelable>) jokes);
     }
 
     public void showSearchDialog() {

@@ -3,7 +3,7 @@ package com.udacity.gradle.builditbigger.Interfaces;
 import com.github.clans.fab.FloatingActionButton;
 
 /**
- * INTERFFACE for manipulating FAB
+ * INTERFACE for manipulating FAB
  */
 
 public interface HideFAB {
