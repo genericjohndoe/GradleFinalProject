@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -25,13 +26,22 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
+import com.udacity.gradle.builditbigger.Interfaces.VideoInfoTransfer;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
+import com.udacity.gradle.builditbigger.Models.VideoInfo;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.Profile.UserCollections.HilarityUserCollections;
 import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
@@ -40,6 +50,7 @@ import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlView
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubsActivity;
+import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
 
 
@@ -53,6 +64,7 @@ public class Profile extends Fragment implements HideFAB {
     //todo convert svg to text use in viewpager
     private String uid;
     private FragmentProfileBinding binding;
+    private OrientationControlViewModel orientationControlViewModel;
 
     /**
      * instantiates new instance of Profile Fragment
@@ -104,6 +116,7 @@ public class Profile extends Fragment implements HideFAB {
         //originally calls new post dialog, changed when configureFAB is called
         binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
         //object beneath provides data to fragment
+        getLifecycle().addObserver(new VideoLifeCyclerObserver(getActivity(), binding.videoPlayer));
         UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this,
                 new UserInfoViewModelFactory(uid))
                 .get(UserInfoViewModel.class);
@@ -133,11 +146,20 @@ public class Profile extends Fragment implements HideFAB {
             binding.subscribersTv.setText(numFollowers + " subscribers");
         });
 
-        OrientationControlViewModel orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
-        Log.i("numMovies", orientationControlViewModel.toString());
-        orientationControlViewModel.getNumVideosLiveData().observe(this, numVideos -> {
-            setOrientation(numVideos);
-            Log.i("numMovies", numVideos+"");
+        orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
+        orientationControlViewModel.getVideoLiveData().observe(this, videoInfo -> {
+            setOrientation(videoInfo);
+        });
+
+        orientationControlViewModel.getOrientationLiveData().observe(this, isLandscape ->{
+            if (!isLandscape){
+                long time = binding.videoPlayer.getPlayer().getCurrentPosition();
+                binding.videoPlayer.getPlayer().stop();
+                binding.videoPlayer.getPlayer().release();
+                binding.coordinatorLayout.setVisibility(View.VISIBLE);
+                binding.videoPlayer.setVisibility(View.GONE);
+                orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(null,time));
+            }
         });
 
         return binding.getRoot();
@@ -249,26 +271,42 @@ public class Profile extends Fragment implements HideFAB {
         return binding.searchFab;
     }
 
-    private void setOrientation(Integer numVideos){
+    private void setOrientation(VideoInfo videoInfo){
         Log.i("numMovies", "SetOrienation called");
-        if (numVideos == 0){
-            //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (videoInfo == null){
             binding.videoPlayer.setVisibility(View.GONE);
             binding.coordinatorLayout.setVisibility(View.VISIBLE);
             Log.i("numMovies", "SetOrienation numVideos is 0");
         } else {
-            //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
             int orientation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
             if (orientation == Surface.ROTATION_0 || orientation == Surface.ROTATION_180) {
                 binding.videoPlayer.setVisibility(View.GONE);
                 binding.coordinatorLayout.setVisibility(View.VISIBLE);
+                long time = binding.videoPlayer.getPlayer().getCurrentPosition();
+                binding.videoPlayer.getPlayer().setPlayWhenReady(false);
+                orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(videoInfo.getUrl(),time));
                 Log.i("numMovies", "SetOrienation rot is 0 or 180");
             } else {
                 binding.videoPlayer.setVisibility(View.VISIBLE);
                 binding.coordinatorLayout.setVisibility(View.GONE);
                 Log.i("numMovies", "SetOrienation rot is 90 or 270");
+                setVideoPlayer(videoInfo);
             }
         }
     }
 
+    private void setVideoPlayer(VideoInfo videoInfo){
+        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        // Produces DataSource instances through which media data is loaded.
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(),
+                Util.getUserAgent(getActivity(), "Hilarity"), bandwidthMeter);
+        // Produces Extractor instances for parsing the media data.
+        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+        if (binding.videoPlayer.getPlayer() != null) {
+            binding.videoPlayer.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(videoInfo.getUrl()),
+                    dataSourceFactory, extractorsFactory, null, null), false, false);
+            binding.videoPlayer.getPlayer().seekTo(videoInfo.getTimeElapsed());
+            binding.videoPlayer.getPlayer().setPlayWhenReady(true);
+        }
+    }
 }

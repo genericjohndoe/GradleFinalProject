@@ -75,7 +75,7 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
                 new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
 
-        if (jokesAdapter != null && viewHolder != null) player.addListener(new ExoEventPlayer(jokesAdapter, viewHolder));
+        if (jokesAdapter != null && viewHolder != null) player.addListener(new ExoEventPlayer(jokesAdapter, viewHolder, context));
         playerView.setPlayer(player);
         mediaSessionConnector.setPlayer(player, null,null);
         mMediaSession.setActive(true);
@@ -100,6 +100,7 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void destroy(LifecycleOwner lifecycleOwner){
         Log.i("Video playback", "destroy called");
+        player.release();
     }
 
     public class PlayBackController extends DefaultPlaybackController{

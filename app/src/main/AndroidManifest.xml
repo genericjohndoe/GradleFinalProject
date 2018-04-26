@@ -69,7 +69,8 @@
             android:name=".MainUI.HilarityActivity"
             android:label="@string/title_activity_main22"
             android:parentActivityName=".MainUI.HilarityActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize"/>
 
         <service android:name=".CloudMessaging.HilarityFirebaseMessagingService">
             <intent-filter>

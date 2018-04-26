@@ -2,6 +2,8 @@ package com.udacity.gradle.builditbigger.MainUI;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -43,6 +45,7 @@ public class HilarityActivity extends AppCompatActivity
     DrawerLayout drawer;
     int fragmentNumber;
     String otherUid;
+    OrientationControlViewModel orientationControlViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +105,14 @@ public class HilarityActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        OrientationControlViewModel orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
-        Log.i("numMovies", orientationControlViewModel.toString());
-        orientationControlViewModel.getNumVideosLiveData().observe(this, numVideos -> {
-            if (numVideos == 0){
+        orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
+        orientationControlViewModel.getVideoPlayingMutableLiveData().observe(this, videoPlaying -> {
+            Log.i("orientation3", videoPlaying + " = hilarity activity is video playing?");
+            if (!videoPlaying){
                 toolbar.setVisibility(View.VISIBLE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             } else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 int orientation = getWindowManager().getDefaultDisplay().getRotation();
                 if (orientation == Surface.ROTATION_0 || orientation == Surface.ROTATION_180) {
                     toolbar.setVisibility(View.VISIBLE);
@@ -192,6 +197,21 @@ public class HilarityActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int orientation = newConfig.orientation;
+        Log.i("orientation3", "HilarityActivity, onConfigurationChanged called");
+        if (orientation == Configuration.ORIENTATION_PORTRAIT){
+            orientationControlViewModel.getOrientationLiveData().setValue(false);
+            Log.i("orientation3", "HilarityActivity, orientation is set to false");
+        }
+        else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            orientationControlViewModel.getOrientationLiveData().setValue(true);
+            Log.i("orientation3", "HilarityActivity, orientation is set to true");
+        }
     }
 }
 

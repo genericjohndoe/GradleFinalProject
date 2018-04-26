@@ -9,9 +9,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,8 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
-import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -39,14 +35,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hendraanggrian.widget.SocialTextView;
 import com.udacity.gradle.builditbigger.Comments.CommentActivity;
-import com.udacity.gradle.builditbigger.Comments.CommentFragment;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.Models.Post;
-import com.udacity.gradle.builditbigger.Profile.Profile;
+import com.udacity.gradle.builditbigger.Models.VideoInfo;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
@@ -76,9 +70,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         setHasStableIds(true);
     }
 
-    public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner, ExoPlayer.ExoPlayerComponent {
-        GenericPostBinding binding;
-
+    public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
+        private GenericPostBinding binding;
         private LifecycleRegistry mLifecycleRegistry;
         private boolean isLiked = false;
         private Post joke;
@@ -226,9 +219,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             return binding;
         }
 
-        @Override
-        public void handleMessage(int messageType, Object message) throws ExoPlaybackException {
-
+        public OrientationControlViewModel getOrientationControlViewModel() {
+            return orientationControlViewModel;
         }
     }
 
@@ -286,9 +278,23 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             holder.setJoke(joke);
             holder.getLifecycle().addObserver(new VideoLifeCyclerObserver(context, holder, this));
             prepareVideoPlayback(holder);
-            holder.orientationControlViewModel.getNumVideosLiveData().setValue(++numVideos);
-            Log.i("numMovies", holder.orientationControlViewModel.toString());
-            Log.i("numMovies", numVideos+"");
+            holder.orientationControlViewModel.getOrientationLiveData().observe(holder, orientationChanged ->{
+                //currently doesn't get called
+                Log.i("orientation3", "viewholder observing orientation live data");
+                if (orientationChanged){
+                    //todo there is a lag after rotation, show loading spinner
+                    holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
+                    holder.orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(joke.getMediaURL(),
+                            holder.binding.videoLayout.postVideoView.getPlayer().getCurrentPosition()));
+                    Log.i("orientation3", "the videoInfo is set in the holder");
+                }
+            });
+            /*holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
+                if (nowPlayingViewHolder.equals(holder)) {
+                    holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
+                    holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
+                }
+            });*/
         } else {
             Glide.with(context).asGif().load(joke.getMediaURL())
                     .into(holder.binding.gifLayout.postGifimageview);
@@ -359,7 +365,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         super.onViewDetachedFromWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
         if (holder.getJoke().getType() == Constants.VIDEO){
-            holder.orientationControlViewModel.getNumVideosLiveData().setValue(--numVideos);
+            //holder.orientationControlViewModel.getNumVideosLiveData().setValue(--numVideos);
             Log.i("numMovies", numVideos+"");
         }
     }
