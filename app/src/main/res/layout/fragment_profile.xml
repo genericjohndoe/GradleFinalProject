@@ -18,7 +18,7 @@
                 android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?colorPrimary"
+                android:background="#194000"
                 app:elevation="4dp">
 
                 <android.support.design.widget.CollapsingToolbarLayout
@@ -44,6 +44,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:text="Posts"
+                            android:textColor="@color/accent"
                             app:layout_constraintLeft_toRightOf="@+id/profile_imageview"
                             app:layout_constraintTop_toTopOf="@+id/profile_imageview" />
 
@@ -70,6 +71,7 @@
                             android:clickable="true"
                             android:focusable="auto"
                             android:text="Subscriptions"
+                            android:textColor="@color/accent"
                             app:layout_constraintEnd_toStartOf="@+id/subscribers_tv"
                             app:layout_constraintStart_toEndOf="@+id/posts_tv"
                             app:layout_constraintTop_toTopOf="@+id/posts_tv" />
@@ -82,6 +84,7 @@
                             android:clickable="true"
                             android:focusable="auto"
                             android:text="Subscribers"
+                            android:textColor="@color/accent"
                             android:textAppearance="@android:style/TextAppearance.Material.Small"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/subscriptions_tv" />

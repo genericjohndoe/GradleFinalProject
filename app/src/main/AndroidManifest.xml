@@ -25,7 +25,7 @@
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/hilarity_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"

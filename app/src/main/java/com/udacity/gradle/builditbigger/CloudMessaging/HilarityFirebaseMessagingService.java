@@ -14,9 +14,12 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.udacity.gradle.builditbigger.Comments.CommentActivity;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.R;
+
+import java.util.Map;
 
 /**
  * Created by joeljohnson on 1/28/18.
@@ -31,10 +34,12 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (remoteMessage.getData().size() > 0) {
-            String path = remoteMessage.getData().get("path");
-            String title = remoteMessage.getNotification().getTitle();
-            sendNewMessageNotification(remoteMessage.getNotification().getBody(), path, title);
+        Map<String, String> data = remoteMessage.getData();
+        if (data.get("type").equals("message")) {
+            sendNewMessageNotification(data.get("body"), data.get("path"), data.get("title"));
+        } else if (data.get("type").equals("mention") || data.get("type").equals("comment")){
+            sendNewCommentMentionNotification(data.get("title"), data.get("body"), data.get("uid"),
+                    data.get("postid"), Integer.parseInt(data.get("position")));
         }
     }
 
@@ -76,5 +81,30 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendNewCommentMentionNotification(String title, String body, String uid, String pushId, int position){
+        Intent intent = new Intent(this, CommentActivity.class);
+        intent.putExtra("uid", uid);
+        intent.putExtra("pushId", pushId);
+        intent.putExtra("position", position);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        String channelId = "fcm_default_channel";
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
     }
 }

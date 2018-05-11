@@ -11,7 +11,7 @@ public class Comment {
     private String postUid;
     private String postPushId;
     private String commentId;
-    HilarityUser hilarityUser;
+    private HilarityUser hilarityUser;
 
     public Comment(){}
 

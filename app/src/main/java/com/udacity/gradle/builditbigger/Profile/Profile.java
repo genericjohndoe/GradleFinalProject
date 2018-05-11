@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
@@ -134,16 +135,16 @@ public class Profile extends Fragment implements HideFAB {
         );
         //todo replace text with image text
         userInfoViewModel.getNumPostLiveData().observe(this, numPosts -> {
-            binding.postsTv.setText(numPosts + " posts");
+            binding.postsTv.setText(numPosts != null ? numPosts + " posts" : "0 posts");
             }
         );
 
         userInfoViewModel.getNumFollowingLiveData().observe(this, numFollowing -> {
-            binding.subscriptionsTv.setText(numFollowing + " subscriptions");
+            binding.subscriptionsTv.setText(numFollowing != null ? numFollowing + " subscriptions" : "0 subscriptions");
         });
 
         userInfoViewModel.getNumFollowersLiveData().observe(this, numFollowers -> {
-            binding.subscribersTv.setText(numFollowers + " subscribers");
+            binding.subscribersTv.setText(numFollowers != null ? numFollowers + " subscribers" : "0 subscribers");
         });
 
         orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
@@ -161,6 +162,14 @@ public class Profile extends Fragment implements HideFAB {
                 orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(null,time));
             }
         });
+
+        binding.appBarLayout.addOnOffsetChangedListener(((appBarLayout, verticalOffset) -> {
+            if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
+                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+            } else if (verticalOffset == 0) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+            }
+        }));
 
         return binding.getRoot();
     }
@@ -229,8 +238,8 @@ public class Profile extends Fragment implements HideFAB {
     private class ProfilePagerAdapter extends FragmentPagerAdapter {
         public ProfilePagerAdapter(FragmentManager fm) {super(fm);}
 
-        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid), HilarityUserCollections.newInstance(uid),
-                HilarityUserLikes.newInstance(uid)};
+        Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid, Profile.this), HilarityUserCollections.newInstance(uid, Profile.this),
+                HilarityUserLikes.newInstance(uid, Profile.this)};
 
         String[] tabTitles = new String[]{"Posts", "Genres", "Likes"};
 

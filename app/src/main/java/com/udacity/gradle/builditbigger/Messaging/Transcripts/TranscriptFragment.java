@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +11,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
+import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Message;
 import com.udacity.gradle.builditbigger.R;
@@ -43,7 +46,7 @@ public class TranscriptFragment extends Fragment {
         if (getArguments() != null){
             uid = getArguments().getString("uid");
             path = getArguments().getString("path");
-            usersUidList = path.split(", ");
+            if (path != null) usersUidList = path.split(", ");
         }
 
     }
@@ -63,16 +66,21 @@ public class TranscriptFragment extends Fragment {
         bind.messagesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL, false));
         MessagesViewModel messagesViewModel = ViewModelProviders.of(this,new MessagesViewModelFactory(uid,path)).get(MessagesViewModel.class);
         messagesViewModel.getMessagesLiveData().observe(this, message -> {
-            messages.add(message);
-            messagesAdapter.notifyDataSetChanged();
+            if (!messages.contains(message)) {
+                messages.add(message);
+                messagesAdapter.notifyDataSetChanged();
+            }
         });
         //adds new message to database
+
         bind.messageEditText.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
                 String text = bind.messageEditText.getText().toString();
-                Constants.DATABASE.child("messages/"+uid+"/"+path+"/messagelist").push()
-                        .setValue(new Message(Constants.USER,text,System.currentTimeMillis()));
+                DatabaseReference db = Constants.DATABASE.child("messages/"+uid+"/"+path+"/messagelist").push();
+                db.setValue(new Message(Constants.USER,text,System.currentTimeMillis(), db.getKey()));
                 bind.messageEditText.setText("");
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(bind.messageEditText.getWindowToken(), 0);
                 return true;
             }
             return false;

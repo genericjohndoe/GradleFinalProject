@@ -40,11 +40,12 @@ public class HilarityUserCollections extends Fragment {
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserCollections newInstance(String uid) {
+    public static HilarityUserCollections newInstance(String uid, Profile profile) {
         HilarityUserCollections hilarityUserGenres = new HilarityUserCollections();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserGenres.setArguments(bundle);
+        hilarityUserGenres.profile = profile;
         return hilarityUserGenres;
     }
 
@@ -67,8 +68,7 @@ public class HilarityUserCollections extends Fragment {
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         binding.recyclerView.setAdapter(genreAdapter);
-        profile = (Profile) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
-        Log.i("profilefragment", profile.toString() + " collections");
+
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

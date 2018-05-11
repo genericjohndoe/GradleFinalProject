@@ -10,7 +10,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
  * Created by joeljohnson on 1/28/18.
  */
 
-public class HilarityFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class  HilarityFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of

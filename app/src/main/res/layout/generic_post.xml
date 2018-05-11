@@ -75,12 +75,12 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/dark_gray">
+                android:background="@color/white">
 
                 <ImageButton
                     android:id="@+id/favorite_imageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginBottom="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -88,7 +88,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+                    app:srcCompat="@drawable/hilarity_mask_unlike" />
 
                 <TextView
                     android:id="@+id/likes_counter_textView"
@@ -97,6 +97,7 @@
                     android:layout_marginStart="8dp"
                     android:text="0"
                     android:textAppearance="@android:style/TextAppearance.Material.Body2"
+                    android:textColor="#2b6c00"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/favorite_imageButton"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -106,13 +107,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:background="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/likes_counter_textView"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_comment_black_24dp" />
+                    app:srcCompat="@drawable/hilarity_comment" />
 
                 <TextView
                     android:id="@+id/comment_counter_textView"
@@ -121,6 +122,7 @@
                     android:layout_marginStart="8dp"
                     android:text="0"
                     android:textAppearance="@android:style/TextAppearance.Material.Body2"
+                    android:textColor="#2b6c00"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/comment_imageButton"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -132,6 +134,7 @@
                     android:layout_marginStart="8dp"
                     android:text="TextView"
                     android:textAppearance="@android:style/TextAppearance.Material.Body2"
+                    android:textColor="#2b6c00"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/comment_counter_textView"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -153,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:background="@null"
-                    app:srcCompat="@drawable/ic_collections_black_24dp"
+                    app:srcCompat="@drawable/hilarity_mask_collections_green"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toStartOf="@+id/options_imageButton"
                     card_view:layout_constraintTop_toTopOf="parent" />

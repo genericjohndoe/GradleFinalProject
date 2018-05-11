@@ -34,6 +34,7 @@ import java.util.Map;
 public class CommentFragment extends Fragment {
     String uid;
     String postId;
+    int position;
     List<Comment> comments;
     CommentsAdapter commentsAdapter;
 
@@ -46,11 +47,22 @@ public class CommentFragment extends Fragment {
         return fragment;
     }
 
+    public static CommentFragment newInstance(String uid, String pushId, int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("uid", uid);
+        bundle.putString("post id", pushId);
+        bundle.putInt("position", position);
+        CommentFragment fragment = new CommentFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
         postId = getArguments().getString("post id");
+        position = getArguments().getInt("position");
         comments = new ArrayList<>();
         commentsAdapter = new CommentsAdapter(getActivity(), comments);
     }
@@ -70,17 +82,27 @@ public class CommentFragment extends Fragment {
         });
 
         bind.submitImageButton.setOnClickListener(view -> {
-                if (bind.commentEditText.getText().toString() != ""){
+                if (!bind.commentEditText.getText().toString().equals("")){
                     DatabaseReference db = Constants.DATABASE.child("userpostslikescomments/"+uid+"/"+postId+"/comments/commentlist").push();
                     Comment comment = new Comment(Constants.USER, System.currentTimeMillis(),
                             bind.commentEditText.getText().toString(),uid,postId,db.getKey());
 
+                    //todo change to transaction
                     db.setValue(comment, (databaseError, databaseReference) -> {
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("userNameList", bind.commentEditText.getMentions());
-                        //how to get access to list of mentions on server side
-                        FirebaseFunctions.getInstance().getHttpsCallable("onCommentMentionCreated")
-                                .call(data);
+                        if (databaseError == null) {
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("userNameList", bind.commentEditText.getMentions());
+                            data.put("commentFragmentUid", uid);
+                            data.put("commentFragmentPostId", postId);
+                            data.put("position", comments.size()-1);
+                            data.put("commentorUserName", comment.getHilarityUser().getUserName());
+                            data.put("commentContent", comment.getCommentContent());
+                            //how to get access to list of mentions on server side
+                            FirebaseFunctions.getInstance().getHttpsCallable("onCommentMentionCreated")
+                                    .call(data);
+                            FirebaseFunctions.getInstance().getHttpsCallable("onCommentCreated")
+                                    .call(data);
+                        }
                     });
 
                     InputMethodManager inputManager = (InputMethodManager)
@@ -90,6 +112,7 @@ public class CommentFragment extends Fragment {
                     bind.commentEditText.setText("");
                 }
         });
+        if (position > -1) bind.commentsRecyclerView.scrollToPosition(position);
         return bind.getRoot();
     }
 }

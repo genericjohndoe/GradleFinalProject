@@ -42,11 +42,12 @@ public class HilarityUserLikes extends Fragment {
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserLikes newInstance(String uid){
+    public static HilarityUserLikes newInstance(String uid, Profile profile){
         HilarityUserLikes hilarityUserLikes = new HilarityUserLikes();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserLikes.setArguments(bundle);
+        hilarityUserLikes.profile = profile;
         return hilarityUserLikes;
     }
 
@@ -65,8 +66,7 @@ public class HilarityUserLikes extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
         binding.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         binding.recyclerView.setAdapter(jokeAdapter);
-        profile = (Profile) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
-        Log.i("profilefragment", profile.toString() + " likes");
+
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

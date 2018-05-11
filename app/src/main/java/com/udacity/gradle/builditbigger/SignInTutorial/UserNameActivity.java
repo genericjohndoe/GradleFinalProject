@@ -30,7 +30,7 @@ public class UserNameActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Constants.FIRESTORE.collection("users").whereEqualTo("userName", s).get().addOnSuccessListener(queryDocumentSnapshots -> {
+                Constants.FIRESTORE.collection("users").whereEqualTo("userName", ""+s).get().addOnSuccessListener(queryDocumentSnapshots -> {
                    if (queryDocumentSnapshots.getDocuments().size() == 0){
                        findViewById(R.id.status_imageView).setBackground(getDrawable(R.drawable.fui_done_check_mark));
                        proceed = true;

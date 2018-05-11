@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.example.chipslibrary.models.ChipInterface;
 import com.example.chipslibrary.views.ChipsInputEditText;
+import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Database.SearchViewModel;
 import com.udacity.gradle.builditbigger.Database.SearchViewModelFactory;
@@ -101,8 +102,8 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
                     Collections.sort(sendTo);
                     String text = bind.incomingMessageEdittext.getText().toString();
                     String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
-                    Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push()
-                            .setValue(new Message(Constants.USER,text,System.currentTimeMillis()));
+                    DatabaseReference db = Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push();
+                    db.setValue(new Message(Constants.USER,text,System.currentTimeMillis(),db.getKey()));
                     InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
                     startActivity(new Intent(getActivity(), TranscriptActivity.class));

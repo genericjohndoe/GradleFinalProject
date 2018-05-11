@@ -11,8 +11,10 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comment);
         String uid = getIntent().getStringExtra("uid");
         String pushId = getIntent().getStringExtra("pushId");
+        //if call from the server side, position have value > -1
+        int position = getIntent().getIntExtra("position", -1);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.comment_framelayout, CommentFragment.newInstance(uid, pushId))
+                .add(R.id.comment_framelayout, (position == -1) ? CommentFragment.newInstance(uid, pushId) : CommentFragment.newInstance(uid, pushId,position))
                 .commit();
     }
 }

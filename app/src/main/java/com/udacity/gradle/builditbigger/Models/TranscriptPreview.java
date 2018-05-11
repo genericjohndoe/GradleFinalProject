@@ -32,4 +32,9 @@ public class TranscriptPreview {
     public String getPath() {
         return path;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof TranscriptPreview) && ((TranscriptPreview) obj).getPath().equals(path);
+    }
 }

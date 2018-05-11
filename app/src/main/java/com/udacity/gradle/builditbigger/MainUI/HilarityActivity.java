@@ -112,7 +112,7 @@ public class HilarityActivity extends AppCompatActivity
                 toolbar.setVisibility(View.VISIBLE);
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             } else {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 int orientation = getWindowManager().getDefaultDisplay().getRotation();
                 if (orientation == Surface.ROTATION_0 || orientation == Surface.ROTATION_180) {
                     toolbar.setVisibility(View.VISIBLE);

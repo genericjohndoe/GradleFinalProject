@@ -67,8 +67,10 @@ public class SentMessagesFragment extends Fragment {
 
         SentMessagesViewModel sentMessagesViewModel = ViewModelProviders.of(this, new SentMessagesViewModelFactory(uid)).get(SentMessagesViewModel.class);
         sentMessagesViewModel.getSentMessagesLiveData().observe(this, transcriptPreview -> {
-            transcriptPreviews.add(transcriptPreview);
-            sentMessagesAdapter.notifyDataSetChanged();
+            if (!transcriptPreviews.contains(transcriptPreview)) {
+                transcriptPreviews.add(transcriptPreview);
+                sentMessagesAdapter.notifyDataSetChanged();
+            }
         });
         return binding.getRoot();
     }

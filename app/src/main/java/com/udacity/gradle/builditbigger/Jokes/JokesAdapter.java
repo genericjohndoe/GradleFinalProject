@@ -7,9 +7,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
+import android.media.MediaCodec;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,9 +30,13 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -278,7 +286,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             holder.setJoke(joke);
             holder.getLifecycle().addObserver(new VideoLifeCyclerObserver(context, holder, this));
             prepareVideoPlayback(holder);
-            holder.orientationControlViewModel.getOrientationLiveData().observe(holder, orientationChanged ->{
+            holder.orientationControlViewModel.getOrientationLiveData().observe(holder, orientationChanged -> {
                 //currently doesn't get called
                 Log.i("orientation3", "viewholder observing orientation live data");
                 if (orientationChanged){
@@ -322,9 +330,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         viewHolderViewModel.getIsLikedLiveData().observe(holder, aBoolean -> {
             if (aBoolean) {
-                Glide.with(context.getApplicationContext()).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_like).into(holder.binding.favoriteImageButton);
             } else {
-                Glide.with(context.getApplicationContext()).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_unlike).into(holder.binding.favoriteImageButton);
             }
             holder.setIsLiked(aBoolean);
         });
@@ -334,11 +342,19 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         holder.binding.favoriteImageButton.setOnClickListener(view -> {
             final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;
             if (holder.getIsLiked()) {
-                Constants.DATABASE.child(path).removeValue();
-                Glide.with(context).load(R.drawable.ic_favorite_border_black_24dp).into(holder.binding.favoriteImageButton);
+                Constants.DATABASE.child(path).removeValue((databaseError, databaseReference) -> {
+                    if (databaseError == null) {
+                        Glide.with(context).load(R.drawable.hilarity_mask_unlike).into(holder.binding.favoriteImageButton);
+                        Constants.DATABASE.child("userlikes/" + Constants.UID + "/list/" + joke.getUID() + " " + joke.getPushId()).removeValue();
+                    }
+                });
             } else {
-                Constants.DATABASE.child(path).setValue(true);
-                Glide.with(context).load(R.drawable.ic_favorite_black_24dp).into(holder.binding.favoriteImageButton);
+                Constants.DATABASE.child(path).setValue(true, (databaseError, databaseReference) -> {
+                    if (databaseError == null){
+                        Glide.with(context).load(R.drawable.hilarity_mask_like).into(holder.binding.favoriteImageButton);
+                        Constants.DATABASE.child("userlikes/" + Constants.UID + "/list/" + joke.getUID() + " " + joke.getPushId()).setValue(joke);
+                    }
+                });
             }
         });
 
@@ -386,6 +402,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         // Produces DataSource instances through which media data is loaded.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
                 Util.getUserAgent(context, "Hilarity"), bandwidthMeter);
+        SimpleCache cache = new SimpleCache(context.getCacheDir(), new LeastRecentlyUsedCacheEvictor(1024^2*100));
+        CacheDataSourceFactory cacheDataSourceFactory = new CacheDataSourceFactory(cache, dataSourceFactory);
         // Produces Extractor instances for parsing the media data.
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         if (holder.binding.videoLayout.postVideoView.getPlayer() != null) {

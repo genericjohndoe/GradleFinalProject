@@ -45,11 +45,12 @@ public class HilarityUserJokes extends Fragment {
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserJokes newInstance(String uid) {
+    public static HilarityUserJokes newInstance(String uid, Profile profile) {
         HilarityUserJokes hilarityUserJokes = new HilarityUserJokes();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
         hilarityUserJokes.setArguments(bundle);
+        hilarityUserJokes.profile = profile;
         return hilarityUserJokes;
     }
 
@@ -70,8 +71,7 @@ public class HilarityUserJokes extends Fragment {
         llm.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.setAdapter(jokeAdapter);
-        profile = (Profile) getActivity().getSupportFragmentManager().findFragmentByTag("profile");
-        Log.i("profilefragment", profile.toString());
+
 
 
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
