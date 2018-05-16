@@ -53,6 +53,7 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubsActivity;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
+import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
 
 
 /**
@@ -66,6 +67,7 @@ public class Profile extends Fragment implements HideFAB {
     private String uid;
     private FragmentProfileBinding binding;
     private OrientationControlViewModel orientationControlViewModel;
+    private boolean isFollowed;
 
     /**
      * instantiates new instance of Profile Fragment
@@ -74,7 +76,6 @@ public class Profile extends Fragment implements HideFAB {
      */
     public static Profile newInstance(String uid){
         Profile profile = new Profile();
-
         Bundle bundle = new Bundle();
         bundle.putString("uid",uid);
         profile.setArguments(bundle);
@@ -85,7 +86,6 @@ public class Profile extends Fragment implements HideFAB {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uid = getArguments().getString("uid");
-        Log.i("profilefragment", toString() + "profile");
     }
 
     @Override
@@ -170,7 +170,29 @@ public class Profile extends Fragment implements HideFAB {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().show();
             }
         }));
+        if (!uid.equals(Constants.UID)) {
+            new IsFollowingLiveData(uid).observe(this, isFollowed -> {
+                this.isFollowed = isFollowed;
+                if (isFollowed) {
+                    binding.subscribeButton.setText("Subscribed");
+                } else {
+                    binding.subscribeButton.setText("Subscribe");
+                }
+            });
+        }
+        if (uid.equals(Constants.UID)) binding.subscribeButton.setText("Edit Profile");
+        binding.subscribeButton.setOnClickListener(view ->{
+            if (uid.equals(Constants.UID)){
+                //todo create intent to edit profile
+            } else {
+                if (!isFollowed){
+                    Constants.DATABASE.child("followers/"+uid+"/list/"+Constants.UID).setValue(Constants.USER);
+                } else {
+                    Constants.DATABASE.child("followers/"+uid+"/list/"+Constants.UID).removeValue();
+                }
 
+            }
+        });
         return binding.getRoot();
     }
 

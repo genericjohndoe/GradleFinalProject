@@ -90,18 +90,18 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/subscriptions_tv" />
 
-                        <ImageButton
+                        <Button
                             android:id="@+id/subscribe_button"
+                            android:text="Subscribe"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="16dp"
-                            android:background="@null"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/profile_imageview"
                             app:layout_constraintTop_toBottomOf="@+id/subscriptions_tv"
-                            app:srcCompat="@drawable/hilarity_to_follow" />
+                             />
 
                     </android.support.constraint.ConstraintLayout>
 

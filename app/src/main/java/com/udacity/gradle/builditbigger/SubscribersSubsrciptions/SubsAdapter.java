@@ -52,7 +52,11 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
         holder.setUid(subscribersList.get(position).getUid());
         new IsFollowingLiveData(holder.getUid()).observe(holder, bool ->{
             holder.setIsFollowed(bool);
-            //todo set UI
+            if (bool){
+                holder.binding.followButton.setText("Subscribed");
+            } else {
+                holder.binding.followButton.setText("Subscribe");
+            }
         });
         //holder.binding.executePendingBindings();
     }
