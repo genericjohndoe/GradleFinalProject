@@ -83,14 +83,27 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
         bind.fab.setOnClickListener(view -> showSearchDialog());
         FeedViewModel feedViewModel = ViewModelProviders.of(this, new FeedViewModelProvider(uid)).get(FeedViewModel.class);
-        feedViewModel.getFeedLiveData().observe(this, joke -> {
-            if (!jokes.contains(joke)) {
-                jokes.add(joke);
-                if (!enableSwipeToRefresh){
-                    refreshLayout();
-                } else {
-                    bind.refreshButton.setVisibility(View.VISIBLE);
-                }
+        feedViewModel.getFeedLiveData().observe(this, jokeWrapper -> {
+            switch (jokeWrapper.getState()) {
+                case 1:
+                    if (!jokes.contains(jokeWrapper.getPost())){
+                        jokes.add(jokeWrapper.getPost());
+                        if (!enableSwipeToRefresh){
+                            refreshLayout();
+                        } else {
+                            bind.refreshButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    break;
+                case 2:
+                    int index = jokes.indexOf(jokeWrapper.getPost());
+                    jokes.set(index, jokeWrapper.getPost());
+                    jokeAdapter.notifyDataSetChanged();
+                    break;
+                default:
+                    jokes.remove(jokeWrapper.getPost());
+                    jokeAdapter.notifyDataSetChanged();
+                    break;
             }
             if (jokes.size() == 0 || jokes.size() == 1) configureUI();
         });

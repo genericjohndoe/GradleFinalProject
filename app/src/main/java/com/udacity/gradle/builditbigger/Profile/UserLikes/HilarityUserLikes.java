@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
@@ -94,8 +95,17 @@ public class HilarityUserLikes extends Fragment {
         UserLikesViewModel userLikesViewModel = ViewModelProviders.of(this, new UserLikesViewModelFactory(uid))
                 .get(UserLikesViewModel.class);
 
-        userLikesViewModel.getUserLikesLiveData().observe(this, joke -> {
-            if (!jokes.contains(joke))jokes.add(joke);
+        userLikesViewModel.getUserLikesLiveData().observe(this, jokeWrapper -> {
+
+            switch (jokeWrapper.getState()){
+                case 1: if (!jokes.contains(jokeWrapper.getPost())) jokes.add(jokeWrapper.getPost());
+                        break;
+                case 2: int index = jokes.indexOf(jokeWrapper.getPost());
+                        jokes.set(index, jokeWrapper.getPost());
+                        break;
+                default: jokes.remove(jokeWrapper.getPost());
+                         break;
+            }
             if (!searched) {
                 jokeAdapter.notifyDataSetChanged();
                 configureUI();

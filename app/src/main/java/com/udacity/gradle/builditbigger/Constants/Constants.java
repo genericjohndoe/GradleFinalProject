@@ -62,4 +62,8 @@ public class Constants {
         }
         return null;
     }
+
+    public static int STATE_ADDED = 1;
+    public static int STATE_CHANGED = 2;
+    public static int STATE_REMOVED = 3;
 }
