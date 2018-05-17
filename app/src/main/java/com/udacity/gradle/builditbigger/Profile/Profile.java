@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -109,6 +110,10 @@ public class Profile extends Fragment implements HideFAB {
         });
 
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
+
+        binding.profileTabLayout.getTabAt(0).setCustomView(R.layout.icon_post);
+        binding.profileTabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
+        binding.profileTabLayout.getTabAt(2).setCustomView(R.layout.icon_likes);
 
         binding.subscribersTv.setOnClickListener(view -> createSubsIntent(1));
 
