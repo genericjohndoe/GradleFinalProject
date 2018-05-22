@@ -123,6 +123,7 @@ public class Profile extends Fragment implements HideFAB {
         binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
         //object beneath provides data to fragment
         getLifecycle().addObserver(new VideoLifeCyclerObserver(getActivity(), binding.videoPlayer));
+
         UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this,
                 new UserInfoViewModelFactory(uid))
                 .get(UserInfoViewModel.class);
@@ -138,7 +139,7 @@ public class Profile extends Fragment implements HideFAB {
                     .into(binding.profileImageview);
             }
         );
-        //todo replace text with image text
+
         userInfoViewModel.getNumPostLiveData().observe(this, numPosts -> {
             binding.postsTv.setText(numPosts != null ? numPosts + " posts" : "0 posts");
             }

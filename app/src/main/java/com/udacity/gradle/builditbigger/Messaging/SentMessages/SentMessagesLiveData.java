@@ -17,14 +17,14 @@ public class SentMessagesLiveData extends LiveData<TranscriptPreview> {
     private DatabaseReference databaseReference;
 
     public SentMessagesLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("messages/"+uid);
+        databaseReference = Constants.DATABASE.child("transcriptpreviews/"+uid);
     }
 
 
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(dataSnapshot.child("transcriptPreview").getValue(TranscriptPreview.class));
+            setValue(dataSnapshot.getValue(TranscriptPreview.class));
         }
 
         @Override

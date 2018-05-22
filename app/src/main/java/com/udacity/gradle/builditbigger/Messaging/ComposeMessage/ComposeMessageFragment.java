@@ -21,7 +21,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.example.chipslibrary.models.ChipInterface;
 import com.example.chipslibrary.views.ChipsInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Database.SearchViewModel;
 import com.udacity.gradle.builditbigger.Database.SearchViewModelFactory;
@@ -29,6 +32,7 @@ import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
+import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentComposeMessageBinding;
 
@@ -91,26 +95,46 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
         bind.userMessageRecyclerview.setAdapter(usersToMessageAdapter);
         bind.userMessageRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         bind.userMessageRecyclerview.requestFocus();
-        bind.incomingMessageEdittext.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    List<String> sendTo = new ArrayList<>();
-                    for (HilarityUser chip: hilarityUsers){
-                        sendTo.add(chip.getUid());
-                    }
-                    sendTo.add(Constants.UID);
-                    Collections.sort(sendTo);
-                    String text = bind.incomingMessageEdittext.getText().toString();
-                    String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
-                    DatabaseReference db = Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push();
-                    db.setValue(new Message(Constants.USER,text,System.currentTimeMillis(),db.getKey()));
-                    InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
-                    startActivity(new Intent(getActivity(), TranscriptActivity.class));
-                    return true;
+        bind.sendButton.setOnClickListener(view ->{
+            List<String> sendTo = new ArrayList<>();
+            for (HilarityUser chip: hilarityUsers){
+                sendTo.add(chip.getUid());
+            }
+            sendTo.add(Constants.UID);
+            Collections.sort(sendTo);
+            String text = bind.incomingMessageEdittext.getText().toString();
+            String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
+            DatabaseReference db = Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push();
+            Message message = new Message(Constants.USER,text,System.currentTimeMillis(),db.getKey());
+            db.setValue(message, ((databaseError, databaseReference) -> {
+                if (databaseError == null && hilarityUsers != null){
+                    Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()){
+                                        Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path+"/message")
+                                                .setValue(message);
+                                    }else{
+                                        Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path)
+                                                .setValue(new TranscriptPreview(message, hilarityUsers,path));
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {}
+                            });
+                    Intent intent = new Intent(getActivity(), TranscriptActivity.class);
+                    intent.putExtra("path", path);
+                    startActivity(intent);
+                } else {
+                    Log.i("HillBilly","list is null");
                 }
-                return false;
+            }));
+            InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
         });
+
         bind.incomingMessageEdittext.setOnFocusChangeListener((view, hasFocus) -> {
             usersToMessageAdapter = new UsersToMessageAdapter(new ArrayList<>(), ComposeMessageFragment.this, getActivity());
             usersToMessageAdapter.notifyDataSetChanged();

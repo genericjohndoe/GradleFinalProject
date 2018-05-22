@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,37 +34,29 @@ public class MessagedUsersAdapter extends RecyclerView.Adapter<MessagedUsersAdap
     private Context context;
     private List<HilarityUser> hilarityUsers;
 
-    public MessagedUsersAdapter(String[] users, Context context){
+    public MessagedUsersAdapter(List<HilarityUser> hilarityUsers, Context context){
         this.context = context;
-        hilarityUsers = new ArrayList<>();
-        for (String user: users){
-            Constants.DATABASE.child("users/"+user).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    hilarityUsers.add(dataSnapshot.getValue(HilarityUser.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            });
-        }
+        this.hilarityUsers = hilarityUsers;
         //hilarityUsers = HilarityUserDatabase.getInstance(context).dao().getUsersFromUidList(users);
     }
 
     @Override
     public void onBindViewHolder(MessagedUserViewHolder holder, int position) {
         Glide.with(context).load(hilarityUsers.get(position).getUrlString()).into(holder.bind.profileImageview);
+        Log.i("HilarityMessage12", "position "+position);
         holder.uid = hilarityUsers.get(position).getUid();
     }
 
     @Override
     public MessagedUserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MessagedUserCellBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.messaged_user_cell, parent, false);
+        Log.i("HilarityMessage12", "view holder made");
         return new MessagedUserViewHolder(bind);
     }
 
     @Override
     public int getItemCount() {
+        //Log.i("HilarityMessage12", "GIC "+hilarityUsers.size());
         return hilarityUsers.size();
     }
 

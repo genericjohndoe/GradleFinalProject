@@ -13,7 +13,6 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -107,6 +106,9 @@
         <activity
             android:name=".Messaging.Transcripts.TranscriptActivity"
             android:parentActivityName=".Messaging.SentMessages.MessagesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Messaging.SentMessages.MessagesActivity" />
             <intent-filter>
                 <action android:name="com.udacity.gradle.builditbigger.ACTION_MESSAGE" />
             </intent-filter>

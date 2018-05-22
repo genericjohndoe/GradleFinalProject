@@ -17,6 +17,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.udacity.gradle.builditbigger.Comments.CommentActivity;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
+import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
 import java.util.Map;
@@ -63,6 +64,7 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNewMessageNotification(String messageBody, String path, String title) {
         Intent intent = new Intent(this, TranscriptActivity.class);
         intent.putExtra("preview", path);
+        //intent.putExtra("users", users);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);

@@ -9,13 +9,12 @@ import java.util.List;
 public class TranscriptPreview {
 
     private Message message;
-    private List<String> conversationalists;
+    private List<HilarityUser> conversationalists;
     private String path;
 
     public TranscriptPreview(){}
 
-
-    public TranscriptPreview(Message message, List<String> conversationalists, String path){
+    public TranscriptPreview(Message message, List<HilarityUser> conversationalists, String path){
         this.message = message;
         this.conversationalists = conversationalists;
         this.path = path;
@@ -25,7 +24,7 @@ public class TranscriptPreview {
         return message;
     }
 
-    public List<String> getConversationalists() {
+    public List<HilarityUser> getConversationalists() {
         return conversationalists;
     }
 

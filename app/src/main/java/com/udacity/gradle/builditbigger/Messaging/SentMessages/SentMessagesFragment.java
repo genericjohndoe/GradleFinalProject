@@ -31,9 +31,7 @@ import java.util.List;
 public class SentMessagesFragment extends Fragment {
     private String uid;
 
-    public SentMessagesFragment() {
-        // Required empty public constructor
-    }
+    public SentMessagesFragment() {}
 
     public static SentMessagesFragment newInstance(String uid) {
         SentMessagesFragment fragment = new SentMessagesFragment();
@@ -53,7 +51,6 @@ public class SentMessagesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle("Sent Messages");
         List<TranscriptPreview> transcriptPreviews = new ArrayList<>();
         SentMessagesAdapter sentMessagesAdapter = new SentMessagesAdapter(transcriptPreviews, getActivity());
         FragmentSentMessageBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_sent_message, container, false);
