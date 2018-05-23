@@ -11,13 +11,15 @@ public class TranscriptPreview {
     private Message message;
     private List<HilarityUser> conversationalists;
     private String path;
+    private Boolean original;
 
     public TranscriptPreview(){}
 
-    public TranscriptPreview(Message message, List<HilarityUser> conversationalists, String path){
+    public TranscriptPreview(Message message, List<HilarityUser> conversationalists, String path, Boolean original){
         this.message = message;
         this.conversationalists = conversationalists;
         this.path = path;
+        this.original = original;
     }
 
     public Message getMessage() {
@@ -31,6 +33,8 @@ public class TranscriptPreview {
     public String getPath() {
         return path;
     }
+
+    public Boolean getOriginal() { return original;}
 
     @Override
     public boolean equals(Object obj) {

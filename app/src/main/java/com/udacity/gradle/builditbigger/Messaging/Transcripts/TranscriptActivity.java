@@ -1,9 +1,11 @@
 package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Messaging.SentMessages.MessagesActivity;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
@@ -19,4 +21,12 @@ public class TranscriptActivity extends AppCompatActivity {
                 .add(R.id.transcript_framelayout, TranscriptFragment.newInstance(Constants.UID, path), "transcript")
                 .commit();
     }
+
+    /*@Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MessagesActivity.class);
+        startActivity(intent);
+        finish();
+    }*/
 }

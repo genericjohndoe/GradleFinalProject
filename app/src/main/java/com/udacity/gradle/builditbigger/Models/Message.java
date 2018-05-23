@@ -10,14 +10,16 @@ public class Message {
     private Long timeStamp;
     private HilarityUser hilarityUser;
     private String pushId;
+    private Boolean original;
 
     public Message(){}
 
-    public Message(HilarityUser user, String contents, long timeStamp, String pushId){
+    public Message(HilarityUser user, String contents, long timeStamp, String pushId, Boolean original){
         hilarityUser = user;
         this.contents = contents;
         this.timeStamp = timeStamp;
         this.pushId = pushId;
+        this.original = original;
     }
 
     public HilarityUser getHilarityUser() {
@@ -35,6 +37,8 @@ public class Message {
     public String getPushId() {
         return pushId;
     }
+
+    public Boolean getOriginal() { return original; }
 
     @Override
     public boolean equals(Object obj) {

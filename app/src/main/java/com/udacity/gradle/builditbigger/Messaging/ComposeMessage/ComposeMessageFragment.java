@@ -105,7 +105,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
             String text = bind.incomingMessageEdittext.getText().toString();
             String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
             DatabaseReference db = Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push();
-            Message message = new Message(Constants.USER,text,System.currentTimeMillis(),db.getKey());
+            Message message = new Message(Constants.USER,text,System.currentTimeMillis(),db.getKey(),true);
             db.setValue(message, ((databaseError, databaseReference) -> {
                 if (databaseError == null && hilarityUsers != null){
                     Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path)
@@ -117,7 +117,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
                                                 .setValue(message);
                                     }else{
                                         Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path)
-                                                .setValue(new TranscriptPreview(message, hilarityUsers,path));
+                                                .setValue(new TranscriptPreview(message, hilarityUsers,path, true));
                                     }
                                 }
 
@@ -127,6 +127,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
                     Intent intent = new Intent(getActivity(), TranscriptActivity.class);
                     intent.putExtra("path", path);
                     startActivity(intent);
+                    getActivity().finish();
                 } else {
                     Log.i("HillBilly","list is null");
                 }

@@ -96,10 +96,10 @@ public class TranscriptFragment extends Fragment {
         bind.sendButton.setOnClickListener(view ->{
             String text = bind.messageEditText.getText().toString();
             DatabaseReference db = Constants.DATABASE.child("messages/"+uid+"/"+path+"/messagelist").push();
-            Message message = new Message(Constants.USER,text,System.currentTimeMillis(), db.getKey());
+            Message message = new Message(Constants.USER,text,System.currentTimeMillis(), db.getKey(), true);
             db.setValue(message, (databaseError, databaseReference) -> {
                 if (databaseError == null) {
-                    Constants.DATABASE.child("transcriptpreviews/"+uid+"/"+path+"/"+db.getKey()+"/message")
+                    Constants.DATABASE.child("transcriptpreviews/"+uid+"/"+path+"/message")
                             .setValue(message);
                 }
             });
