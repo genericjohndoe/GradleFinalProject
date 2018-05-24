@@ -7,13 +7,11 @@
     android:layout_height="match_parent"
     tools:context="com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <com.example.chipslibrary.ChipsInput
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/chips_input"
+        android:id="@+id/recipient_recyclerview"
         android:background="@color/accent"
-        app:chip_deletable="true"
          />
 
     <android.support.v7.widget.RecyclerView

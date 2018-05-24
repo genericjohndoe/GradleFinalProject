@@ -55,10 +55,7 @@ public class MessagedUsersAdapter extends RecyclerView.Adapter<MessagedUsersAdap
     }
 
     @Override
-    public int getItemCount() {
-        //Log.i("HilarityMessage12", "GIC "+hilarityUsers.size());
-        return hilarityUsers.size();
-    }
+    public int getItemCount() {return hilarityUsers.size();}
 
     /**
      * MessagedUserViewHolder class used to generate messaged user cell

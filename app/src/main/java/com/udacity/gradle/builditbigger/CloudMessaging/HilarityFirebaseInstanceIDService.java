@@ -19,8 +19,7 @@ public class  HilarityFirebaseInstanceIDService extends FirebaseInstanceIdServic
      */
     @Override
     public void onTokenRefresh() {
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        sendRegistrationToServer(refreshedToken);
+        sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
     }
 
     /**

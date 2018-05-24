@@ -53,7 +53,6 @@ public class HilarityActivity extends AppCompatActivity
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        messagingToken();
         fragmentNumber = getIntent().getIntExtra("number", 0);
         otherUid = getIntent().getStringExtra("uid");
         Fragment fragment;
@@ -183,20 +182,6 @@ public class HilarityActivity extends AppCompatActivity
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void messagingToken(){
-        Constants.DATABASE.child("messagingtokens/"+Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) Constants.DATABASE.child("messagingtokens/"+Constants.UID).setValue(FirebaseInstanceId.getInstance().getToken());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override

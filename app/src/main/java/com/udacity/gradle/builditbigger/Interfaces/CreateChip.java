@@ -13,5 +13,7 @@ public interface CreateChip {
 
     void addChipView(HilarityUser hu);
 
-    List<ComposeMessageFragment.HilarityUserChip> getSelectedUsers();
+    List<HilarityUser> getSelectedUsers();
+
+    void removeChipView(HilarityUser hu);
 }

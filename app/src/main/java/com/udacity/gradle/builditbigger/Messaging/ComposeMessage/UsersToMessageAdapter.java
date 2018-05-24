@@ -1,11 +1,20 @@
 package com.udacity.gradle.builditbigger.Messaging.ComposeMessage;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
@@ -25,26 +34,26 @@ public class UsersToMessageAdapter extends RecyclerView.Adapter<UsersToMessageAd
     private CreateChip cc;
     private Context context;
 
-    UsersToMessageAdapter(List<HilarityUser> hilarityUserList, CreateChip cc, Context context){
+    UsersToMessageAdapter(List<HilarityUser> hilarityUserList, CreateChip cc, Context context) {
         this.hilarityUserList = hilarityUserList;
         this.cc = cc;
         this.context = context;
     }
 
     @Override
-    public HilarityUserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        HilarityUserNetworkBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.hilarity_user_network, parent, false);
+    @NonNull
+    public HilarityUserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        HilarityUserNetworkBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                R.layout.hilarity_user_network, parent, false);
         return new HilarityUserViewHolder(bind);
     }
 
     @Override
-    public void onBindViewHolder(HilarityUserViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HilarityUserViewHolder holder, int position) {
         HilarityUser hu = hilarityUserList.get(position);
-        Log.i("Hilarity","hu is null? "+ Boolean.toString(hu == (null)));
         holder.hu = hu;
         Glide.with(context).load(hu.getUrlString()).into(holder.bind.profileImageview);
         holder.bind.usernameTextView.setText(hu.getUserName());
-        Log.i("Hilarity", "onBindViewHolder");
     }
 
     @Override
@@ -52,10 +61,10 @@ public class UsersToMessageAdapter extends RecyclerView.Adapter<UsersToMessageAd
         return hilarityUserList.size();
     }
 
-    public void setHilarityUserList(List<HilarityUser> list){
+
+    public void setHilarityUserList(List<HilarityUser> list) {
         this.hilarityUserList = list;
         notifyDataSetChanged();
-        Log.i("Hilarity","setHilarityUserList");
     }
 
     public class HilarityUserViewHolder extends RecyclerView.ViewHolder {
@@ -66,14 +75,16 @@ public class UsersToMessageAdapter extends RecyclerView.Adapter<UsersToMessageAd
             super(bind.getRoot());
             Log.i("Hilarity", "HVH created");
             this.bind = bind;
-            this.bind.isPickedCheckBox.setOnClickListener(view -> {
-                Log.i("Hilarity","hu is null in onClick? "+ Boolean.toString(hu == (null)));
-                cc.addChipView(hu);
+            this.bind.isPickedCheckBox.setOnClickListener(view ->{
+                if (bind.isPickedCheckBox.isChecked()){
+                    cc.addChipView(hu);
+                }else {
+                    cc.removeChipView(hu);
+                }
             });
-            if (hu !=null && cc.getSelectedUsers().contains(hu)){
+            if (hu != null && cc.getSelectedUsers().contains(hu)) {
                 bind.isPickedCheckBox.setChecked(true);
             }
         }
     }
-
 }

@@ -44,8 +44,6 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //dialog boxes
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    //chips library
-    implementation project(path: ':chipslibrary')
     //Firebase
     implementation "com.google.firebase:firebase-storage:15.0.2"
     implementation "com.google.firebase:firebase-database:15.0.1"
@@ -81,8 +79,8 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.1'
     implementation 'com.google.android.exoplayer:extension-mediasession:r2.5.1'
     // Room
-    implementation "android.arch.persistence.room:runtime:1.0.0"
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation "android.arch.persistence.room:runtime:1.1.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.0"
     //kapt "android.arch.persistence.room:compiler:1.0.0"
     //vid chat
     implementation 'co.netguru.videochatguru:videochatguru:0.1.2@aar'

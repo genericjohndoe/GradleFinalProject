@@ -4,23 +4,17 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-import com.example.chipslibrary.models.ChipInterface;
-import com.example.chipslibrary.views.ChipsInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +23,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Database.SearchViewModel;
 import com.udacity.gradle.builditbigger.Database.SearchViewModelFactory;
 import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
+import com.udacity.gradle.builditbigger.Interfaces.FilterRecyclerView;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
@@ -44,7 +39,7 @@ import java.util.List;
 /**
  * to be shown when user is picking people to message
  */
-public class ComposeMessageFragment extends Fragment implements CreateChip {
+public class ComposeMessageFragment extends Fragment implements CreateChip, FilterRecyclerView {
 
     //todo connect edit text and other recycler view show that before typing user sees
     //todo chron list of people messaged, then people in network, then queries master list of user
@@ -54,7 +49,8 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
     private String uid;
     private FragmentComposeMessageBinding bind;
     private UsersToMessageAdapter usersToMessageAdapter;
-    private List<HilarityUser> hilarityUsers;
+    private List<HilarityUser> hilarityUsers;//list of intended users
+    private IntendedRecipientAdapter intendedRecipientAdapter;
 
     public static ComposeMessageFragment newInstance(String uid){
         ComposeMessageFragment composeMessageFragment = new ComposeMessageFragment();
@@ -70,31 +66,23 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
         networkChipList = new ArrayList<>();
         hilarityUsers = new ArrayList<>();
         usersToMessageAdapter = new UsersToMessageAdapter(networkChipList,this, getActivity());
+        intendedRecipientAdapter = new IntendedRecipientAdapter(hilarityUsers, getActivity(), this);
         uid = getArguments().getString("uid");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         bind = DataBindingUtil.inflate(inflater,R.layout.fragment_compose_message, container, false);
-        ChipsInputEditText chipsInputEditText = bind.chipsInput.getAccessToEditText();
-        chipsInputEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                usersToMessageAdapter.setHilarityUserList(filter("%"+s+"%", networkChipList));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+        bind.recipientRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        bind.recipientRecyclerview.setAdapter(intendedRecipientAdapter);
 
         bind.userMessageRecyclerview.setAdapter(usersToMessageAdapter);
         bind.userMessageRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         bind.userMessageRecyclerview.requestFocus();
+
         bind.sendButton.setOnClickListener(view ->{
             List<String> sendTo = new ArrayList<>();
             for (HilarityUser chip: hilarityUsers){
@@ -106,6 +94,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
             String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
             DatabaseReference db = Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push();
             Message message = new Message(Constants.USER,text,System.currentTimeMillis(),db.getKey(),true);
+            hilarityUsers.add(Constants.USER);
             db.setValue(message, ((databaseError, databaseReference) -> {
                 if (databaseError == null && hilarityUsers != null){
                     Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path)
@@ -135,9 +124,8 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
             InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
         });
-
         bind.incomingMessageEdittext.setOnFocusChangeListener((view, hasFocus) -> {
-            usersToMessageAdapter = new UsersToMessageAdapter(new ArrayList<>(), ComposeMessageFragment.this, getActivity());
+            usersToMessageAdapter.setHilarityUserList(new ArrayList<>());
             usersToMessageAdapter.notifyDataSetChanged();
         });
         SearchViewModel searchViewModel = ViewModelProviders.of(ComposeMessageFragment.this, new SearchViewModelFactory(getActivity().getApplication())).get(SearchViewModel.class);
@@ -151,60 +139,40 @@ public class ComposeMessageFragment extends Fragment implements CreateChip {
     }
 
 
-    public class HilarityUserChip implements ChipInterface {
-        HilarityUser hilarityUser;
-
-        HilarityUserChip(HilarityUser hilarityUser){
-            this.hilarityUser = hilarityUser;
-        }
-
-        @Override
-        public Drawable getAvatarDrawable() {
-            return null;
-        }
-
-        @Override
-        public Object getId() {
-            return hilarityUser.getUid();
-        }
-
-        @Override
-        public String getInfo() {
-            return null;
-        }
-
-        @Override
-        public String getLabel() {
-            return hilarityUser.getUserName();
-        }
-
-        @Override
-        public Uri getAvatarUri() {
-            return Uri.parse(hilarityUser.getUrlString());
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return getId().equals(((HilarityUser) obj).getUid());
-        }
-    }
 
     @Override
     public void addChipView(HilarityUser hu) {
-        bind.chipsInput.addChip(new HilarityUserChip(hu));
         hilarityUsers.add(hu);
+        intendedRecipientAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public List<HilarityUserChip> getSelectedUsers() {
-        return (List<HilarityUserChip>) bind.chipsInput.getSelectedChipList();
+    public List<HilarityUser> getSelectedUsers() {
+        return hilarityUsers;
+    }
+
+    @Override
+    public void removeChipView(HilarityUser hu) {
+        hilarityUsers.remove(hu);
+        intendedRecipientAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void filter(String input) {
+        usersToMessageAdapter.setHilarityUserList(filter(input, networkChipList));
+        usersToMessageAdapter.notifyDataSetChanged();
     }
 
     private List<HilarityUser> filter(String str, List<HilarityUser> list){
+        Log.i("JoelJohnson", "filter param "+str);
         ArrayList<HilarityUser> newList = new ArrayList<>();
         for (HilarityUser user: list){
-            if (user.getUserName().contains(str)) newList.add(user);
+            if (user.getUserName().contains(str)){
+                Log.i("JoelJohnson", user.getUserName()+ " added");
+                newList.add(user);
+            }
         }
+
         return newList;
     }
 }

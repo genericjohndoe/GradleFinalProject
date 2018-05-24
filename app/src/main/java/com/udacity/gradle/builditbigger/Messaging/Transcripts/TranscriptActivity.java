@@ -21,12 +21,4 @@ public class TranscriptActivity extends AppCompatActivity {
                 .add(R.id.transcript_framelayout, TranscriptFragment.newInstance(Constants.UID, path), "transcript")
                 .commit();
     }
-
-    /*@Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, MessagesActivity.class);
-        startActivity(intent);
-        finish();
-    }*/
 }

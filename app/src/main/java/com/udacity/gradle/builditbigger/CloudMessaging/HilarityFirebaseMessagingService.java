@@ -35,6 +35,7 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.i("Ladidadi", "onMessageReceived called");
         Map<String, String> data = remoteMessage.getData();
         if (data.get("type").equals("message")) {
             sendNewMessageNotification(data.get("body"), data.get("path"), data.get("title"));
@@ -62,9 +63,9 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNewMessageNotification(String messageBody, String path, String title) {
+        Log.i("Ladidadi", "sendNewMessageNotification");
         Intent intent = new Intent(this, TranscriptActivity.class);
-        intent.putExtra("preview", path);
-        //intent.putExtra("users", users);
+        intent.putExtra("path", path);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -78,11 +79,12 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0 , notificationBuilder.build());
     }
 
     private void sendNewCommentMentionNotification(String title, String body, String uid, String pushId, int position){

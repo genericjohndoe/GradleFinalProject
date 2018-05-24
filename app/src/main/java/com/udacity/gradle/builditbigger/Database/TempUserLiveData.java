@@ -27,12 +27,10 @@ public class TempUserLiveData extends LiveData<HilarityUser> {
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        }
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
-        }
+        public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
         @Override
         public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
