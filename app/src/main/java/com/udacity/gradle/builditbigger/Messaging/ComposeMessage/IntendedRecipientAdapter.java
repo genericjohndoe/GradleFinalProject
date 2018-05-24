@@ -18,6 +18,7 @@ import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.MessagedUserCellBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IntendedRecipientAdapter extends RecyclerView.Adapter {
@@ -107,6 +108,11 @@ public class IntendedRecipientAdapter extends RecyclerView.Adapter {
                 @Override
                 public void afterTextChanged(Editable s) {}
             });
+
+            editText.setOnFocusChangeListener((view2, hasFocus) -> {
+                filterRecyclerView.requestFocus();
+            });
+            editText.requestFocus();
         }
     }
 }

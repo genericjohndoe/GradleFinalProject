@@ -163,6 +163,11 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
         usersToMessageAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void requestFocus() {
+        usersToMessageAdapter.setHilarityUserList(networkChipList);
+    }
+
     private List<HilarityUser> filter(String str, List<HilarityUser> list){
         Log.i("JoelJohnson", "filter param "+str);
         ArrayList<HilarityUser> newList = new ArrayList<>();
@@ -172,7 +177,6 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
                 newList.add(user);
             }
         }
-
         return newList;
     }
 }
