@@ -3,8 +3,10 @@ package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -19,12 +21,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
+import com.udacity.gradle.builditbigger.Messaging.MediaDialog.AddMediaDialog;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentTranscriptBinding;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +37,13 @@ import java.util.List;
  * TranscriptFragment class shows messages exchanged between users
  */
 
-public class TranscriptFragment extends Fragment {
+public class TranscriptFragment extends Fragment implements IntentCreator {
     private String uid;
     private String path;
     private String[] usersUidList;
     private List<HilarityUser> hilarityUsers;
+    private FragmentTranscriptBinding bind;
+    private DialogFragment newMedia;
 
     public static TranscriptFragment newInstance(String uid, String path){
         TranscriptFragment transcriptFragment = new TranscriptFragment();
@@ -73,9 +80,8 @@ public class TranscriptFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentTranscriptBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_transcript,container,false);
+        bind = DataBindingUtil.inflate(inflater, R.layout.fragment_transcript,container,false);
         //shows horizontal list of users
-
         bind.usersRecyclerView.setAdapter(new MessagedUsersAdapter(hilarityUsers, getActivity()));
         bind.usersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         //shows list of messages
@@ -95,19 +101,45 @@ public class TranscriptFragment extends Fragment {
         });
         bind.sendButton.setOnClickListener(view ->{
             String text = bind.messageEditText.getText().toString();
-            DatabaseReference db = Constants.DATABASE.child("messages/"+uid+"/"+path+"/messagelist").push();
-            Message message = new Message(Constants.USER,text,System.currentTimeMillis(), db.getKey(), true);
-            db.setValue(message, (databaseError, databaseReference) -> {
-                if (databaseError == null) {
-                    Constants.DATABASE.child("transcriptpreviews/"+uid+"/"+path+"/message")
-                            .setValue(message);
-                }
-            });
-            bind.messageEditText.setText("");
-            InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            mgr.hideSoftInputFromWindow(bind.messageEditText.getWindowToken(), 0);
+            List<String> textList = new ArrayList<>();
+            textList.add(text);
+            sendMessage(textList);
+        });
+
+        bind.mediaButton.setOnClickListener(view ->{
+            newMedia = AddMediaDialog.getInstance(this);
+            newMedia.show(getActivity().getSupportFragmentManager(),"new media");
         });
 
         return bind.getRoot();
+    }
+
+    @Override
+    public void createIntent(String filepath, String number) {
+        String dbPath = "users/" + Constants.UID + "/images/" + Constants.getCurrentDateAndTime() + ".png";
+        Constants.STORAGE.child(dbPath)
+                .putFile(Uri.fromFile(new File(filepath)))
+                .addOnFailureListener(exception -> {})
+                .addOnSuccessListener(taskSnapshot -> {
+                    List<String> messageInfo = new ArrayList<>();
+                    messageInfo.add(dbPath);
+                    messageInfo.add(taskSnapshot.getUploadSessionUri().toString());
+                    sendMessage(messageInfo);
+                });
+        newMedia.dismiss();
+    }
+
+    private void sendMessage(List<String> messageContents){
+        DatabaseReference db = Constants.DATABASE.child("messages/"+uid+"/"+path+"/messagelist").push();
+        Message message = new Message(Constants.USER,messageContents,System.currentTimeMillis(), db.getKey(), true);
+        db.setValue(message, (databaseError, databaseReference) -> {
+            if (databaseError == null) {
+                Constants.DATABASE.child("transcriptpreviews/"+uid+"/"+path+"/message")
+                        .setValue(message);
+            }
+        });
+        bind.messageEditText.setText("");
+        InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(bind.messageEditText.getWindowToken(), 0);
     }
 }

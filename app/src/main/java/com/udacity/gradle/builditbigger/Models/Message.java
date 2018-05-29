@@ -1,12 +1,14 @@
 package com.udacity.gradle.builditbigger.Models;
 
+import java.util.List;
+
 /**
  * Message class serves as model for direct messages sent among users
  */
 
 public class Message {
 
-    private String contents;
+    private List<String> contents;
     private Long timeStamp;
     private HilarityUser hilarityUser;
     private String pushId;
@@ -14,7 +16,7 @@ public class Message {
 
     public Message(){}
 
-    public Message(HilarityUser user, String contents, long timeStamp, String pushId, Boolean original){
+    public Message(HilarityUser user, List<String> contents, long timeStamp, String pushId, Boolean original){
         hilarityUser = user;
         this.contents = contents;
         this.timeStamp = timeStamp;
@@ -26,7 +28,7 @@ public class Message {
         return hilarityUser;
     }
 
-    public String getContents() {
+    public List<String> getContents() {
         return contents;
     }
 

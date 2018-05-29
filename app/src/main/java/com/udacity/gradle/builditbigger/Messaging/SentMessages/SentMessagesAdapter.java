@@ -55,7 +55,8 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
             holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, preview.getMessage().getTimeStamp()));
             holder.binding.userNameTextView.setText(userName);
             Glide.with(context).load(preview.getMessage().getHilarityUser().getUrlString()).into(holder.binding.profileImageview);
-            holder.binding.lastMessageTextView.setText(preview.getMessage().getContents());
+            String text = (preview.getMessage().getContents().size() == 1) ? preview.getMessage().getContents().get(0) : "Image Sent";
+            holder.binding.lastMessageTextView.setText(text);
         } else {
             Log.i("Hilarity","preview is null");
         }

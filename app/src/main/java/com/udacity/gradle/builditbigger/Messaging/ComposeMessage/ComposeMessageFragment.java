@@ -4,9 +4,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -24,6 +26,8 @@ import com.udacity.gradle.builditbigger.Database.SearchViewModel;
 import com.udacity.gradle.builditbigger.Database.SearchViewModelFactory;
 import com.udacity.gradle.builditbigger.Interfaces.CreateChip;
 import com.udacity.gradle.builditbigger.Interfaces.FilterRecyclerView;
+import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
+import com.udacity.gradle.builditbigger.Messaging.MediaDialog.AddMediaDialog;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
@@ -31,6 +35,7 @@ import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentComposeMessageBinding;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +44,8 @@ import java.util.List;
 /**
  * to be shown when user is picking people to message
  */
-public class ComposeMessageFragment extends Fragment implements CreateChip, FilterRecyclerView {
-
-    //todo connect edit text and other recycler view show that before typing user sees
+public class ComposeMessageFragment extends Fragment implements CreateChip, FilterRecyclerView, IntentCreator {
     //todo chron list of people messaged, then people in network, then queries master list of user
-    //todo once user is picked from bottom recyclerview, add user chips to top recycler view
 
     private List<HilarityUser> networkChipList;
     private String uid;
@@ -52,10 +54,10 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
     private List<HilarityUser> hilarityUsers;//list of intended users
     private IntendedRecipientAdapter intendedRecipientAdapter;
 
-    public static ComposeMessageFragment newInstance(String uid){
+    public static ComposeMessageFragment newInstance(String uid) {
         ComposeMessageFragment composeMessageFragment = new ComposeMessageFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("uid",uid);
+        bundle.putString("uid", uid);
         composeMessageFragment.setArguments(bundle);
         return composeMessageFragment;
     }
@@ -65,7 +67,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
         super.onCreate(savedInstanceState);
         networkChipList = new ArrayList<>();
         hilarityUsers = new ArrayList<>();
-        usersToMessageAdapter = new UsersToMessageAdapter(networkChipList,this, getActivity());
+        usersToMessageAdapter = new UsersToMessageAdapter(networkChipList, this, getActivity());
         intendedRecipientAdapter = new IntendedRecipientAdapter(hilarityUsers, getActivity(), this);
         uid = getArguments().getString("uid");
     }
@@ -74,7 +76,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        bind = DataBindingUtil.inflate(inflater,R.layout.fragment_compose_message, container, false);
+        bind = DataBindingUtil.inflate(inflater, R.layout.fragment_compose_message, container, false);
 
         bind.recipientRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         bind.recipientRecyclerview.setAdapter(intendedRecipientAdapter);
@@ -83,47 +85,14 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
         bind.userMessageRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         bind.userMessageRecyclerview.requestFocus();
 
-        bind.sendButton.setOnClickListener(view ->{
-            List<String> sendTo = new ArrayList<>();
-            for (HilarityUser chip: hilarityUsers){
-                sendTo.add(chip.getUid());
-            }
-            sendTo.add(Constants.UID);
-            Collections.sort(sendTo);
+        bind.sendButton.setOnClickListener(view -> {
             String text = bind.incomingMessageEdittext.getText().toString();
-            String path = sendTo.toString().substring(1, sendTo.toString().length()-1);
-            DatabaseReference db = Constants.DATABASE.child("messages/"+Constants.UID+"/"+path+"/messagelist").push();
-            Message message = new Message(Constants.USER,text,System.currentTimeMillis(),db.getKey(),true);
-            hilarityUsers.add(Constants.USER);
-            db.setValue(message, ((databaseError, databaseReference) -> {
-                if (databaseError == null && hilarityUsers != null){
-                    Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path)
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()){
-                                        Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path+"/message")
-                                                .setValue(message);
-                                    }else{
-                                        Constants.DATABASE.child("transcriptpreviews/"+Constants.UID+"/"+path)
-                                                .setValue(new TranscriptPreview(message, hilarityUsers,path, true));
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {}
-                            });
-                    Intent intent = new Intent(getActivity(), TranscriptActivity.class);
-                    intent.putExtra("path", path);
-                    startActivity(intent);
-                    getActivity().finish();
-                } else {
-                    Log.i("HillBilly","list is null");
-                }
-            }));
-            InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
+            List<String> textList = new ArrayList<>();
+            textList.add(text);
+            sendMessage(textList);
         });
+
+
         bind.incomingMessageEdittext.setOnFocusChangeListener((view, hasFocus) -> {
             usersToMessageAdapter.setHilarityUserList(new ArrayList<>());
             usersToMessageAdapter.notifyDataSetChanged();
@@ -135,9 +104,12 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
                 usersToMessageAdapter.notifyDataSetChanged();
             }
         });
+        bind.addMediaImagebutton.setOnClickListener(view -> {
+            DialogFragment newMedia = AddMediaDialog.getInstance(this);
+            newMedia.show(getActivity().getSupportFragmentManager(), "new media");
+        });
         return bind.getRoot();
     }
-
 
 
     @Override
@@ -168,15 +140,66 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
         usersToMessageAdapter.setHilarityUserList(networkChipList);
     }
 
-    private List<HilarityUser> filter(String str, List<HilarityUser> list){
-        Log.i("JoelJohnson", "filter param "+str);
+    private List<HilarityUser> filter(String str, List<HilarityUser> list) {
         ArrayList<HilarityUser> newList = new ArrayList<>();
-        for (HilarityUser user: list){
-            if (user.getUserName().contains(str)){
-                Log.i("JoelJohnson", user.getUserName()+ " added");
-                newList.add(user);
-            }
+        for (HilarityUser user : list) {
+            if (user.getUserName().contains(str)) newList.add(user);
+
         }
         return newList;
+    }
+
+    @Override
+    public void createIntent(String filepath, String number) {
+        String dbPath = "users/" + Constants.UID + "/images/" + Constants.getCurrentDateAndTime() + ".png";
+        Constants.STORAGE.child(dbPath)
+                .putFile(Uri.fromFile(new File(filepath)))
+                .addOnFailureListener(exception -> {})
+                .addOnSuccessListener(taskSnapshot -> {
+                    List<String> messageInfo = new ArrayList<>();
+                    messageInfo.add(dbPath);
+                    messageInfo.add(taskSnapshot.getUploadSessionUri().toString());
+                    sendMessage(messageInfo);
+                });
+    }
+
+    private void sendMessage(List<String> messageContent) {
+        List<String> sendTo = new ArrayList<>();
+        for (HilarityUser chip : hilarityUsers) {
+            sendTo.add(chip.getUid());
+        }
+        sendTo.add(Constants.UID);
+        Collections.sort(sendTo);
+        String path = sendTo.toString().substring(1, sendTo.toString().length() - 1);
+        DatabaseReference db = Constants.DATABASE.child("messages/" + Constants.UID + "/" + path + "/messagelist").push();
+        Message message = new Message(Constants.USER, messageContent, System.currentTimeMillis(), db.getKey(), true);
+        hilarityUsers.add(Constants.USER);
+        db.setValue(message, ((databaseError, databaseReference) -> {
+            if (databaseError == null && hilarityUsers != null) {
+                Constants.DATABASE.child("transcriptpreviews/" + Constants.UID + "/" + path)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    Constants.DATABASE.child("transcriptpreviews/" + Constants.UID + "/" + path + "/message")
+                                            .setValue(message);
+                                } else {
+                                    Constants.DATABASE.child("transcriptpreviews/" + Constants.UID + "/" + path)
+                                            .setValue(new TranscriptPreview(message, hilarityUsers, path, true));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                Intent intent = new Intent(getActivity(), TranscriptActivity.class);
+                intent.putExtra("path", path);
+                startActivity(intent);
+                getActivity().finish();
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(bind.incomingMessageEdittext.getWindowToken(), 0);
+            }
+        }));
     }
 }

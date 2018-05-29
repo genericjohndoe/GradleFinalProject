@@ -73,9 +73,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         }
 
         @Override
-        public void onClick(View v) {
-            creator.createIntent(filepath, number);
-        }
+        public void onClick(View v) { creator.createIntent(filepath, number);}
     }
 
 

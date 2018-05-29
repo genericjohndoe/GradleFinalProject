@@ -62,7 +62,7 @@ public class NewImageSubmission extends Fragment {
                             })
                             .addOnSuccessListener((taskSnapshot) -> {
                                         file.delete();
-                                        String downloadUrl = taskSnapshot.getDownloadUrl().toString();
+                                        String downloadUrl = taskSnapshot.getUploadSessionUri().toString();
                                         DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                         Post newImagePost = new Post("", "", System.currentTimeMillis(),
                                                 "genre push id", downloadUrl, Constants.UID,
