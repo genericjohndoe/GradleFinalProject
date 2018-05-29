@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -84,6 +85,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
         bind.userMessageRecyclerview.setAdapter(usersToMessageAdapter);
         bind.userMessageRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         bind.userMessageRecyclerview.requestFocus();
+        bind.userMessageRecyclerview.setOnTouchListener((view, event) -> bind.userMessageRecyclerview.requestFocus());
 
         bind.sendButton.setOnClickListener(view -> {
             String text = bind.incomingMessageEdittext.getText().toString();

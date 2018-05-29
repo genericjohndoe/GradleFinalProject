@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
@@ -110,7 +111,12 @@ public class IntendedRecipientAdapter extends RecyclerView.Adapter {
             });
 
             editText.setOnFocusChangeListener((view2, hasFocus) -> {
-                filterRecyclerView.requestFocus();
+                if (hasFocus) {
+                    filterRecyclerView.requestFocus();
+                }else{
+                    InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    mgr.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                }
             });
             editText.requestFocus();
         }
