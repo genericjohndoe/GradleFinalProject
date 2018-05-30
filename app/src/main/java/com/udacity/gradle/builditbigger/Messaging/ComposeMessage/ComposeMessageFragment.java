@@ -153,7 +153,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
 
     @Override
     public void createIntent(String filepath, String number) {
-        String dbPath = "users/" + Constants.UID + "/images/" + Constants.getCurrentDateAndTime() + ".png";
+        String dbPath = "users/" + Constants.UID + "/media/" + Constants.getCurrentDateAndTime() + "." + Constants.getExtension(filepath);
         Constants.STORAGE.child(dbPath)
                 .putFile(Uri.fromFile(new File(filepath)))
                 .addOnFailureListener(exception -> {})

@@ -9,6 +9,7 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Messaging.Transcripts.MessagesAdapter;
 
 /**
  * class controls video playback
@@ -38,11 +40,16 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
     MediaSessionConnector mediaSessionConnector;
     Context context;
     long position;
-    JokesAdapter.JokesViewHolder viewHolder;
-    JokesAdapter jokesAdapter;
+    RecyclerView.ViewHolder viewHolder;
+    RecyclerView.Adapter jokesAdapter;
 
-    public VideoLifeCyclerObserver(Context context, JokesAdapter.JokesViewHolder viewHolder, JokesAdapter jokesAdapter){
-        this.playerView = viewHolder.getBinding().videoLayout.postVideoView;
+    public VideoLifeCyclerObserver(Context context, RecyclerView.ViewHolder viewHolder, RecyclerView.Adapter jokesAdapter){
+        if (viewHolder instanceof JokesAdapter.JokesViewHolder){
+            this.playerView = ((JokesAdapter.JokesViewHolder) viewHolder).getBinding().videoLayout.postVideoView;
+        } else {
+            this.playerView =  ((MessagesAdapter.SentVideoMessagesViewHolder) viewHolder).getExoPlayerView();
+        }
+
         this.context = context;
         this.jokesAdapter = jokesAdapter;
         this.viewHolder = viewHolder;
@@ -75,7 +82,7 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
                 new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
 
-        if (jokesAdapter != null && viewHolder != null) player.addListener(new ExoEventPlayer(jokesAdapter, viewHolder, context));
+        if ((viewHolder instanceof JokesAdapter.JokesViewHolder) && jokesAdapter != null && viewHolder != null) player.addListener(new ExoEventPlayer((JokesAdapter) jokesAdapter, (JokesAdapter.JokesViewHolder) viewHolder, context));
         playerView.setPlayer(player);
         mediaSessionConnector.setPlayer(player, null,null);
         mMediaSession.setActive(true);

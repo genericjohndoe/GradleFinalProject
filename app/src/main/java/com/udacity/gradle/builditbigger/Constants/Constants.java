@@ -66,6 +66,19 @@ public class Constants {
         return null;
     }
 
+    public static String getExtension(String filepath){
+        String filenameArray[] = filepath.split("\\.");
+        return filenameArray[filenameArray.length-1];
+    }
+
+    public static boolean isImage(String filepath){
+        String[] imageFileTypes = new String[]{"bmp", "jpg", "jpeg", "png", "webp"};
+        for (String type: imageFileTypes){
+            if (type.contains(getExtension(filepath))) return true;
+        }
+        return false;
+    }
+
     public static int STATE_ADDED = 1;
     public static int STATE_CHANGED = 2;
     public static int STATE_REMOVED = 3;

@@ -116,7 +116,7 @@ public class TranscriptFragment extends Fragment implements IntentCreator {
 
     @Override
     public void createIntent(String filepath, String number) {
-        String dbPath = "users/" + Constants.UID + "/images/" + Constants.getCurrentDateAndTime() + ".png";
+        String dbPath = "users/" + Constants.UID + "/media/" + Constants.getCurrentDateAndTime() + "." + Constants.getExtension(filepath);
         Constants.STORAGE.child(dbPath)
                 .putFile(Uri.fromFile(new File(filepath)))
                 .addOnFailureListener(exception -> {})
@@ -142,4 +142,5 @@ public class TranscriptFragment extends Fragment implements IntentCreator {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(bind.messageEditText.getWindowToken(), 0);
     }
+
 }
