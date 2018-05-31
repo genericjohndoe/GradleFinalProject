@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.RemoteInput;
 import android.util.Log;
 
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -37,7 +39,7 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.i("Ladidadi", "onMessageReceived called");
         Map<String, String> data = remoteMessage.getData();
-        if (data.get("type").equals("message")) {
+        if (data != null && data.get("type").equals("message")) {
             sendNewMessageNotification(data.get("body"), data.get("path"), data.get("title"));
         } else if (data.get("type").equals("mention") || data.get("type").equals("comment")){
             sendNewCommentMentionNotification(data.get("title"), data.get("body"), data.get("uid"),
@@ -79,12 +81,37 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setContentIntent(pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            final String KEY_TEXT_REPLY = "key_text_reply";
+
+
+            RemoteInput remoteInput = new RemoteInput.Builder(KEY_TEXT_REPLY)
+                    .setLabel("reply")
+                    .build();
+
+            Intent intent1 = new Intent(this, NotifcationMessageReceiver.class);
+            intent1.putExtra("path", path);
+
+            PendingIntent replyPendingIntent =
+                    PendingIntent.getBroadcast(getApplicationContext(),
+                            100,
+                            intent1,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Action action =
+                    new NotificationCompat.Action.Builder(R.drawable.baseline_send_24px,
+                            "reply", replyPendingIntent)
+                            .addRemoteInput(remoteInput)
+                            .build();
+
+            notificationBuilder.addAction(action);
+        }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0 , notificationBuilder.build());
+        notificationManager.notify(2 , notificationBuilder.build());
     }
 
     private void sendNewCommentMentionNotification(String title, String body, String uid, String pushId, int position){

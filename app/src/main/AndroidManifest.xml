@@ -32,14 +32,17 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="face" />
+
         <activity
             android:name=".Collections.CollectionActivity"
             android:label="@string/genres"
@@ -69,10 +72,10 @@
         </activity>
         <activity
             android:name=".MainUI.HilarityActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_main22"
             android:parentActivityName=".MainUI.HilarityActivity"
-            android:theme="@style/AppTheme"
-            android:configChanges="orientation|screenSize"/>
+            android:theme="@style/AppTheme" />
 
         <service android:name=".CloudMessaging.HilarityFirebaseMessagingService">
             <intent-filter>
@@ -105,15 +108,15 @@
         <activity android:name=".Messaging.SentMessages.MessagesActivity" />
         <activity
             android:name=".Messaging.Transcripts.TranscriptActivity"
-            android:parentActivityName=".Messaging.SentMessages.MessagesActivity" >
+            android:parentActivityName=".Messaging.SentMessages.MessagesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Messaging.SentMessages.MessagesActivity" />
+
             <intent-filter>
                 <action android:name="com.udacity.gradle.builditbigger.ACTION_MESSAGE" />
             </intent-filter>
         </activity>
-
         <activity android:name=".NewPost.NewPostActivity" />
         <activity
             android:name=".Messaging.ComposeMessage.ComposeMessageActivity"
@@ -142,8 +145,14 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".Settings.SettingsActivity" />
         <activity android:name=".Forums.Replies.ForumQuestionActivity" />
-        <activity android:name=".Forums.CreateQuestion.NewQuestionActivity"
-            android:parentActivityName=".MainUI.HilarityActivity"></activity>
+        <activity
+            android:name=".Forums.CreateQuestion.NewQuestionActivity"
+            android:parentActivityName=".MainUI.HilarityActivity" />
+
+        <receiver
+            android:name=".CloudMessaging.NotifcationMessageReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

@@ -56,6 +56,7 @@ public class HilarityActivity extends AppCompatActivity
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
         createNotificationChannel();
+        messagingToken();
         setSupportActionBar(toolbar);
         fragmentNumber = getIntent().getIntExtra("number", 0);
         otherUid = getIntent().getStringExtra("uid");
@@ -217,6 +218,20 @@ public class HilarityActivity extends AppCompatActivity
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public void messagingToken(){
+        Constants.DATABASE.child("messagingtokens/"+Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Constants.DATABASE.child("messagingtokens/"+Constants.UID).setValue(FirebaseInstanceId.getInstance().getToken());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
