@@ -17,6 +17,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
+import com.udacity.gradle.builditbigger.Interfaces.ReturnMediaResult;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewImagePostBinding;
@@ -34,7 +36,7 @@ import java.io.File;
  * Created by joeljohnson on 11/3/17.
  */
 
-public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor>, IntentCreator {
+public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor>, IntentCreator, ReturnMediaResult {
     //todo upon screen rotation, ensure texture view takes up entire screen
     LifeCycleCamera camera;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -56,7 +58,7 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
             requestStorageWritePermission();
             return;
         }
-        mediaAdapter = new MediaAdapter(getActivity(), number, this);
+        mediaAdapter = new MediaAdapter(getActivity(), number, this, this);
     }
 
     @Nullable
@@ -128,10 +130,16 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     }
 
     public void moveFile(File file){
-        Intent intent = new Intent(getActivity(), ImagePostSubmissionActivity.class);
-        intent.putExtra("filepath", file.getPath());
-        intent.putExtra("number", number);
-        getActivity().startActivity(intent);
+        if (!number.equals("-1")) {
+            Intent intent = new Intent(getActivity(), ImagePostSubmissionActivity.class);
+            intent.putExtra("filepath", file.getPath());
+            intent.putExtra("number", number);
+            getActivity().startActivity(intent);
+            Log.i("newmediatest", "number isn't -1");
+        }else {
+            Log.i("newmediatest", "number is -1");
+            returnResult(file.getPath());
+        }
     }
 
     @Override
@@ -140,5 +148,14 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
         intent.putExtra("filepath", filepath);
         intent.putExtra("number", number);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void returnResult(String path) {
+        Log.i("newmediatest", "activity should finish and return result");
+        Intent intent = new Intent();
+        intent.putExtra("filepath",path);
+        getActivity().setResult(1, intent);
+        getActivity().finish();
     }
 }

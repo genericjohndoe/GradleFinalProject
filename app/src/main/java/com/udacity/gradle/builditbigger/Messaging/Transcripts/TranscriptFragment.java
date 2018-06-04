@@ -1,7 +1,9 @@
 package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,11 +23,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Interfaces.ActivityForResult;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.Messaging.MediaDialog.AddMediaDialog;
+import com.udacity.gradle.builditbigger.Messaging.MediaDialog.ChooseMediaDialog;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
+import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentTranscriptBinding;
 
@@ -37,13 +42,14 @@ import java.util.List;
  * TranscriptFragment class shows messages exchanged between users
  */
 
-public class TranscriptFragment extends Fragment implements IntentCreator {
+public class TranscriptFragment extends Fragment implements IntentCreator, ActivityForResult {
     private String uid;
     private String path;
     private String[] usersUidList;
     private List<HilarityUser> hilarityUsers;
     private FragmentTranscriptBinding bind;
     private DialogFragment newMedia;
+    private ChooseMediaDialog chooseMediaDialog;
 
     public static TranscriptFragment newInstance(String uid, String path){
         TranscriptFragment transcriptFragment = new TranscriptFragment();
@@ -107,8 +113,12 @@ public class TranscriptFragment extends Fragment implements IntentCreator {
         });
 
         bind.mediaButton.setOnClickListener(view ->{
-            newMedia = AddMediaDialog.getInstance(this);
-            newMedia.show(getActivity().getSupportFragmentManager(),"new media");
+            //todo show media dialog for different options
+            //todo start different activity based off whats pressed
+            chooseMediaDialog = ChooseMediaDialog.getInstance(this);
+            chooseMediaDialog.show(getActivity().getSupportFragmentManager(),"new media");
+            //newMedia = AddMediaDialog.getInstance(this);
+            //newMedia.show(getActivity().getSupportFragmentManager(),"new media");
         });
 
         return bind.getRoot();
@@ -126,7 +136,7 @@ public class TranscriptFragment extends Fragment implements IntentCreator {
                     messageInfo.add(taskSnapshot.getUploadSessionUri().toString());
                     sendMessage(messageInfo);
                 });
-        newMedia.dismiss();
+        chooseMediaDialog.dismiss();
     }
 
     private void sendMessage(List<String> messageContents){
@@ -143,4 +153,22 @@ public class TranscriptFragment extends Fragment implements IntentCreator {
         mgr.hideSoftInputFromWindow(bind.messageEditText.getWindowToken(), 0);
     }
 
+    @Override
+    public void activityForResult(int num) {
+        Intent intent = new Intent(getActivity(), NewPostActivity2.class);
+        intent.putExtra("posttype", num);
+        intent.putExtra("number", "-1");
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("newmediatest", "OAR called");
+        if (requestCode == 1){
+            Log.i("newmediatest", ""+resultCode);
+            String filepath = data.getStringExtra("filepath");
+            Log.i("newmediatest", filepath);
+            createIntent(filepath, null);
+        }
+    }
 }

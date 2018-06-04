@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
@@ -22,6 +25,9 @@ import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -72,11 +78,17 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
+
+
+
         String channelId = "new_message_channel";
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_person_black_24dp)
+                        .setLargeIcon(getBitmapfromUrl("https://ibin.co/2t1lLdpfS06F.png"))//user for profile pic
+                        .setStyle(new NotificationCompat.BigPictureStyle()
+                                .bigPicture(getBitmapfromUrl("https://ibin.co/2t1lLdpfS06F.png")))//use of picture was sent
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
@@ -137,5 +149,23 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
+    }
+
+    public Bitmap getBitmapfromUrl(String imageUrl) {
+        try {
+            URL url = new URL(imageUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(input);
+            return bitmap;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+
+        }
     }
 }

@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
+import com.udacity.gradle.builditbigger.Interfaces.ReturnMediaResult;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewVideoPostBinding;
@@ -38,7 +39,7 @@ import java.util.Calendar;
  * Created by joeljohnson on 11/4/17.
  */
 
-public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ActivityCompat.OnRequestPermissionsResultCallback, IntentCreator {
+public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ActivityCompat.OnRequestPermissionsResultCallback, IntentCreator, ReturnMediaResult {
     //todo take into account screen rotation such that textureview takes up entire screen in landscape mode
     //todo error handling for screen rotation
     LifeCycleCamera camera;
@@ -66,7 +67,7 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
             requestStorageWritePermission();
             return;
         }
-        mediaAdapter = new MediaAdapter(getActivity(), number, this);
+        mediaAdapter = new MediaAdapter(getActivity(), number, this, this);
     }
 
     @Nullable
@@ -159,10 +160,14 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     }
 
     public void moveFile(File file){
-        Intent intent = new Intent(getActivity(), VideoPostSubmissionActivity.class);
-        intent.putExtra("filepath", file.getPath());
-        intent.putExtra("number", number);
-        getActivity().startActivity(intent);
+        if (!number.equals("-1")) {
+            Intent intent = new Intent(getActivity(), VideoPostSubmissionActivity.class);
+            intent.putExtra("filepath", file.getPath());
+            intent.putExtra("number", number);
+            getActivity().startActivity(intent);
+        } else {
+            returnResult(file.getPath());
+        }
     }
 
     @Override
@@ -171,5 +176,13 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
         intent.putExtra("filepath", filepath);
         intent.putExtra("number", number);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void returnResult(String path) {
+        Intent intent = new Intent();
+        intent.putExtra("filepath",path);
+        getActivity().setResult(1, intent);
+        getActivity().finish();
     }
 }

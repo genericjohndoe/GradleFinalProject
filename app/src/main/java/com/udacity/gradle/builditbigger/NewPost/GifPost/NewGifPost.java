@@ -25,6 +25,7 @@ import android.webkit.MimeTypeMap;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
+import com.udacity.gradle.builditbigger.Interfaces.ReturnMediaResult;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.NewPost.VideoPost.VideoPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.R;
@@ -39,7 +40,7 @@ import java.io.File;
  * Use the {@link NewGifPost#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewGifPost extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,  ActivityCompat.OnRequestPermissionsResultCallback, IntentCreator {
+public class NewGifPost extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,  ActivityCompat.OnRequestPermissionsResultCallback, IntentCreator, ReturnMediaResult {
 
     MediaAdapter mediaAdapter;
     LifeCycleCamera camera;
@@ -75,7 +76,7 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
             //return;
         }
         if (getArguments() != null) number = getArguments().getString("number");
-        mediaAdapter = new MediaAdapter(getActivity(), number, this);
+        mediaAdapter = new MediaAdapter(getActivity(), number, this, this);
     }
 
     @Override
@@ -179,10 +180,14 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
     }
 
     public void moveFile(File file){
-        Intent intent = new Intent(getActivity(), NewGifSubmissionActivity.class);
-        intent.putExtra("filepath", file.getPath());
-        intent.putExtra("number", number);
-        getActivity().startActivity(intent);
+        if (!number.equals("-1")) {
+            Intent intent = new Intent(getActivity(), VideoPostSubmissionActivity.class);
+            intent.putExtra("filepath", file.getPath());
+            intent.putExtra("number", number);
+            getActivity().startActivity(intent);
+        } else {
+            returnResult(file.getPath());
+        }
     }
 
     @Override
@@ -191,5 +196,13 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
         intent.putExtra("filepath", filepath);
         intent.putExtra("number", number);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void returnResult(String path) {
+        Intent intent = new Intent();
+        intent.putExtra("filepath",path);
+        getActivity().setResult(1, intent);
+        getActivity().finish();
     }
 }

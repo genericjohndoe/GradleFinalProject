@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
+import com.udacity.gradle.builditbigger.Interfaces.ReturnMediaResult;
 import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifSubmissionActivity;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.ImagePostSubmissionActivity;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImageSubmission;
@@ -34,6 +35,14 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     private Context context;
     private static String number;
     private static IntentCreator creator;
+    private static ReturnMediaResult returnMediaResult;
+
+    public MediaAdapter(Context context, String number, IntentCreator creator, ReturnMediaResult returnMediaResult) {
+        this.context = context;
+        this.number = number;
+        this.creator = creator;
+        this.returnMediaResult = returnMediaResult;
+    }
 
     public MediaAdapter(Context context, String number, IntentCreator creator) {
         this.context = context;
@@ -73,7 +82,13 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         }
 
         @Override
-        public void onClick(View v) { creator.createIntent(filepath, number);}
+        public void onClick(View v) {
+            if (!number.equals("-1")) {
+                creator.createIntent(filepath, number);
+            } else {
+                returnMediaResult.returnResult(filepath);
+            }
+        }
     }
 
 
