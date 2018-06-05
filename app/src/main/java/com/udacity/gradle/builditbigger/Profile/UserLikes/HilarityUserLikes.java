@@ -63,8 +63,9 @@ public class HilarityUserLikes extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
-
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        llm.setStackFromEnd(true);
+        binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         binding.recyclerView.setAdapter(jokeAdapter);
 

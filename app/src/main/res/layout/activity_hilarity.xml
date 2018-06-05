@@ -20,7 +20,7 @@
         android:layout_gravity="start"
         app:menu="@menu/activity_hilarity_drawer"
         android:fitsSystemWindows="true"
-        android:background="@color/theme_primary"
+        android:background="@color/black"
         app:itemIconTint="@color/dark_gray"
         app:itemTextColor="@color/dark_gray"
         android:layout_marginTop="60dp"/>

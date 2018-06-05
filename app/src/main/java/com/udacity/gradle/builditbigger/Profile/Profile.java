@@ -63,8 +63,6 @@ import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
 
 public class Profile extends Fragment implements HideFAB {
     //todo populate UI with info from database
-    //todo find out why viewpager fragments don't immediately show when profile page is reloaded
-    //todo convert svg to text use in viewpager
     private String uid;
     private FragmentProfileBinding binding;
     private OrientationControlViewModel orientationControlViewModel;
@@ -141,16 +139,16 @@ public class Profile extends Fragment implements HideFAB {
         );
 
         userInfoViewModel.getNumPostLiveData().observe(this, numPosts -> {
-            binding.postsTv.setText(numPosts != null ? numPosts + " posts" : "0 posts");
+            binding.postsTv.setText(numPosts != null ? numPosts + " " : "0 ");
             }
         );
 
         userInfoViewModel.getNumFollowingLiveData().observe(this, numFollowing -> {
-            binding.subscriptionsTv.setText(numFollowing != null ? numFollowing + " subscriptions" : "0 subscriptions");
+            binding.subscriptionsTv.setText(numFollowing != null ? numFollowing + " " : "0 ");
         });
 
         userInfoViewModel.getNumFollowersLiveData().observe(this, numFollowers -> {
-            binding.subscribersTv.setText(numFollowers != null ? numFollowers + " subscribers" : "0 subscribers");
+            binding.subscribersTv.setText(numFollowers != null ? numFollowers + " " : "0 ");
         });
 
         orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
@@ -176,6 +174,7 @@ public class Profile extends Fragment implements HideFAB {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().show();
             }
         }));
+
         if (!uid.equals(Constants.UID)) {
             new IsFollowingLiveData(uid).observe(this, isFollowed -> {
                 this.isFollowed = isFollowed;
@@ -229,7 +228,6 @@ public class Profile extends Fragment implements HideFAB {
     /**
      * shows new post dialog from profile when user posts are shown
      */
-    //todo replace with method that generates FragmentTransaction
     //todo allow for post to be added to collection upon creation
     private void showNewPostFragment() {
         Intent intent = new Intent(getActivity(), NewPostActivity2.class);
@@ -240,7 +238,6 @@ public class Profile extends Fragment implements HideFAB {
     /**
      * shows new genre dialog from profile when user created genres are shown
      */
-    //todo replace with method that generates FragmentTransaction
     //todo allow privacy? if yes, remember to do on server side too
     private void showNewGenreDialog() {
         new MaterialDialog.Builder(getActivity())

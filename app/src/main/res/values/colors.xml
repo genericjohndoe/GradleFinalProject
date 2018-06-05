@@ -22,4 +22,18 @@
     <color name="material_purple_a700">#AA00FF</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="green_background">#18736E</color>
+    <color name="green_expanded_toolbar" >#308B87</color>
+    <color name="green_1">#63BDB1</color>
+    <color name="green_2">#16D7CC</color>
+    <color name="green_3">#94EDE8</color>
+    <color name="green_4">#CDF8F5</color>
+    <color name="green_5">#E3FFFD</color>
+
+    <color name="black">#031A11</color>
+    <color name="green_black_1">#052619</color>
+    <color name="green_6">#92D8C6</color>
+    <color name="green_7">#72CBAE</color>
+    <color name="green_8">#369F77</color>
 </resources>

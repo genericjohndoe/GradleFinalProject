@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#228b22 ">
+    android:background="@color/black">
 
     <com.github.rahatarmanahmed.cpv.CircularProgressView
         android:id="@+id/progress"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:cpv_color="@color/dark_gray"
+        app:cpv_color="@color/green_8"
         app:cpv_indeterminate="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

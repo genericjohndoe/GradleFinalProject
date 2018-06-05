@@ -103,6 +103,7 @@ public class HilarityActivity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.green_8));
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 

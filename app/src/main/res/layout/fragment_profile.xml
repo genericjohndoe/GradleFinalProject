@@ -6,8 +6,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/profile_constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#112b00">
+        android:layout_height="match_parent">
 
         <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,7 +18,7 @@
                 android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#194000"
+                android:background="@color/black"
                 app:elevation="4dp">
 
                 <android.support.design.widget.CollapsingToolbarLayout
@@ -27,7 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
-                    app:contentScrim="#194000"
+                    app:contentScrim="@color/black"
                     app:expandedTitleMarginStart="12dp"
                     app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -42,10 +41,9 @@
                             android:id="@+id/posts_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:text="Posts"
-                            android:textColor="@color/accent"
+                            android:layout_marginLeft="24dp"
+                            android:drawableRight="@drawable/hilarity_mask_unlike_white"
+                            android:textColor="@color/green_8"
                             app:layout_constraintLeft_toRightOf="@+id/profile_imageview"
                             app:layout_constraintTop_toTopOf="@+id/profile_imageview" />
 
@@ -53,10 +51,11 @@
                             android:id="@+id/profile_imageview"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
-                            android:src="@color/colorPrimary"
+                            android:src="@color/green_8"
+                            app:civ_border_color="@color/green_8"
+                            app:civ_border_width="2dp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,8 +68,8 @@
                             android:layout_marginStart="8dp"
                             android:clickable="true"
                             android:focusable="auto"
-                            android:text="Subscriptions"
-                            android:textColor="@color/accent"
+                            android:drawableRight="@drawable/ic_hilarity_following_icon"
+                            android:textColor="@color/green_8"
                             app:layout_constraintEnd_toStartOf="@+id/subscribers_tv"
                             app:layout_constraintStart_toEndOf="@+id/posts_tv"
                             app:layout_constraintTop_toTopOf="@+id/posts_tv" />
@@ -79,19 +78,21 @@
                             android:id="@+id/subscribers_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:layout_marginEnd="24dp"
                             android:clickable="true"
+                            android:drawableRight="@drawable/ic_hilarity_follower_icon"
                             android:focusable="auto"
-                            android:text="Subscribers"
-                            android:textColor="@color/accent"
                             android:textAppearance="@android:style/TextAppearance.Material.Small"
+                            android:textColor="@color/green_8"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/subscriptions_tv" />
 
                         <Button
                             android:id="@+id/subscribe_button"
                             android:text="Subscribe"
+                            android:textColor="@color/green_8"
                             android:layout_width="0dp"
+                            android:background="@drawable/button_border"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_marginStart="8dp"
@@ -119,9 +120,9 @@
                             android:layout_gravity="bottom"
                             android:visibility="visible"
                             app:tabGravity="fill"
-                            app:tabIndicatorColor="@color/accent"
+                            app:tabIndicatorColor="@color/green_8"
                             app:tabMode="fixed"
-                            app:tabSelectedTextColor="@color/accent"
+                            app:tabSelectedTextColor="@color/green_8"
                             app:tabTextColor="@color/white"/>
 
 
@@ -162,21 +163,24 @@
             app:layout_anchorGravity="right|bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            fab:menu_colorNormal="#228b22">
+            fab:menu_colorNormal="@color/green_8"
+            app:menu_colorPressed="@color/green_7">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/new_post_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_black_24dp"
-                fab:fab_colorNormal="#228b22" />
+                fab:fab_colorNormal="@color/green_8"
+                app:fab_colorPressed="@color/green_7"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/search_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_search_black_24dp"
-                fab:fab_colorNormal="#228b22" />
+                fab:fab_colorNormal="@color/green_8"
+                app:fab_colorPressed="@color/green_7"/>
         </com.github.clans.fab.FloatingActionMenu>
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView

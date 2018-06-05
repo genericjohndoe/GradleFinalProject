@@ -2,14 +2,17 @@ package com.udacity.gradle.builditbigger.Forums.Questions;
 
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.udacity.gradle.builditbigger.Forums.CreateQuestion.NewQuestionActivity;
 import com.udacity.gradle.builditbigger.Forums.ForumQuestionsViewModel;
@@ -51,7 +54,15 @@ public class ForumFragment extends Fragment {
         List<ForumQuestion> forumQuestions = new ArrayList<>();
         ForumQuestionAdapter forumQuestionAdapter = new ForumQuestionAdapter(forumQuestions, getActivity());
         bind.questionsRecyclerview.setAdapter(forumQuestionAdapter);
-        bind.questionsRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,true));
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        llm.setStackFromEnd(true);
+        bind.questionsRecyclerview.setLayoutManager(llm);
+        bind.questionsRecyclerview.setOnTouchListener((v, event) -> {
+            bind.questionsRecyclerview.requestFocus();
+            InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            mgr.hideSoftInputFromWindow(bind.filterEditText.getWindowToken(), 0);
+            return true;
+        });
         ViewModelProviders.of(this).get(ForumQuestionsViewModel.class).getForumQuestionsLiveData().observe(this, question -> {
             if (!forumQuestions.contains(question)) {
                 forumQuestions.add(question);

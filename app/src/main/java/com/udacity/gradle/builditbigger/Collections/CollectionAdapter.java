@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger.Collections;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,13 +18,14 @@ import com.udacity.gradle.builditbigger.Jokes.JokesActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
 
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.databinding.GenreTextViewBinding;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
 /**
- * CLASS FOR STYLING GENRE for recyclerview
+ * CLASS FOR STYLING collection for recyclerview
  */
 
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
@@ -38,22 +40,19 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     }
 
     public class CollectionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView genreTitle;
-        ImageButton lockButton;
         Collection collection;
-        Button subButton;
+        GenreTextViewBinding bind;
 
-        public CollectionViewHolder(View view) {
-            super(view);
-            genreTitle = view.findViewById(R.id.genre_title_textview);
-            lockButton = view.findViewById(R.id.lock_imageButton);
-            lockButton.setOnClickListener(view2-> {
+        public CollectionViewHolder(GenreTextViewBinding bind) {
+            super(bind.getRoot());
+            this.bind = bind;
+
+            bind.lockImageButton.setOnClickListener(view2-> {
                     //todo switch between lock and unlock if genre was created by user
                     //todo after checking if the changes in the database are made
             });
-            subButton = view.findViewById(R.id.subscribe_button);
-            view.setOnClickListener(this);
-            view.setTag(this);
+            bind.getRoot().setOnClickListener(this);
+            bind.getRoot().setTag(this);
         }
 
         @Override
@@ -71,25 +70,25 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     @Override @NonNull
     public CollectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.genre_text_view, null);
-        return new CollectionViewHolder(view);
+        GenreTextViewBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.genre_text_view, parent, false);
+        return new CollectionViewHolder(bind);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CollectionViewHolder holder, int position) {
         Collection genre = genres.get(position);
-        holder.genreTitle.setText(genre.getTitle());
+        holder.bind.genreTitleTextview.setText(genre.getTitle());
         holder.collection = genre;
         if (genre.getUID().equals(Constants.UID)){
-            holder.subButton.setVisibility(View.GONE);
+            holder.bind.subscribeButton.setVisibility(View.GONE);
             if (genre.getRestricted()){
-                holder.lockButton.setBackgroundResource(R.drawable.ic_lock_outline_black_24dp);
+                holder.bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_outline_black_24dp);
             } else {
-                holder.lockButton.setBackgroundResource(R.drawable.ic_lock_open_black_24dp);
+                holder.bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_open_black_24dp);
             }
         } else {
-            holder.lockButton.setVisibility(View.GONE);
-            holder.subButton.setOnClickListener(view ->{/*subscribe*/});
+            holder.bind.lockImageButton.setVisibility(View.GONE);
+            holder.bind.subscribeButton.setOnClickListener(view ->{/*subscribe*/});
         }
     }
 

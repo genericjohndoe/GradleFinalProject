@@ -66,7 +66,6 @@ public class HilarityUserCollections extends Fragment {
         llm.setStackFromEnd(true);
         //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding.recyclerView.setLayoutManager(llm);
-        binding.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         binding.recyclerView.setAdapter(genreAdapter);
 
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
