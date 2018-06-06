@@ -22,10 +22,7 @@ import java.util.List;
  */
 
 public class SubscribersFragment extends Fragment {
-    //todo if button in cell and cell have different on clicks, which is registered first does clicking in different
-    //todo provide the desired effect
     private String uid;
-
 
     public static SubscribersFragment newInstance(String uid){
         SubscribersFragment subscribersFragment = new SubscribersFragment();
@@ -55,8 +52,10 @@ public class SubscribersFragment extends Fragment {
                 .get(SubscribersViewModel.class);
 
         subscribersViewModel.getSubscribersLiveData().observe(this, hilarityUser -> {
-            subscribers.add(hilarityUser);
-            subsAdapter.notifyDataSetChanged();
+            if (!subscribers.contains(hilarityUser)) {
+                subscribers.add(hilarityUser);
+                subsAdapter.notifyDataSetChanged();
+            }
         });
         return binding.getRoot();
     }

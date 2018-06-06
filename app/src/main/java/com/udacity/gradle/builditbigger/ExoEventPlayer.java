@@ -47,21 +47,25 @@ public class ExoEventPlayer implements Player.EventListener {
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-        OrientationControlViewModel orientationControlViewModel = ViewModelProviders.of((FragmentActivity) context, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
+        Log.i("orientation3", "exoeventplayer onplayerstatechanged playwhenready = " +playWhenReady);
+        Log.i("orientation3", "exoplayer onplayerstatechanged playbackstate = " +playbackState);
+        Log.i("orientation3", viewHolder.toString() + " being worked on in onplayerstatechanged");
 
         if (playWhenReady && playbackState == Player.STATE_READY){
+            viewHolder.getOrientationControlViewModel().getVideoPlayingMutableLiveData().setValue(true);
             if (jokesAdapter.getNowPlayingViewHolder() == null) {
                 jokesAdapter.setNowPlayingViewHolder(viewHolder);
+                Log.i("orientation3", "exoplayer onplayerstatechanged now player viewholder set from null");
             } else {
                 jokesAdapter.getNowPlayingViewHolder().getBinding().videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
                 jokesAdapter.setNowPlayingViewHolder(viewHolder);
+                Log.i("orientation3", "exoplayer onplayerstatechanged now player viewholder replaced");
             }
         } else if (playbackState == Player.STATE_ENDED){
             jokesAdapter.setNowPlayingViewHolder(null);
-            orientationControlViewModel.getVideoPlayingMutableLiveData().setValue(false);
+            viewHolder.getOrientationControlViewModel().getVideoPlayingMutableLiveData().setValue(false);
+            Log.i("orientation3", "exoplayer onplayerstatechanged video ended now player viewholder set to null");
         }
-        orientationControlViewModel.getVideoPlayingMutableLiveData().setValue(jokesAdapter.getNowPlayingViewHolder() != null);
-        //Log.i("orientation3", "EventPlayer, tells listeners where or not adapter's VH is null, VH = " + (jokesAdapter.getNowPlayingViewHolder() != null));
     }
 
     @Override

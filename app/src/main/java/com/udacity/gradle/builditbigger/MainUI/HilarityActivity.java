@@ -32,6 +32,7 @@ import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
 import com.udacity.gradle.builditbigger.Feed.FeedFragment;
 import com.udacity.gradle.builditbigger.Forums.Questions.ForumFragment;
 import com.udacity.gradle.builditbigger.Messaging.SentMessages.MessagesActivity;
+import com.udacity.gradle.builditbigger.Models.VideoInfo;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
@@ -49,6 +50,8 @@ public class HilarityActivity extends AppCompatActivity
     int fragmentNumber;
     String otherUid;
     OrientationControlViewModel orientationControlViewModel;
+    FullScreenVideoDialog dialog;
+    boolean isVideoPlaying;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class HilarityActivity extends AppCompatActivity
         otherUid = getIntent().getStringExtra("uid");
         Fragment fragment;
         String tag;
-        switch(fragmentNumber){
+        switch (fragmentNumber) {
             case 1:
                 fragment = Profile.newInstance(Constants.UID);
                 tag = "profile";
@@ -107,24 +110,18 @@ public class HilarityActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        Fragment fragment2 = getSupportFragmentManager().findFragmentByTag("full screen video");
+        if(fragment2 != null) getSupportFragmentManager().beginTransaction().remove(fragment2).commit();
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
         orientationControlViewModel.getVideoPlayingMutableLiveData().observe(this, videoPlaying -> {
             Log.i("orientation3", videoPlaying + " = hilarity activity is video playing?");
-            if (!videoPlaying){
-                toolbar.setVisibility(View.VISIBLE);
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            } else {
-                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                int orientation = getWindowManager().getDefaultDisplay().getRotation();
-                if (orientation == Surface.ROTATION_0 || orientation == Surface.ROTATION_180) {
-                    toolbar.setVisibility(View.VISIBLE);
-                } else {
-                    toolbar.setVisibility(View.GONE);
-                }
-            }
+            isVideoPlaying = videoPlaying;
+            formatUiForVideo(videoPlaying);
         });
 
     }
@@ -153,7 +150,7 @@ public class HilarityActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_message){
+        if (id == R.id.action_message) {
             startActivity(new Intent(this, MessagesActivity.class));
             return true;
         }
@@ -182,7 +179,7 @@ public class HilarityActivity extends AppCompatActivity
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-        if (id != R.id.logout){
+        if (id != R.id.logout) {
             startActivity(intent);
             finish();
         }
@@ -195,13 +192,19 @@ public class HilarityActivity extends AppCompatActivity
         super.onConfigurationChanged(newConfig);
         int orientation = newConfig.orientation;
         Log.i("orientation3", "HilarityActivity, onConfigurationChanged called");
-        if (orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (dialog != null && dialog.isVisible()) {
+                orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(dialog.getUrl(), dialog.getPosition()));
+                dialog.dismiss();
+                Fragment fragment2 = getSupportFragmentManager().findFragmentByTag("full screen video");
+                if (fragment2 != null) getSupportFragmentManager().beginTransaction().remove(fragment2).commit();
+            }
             orientationControlViewModel.getOrientationLiveData().setValue(false);
-            Log.i("orientation3", "HilarityActivity, orientation is set to false");
-        }
-        else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            Log.i("orientation3", "HilarityActivity, orientation is in portrait, set to false");
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             orientationControlViewModel.getOrientationLiveData().setValue(true);
-            Log.i("orientation3", "HilarityActivity, orientation is set to true");
+            if (dialog != null && !dialog.isVisible()) dialog.show(getSupportFragmentManager(), "full screen video");
+            Log.i("orientation3", "HilarityActivity, orientation is in landscape, set to true");
         }
     }
 
@@ -221,11 +224,11 @@ public class HilarityActivity extends AppCompatActivity
         }
     }
 
-    public void messagingToken(){
-        Constants.DATABASE.child("messagingtokens/"+Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void messagingToken() {
+        Constants.DATABASE.child("messagingtokens/" + Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Constants.DATABASE.child("messagingtokens/"+Constants.UID).setValue(FirebaseInstanceId.getInstance().getToken());
+                Constants.DATABASE.child("messagingtokens/" + Constants.UID).setValue(FirebaseInstanceId.getInstance().getToken());
             }
 
             @Override
@@ -233,6 +236,26 @@ public class HilarityActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    public void formatUiForVideo(boolean isVideoPlaying){
+        if (!isVideoPlaying) {
+            Log.i("orientation3", "HA formatUiForVideos no videos playing, locked in portrait");
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            Log.i("orientation3", "HA formatUiForVideos video is playing, orientation unspecified");
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                orientationControlViewModel.getVideoLiveData().observe(this, videoInfo -> {
+                    Log.i("orientation3", "HA formatUiForVideos video info passed to dialog");
+                    setUpDialog(videoInfo);
+                });
+        }
+
+    }
+
+    public void setUpDialog(VideoInfo videoInfo){
+        Log.i("orientation3", "HA setUpDialog dialog set up");
+        dialog = FullScreenVideoDialog.getInstance(videoInfo.getUrl(), videoInfo.getTimeElapsed());
     }
 
 }

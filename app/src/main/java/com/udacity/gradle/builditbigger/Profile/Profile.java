@@ -17,13 +17,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
+
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -120,7 +119,6 @@ public class Profile extends Fragment implements HideFAB {
         //originally calls new post dialog, changed when configureFAB is called
         binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
         //object beneath provides data to fragment
-        getLifecycle().addObserver(new VideoLifeCyclerObserver(getActivity(), binding.videoPlayer));
 
         UserInfoViewModel userInfoViewModel = ViewModelProviders.of(this,
                 new UserInfoViewModelFactory(uid))
@@ -151,21 +149,7 @@ public class Profile extends Fragment implements HideFAB {
             binding.subscribersTv.setText(numFollowers != null ? numFollowers + " " : "0 ");
         });
 
-        orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
-        orientationControlViewModel.getVideoLiveData().observe(this, videoInfo -> {
-            setOrientation(videoInfo);
-        });
 
-        orientationControlViewModel.getOrientationLiveData().observe(this, isLandscape ->{
-            if (!isLandscape){
-                long time = binding.videoPlayer.getPlayer().getCurrentPosition();
-                binding.videoPlayer.getPlayer().stop();
-                binding.videoPlayer.getPlayer().release();
-                binding.coordinatorLayout.setVisibility(View.VISIBLE);
-                binding.videoPlayer.setVisibility(View.GONE);
-                orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(null,time));
-            }
-        });
 
         binding.appBarLayout.addOnOffsetChangedListener(((appBarLayout, verticalOffset) -> {
             if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
@@ -305,42 +289,7 @@ public class Profile extends Fragment implements HideFAB {
         return binding.searchFab;
     }
 
-    private void setOrientation(VideoInfo videoInfo){
-        Log.i("numMovies", "SetOrienation called");
-        if (videoInfo == null){
-            binding.videoPlayer.setVisibility(View.GONE);
-            binding.coordinatorLayout.setVisibility(View.VISIBLE);
-            Log.i("numMovies", "SetOrienation numVideos is 0");
-        } else {
-            int orientation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
-            if (orientation == Surface.ROTATION_0 || orientation == Surface.ROTATION_180) {
-                binding.videoPlayer.setVisibility(View.GONE);
-                binding.coordinatorLayout.setVisibility(View.VISIBLE);
-                long time = binding.videoPlayer.getPlayer().getCurrentPosition();
-                binding.videoPlayer.getPlayer().setPlayWhenReady(false);
-                orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(videoInfo.getUrl(),time));
-                Log.i("numMovies", "SetOrienation rot is 0 or 180");
-            } else {
-                binding.videoPlayer.setVisibility(View.VISIBLE);
-                binding.coordinatorLayout.setVisibility(View.GONE);
-                Log.i("numMovies", "SetOrienation rot is 90 or 270");
-                setVideoPlayer(videoInfo);
-            }
-        }
-    }
 
-    private void setVideoPlayer(VideoInfo videoInfo){
-        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(),
-                Util.getUserAgent(getActivity(), "Hilarity"), bandwidthMeter);
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        if (binding.videoPlayer.getPlayer() != null) {
-            binding.videoPlayer.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(videoInfo.getUrl()),
-                    dataSourceFactory, extractorsFactory, null, null), false, false);
-            binding.videoPlayer.getPlayer().seekTo(videoInfo.getTimeElapsed());
-            binding.videoPlayer.getPlayer().setPlayWhenReady(true);
-        }
-    }
+
+
 }

@@ -47,6 +47,7 @@ import com.udacity.gradle.builditbigger.Comments.CommentActivity;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
+import com.udacity.gradle.builditbigger.Models.MetaData;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.VideoInfo;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
@@ -57,6 +58,7 @@ import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -76,6 +78,14 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         this.jokes = objects;
         this.isUserProfile = isUserProfile;
         setHasStableIds(true);
+        Post newVideoPost = new Post("", "", System.currentTimeMillis(),
+                "genre push id", "asset:///portrait_test.mp4", Constants.UID, "key", "tagline", Constants.VIDEO,
+                new MetaData("video", Integer.parseInt("2") + 1, new HashMap<>()));
+        jokes.add(newVideoPost);
+        Post newVideoPost2 = new Post("", "", System.currentTimeMillis(),
+                "genre push id", "asset:///landscape_test.mp4", Constants.UID, "keys", "tagline", Constants.VIDEO,
+                new MetaData("video", Integer.parseInt("3") + 1, new HashMap<>()));
+        jokes.add(newVideoPost2);
     }
 
     public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
@@ -289,20 +299,21 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             holder.orientationControlViewModel.getOrientationLiveData().observe(holder, orientationChanged -> {
                 //currently doesn't get called
                 Log.i("orientation3", "viewholder observing orientation live data");
-                if (orientationChanged){
+                if (orientationChanged && holder.equals(getNowPlayingViewHolder())){
                     //todo there is a lag after rotation, show loading spinner
                     holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
-                    holder.orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(joke.getMediaURL(),
-                            holder.binding.videoLayout.postVideoView.getPlayer().getCurrentPosition()));
-                    Log.i("orientation3", "the videoInfo is set in the holder");
+                    VideoInfo videoInfo = new VideoInfo(joke.getMediaURL(),
+                            holder.binding.videoLayout.postVideoView.getPlayer().getCurrentPosition());
+                    holder.orientationControlViewModel.getVideoLiveData().setValue(videoInfo);
+                    Log.i("orientation3", "holder was pause, info sent: " + videoInfo.toString());
+                } else {
+                    //holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
+                        //holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
+                        //holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(true);
+                    //});
+                    Log.i("orientation3", "holder received info from dialog");
                 }
             });
-            /*holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
-                if (nowPlayingViewHolder.equals(holder)) {
-                    holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
-                    holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
-                }
-            });*/
         } else {
             Glide.with(context).asGif().load(joke.getMediaURL())
                     .into(holder.binding.gifLayout.postGifimageview);
