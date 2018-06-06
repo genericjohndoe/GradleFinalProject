@@ -306,11 +306,13 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                             holder.binding.videoLayout.postVideoView.getPlayer().getCurrentPosition());
                     holder.orientationControlViewModel.getVideoLiveData().setValue(videoInfo);
                     Log.i("orientation3", "holder was pause, info sent: " + videoInfo.toString());
-                } else {
-                    //holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
-                        //holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
-                        //holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(true);
-                    //});
+                } else if (!orientationChanged && holder.equals(getNowPlayingViewHolder())){
+                    holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
+                        holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
+                        prepareVideoPlayback(holder);
+                        holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(true);
+                        
+                    });
                     Log.i("orientation3", "holder received info from dialog");
                 }
             });
@@ -408,7 +410,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         return (long) position;
     }
 
-    private void prepareVideoPlayback(JokesViewHolder holder) {
+    public void prepareVideoPlayback(JokesViewHolder holder) {
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         // Produces DataSource instances through which media data is loaded.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,

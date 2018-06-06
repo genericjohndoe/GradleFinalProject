@@ -56,10 +56,12 @@ public class ExoEventPlayer implements Player.EventListener {
             if (jokesAdapter.getNowPlayingViewHolder() == null) {
                 jokesAdapter.setNowPlayingViewHolder(viewHolder);
                 Log.i("orientation3", "exoplayer onplayerstatechanged now player viewholder set from null");
-            } else {
+            } else if (!jokesAdapter.getNowPlayingViewHolder().equals(viewHolder)) {
                 jokesAdapter.getNowPlayingViewHolder().getBinding().videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
                 jokesAdapter.setNowPlayingViewHolder(viewHolder);
                 Log.i("orientation3", "exoplayer onplayerstatechanged now player viewholder replaced");
+            } else if (jokesAdapter.getNowPlayingViewHolder().equals(viewHolder)){
+                //jokesAdapter.prepareVideoPlayback(viewHolder);
             }
         } else if (playbackState == Player.STATE_ENDED){
             jokesAdapter.setNowPlayingViewHolder(null);

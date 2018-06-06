@@ -109,4 +109,8 @@ public class FullScreenVideoDialog extends DialogFragment {
     public String getUrl() {
         return url;
     }
+
+    public void pause(){
+        simpleExoPlayerView.getPlayer().setPlayWhenReady(false);
+    }
 }

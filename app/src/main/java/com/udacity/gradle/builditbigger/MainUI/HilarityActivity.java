@@ -194,6 +194,7 @@ public class HilarityActivity extends AppCompatActivity
         Log.i("orientation3", "HilarityActivity, onConfigurationChanged called");
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             if (dialog != null && dialog.isVisible()) {
+                //dialog.pause();
                 orientationControlViewModel.getVideoLiveData().setValue(new VideoInfo(dialog.getUrl(), dialog.getPosition()));
                 dialog.dismiss();
                 Fragment fragment2 = getSupportFragmentManager().findFragmentByTag("full screen video");
