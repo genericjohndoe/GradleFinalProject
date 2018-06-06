@@ -309,9 +309,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 } else if (!orientationChanged && holder.equals(getNowPlayingViewHolder())){
                     holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
                         holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
-                        prepareVideoPlayback(holder);
+                        Log.i("iuvylv", "prepared called from on start");
                         holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(true);
-                        
+
                     });
                     Log.i("orientation3", "holder received info from dialog");
                 }
@@ -385,6 +385,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         super.onViewAttachedToWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
         if (holder.getJoke() != null && holder.getJoke().getType() == Constants.VIDEO) {
+            Log.i("iuvylv", "prepared called from on resume");
             prepareVideoPlayback(holder);
         }
     }
