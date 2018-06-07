@@ -152,7 +152,20 @@
         <receiver
             android:name=".CloudMessaging.NotifcationMessageReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
+        <activity
+            android:name=".Settings.UserSettings.UserSettingsActivity"
+            android:label="@string/title_activity_user_settings"
+            android:parentActivityName=".Settings.SettingsActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udacity.gradle.builditbigger.Settings.SettingsActivity" />
+        </activity>
+        <activity android:name=".Settings.NotificationSettings.NotificationSettingsActivity" />
+        <activity android:name=".Settings.ContentCreatorSettings.ContentCreatorActivity" />
+        <activity android:name=".Settings.PaymentSettings.PaymentActivity"></activity>
     </application>
 
 </manifest>
