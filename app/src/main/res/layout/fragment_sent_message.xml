@@ -29,13 +29,14 @@
             android:src="@drawable/ic_add_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            fab:fab_colorNormal="#228b22" />
+            fab:fab_colorNormal="@color/green_8"
+            app:fab_colorPressed="@color/green_7"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#228b22"
+            android:background="@color/green_8"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

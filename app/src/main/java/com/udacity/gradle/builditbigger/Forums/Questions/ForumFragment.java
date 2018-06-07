@@ -57,12 +57,6 @@ public class ForumFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
         llm.setStackFromEnd(true);
         bind.questionsRecyclerview.setLayoutManager(llm);
-        bind.questionsRecyclerview.setOnTouchListener((v, event) -> {
-            bind.questionsRecyclerview.requestFocus();
-            InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            mgr.hideSoftInputFromWindow(bind.filterEditText.getWindowToken(), 0);
-            return true;
-        });
         ViewModelProviders.of(this).get(ForumQuestionsViewModel.class).getForumQuestionsLiveData().observe(this, question -> {
             if (!forumQuestions.contains(question)) {
                 forumQuestions.add(question);

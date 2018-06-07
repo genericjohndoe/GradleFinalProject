@@ -5,13 +5,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment">
+    tools:context="com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment"
+    android:background="@color/black">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recipient_recyclerview"
-        android:background="@color/accent"
+        android:background="@color/green_black_1"
          />
 
     <android.support.v7.widget.RecyclerView
@@ -35,7 +36,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/incoming_message_edittext"/>
+            android:id="@+id/incoming_message_edittext"
+            android:backgroundTint="@color/green_8"/>
 
         <ImageButton
             android:id="@+id/send_button"

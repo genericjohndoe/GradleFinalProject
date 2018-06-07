@@ -58,24 +58,28 @@ public class NewVideoSubmission extends Fragment {
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_video_submission, container, false);
 
         bind.submitButton.setOnClickListener(view -> {
-            Constants.STORAGE.child("users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4").putFile(Uri.fromFile(file))
+            String path = "users/" + Constants.UID + "/videos/" + getCurrentDateAndTime() + ".mp4";
+            Constants.STORAGE.child(path).putFile(Uri.fromFile(file))
                     .addOnFailureListener(exception -> {
                     })
                     .addOnSuccessListener(taskSnapshot -> {
                                 file.delete();
-                                String downloadUrl = taskSnapshot.getDownloadUrl().toString();
-                                DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-                                Post newVideoPost = new Post("", "", System.currentTimeMillis(),
-                                        "genre push id", downloadUrl, Constants.UID, db.getKey(), bind.videoTagline.getText().toString(), Constants.VIDEO,
-                                        new MetaData("video", Integer.parseInt(number) + 1, Constants.getTags(bind.videoTagline.getText().toString())));
-                                db.setValue(newVideoPost, ((databaseError, databaseReference) -> {
-                                    if (databaseError == null){
-                                        getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
-                                        Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
-                                        Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
-                                        Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
-                                    }
-                                }));
+                                Constants.STORAGE.child(path).getDownloadUrl().addOnSuccessListener(uri ->{
+                                    String downloadUrl = uri.toString();
+                                    DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
+                                    Post newVideoPost = new Post("", "", System.currentTimeMillis(),
+                                            "genre push id", downloadUrl, Constants.UID, db.getKey(), bind.videoTagline.getText().toString(), Constants.VIDEO,
+                                            new MetaData("video", Integer.parseInt(number) + 1, Constants.getTags(bind.videoTagline.getText().toString())));
+                                    db.setValue(newVideoPost, ((databaseError, databaseReference) -> {
+                                        if (databaseError == null){
+                                            getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                            Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
+                                            Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
+                                            Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
+                                        }
+                                    }));
+                                });
+
                             }
                     );
         });

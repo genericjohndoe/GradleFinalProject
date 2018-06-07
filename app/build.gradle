@@ -45,17 +45,17 @@ dependencies {
     //dialog boxes
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     //Firebase
-    implementation "com.google.firebase:firebase-storage:15.0.2"
-    implementation "com.google.firebase:firebase-database:15.0.1"
-    implementation "com.google.firebase:firebase-auth:15.1.0"
-    implementation "com.google.firebase:firebase-messaging:15.0.2"
-    implementation "com.google.firebase:firebase-firestore:16.0.0"
-    implementation "com.google.firebase:firebase-functions:$firebase_version"
-    implementation 'com.google.firebase:firebase-ml-vision:15.0.0'
+    implementation "com.google.firebase:firebase-storage:16.0.1"
+    implementation "com.google.firebase:firebase-database:16.0.1"
+    implementation "com.google.firebase:firebase-auth:16.0.1"
+    implementation "com.google.firebase:firebase-messaging:17.0.0"
+    implementation "com.google.firebase:firebase-firestore:17.0.1"
+    implementation "com.google.firebase:firebase-functions:16.0.1"
+    implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
     implementation "com.google.android.gms:play-services-auth:15.0.1"
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     //support library
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     implementation "com.android.support:appcompat-v7:$support_lib_version"
     implementation "com.android.support:support-v13:$support_lib_version"
     implementation "com.android.support:support-v4:$support_lib_version"

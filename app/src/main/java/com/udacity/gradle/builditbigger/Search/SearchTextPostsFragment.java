@@ -54,7 +54,7 @@ public class SearchTextPostsFragment extends Fragment {
         JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), new ArrayList<>(), false);
         bind.recyclerview.setAdapter(jokesAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
+        /*ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
             Constants.FIRESTORE.collection("posts").whereEqualTo("type", Constants.TEXT).whereGreaterThanOrEqualTo("jokeTitle", query).get()
                     .addOnSuccessListener(documentSnapshots -> {
                         List<Post> textPosts = new ArrayList<>();
@@ -63,7 +63,7 @@ public class SearchTextPostsFragment extends Fragment {
                         }
                         jokesAdapter.setJokes(textPosts);
                     });
-        });
+        });*/
         return bind.getRoot();
     }
 

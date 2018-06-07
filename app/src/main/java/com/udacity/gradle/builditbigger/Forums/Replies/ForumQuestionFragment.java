@@ -57,6 +57,7 @@ public class ForumQuestionFragment extends Fragment {
         FragmentForumQuestionBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_forum_question, container, false);
         bind.question.userNameTextView.setText("@"+forumQuestion.getHilarityUser().getUserName());
         bind.question.questionTextView.setText(forumQuestion.getQuestion());
+        bind.question.questionTextView.requestFocus();
         bind.question.timeTextView.setText(Constants.formattedTimeString(getActivity(),forumQuestion.getTimeStamp()));
         List<ForumReply> replies = new ArrayList<>();
         ForumReplyAdapter adapter = new ForumReplyAdapter(replies, getActivity(), forumQuestion.getKey());
@@ -77,7 +78,7 @@ public class ForumQuestionFragment extends Fragment {
             });
         });
         ViewModelProviders.of(this).get(ForumQuestionsViewModel.class)
-                .getForumQuestionReplyLiveData(forumQuestion.getKey()).observe(this, reply ->{
+                .getForumQuestionReplyLiveData(forumQuestion.getKey()).observe(this, reply -> {
             if (!replies.contains(reply)){
                 replies.add(reply);
                 adapter.notifyDataSetChanged();

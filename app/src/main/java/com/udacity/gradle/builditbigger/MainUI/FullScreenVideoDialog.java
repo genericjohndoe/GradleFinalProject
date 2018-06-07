@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class FullScreenVideoDialog extends DialogFragment {
         if (getArguments() != null){
             url = getArguments().getString("url");
             position = getArguments().getLong("position");
+            Log.i("orientation4", "position = " + position + " in onCreate");
         }
     }
 
@@ -79,9 +81,9 @@ public class FullScreenVideoDialog extends DialogFragment {
             simpleExoPlayerView.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(url),
                     dataSourceFactory, extractorsFactory, null, null), false, true);
             simpleExoPlayerView.getPlayer().seekTo(position);
+            Log.i("orientation4", "position = " + position + " in onResume");
             simpleExoPlayerView.getPlayer().setPlayWhenReady(true);
         }
-
     }
 
     @NonNull
@@ -113,4 +115,10 @@ public class FullScreenVideoDialog extends DialogFragment {
     public void pause(){
         simpleExoPlayerView.getPlayer().setPlayWhenReady(false);
     }
+
+    /*@Override
+    public void onDestroy() {
+        simpleExoPlayerView.getPlayer().release();
+        super.onDestroy();
+    }*/
 }

@@ -75,25 +75,29 @@ public class NewGifSubmission extends Fragment {
         }
         //Glide.with(this).asGif().load(new File(filepath)).into(bind.gifImageview);
         bind.submitButton.setOnClickListener(view -> {
-            Constants.STORAGE.child("users/" + Constants.UID + "/gifs/" + getCurrentDateAndTime() + ".gif").putFile(Uri.fromFile(new File(filepath)))
+            String path = "users/" + Constants.UID + "/gifs/" + getCurrentDateAndTime() + ".gif";
+            Constants.STORAGE.child(path).putFile(Uri.fromFile(new File(filepath)))
                     .addOnFailureListener(exception -> {
                                 Log.i("cloud storage exception", exception.toString());
                     })
                     .addOnSuccessListener(taskSnapshot -> {
                         new File(filepath).delete();
-                        String downloadUrl = taskSnapshot.getDownloadUrl().toString();
-                        String tagline = bind.socialEditText.getText().toString();
-                        DatabaseReference db = Constants.DATABASE.child("userposts/"+Constants.UID).push();
-                        MetaData metaData = new MetaData("gif", Integer.parseInt(number)+1, Constants.getTags(tagline));
-                        Post joke = new Post("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.GIF,metaData);
-                        db.setValue(joke, (databaseError, databaseReference) -> {
-                            if (databaseError == null) {
-                                getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
-                                Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
-                                Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
-                                Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
-                            }
+                        Constants.STORAGE.child(path).getDownloadUrl().addOnSuccessListener(uri ->{
+                            String downloadUrl = uri.toString();
+                            String tagline = bind.socialEditText.getText().toString();
+                            DatabaseReference db = Constants.DATABASE.child("userposts/"+Constants.UID).push();
+                            MetaData metaData = new MetaData("gif", Integer.parseInt(number)+1, Constants.getTags(tagline));
+                            Post joke = new Post("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.GIF,metaData);
+                            db.setValue(joke, (databaseError, databaseReference) -> {
+                                if (databaseError == null) {
+                                    getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                    Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
+                                    Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
+                                    Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
+                                }
+                            });
                         });
+
                     });
         });
         return bind.getRoot();

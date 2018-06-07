@@ -69,4 +69,9 @@ public class ForumQuestion implements Parcelable {
         }
 
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((obj instanceof ForumQuestion) && ((ForumQuestion) obj).getKey().equals(key));
+    }
 }

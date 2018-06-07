@@ -10,7 +10,7 @@ import android.arch.lifecycle.ViewModel;
 public class SearchHilarityViewModel extends ViewModel {
     private static SearchHilarityViewModel searchHilarityViewModel;
 
-    private SearchHilarityViewModel(){}
+    public SearchHilarityViewModel(){}
 
     public static SearchHilarityViewModel getInstance(){
         if (searchHilarityViewModel == null){

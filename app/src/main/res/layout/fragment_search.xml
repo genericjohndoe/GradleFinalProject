@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.udacity.gradle.builditbigger.Search.SearchFragment">
+    tools:context="com.udacity.gradle.builditbigger.Search.SearchFragment"
+    android:background="@color/black">
 
     <EditText
         android:id="@+id/searcheditText"
@@ -13,7 +14,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/ic_search_black_24dp"
         android:ems="10"
+        android:backgroundTint="@color/green_8"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +29,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        app:tabTextColor="@color/green_8"
+        app:tabSelectedTextColor="@color/green_6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searcheditText"

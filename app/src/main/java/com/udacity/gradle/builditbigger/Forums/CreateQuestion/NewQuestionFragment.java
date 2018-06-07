@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,7 @@ public class NewQuestionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentNewQuestionBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_question, container, false);
+        bind.questionEditText.requestFocus();
         bind.submitButton.setOnClickListener(view ->{
             String question = bind.questionEditText.getText().toString();
             if (question.length() > 10){

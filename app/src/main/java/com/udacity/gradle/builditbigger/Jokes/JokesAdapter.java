@@ -305,11 +305,10 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     VideoInfo videoInfo = new VideoInfo(joke.getMediaURL(),
                             holder.binding.videoLayout.postVideoView.getPlayer().getCurrentPosition());
                     holder.orientationControlViewModel.getVideoLiveData().setValue(videoInfo);
-                    Log.i("orientation3", "holder was pause, info sent: " + videoInfo.toString());
+                    Log.i("orientation4", "holder was pause, info sent: " + videoInfo.getTimeElapsed());
                 } else if (!orientationChanged && holder.equals(getNowPlayingViewHolder())){
                     holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
                         holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
-                        Log.i("iuvylv", "prepared called from on start");
                         holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(true);
 
                     });
@@ -385,7 +384,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         super.onViewAttachedToWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
         if (holder.getJoke() != null && holder.getJoke().getType() == Constants.VIDEO) {
-            Log.i("iuvylv", "prepared called from on resume");
             prepareVideoPlayback(holder);
         }
     }

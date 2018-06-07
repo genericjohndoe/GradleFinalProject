@@ -35,4 +35,9 @@ public class ForumReply {
     public String getKey() {
         return key;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((obj instanceof ForumReply) && ((ForumReply) obj).getKey().equals(key));
+    }
 }
