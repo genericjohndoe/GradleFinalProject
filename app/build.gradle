@@ -97,6 +97,7 @@ dependencies {
     implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
     //for tutorials
     implementation 'com.github.takusemba:spotlight:1.3.3'
+    implementation 'com.stripe:stripe-android:6.1.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
