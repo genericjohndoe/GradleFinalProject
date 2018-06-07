@@ -38,8 +38,7 @@ public class ForumFragment extends Fragment {
      * @return A new instance of fragment ForumFragment.
      */
     public static ForumFragment newInstance() {
-        ForumFragment fragment = new ForumFragment();
-        return fragment;
+        return new ForumFragment();
     }
 
     @Override

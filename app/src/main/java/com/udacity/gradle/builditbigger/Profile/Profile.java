@@ -64,7 +64,6 @@ public class Profile extends Fragment implements HideFAB {
     //todo populate UI with info from database
     private String uid;
     private FragmentProfileBinding binding;
-    private OrientationControlViewModel orientationControlViewModel;
     private boolean isFollowed;
 
     /**
@@ -90,7 +89,7 @@ public class Profile extends Fragment implements HideFAB {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_profile,container,false);
-        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         binding.profileViewPager.setAdapter(new ProfilePagerAdapter(getActivity().getSupportFragmentManager()));
         //changes function of floating action menu based on what fragment is shown in the profile viewpager
         binding.profileViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -133,6 +132,9 @@ public class Profile extends Fragment implements HideFAB {
             Glide.with(Profile.this)
                     .load(profileUrl)
                     .into(binding.profileImageview);
+            Glide.with(Profile.this)
+                    .load(profileUrl)
+                    .into(binding.smallProfileImageview);
             }
         );
 
@@ -149,13 +151,17 @@ public class Profile extends Fragment implements HideFAB {
             binding.subscribersTv.setText(numFollowers != null ? numFollowers + " " : "0 ");
         });
 
+        //binding.appBar.nav
 
 
         binding.appBarLayout.addOnOffsetChangedListener(((appBarLayout, verticalOffset) -> {
             if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
                 ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+                binding.smallProfileImageview.setVisibility(View.VISIBLE);
             } else if (verticalOffset == 0) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+            } else {
+                binding.smallProfileImageview.setVisibility(View.GONE);
             }
         }));
 
