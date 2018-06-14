@@ -27,13 +27,6 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
@@ -212,7 +205,7 @@ public class Profile extends Fragment implements HideFAB {
         Intent intent = new Intent(getActivity(), SubsActivity.class);
         intent.putExtra("uid", uid);
         intent.putExtra("fragment", fragmenttype);
-        getActivity().startActivity(intent);
+        startActivity(intent);
     }
 
     /**

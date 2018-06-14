@@ -1,1 +1,1 @@
-include ':app', ':chipslibrary'
+include ':app', ':richeditor'

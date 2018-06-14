@@ -133,9 +133,9 @@
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-solver:1.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-ui-r2.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.databinding:adapters-3.1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp:okhttp:2.7.2@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: javax.inject:javax.inject:1@jar" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.databinding:adapters-3.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:19.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-fragment-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-1.1.1" level="project" />
@@ -147,7 +147,7 @@
     <orderEntry type="library" name="Gradle: pl.droidsonroids.gif:android-gif-drawable-1.2.12" level="project" />
     <orderEntry type="library" name="Gradle: com.hendraanggrian:socialview-core-0.17" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-15.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.databinding:library-3.1.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.databinding:library-3.1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-core-r2.5.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:transition-27.1.1" level="project" />
@@ -162,7 +162,6 @@
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-dash-r2.5.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.1.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.android.databinding:baseLibrary:3.1.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.takusemba:spotlight-1.3.3" level="project" />
     <orderEntry type="library" name="Gradle: com.hendraanggrian:picasso-utils-0.3" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:extensions-1.1.1" level="project" />
@@ -220,9 +219,11 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-database-16.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-functions-16.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.databinding:baseLibrary:3.1.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-vision-common-15.0.2" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.persistence:db-1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-hls-r2.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.j2html:j2html:1.3.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-16.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-interop-16.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.picasso:picasso:2.5.2@jar" level="project" />
@@ -238,5 +239,6 @@
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.0.19@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-v13-27.1.1" level="project" />
     <orderEntry type="library" name="Gradle: co.netguru.videochatguru:videochatguru-0.1.2" level="project" />
+    <orderEntry type="module" module-name="richeditor" />
   </component>
 </module>

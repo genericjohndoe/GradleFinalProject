@@ -13,6 +13,8 @@ import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostBinding;
 
+
+
 /**
  * Created by joeljohnson on 11/3/17.
  */
@@ -65,23 +67,25 @@ public class NewTextPostEditFragment extends Fragment {
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_text_post, container, false);
         if (title != null) {
             bind.titleEditText.setText(title);
-            bind.bodyEditText.setText(body);
+            bind.bodyEditText.setHtml(body);
             bind.taglineEditText.setText(tagline);
         }
         bind.continuebutton.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), TextPostSubmissionActivity.class);
             intent.putExtra("title", bind.titleEditText.getText().toString());
-            intent.putExtra("body", bind.bodyEditText.getText().toString());
+            intent.putExtra("body", bind.bodyEditText.getHtml());
             intent.putExtra("tagline", bind.taglineEditText.getText().toString());
             intent.putExtra("number", number);
-            getActivity().startActivity(intent);
+            startActivity(intent);
         });
+        bind.bodyEditText.setEditorFontColor("#369F77");
         bind.saveDraftButton.setOnClickListener(view -> {//todo add path for saved drafts in database
         });
         bind.discardButton.setOnClickListener(view -> {
             wasDiscarded = true;
-            getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+            startActivity(new Intent(getActivity(), HilarityActivity.class));
         });
+
         return bind.getRoot();
     }
 
@@ -89,9 +93,10 @@ public class NewTextPostEditFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         if (!wasDiscarded) {
             outState.putString(TITLE, bind.titleEditText.getText().toString());
-            outState.putString(BODY, bind.bodyEditText.getText().toString());
+            outState.putString(BODY, bind.bodyEditText.getHtml());
             outState.putString(TAGLINE, bind.taglineEditText.getText().toString());
         }
         super.onSaveInstanceState(outState);
     }
+
 }

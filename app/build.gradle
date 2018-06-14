@@ -41,6 +41,7 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    implementation project(path: ':richeditor')
     //circular imageview
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //dialog boxes
@@ -98,6 +99,7 @@ dependencies {
     //for tutorials
     implementation 'com.github.takusemba:spotlight:1.3.3'
     implementation 'com.stripe:stripe-android:6.1.2'
+    implementation 'com.j2html:j2html:1.3.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
