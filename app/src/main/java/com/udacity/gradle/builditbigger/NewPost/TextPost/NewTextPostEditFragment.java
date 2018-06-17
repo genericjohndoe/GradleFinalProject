@@ -13,6 +13,7 @@ import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostBinding;
 
+import jp.wasabeef.richeditor.RichEditorToolBar;
 
 
 /**
@@ -78,6 +79,8 @@ public class NewTextPostEditFragment extends Fragment {
             intent.putExtra("number", number);
             startActivity(intent);
         });
+        RichEditorToolBar toolBar = bind.getRoot().findViewById(R.id.richEditorToolBar);
+        toolBar.setRichEditor(bind.bodyEditText);
         bind.bodyEditText.setEditorFontColor("#369F77");
         bind.saveDraftButton.setOnClickListener(view -> {//todo add path for saved drafts in database
         });
