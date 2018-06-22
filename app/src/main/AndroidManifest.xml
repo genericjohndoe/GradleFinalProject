@@ -141,7 +141,7 @@
         </activity>
         <activity
             android:name=".NewPost.NewPostActivity2"
-            android:label="@string/title_activity_new_post2"
+            android:label=""
             android:theme="@style/AppTheme" />
         <activity android:name=".Settings.SettingsActivity" />
         <activity android:name=".Forums.Replies.ForumQuestionActivity" />
@@ -165,7 +165,8 @@
         </activity>
         <activity android:name=".Settings.NotificationSettings.NotificationSettingsActivity" />
         <activity android:name=".Settings.ContentCreatorSettings.ContentCreatorActivity" />
-        <activity android:name=".Settings.PaymentSettings.PaymentActivity"></activity>
+        <activity android:name=".Settings.PaymentSettings.PaymentActivity" />
+        <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostActivity"></activity>
     </application>
 
 </manifest>

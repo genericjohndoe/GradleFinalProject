@@ -277,6 +277,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
   //constructor
   public static final int PHOTO = 0;
   public static final int VIDEO = 1;
+  public static final int GIF = 2;
 
   public LifeCycleCamera(Fragment fragment, AutoFitTextureView aftv, int mode) {
     this.fragment = fragment;
@@ -1108,6 +1109,14 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     isBackCamera = !isBackCamera;
     onPause(fragment);
     onResume(fragment);
+  }
+
+  public int getMode(){
+    return mode;
+  }
+
+  public void setMode(int mode){
+    this.mode = mode;
   }
 
 }

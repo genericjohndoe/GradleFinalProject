@@ -21,7 +21,7 @@
     <color name="material_lime_a700">#AEEA00</color>
     <color name="material_purple_a700">#AA00FF</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#0a000000</color>
 
     <color name="green_background">#18736E</color>
     <color name="green_expanded_toolbar" >#308B87</color>
@@ -36,4 +36,5 @@
     <color name="green_6">#92D8C6</color>
     <color name="green_7">#72CBAE</color>
     <color name="green_8">#369F77</color>
+    <color name="green_9">#64369f77</color>
 </resources>

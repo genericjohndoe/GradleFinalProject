@@ -7,13 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <ImageButton
             android:id="@+id/continuebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="51dp"
+            android:layout_height="40dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Continue"
+            android:src="@drawable/ic_hilarity_continue"
+            android:background="@drawable/button_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -28,6 +29,7 @@
             android:hint="title"
             android:backgroundTint="@color/green_8"
             android:textColor="@color/green_8"
+            android:textColorHint="@color/green_8"
             android:gravity="top|start"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,13 +51,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/richEditorToolBar" />
 
-        <Button
+        <ImageButton
             android:id="@+id/save_draft_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="79dp"
+            android:layout_height="40dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            android:text="Save Draft"
+            android:src="@drawable/ic_book"
+            android:background="@drawable/button_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -75,13 +78,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/discard_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:text="Discard"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:background="@drawable/button_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/continuebutton"
             app:layout_constraintHorizontal_bias="0.5"
@@ -95,9 +99,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/button_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_editText"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/title_editText"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

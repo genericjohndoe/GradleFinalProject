@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,124 +29,67 @@ import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifPost;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
 import com.udacity.gradle.builditbigger.NewPost.TextPost.NewTextPostEditFragment;
 import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoPost;
+import com.udacity.gradle.builditbigger.NewPost.VisualMediaPost.VisualMediaPostFragment;
+import com.udacity.gradle.builditbigger.Profile.Profile;
+import com.udacity.gradle.builditbigger.Profile.UserCollections.HilarityUserCollections;
+import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
+import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.R;
 
-public class NewPostActivity2 extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    DrawerLayout drawer;
+public class NewPostActivity2 extends AppCompatActivity {
     String number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_post2);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        setTitle("New Post");
-        drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        drawer.requestFocus();
-        toggle.syncState();
-        int posttype = getIntent().getIntExtra("posttype", 1);
+        setContentView(R.layout.app_bar_new_post2);
+
+        int posttype = getIntent().getIntExtra("posttype", 0);
         number = getIntent().getStringExtra("number");
+
+        Intent intent = new Intent(this, NewPostActivity2.class);
+        intent.putExtra("number", number);
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+
+        tabLayout.getTabAt(0).setCustomView(R.layout.icon_document_post);
+        tabLayout.getTabAt(1).setCustomView(R.layout.icon_visual_media_post);
+        tabLayout.getTabAt(2).setCustomView(R.layout.icon_audio_media_post);
+
         Fragment fragment;
-        Log.i("TAGGGG", ""+posttype);
         switch (posttype){
-            case 1:
+            case 0:
                 fragment = NewTextPostEditFragment.newInstance(number);
                 break;
+            case 1:
+                fragment = VisualMediaPostFragment.newInstance(number);
+                break;
             case 2:
-                fragment = NewImagePost.newInstance(number);
-                break;
-            case 3:
                 fragment = NewVideoPost.newInstance(number);
-                break;
-            case 4:
-                fragment = NewGifPost.newInstance(number);
                 break;
             default:
                 fragment = null;
-
         }
+
+        tabLayout.getTabAt(posttype).select();
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.new_post_framelayout2, fragment)
                 .commit();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                intent.putExtra("posttype", tab.getPosition());
+                startActivity(intent);
+                finish();
+            }
 
-        int[] location = new int[2];
-        drawer.getLocationInWindow(location);
-        //correction factor added to get spotlight in correct location
-        float oneX = location[0] + drawer.getWidth() / 2f + 75;
-        float oneY = location[1] + drawer.getHeight() / 2f + 75;
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
 
-        SimpleTarget target = new SimpleTarget.Builder(this).setPoint(oneX,oneY)
-                .setRadius(60f)
-                .build();
-
-        Spotlight.with(this)
-                .setOverlayColor(ContextCompat.getColor(this, R.color.background))
-                .setDuration(500L)
-                .setAnimation(new DecelerateInterpolator(2f))
-                .setTargets(target)
-                .setClosedOnTouchedOutside(true)
-                .setOnSpotlightEndedListener(()-> {drawer.openDrawer(GravityCompat.START);})
-                .start();
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
     }
-
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-        startActivity(new Intent(this, HilarityActivity.class));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.new_post_activity2, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Intent intent = new Intent(this, NewPostActivity2.class);
-        intent.putExtra("number", number);
-        if (id == R.id.nav_text) {
-            intent.putExtra("posttype",1);
-        } else if (id == R.id.nav_image) {
-            intent.putExtra("posttype",2);
-        } else if (id == R.id.nav_video) {
-            intent.putExtra("posttype",3);
-        } else if (id == R.id.nav_gif) {
-            intent.putExtra("posttype",4);
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        startActivity(intent);
-        return true;
-    }
-
-
 }

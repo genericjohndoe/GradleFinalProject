@@ -21,8 +21,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/activity_new_post2_drawer"
-        android:background="@color/theme_primary"
-        app:itemIconTint="@color/dark_gray"
+        android:background="@color/black"
+        app:itemIconTint="@color/green_8"
         app:itemTextColor="@color/dark_gray"
         android:layout_marginTop="60dp"/>
 
