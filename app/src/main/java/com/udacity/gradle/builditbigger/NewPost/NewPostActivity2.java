@@ -25,6 +25,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.takusemba.spotlight.SimpleTarget;
 import com.takusemba.spotlight.Spotlight;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
+import com.udacity.gradle.builditbigger.NewPost.AudioMediaPost.AudioMediaPostFragment;
 import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifPost;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
 import com.udacity.gradle.builditbigger.NewPost.TextPost.NewTextPostEditFragment;
@@ -65,7 +66,7 @@ public class NewPostActivity2 extends AppCompatActivity {
                 fragment = VisualMediaPostFragment.newInstance(number);
                 break;
             case 2:
-                fragment = NewVideoPost.newInstance(number);
+                fragment = AudioMediaPostFragment.newInstance(number);
                 break;
             default:
                 fragment = null;
