@@ -3,18 +3,25 @@ package com.udacity.gradle.builditbigger.NewPost.AudioMediaPost;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentAudioMediaPostBinding;
 
@@ -27,15 +34,17 @@ import java.io.IOException;
  * Use the {@link AudioMediaPostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AudioMediaPostFragment extends Fragment {
+public class AudioMediaPostFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private String number;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private String[] mediaColumns = {MediaStore.Images.ImageColumns.DATA, MediaStore.Images.ImageColumns.DATE_TAKEN};
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
     private MediaRecorder recorder;
     private String fileName;
     private boolean isRecording = true;
-    long stopTime = 0;
+    private long stopTime = 0;
+    private MediaAdapter mediaAdapter;
 
     public AudioMediaPostFragment() {}
 
@@ -59,6 +68,7 @@ public class AudioMediaPostFragment extends Fragment {
         ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         fileName = getActivity().getExternalCacheDir().getAbsolutePath();
         fileName += "/audiorecordtest.3gp";
+        mediaAdapter = new MediaAdapter(getActivity(), number, null);
     }
 
     @Override
@@ -106,7 +116,8 @@ public class AudioMediaPostFragment extends Fragment {
             intent.putExtra("path", fileName);
             startActivity(intent);
         });
-
+        bind.audioRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        bind.audioRecyclerView.setAdapter(mediaAdapter);
         return bind.getRoot();
     }
 
@@ -118,8 +129,31 @@ public class AudioMediaPostFragment extends Fragment {
                 permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 break;
         }
-        if (!permissionToRecordAccepted ) getActivity().finish();
+        if (!permissionToRecordAccepted) getActivity().finish();
+    }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(0, null,  this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override @NonNull
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+                + MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO;
+        return new CursorLoader(getActivity(), MediaStore.Files.getContentUri("external"), mediaColumns,
+                selection, null, mediaColumns[1] + " DESC");
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+        data.setNotificationUri(getActivity().getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        mediaAdapter.swapCursor(data, true);
+    }
+
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        mediaAdapter.swapCursor(null, true);
     }
 
     private void startRecording() {
@@ -142,7 +176,4 @@ public class AudioMediaPostFragment extends Fragment {
         recorder.release();
         recorder = null;
     }
-
-
-
 }

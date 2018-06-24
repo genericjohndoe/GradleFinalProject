@@ -120,12 +120,12 @@ public class NewImagePost extends Fragment implements ActivityCompat.OnRequestPe
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         data.setNotificationUri(getActivity().getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        mediaAdapter.swapCursor(data);
+        mediaAdapter.swapCursor(data, false);
 
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
-        mediaAdapter.swapCursor(null);
+        mediaAdapter.swapCursor(null, false);
     }
 
     public void moveFile(File file){

@@ -54,7 +54,7 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                              Bundle savedInstanceState) {
         FragmentAudioMediaPostSubmissionBinding bind = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_audio_media_post_submission, container, false);
-        bind.playButton.setOnClickListener(view ->{
+        bind.playButton.setOnClickListener(view -> {
             MediaPlayer mediaPlayer = new MediaPlayer();
             try {
                 mediaPlayer.setDataSource(audioFilePath);

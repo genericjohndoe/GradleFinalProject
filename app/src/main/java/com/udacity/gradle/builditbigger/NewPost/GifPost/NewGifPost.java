@@ -152,11 +152,11 @@ public class NewGifPost extends Fragment implements LoaderManager.LoaderCallback
     @Override
     public void onLoadFinished(@NonNull  Loader<Cursor> loader, Cursor data) {
         data.setNotificationUri(getActivity().getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        mediaAdapter.swapCursor(data);
+        mediaAdapter.swapCursor(data, false);
     }
 
     public void onLoaderReset(@NonNull  Loader<Cursor> loader) {
-        mediaAdapter.swapCursor(null);
+        mediaAdapter.swapCursor(null, false);
     }
 
     private void requestStorageWritePermission() {

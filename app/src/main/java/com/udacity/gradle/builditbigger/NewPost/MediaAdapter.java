@@ -3,6 +3,8 @@ package com.udacity.gradle.builditbigger.NewPost;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +38,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     private static String number;
     private static IntentCreator creator;
     private static ReturnMediaResult returnMediaResult;
+    private boolean isAudio;
 
     public MediaAdapter(Context context, String number, IntentCreator creator, ReturnMediaResult returnMediaResult) {
         this.context = context;
@@ -61,9 +64,14 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         cursor.moveToPosition(position);
         String path = cursor.getString(0);
+        MediaMetadataRetriever mmr = null;
         holder.filepath = path;
-        Glide.with(context).load(new File(path))
-                .into(holder.imageView);
+        if (isAudio) {
+            mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(context, Uri.fromFile(new File(path)));
+        }
+        Glide.with(context).load(isAudio ? mmr.getEmbeddedPicture() : new File(path))
+                    .into(holder.imageView);
     }
 
     @Override
@@ -92,8 +100,9 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     }
 
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(Cursor newCursor, boolean isAudio) {
         cursor = newCursor;
+        this.isAudio = isAudio;
         notifyDataSetChanged();
     }
 }

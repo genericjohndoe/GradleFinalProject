@@ -152,11 +152,11 @@ public class NewVideoPost extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         data.setNotificationUri(getActivity().getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        mediaAdapter.swapCursor(data);
+        mediaAdapter.swapCursor(data, false);
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
-        mediaAdapter.swapCursor(null);
+        mediaAdapter.swapCursor(null, false);
     }
 
     public void moveFile(File file){
