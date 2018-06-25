@@ -36,6 +36,7 @@ public class Constants {
     public static final int IMAGE = 2;
     public static final int VIDEO = 3;
     public static final int GIF = 4;
+    public static final int AUDIO = 5;
 
     public static String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();

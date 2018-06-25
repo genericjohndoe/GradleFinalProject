@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.NewPost.AudioMediaPost;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +21,11 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
+import com.google.firebase.database.DatabaseReference;
+import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
+import com.udacity.gradle.builditbigger.Models.MetaData;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentAudioMediaPostSubmissionBinding;
@@ -67,6 +73,34 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
         bind = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_audio_media_post_submission, container, false);
         getLifecycle().addObserver(new VideoLifeCyclerObserver(getActivity(), bind.simpleexoview));
+        bind.submitbutton.setOnClickListener(view -> {
+            File file = new File(audioFilePath);
+            String path = "users/" + Constants.UID + "/audio/" + Constants.getCurrentDateAndTime() + ".mp4";
+            Constants.STORAGE.child(path).putFile(Uri.fromFile(file))
+                    .addOnFailureListener(exception -> {
+                    })
+                    .addOnSuccessListener(taskSnapshot -> {
+                                file.delete();
+                                Constants.STORAGE.child(path).getDownloadUrl().addOnSuccessListener(uri ->{
+                                    String downloadUrl = uri.toString();
+                                    DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
+                                    String tagline = bind.socialEditText.getText().toString();
+                                    Post newAudioPost = new Post("", "", System.currentTimeMillis(),
+                                            "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO,
+                                            new MetaData("audio", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
+                                    db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
+                                        if (databaseError == null){
+                                            getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                            Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
+                                            Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
+                                            Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
+                                        }
+                                    }));
+                                });
+
+                            }
+                    );
+        });
 
         return bind.getRoot();
     }
