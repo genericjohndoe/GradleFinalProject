@@ -86,7 +86,7 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                                     DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                     String tagline = bind.socialEditText.getText().toString();
                                     Post newAudioPost = new Post("", "", System.currentTimeMillis(),
-                                            "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO,
+                                            "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO_AUDIO,
                                             new MetaData("audio", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
                                     db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
                                         if (databaseError == null){

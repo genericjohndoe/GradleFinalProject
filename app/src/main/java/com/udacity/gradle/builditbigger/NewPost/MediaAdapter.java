@@ -64,14 +64,17 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         cursor.moveToPosition(position);
         String path = cursor.getString(0);
-        MediaMetadataRetriever mmr = null;
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();;
         holder.filepath = path;
-        if (isAudio) {
-            mmr = new MediaMetadataRetriever();
-            mmr.setDataSource(context, Uri.fromFile(new File(path)));
-        }
+        if (isAudio) mmr.setDataSource(context, Uri.fromFile(new File(path)));
+
+        String isVideo = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO);
+
         Glide.with(context).load(isAudio ? mmr.getEmbeddedPicture() : new File(path))
                     .into(holder.imageView);
+        Glide.with(context).load((isVideo == null && !isAudio) ? R.drawable.ic_menu_camera : R.drawable.ic_videocam_white_24dp)
+            .into(holder.type);
+        mmr.release();
     }
 
     @Override
@@ -81,11 +84,13 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView imageView;
+        private ImageView type;
         private String filepath;
 
         public ViewHolder(View view) {
             super(view);
             imageView = view.findViewById(R.id.gallery);
+            type = view.findViewById(R.id.type);
             view.setOnClickListener(this);
         }
 

@@ -66,7 +66,7 @@ public class NewImageSubmission extends Fragment {
                                         DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                         Post newImagePost = new Post("", "", System.currentTimeMillis(),
                                                 "genre push id", downloadUrl, Constants.UID,
-                                                db.getKey(), bind.imageTagline.getText().toString(), Constants.IMAGE,
+                                                db.getKey(), bind.imageTagline.getText().toString(), Constants.IMAGE_GIF,
                                                 new MetaData("image", Integer.parseInt(number)+1,Constants.getTags(bind.imageTagline.getText().toString())));
                                         db.setValue(newImagePost, ((databaseError, databaseReference) -> {
                                             if (databaseError == null){

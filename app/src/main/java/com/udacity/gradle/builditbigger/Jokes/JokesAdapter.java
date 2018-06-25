@@ -79,11 +79,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         this.isUserProfile = isUserProfile;
         setHasStableIds(true);
         Post newVideoPost = new Post("", "", System.currentTimeMillis(),
-                "genre push id", "asset:///portrait_test.mp4", Constants.UID, "key", "tagline", Constants.VIDEO,
+                "genre push id", "asset:///portrait_test.mp4", Constants.UID, "key", "tagline", Constants.VIDEO_AUDIO,
                 new MetaData("video", Integer.parseInt("2") + 1, new HashMap<>()));
         jokes.add(newVideoPost);
         Post newVideoPost2 = new Post("", "", System.currentTimeMillis(),
-                "genre push id", "asset:///landscape_test.mp4", Constants.UID, "keys", "tagline", Constants.VIDEO,
+                "genre push id", "asset:///landscape_test.mp4", Constants.UID, "keys", "tagline", Constants.VIDEO_AUDIO,
                 new MetaData("video", Integer.parseInt("3") + 1, new HashMap<>()));
         jokes.add(newVideoPost2);
     }
@@ -262,20 +262,15 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
                 binding.gifLayout.gifRootlayout.setVisibility(View.GONE);
                 return new JokesViewHolder(binding);
-            case Constants.IMAGE:
-                binding.textLayout.textRootLayout.setVisibility(View.GONE);
-                binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
-                binding.gifLayout.gifRootlayout.setVisibility(View.GONE);
-                return new JokesViewHolder(binding);
-            case Constants.VIDEO:
-                binding.textLayout.textRootLayout.setVisibility(View.GONE);
-                binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
-                binding.gifLayout.gifRootlayout.setVisibility(View.GONE);
-                return new JokesViewHolder(binding);
-            case Constants.GIF:
+            case Constants.IMAGE_GIF:
                 binding.textLayout.textRootLayout.setVisibility(View.GONE);
                 binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
                 binding.videoLayout.videoFramelayout.setVisibility(View.GONE);
+                return new JokesViewHolder(binding);
+            case Constants.VIDEO_AUDIO:
+                binding.textLayout.textRootLayout.setVisibility(View.GONE);
+                binding.imageLayout.imageRootLayout.setVisibility(View.GONE);
+                binding.gifLayout.gifRootlayout.setVisibility(View.GONE);
                 return new JokesViewHolder(binding);
         }
         return new JokesViewHolder(binding);
@@ -290,9 +285,10 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         if (joke.getType() == Constants.TEXT) {
             holder.binding.textLayout.jokeTitleTextView.setText(joke.getJokeTitle());
             holder.binding.textLayout.jokeBodyTextView.setText(joke.getJokeBody());
-        } else if (joke.getType() == Constants.IMAGE) {
-            Glide.with(context).load(joke.getMediaURL()).into((holder.binding.imageLayout.postImageview));
-        } else if (joke.getType() == Constants.VIDEO) {
+        } else if (joke.getType() == Constants.IMAGE_GIF) {
+            Glide.with(context).asGif().load(joke.getMediaURL())
+                    .into(holder.binding.gifLayout.postGifimageview);
+        } else if (joke.getType() == Constants.VIDEO_AUDIO) {
             holder.setJoke(joke);
             holder.getLifecycle().addObserver(new VideoLifeCyclerObserver(context, holder, this));
             prepareVideoPlayback(holder);
@@ -315,9 +311,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     Log.i("orientation3", "holder received info from dialog");
                 }
             });
-        } else {
-            Glide.with(context).asGif().load(joke.getMediaURL())
-                    .into(holder.binding.gifLayout.postGifimageview);
         }
         holder.binding.taglineTextView.setText(joke.getTagline());
 
@@ -383,7 +376,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     public void onViewAttachedToWindow(@NonNull JokesViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
-        if (holder.getJoke() != null && holder.getJoke().getType() == Constants.VIDEO) {
+        if (holder.getJoke() != null && holder.getJoke().getType() == Constants.VIDEO_AUDIO) {
             prepareVideoPlayback(holder);
         }
     }
@@ -392,7 +385,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     public void onViewDetachedFromWindow(@NonNull JokesViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
-        if (holder.getJoke().getType() == Constants.VIDEO){
+        if (holder.getJoke().getType() == Constants.VIDEO_AUDIO){
             //holder.orientationControlViewModel.getNumVideosLiveData().setValue(--numVideos);
             Log.i("numMovies", numVideos+"");
         }

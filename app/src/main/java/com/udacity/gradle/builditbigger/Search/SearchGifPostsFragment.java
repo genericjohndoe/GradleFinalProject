@@ -55,7 +55,7 @@ public class SearchGifPostsFragment extends Fragment {
         bind.recyclerview.setAdapter(jokesAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
         ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
-            Constants.FIRESTORE.collection("posts").whereEqualTo("type", Constants.GIF).whereGreaterThanOrEqualTo("metaData.tags."+query, true).get()
+            Constants.FIRESTORE.collection("posts").whereEqualTo("type", Constants.IMAGE_GIF).whereGreaterThanOrEqualTo("metaData.tags."+query, true).get()
                     .addOnSuccessListener(documentSnapshots -> {
                         List<Post> gifPosts = new ArrayList<>();
                         for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {

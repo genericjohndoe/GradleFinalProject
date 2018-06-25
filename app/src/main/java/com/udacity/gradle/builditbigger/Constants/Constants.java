@@ -33,10 +33,8 @@ public class Constants {
     public static DatabaseReference DATABASE;
     public static StorageReference STORAGE = FirebaseStorage.getInstance().getReference();
     public static final int TEXT = 1;
-    public static final int IMAGE = 2;
-    public static final int VIDEO = 3;
-    public static final int GIF = 4;
-    public static final int AUDIO = 5;
+    public static final int IMAGE_GIF = 2;
+    public static final int VIDEO_AUDIO = 3;
 
     public static String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();
@@ -44,7 +42,6 @@ public class Constants {
         String formattedDate = df.format(c.getTime());
         return formattedDate;
     }
-
 
     public static CharSequence formattedTimeString(Context context, long timeInMillis){
         Calendar cal = Calendar.getInstance(TimeZone.getDefault(), context.getResources().getConfiguration().locale);

@@ -68,7 +68,7 @@ public class NewVideoSubmission extends Fragment {
                                     String downloadUrl = uri.toString();
                                     DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                     Post newVideoPost = new Post("", "", System.currentTimeMillis(),
-                                            "genre push id", downloadUrl, Constants.UID, db.getKey(), bind.videoTagline.getText().toString(), Constants.VIDEO,
+                                            "genre push id", downloadUrl, Constants.UID, db.getKey(), bind.videoTagline.getText().toString(), Constants.VIDEO_AUDIO,
                                             new MetaData("video", Integer.parseInt(number) + 1, Constants.getTags(bind.videoTagline.getText().toString())));
                                     db.setValue(newVideoPost, ((databaseError, databaseReference) -> {
                                         if (databaseError == null){

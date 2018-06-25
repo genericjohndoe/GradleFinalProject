@@ -87,7 +87,7 @@ public class NewGifSubmission extends Fragment {
                             String tagline = bind.socialEditText.getText().toString();
                             DatabaseReference db = Constants.DATABASE.child("userposts/"+Constants.UID).push();
                             MetaData metaData = new MetaData("gif", Integer.parseInt(number)+1, Constants.getTags(tagline));
-                            Post joke = new Post("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.GIF,metaData);
+                            Post joke = new Post("","",System.currentTimeMillis(),"genre", downloadUrl,Constants.UID, db.getKey(), tagline, Constants.IMAGE_GIF,metaData);
                             db.setValue(joke, (databaseError, databaseReference) -> {
                                 if (databaseError == null) {
                                     getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
