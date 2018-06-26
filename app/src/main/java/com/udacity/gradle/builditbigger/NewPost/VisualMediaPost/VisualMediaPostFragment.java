@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.NewPost.VisualMediaPost;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -23,16 +24,19 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
+import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostBinding;
+
+import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link VisualMediaPostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VisualMediaPostFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor> {
+public class VisualMediaPostFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback, LoaderManager.LoaderCallbacks<Cursor>, IntentCreator {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_EXTERNAL_STORAGE_READ = 2;
     private String[] mediaColumns = {MediaStore.Images.ImageColumns.DATA, MediaStore.Images.ImageColumns.DATE_TAKEN};
@@ -72,7 +76,7 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
         if (getArguments() != null){
             number = getArguments().getString("number");
         }
-        mediaAdapter = new MediaAdapter(getActivity(), number, null);
+        mediaAdapter = new MediaAdapter(getActivity(), number, this);
     }
 
     @Override
@@ -200,5 +204,17 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
 
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mediaAdapter.swapCursor(null, false);
+    }
+
+    @Override
+    public void createIntent(String filepath, String number) {
+        Intent intent = new Intent(getActivity(), VisualMediaPostSubmissionActivity.class);
+        intent.putExtra("filepath", filepath);
+        intent.putExtra("number", number);
+        startActivity(intent);
+    }
+
+    public void moveFile(File file){
+        createIntent(file.getPath(),number);
     }
 }

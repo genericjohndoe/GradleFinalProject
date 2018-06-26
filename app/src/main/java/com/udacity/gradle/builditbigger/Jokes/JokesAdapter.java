@@ -286,7 +286,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             holder.binding.textLayout.jokeTitleTextView.setText(joke.getJokeTitle());
             holder.binding.textLayout.jokeBodyTextView.setText(joke.getJokeBody());
         } else if (joke.getType() == Constants.IMAGE_GIF) {
-            Glide.with(context).asGif().load(joke.getMediaURL())
+            Glide.with(context).load(joke.getMediaURL())
                     .into(holder.binding.gifLayout.postGifimageview);
         } else if (joke.getType() == Constants.VIDEO_AUDIO) {
             holder.setJoke(joke);

@@ -41,15 +41,12 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
 
-import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifPost;
-import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
-import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoPost;
+import com.udacity.gradle.builditbigger.NewPost.VisualMediaPost.VisualMediaPostFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -885,7 +882,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         if (null != output) {
           try {
             output.close();
-            ((NewImagePost) fragment).moveFile(mFile);
+            ((VisualMediaPostFragment) fragment).moveFile(mFile);
             makeFileAvailible(mFile);
           } catch (IOException e) {
             e.printStackTrace();
@@ -926,7 +923,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
   private String getVideoFilePath(Context context) {
     try {
-      if (fragment instanceof NewVideoPost) {
+      if (mode == VIDEO) {
         mFile = File.createTempFile("temp file", ".mp4", fragment.getActivity().getCacheDir());
       }else {
         mFile = File.createTempFile("temp file", ".gif", fragment.getActivity().getCacheDir());
@@ -1098,10 +1095,10 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
   }
 
   public void getFilePath() {
-    if (fragment instanceof NewVideoPost) {
-      ((NewVideoPost) fragment).moveFile(mFile);
-    } else if (fragment instanceof NewGifPost){
-      ((NewGifPost) fragment).moveFile(mFile);
+    if (mode == VIDEO) {
+      ((VisualMediaPostFragment) fragment).moveFile(mFile);
+    } else if (mode == GIF){
+      ((VisualMediaPostFragment) fragment).moveFile(mFile);
     }
   }
 

@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentAudioMediaPostBinding;
@@ -34,7 +35,7 @@ import java.io.IOException;
  * Use the {@link AudioMediaPostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AudioMediaPostFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class AudioMediaPostFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, IntentCreator {
     private String number;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private String[] mediaColumns = {MediaStore.Images.ImageColumns.DATA, MediaStore.Images.ImageColumns.DATE_TAKEN};
@@ -68,7 +69,7 @@ public class AudioMediaPostFragment extends Fragment implements LoaderManager.Lo
         ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         fileName = getActivity().getExternalCacheDir().getAbsolutePath();
         fileName += "/audiorecordtest.3gp";
-        mediaAdapter = new MediaAdapter(getActivity(), number, null);
+        mediaAdapter = new MediaAdapter(getActivity(), number, this);
     }
 
     @Override
@@ -111,10 +112,7 @@ public class AudioMediaPostFragment extends Fragment implements LoaderManager.Lo
             stopTime = 0;
             bind.timerTextView.stop();
             bind.timerTextView.setText("00:00");
-            Intent intent = new Intent(getActivity(), AudioMediaPostSubmissionActivity.class);
-            intent.putExtra("number", number);
-            intent.putExtra("path", fileName);
-            startActivity(intent);
+            createIntent(fileName,number);
         });
         bind.audioRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         bind.audioRecyclerView.setAdapter(mediaAdapter);
@@ -175,5 +173,13 @@ public class AudioMediaPostFragment extends Fragment implements LoaderManager.Lo
         recorder.stop();
         recorder.release();
         recorder = null;
+    }
+
+    @Override
+    public void createIntent(String filepath, String number) {
+        Intent intent = new Intent(getActivity(), AudioMediaPostSubmissionActivity.class);
+        intent.putExtra("number", number);
+        intent.putExtra("path", filepath);
+        startActivity(intent);
     }
 }

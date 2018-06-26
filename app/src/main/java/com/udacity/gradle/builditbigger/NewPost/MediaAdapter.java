@@ -64,16 +64,21 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         cursor.moveToPosition(position);
         String path = cursor.getString(0);
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();;
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         holder.filepath = path;
-        if (isAudio) mmr.setDataSource(context, Uri.fromFile(new File(path)));
-
-        String isVideo = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO);
+        try {
+            mmr.setDataSource(context, Uri.fromFile(new File(path)));
+        } catch (Exception e){
+            Log.i("mediaadapter", e.toString());
+        }
+        if (!isAudio) {
+            Glide.with(context).load(getVisualMediaTypeDrawable(path,mmr))
+                    .into(holder.type);
+        }
 
         Glide.with(context).load(isAudio ? mmr.getEmbeddedPicture() : new File(path))
                     .into(holder.imageView);
-        Glide.with(context).load((isVideo == null && !isAudio) ? R.drawable.ic_menu_camera : R.drawable.ic_videocam_white_24dp)
-            .into(holder.type);
+
         mmr.release();
     }
 
@@ -104,10 +109,19 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         }
     }
 
-
     public void swapCursor(Cursor newCursor, boolean isAudio) {
         cursor = newCursor;
         this.isAudio = isAudio;
         notifyDataSetChanged();
+    }
+
+    private int getVisualMediaTypeDrawable(String path, MediaMetadataRetriever mmr){
+        if (path.contains(".gif")) return R.drawable.ic_gif_black_24dp;
+        String isVideo = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO);
+        if (isVideo == null) {
+            return R.drawable.ic_menu_camera;
+        } else {
+            return R.drawable.ic_videocam_white_24dp;
+        }
     }
 }

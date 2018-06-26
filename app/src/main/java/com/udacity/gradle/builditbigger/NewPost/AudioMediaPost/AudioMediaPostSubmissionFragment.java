@@ -75,7 +75,7 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
         getLifecycle().addObserver(new VideoLifeCyclerObserver(getActivity(), bind.simpleexoview));
         bind.submitbutton.setOnClickListener(view -> {
             File file = new File(audioFilePath);
-            String path = "users/" + Constants.UID + "/audio/" + Constants.getCurrentDateAndTime() + ".mp4";
+            String path = "users/" + Constants.UID + "/audio/" + Constants.getCurrentDateAndTime() + ".mp3";
             Constants.STORAGE.child(path).putFile(Uri.fromFile(file))
                     .addOnFailureListener(exception -> {
                     })
