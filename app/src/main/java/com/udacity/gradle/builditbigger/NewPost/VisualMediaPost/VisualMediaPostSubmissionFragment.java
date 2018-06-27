@@ -29,6 +29,9 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostSubmissionBinding;
 
 import java.io.File;
+import java.io.IOException;
+
+import pl.droidsonroids.gif.GifDrawable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,6 +66,7 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             filePath = getArguments().getString("filepath");
+            Log.i("wenfhluwhru", filePath);
             number = getArguments().getString("number");
         }
     }
@@ -81,11 +85,16 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
             Log.i("VMPSF", e.toString());
         }
         isVideo = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO);
+        Log.i("wenfhluwhru", ""+(isVideo==null));
         if (isVideo == null) {
             bind.gifImageView.setVisibility(View.VISIBLE);
             bind.simpleExoPlayerView.setVisibility(View.GONE);
             Glide.with(getActivity()).load(new File(filePath))
                     .into(bind.gifImageView);
+           /*try {
+                GifDrawable gifDrawable = new GifDrawable(filePath);
+                bind.gifImageView.setImageDrawable(gifDrawable);
+            }catch (IOException e){}*/
             type = Constants.IMAGE_GIF;
         } else {
             bind.gifImageView.setVisibility(View.GONE);

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Chronometer;
 
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
@@ -29,7 +32,10 @@ import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostBinding;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,11 +48,10 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
     private String[] mediaColumns = {MediaStore.Images.ImageColumns.DATA, MediaStore.Images.ImageColumns.DATE_TAKEN};
     private MediaAdapter mediaAdapter;
     private LifeCycleCamera camera;
-    Handler handler;
-    boolean startrecording = true;
-    int Seconds, Minutes, MilliSeconds;
-    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
+    private boolean startrecording = true;
     private String number;
+    private int time = 0;
+
     public VisualMediaPostFragment() {}
 
     /**
@@ -86,21 +91,7 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
         bind.recyclerView.setAdapter(mediaAdapter);
         bind.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         camera = new LifeCycleCamera(this, bind.autoFitTextureView, LifeCycleCamera.PHOTO);
-        handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            public void run() {
-                MillisecondTime = SystemClock.uptimeMillis() - StartTime;
-                UpdateTime = TimeBuff + MillisecondTime;
-                Seconds = (int) (UpdateTime / 1000);
-                Minutes = Seconds / 60;
-                Seconds = Seconds % 60;
-                MilliSeconds = (int) (UpdateTime % 1000);
-                bind.timerTextView.setText("" + Minutes + ":"
-                        + String.format("%02d", Seconds) + ":"
-                        + String.format("%03d", MilliSeconds));
-                handler.postDelayed(this, 0);
-            }
-        };
+
         bind.photoButton.setOnClickListener(view -> {
             if (camera.getMode() != LifeCycleCamera.PHOTO){
                 Log.i("buttonz", "photo button clicked");
@@ -139,17 +130,41 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
                 if (startrecording) {
                     camera.startRecordingVideo();
                     startrecording = !startrecording;
-                    StartTime = SystemClock.uptimeMillis();
-                    handler.postDelayed(runnable, 0);
                     bind.captureButton.setImageResource(R.drawable.ic_stop_black_24dp);
+                    bind.timerTextView.setBase(SystemClock.elapsedRealtime());
+                    bind.timerTextView.start();
                 } else {
                     startrecording = !startrecording;
-                    handler.removeCallbacks(runnable);
-                    bind.timerTextView.setText("0:00:00.000");
                     camera.stopRecordingVideo();
+                    bind.timerTextView.setBase(SystemClock.elapsedRealtime());
+                    bind.timerTextView.stop();
+                    bind.timerTextView.setText("00:00");
                 }
             } else {
-                //todo add in code for gifs
+
+                bind.timerTextView.setOnChronometerTickListener(chronometer -> {
+                        time++;
+                        if (time == 10) {
+                            startrecording = !startrecording;
+                            camera.stopRecordingVideo();
+                            bind.timerTextView.setBase(SystemClock.elapsedRealtime());
+                            bind.timerTextView.stop();
+                            bind.timerTextView.setText("00:00");
+                        }
+                    });
+                if (startrecording) {
+                    camera.startRecordingVideo();
+                    startrecording = !startrecording;
+                    bind.captureButton.setImageResource(R.drawable.ic_stop_black_24dp);
+                    bind.timerTextView.setBase(SystemClock.elapsedRealtime());
+                    bind.timerTextView.start();
+                } else {
+                    startrecording = !startrecording;
+                    camera.stopRecordingVideo();
+                    bind.timerTextView.setBase(SystemClock.elapsedRealtime());
+                    bind.timerTextView.stop();
+                    bind.timerTextView.setText("00:00");
+                }
             }
         });
 
@@ -215,6 +230,10 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
     }
 
     public void moveFile(File file){
-        createIntent(file.getPath(),number);
+        if (camera.getMode() == LifeCycleCamera.GIF){
+           new GifEncoderAsnycTask(getActivity().getCacheDir()+"/temp.gif",this, number).execute(file);
+        } else {
+            createIntent(file.getPath(), number);
+        }
     }
 }

@@ -926,7 +926,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
       if (mode == VIDEO) {
         mFile = File.createTempFile("temp file", ".mp4", fragment.getActivity().getCacheDir());
       }else {
-        mFile = File.createTempFile("temp file", ".gif", fragment.getActivity().getCacheDir());
+        mFile = File.createTempFile("temp file", ".mp4", fragment.getActivity().getCacheDir());
       }
     } catch (IOException e) {
       Log.d("error", e.toString());
@@ -1114,6 +1114,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
   public void setMode(int mode){
     this.mode = mode;
+    onResume(fragment);
   }
 
 }
