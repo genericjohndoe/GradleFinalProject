@@ -49,12 +49,13 @@ public class GifEncoderAsnycTask extends AsyncTask<File, Void, String> {
         encoder.finish();
         Log.i("wenfhluwhru", "loop finished");
         FileOutputStream outStream = null;
+        File file = new File(path);
         try {
-            outStream = new FileOutputStream(path);
+            outStream = new FileOutputStream(file);
             outStream.write(bos.toByteArray());
             outStream.close();
             Log.i("wenfhluwhru", "outstream closed");
-            return path;
+            return file.getAbsolutePath();
         } catch(Exception e) {
             e.printStackTrace();
         }

@@ -91,10 +91,6 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
             bind.simpleExoPlayerView.setVisibility(View.GONE);
             Glide.with(getActivity()).load(new File(filePath))
                     .into(bind.gifImageView);
-           /*try {
-                GifDrawable gifDrawable = new GifDrawable(filePath);
-                bind.gifImageView.setImageDrawable(gifDrawable);
-            }catch (IOException e){}*/
             type = Constants.IMAGE_GIF;
         } else {
             bind.gifImageView.setVisibility(View.GONE);

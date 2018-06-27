@@ -202,13 +202,13 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
                 + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
                 + " OR "
                 + MediaStore.Files.FileColumns.MEDIA_TYPE + "="
-                + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
-                //+ " OR "
-                //+ MediaStore.Files.FileColumns.MIME_TYPE + "= ?";
-        //String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("gif");
-        //String[] selectionArgs = new String[]{ mimeType };
+                + MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                + " OR "
+                + MediaStore.Files.FileColumns.MIME_TYPE + "= ?";
+        String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("gif");
+        String[] selectionArgs = new String[]{ mimeType };
         return new CursorLoader(getActivity(), MediaStore.Files.getContentUri("external"), mediaColumns,
-                selection, null, mediaColumns[1] + " DESC");
+                selection, selectionArgs, mediaColumns[1] + " DESC");
     }
 
     @Override
