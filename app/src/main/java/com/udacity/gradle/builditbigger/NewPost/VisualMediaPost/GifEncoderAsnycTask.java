@@ -40,6 +40,7 @@ public class GifEncoderAsnycTask extends AsyncTask<File, Void, String> {
         AnimatedGifEncoder encoder = new AnimatedGifEncoder();
         encoder.setDelay(0);
         encoder.setRepeat(100);
+        encoder.setFrameRate(24);
         encoder.start(bos);
         while (timeAt < duration){
             encoder.addFrame(mmr.getFrameAtTime(timeAt));

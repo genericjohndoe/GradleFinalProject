@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Chronometer;
 
+import com.esp.videotogifconverter.VideoToGifConverter;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
@@ -231,7 +233,19 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
 
     public void moveFile(File file){
         if (camera.getMode() == LifeCycleCamera.GIF){
-           new GifEncoderAsnycTask(getActivity().getCacheDir()+"/temp.gif",this, number).execute(file);
+            VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
+            byte[] gif = converter.generateGIF(1);
+            String path = getActivity().getCacheDir()+"/temp.gif";
+            FileOutputStream stream = null;
+            try {
+                stream = new FileOutputStream(path);
+                stream.write(gif);
+                stream.close();
+            } catch (Exception e) {
+
+            }
+            createIntent(path, number);
+           //new GifEncoderAsnycTask(getActivity().getCacheDir()+"/temp.gif",this, number).execute(file);
         } else {
             createIntent(file.getPath(), number);
         }
