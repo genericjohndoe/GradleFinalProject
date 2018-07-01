@@ -14,10 +14,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -53,10 +56,12 @@ import com.udacity.gradle.builditbigger.Models.VideoInfo;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.ReportPost.ReportActivity;
 import com.udacity.gradle.builditbigger.Search.SearchActivity;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +93,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         jokes.add(newVideoPost2);
     }
 
-    public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
+    public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner, PopupMenu.OnMenuItemClickListener {
         private GenericPostBinding binding;
         private LifecycleRegistry mLifecycleRegistry;
         private boolean isLiked = false;
@@ -126,33 +131,23 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             );
             binding.optionsImageButton.setOnClickListener(view ->{
                 if(isUserProfile) {
-                    PopupMenu popup = new PopupMenu(context, binding.optionsImageButton);
-                    //Inflating the Popup using xml file
+                    PopupMenu popup = new PopupMenu(context, binding.optionsImageButton, Gravity.BOTTOM,0,R.style.PopupMenu);
                     popup.getMenuInflater().inflate(R.menu.menu_post, popup.getMenu());
-
-                    popup.setOnMenuItemClickListener(item -> {
-                        if (joke != null) {
-                            Constants.DATABASE.child("userposts/" + joke.getUID() + "/posts/" + joke.getPushId()).removeValue((databaseError, databaseReference) -> {
-                                if (databaseError == null) {
-                                    jokes.remove(joke);
-                                    notifyDataSetChanged();
-                                    Constants.DATABASE.child("userposts/" + joke.getUID() + "/num").addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Constants.DATABASE.child("userposts/" + joke.getUID() + "/num")
-                                                    .setValue(dataSnapshot.getValue(Integer.class)-1);
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                        return true;
-                    });
+                    popup.setOnMenuItemClickListener(this);
+                    Object menuHelper;
+                    Class[] argTypes;
+                    try {
+                        Field fMenuHelper = PopupMenu.class.getDeclaredField("mPopup");
+                        fMenuHelper.setAccessible(true);
+                        menuHelper = fMenuHelper.get(popup);
+                        argTypes = new Class[] { boolean.class };
+                        menuHelper.getClass().getDeclaredMethod("setForceShowIcon",
+                                argTypes).invoke(menuHelper, true);
+                    } catch (Exception e) {}
+                    if (!Constants.UID.equals(joke.getUID())){
+                        popup.getMenu().removeItem(R.id.action_delete);
+                        popup.getMenu().removeItem(R.id.action_edit);
+                    }
                     popup.show();
                 }
 
@@ -239,6 +234,57 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         public OrientationControlViewModel getOrientationControlViewModel() {
             return orientationControlViewModel;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    delete();
+                    return true;
+                case R.id.action_edit:
+                    edit();
+                    return true;
+                case R.id.action_report:
+                    report();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private void delete(){
+            if (joke != null) {
+                Constants.DATABASE.child("userposts/" + joke.getUID() + "/posts/" + joke.getPushId()).removeValue((databaseError, databaseReference) -> {
+                    if (databaseError == null) {
+                        jokes.remove(joke);
+                        notifyDataSetChanged();
+                        Constants.DATABASE.child("userposts/" + joke.getUID() + "/num").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Constants.DATABASE.child("userposts/" + joke.getUID() + "/num")
+                                        .setValue(dataSnapshot.getValue(Integer.class)-1);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {}
+                        });
+                    }
+                });
+            }
+        }
+
+        private void edit(){
+            //read post type
+            //open activity to relevant post editting page
+            //populate views with data from post
+            //also send in path in db for overwritting
+            //after submit button is pressed return to previous activity
+        }
+
+        private void report(){
+            Intent intent = new Intent(context, ReportActivity.class);
+            context.startActivity(intent);
         }
     }
 

@@ -32,6 +32,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:navigationBarColor">@color/green_8</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -55,12 +56,18 @@
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
+
     <style name="EditTextOverride" parent="@android:style/Widget.EditText">
         <item name="android:textColor">@color/green_8</item>
         <item name="android:textColorHint">@color/green_6</item>
     </style>
+
     <style name="CardWidgetStyle" parent="@android:style/Theme.DeviceDefault">
         <item name="editTextStyle">@style/EditTextOverride</item>
         <item name="android:editTextStyle">@style/EditTextOverride</item>
+    </style>
+
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@color/black</item>
     </style>
 </resources>

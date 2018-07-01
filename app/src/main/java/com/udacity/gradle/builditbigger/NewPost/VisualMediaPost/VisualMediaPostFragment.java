@@ -245,7 +245,6 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
 
             }
             createIntent(path, number);
-           //new GifEncoderAsnycTask(getActivity().getCacheDir()+"/temp.gif",this, number).execute(file);
         } else {
             createIntent(file.getPath(), number);
         }

@@ -169,7 +169,8 @@
         <activity android:name=".Settings.PaymentSettings.PaymentActivity" />
         <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostActivity" />
         <activity android:name=".NewPost.AudioMediaPost.AudioMediaPostSubmissionActivity" />
-        <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity"></activity>
+        <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity" />
+        <activity android:name=".ReportPost.ReportActivity"></activity>
     </application>
 
 </manifest>
