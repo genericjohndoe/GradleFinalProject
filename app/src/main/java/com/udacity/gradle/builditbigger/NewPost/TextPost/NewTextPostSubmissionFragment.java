@@ -36,6 +36,7 @@ public class NewTextPostSubmissionFragment extends Fragment {
     private String body;
     private String tagline;
     private String number;
+    private Post post;
 
     public NewTextPostSubmissionFragment() {
     }
@@ -57,6 +58,14 @@ public class NewTextPostSubmissionFragment extends Fragment {
         return fragment;
     }
 
+    public static NewTextPostSubmissionFragment newInstance(Post post) {
+        NewTextPostSubmissionFragment fragment = new NewTextPostSubmissionFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("post", post);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +74,7 @@ public class NewTextPostSubmissionFragment extends Fragment {
             body = getArguments().getString(BODY);
             tagline = getArguments().getString(TAGLINE);
             number = getArguments().getString(NUMBER);
+            post = getArguments().getParcelable("post");
         }
     }
 
@@ -73,23 +83,39 @@ public class NewTextPostSubmissionFragment extends Fragment {
                              Bundle savedInstanceState) {
         FragmentNewTextPostSubmissionBinding bind = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_new_text_post_submission, container, false);
-        bind.titleTextView.setText(title);
-        bind.bodyTextView.setText(body);
+        if (post != null) {
+            bind.titleTextView.setText(post.getJokeTitle());
+            bind.bodyTextView.setText(post.getJokeBody());
+            bind.socialTextView.setText(post.getTagline());
+        } else {
+            bind.titleTextView.setText(title);
+            bind.bodyTextView.setText(body);
+            bind.socialTextView.setText(tagline);
+        }
         bind.bodyTextView.setMovementMethod(new ScrollingMovementMethod());
-        bind.socialTextView.setText(tagline);
+
         bind.submitButton.setOnClickListener(view -> {
-            DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-            Post newJoke = new Post(title, body, System.currentTimeMillis(),
-                    "genre push id", "", Constants.UID, db.getKey(), tagline, Constants.TEXT,
-                    new MetaData("text", Integer.parseInt(number) + 1,Constants.getTags(tagline)));
-            db.setValue(newJoke, (databaseError, databaseReference) -> {
-                if (databaseError == null) {
-                    getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
-                    Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
-                    Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
-                    Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
-                }
-            });
+            DatabaseReference db;
+            if (post != null) {
+                db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts/" + post.getPushId());
+                db.setValue(post);
+                startActivity(new Intent(getActivity(), HilarityActivity.class));
+                getActivity().finish();
+            } else {
+                Post newJoke = new Post(title, body, System.currentTimeMillis(),
+                        "genre push id", "", Constants.UID, null, tagline, Constants.TEXT,
+                        new MetaData("text", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
+                db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
+                newJoke.setPushId(db.getKey());
+                db.setValue(newJoke, (databaseError, databaseReference) -> {
+                    if (databaseError == null) {
+                        startActivity(new Intent(getActivity(), HilarityActivity.class));
+                        Constants.DATABASE.child("userposts/" + Constants.UID + "/num").setValue(Integer.parseInt(number) + 1);
+                        Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + databaseReference.getKey() + "/comments/num").setValue(0);
+                        Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + databaseReference.getKey() + "/likes/num").setValue(0);
+                    }
+                });
+            }
         });
         bind.editButton.setOnClickListener(view -> {
             getActivity().onBackPressed();

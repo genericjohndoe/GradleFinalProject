@@ -24,10 +24,8 @@ public class Post implements Parcelable {
     private MetaData metaData;
 
 
-    public Post() {
-    }
+    public Post() {}
 
-    //TODO modify constructor to include image/video url
     public Post(String jokeTitle, String body, Long time, String genre,
                 String url, String uid, String pushId, String tagline, Integer type, MetaData metaData) {
         this.jokeTitle = jokeTitle;
@@ -47,11 +45,12 @@ public class Post implements Parcelable {
         jokeBody = in.readString();
         jokeTitle = in.readString();
         uid = in.readString();
-        mediaURL = in.readString();
         tagline = in.readString();
-        metaData = in.readParcelable(MetaData.class.getClassLoader());
         type = in.readInt();
+        pushId = in.readString();
         timeStamp = in.readLong();
+        mediaURL = in.readString();
+        metaData = in.readParcelable(MetaData.class.getClassLoader());
     }
 
     public String getJokeTitle() {
@@ -106,6 +105,14 @@ public class Post implements Parcelable {
 
     public void setMetaData(MetaData metaData){
         this.metaData = metaData;
+    }
+
+    public void setPushId(String pushId) {
+        this.pushId = pushId;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
     }
 
     @Override

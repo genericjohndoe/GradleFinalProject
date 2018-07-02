@@ -53,6 +53,11 @@ import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.Models.MetaData;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.VideoInfo;
+import com.udacity.gradle.builditbigger.NewPost.AudioMediaPost.AudioMediaPostSubmissionActivity;
+import com.udacity.gradle.builditbigger.NewPost.ImagePost.ImagePostSubmissionActivity;
+import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
+import com.udacity.gradle.builditbigger.NewPost.VideoPost.VideoPostSubmissionActivity;
+import com.udacity.gradle.builditbigger.NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
@@ -129,7 +134,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                         return null;
                     }
             );
-            binding.optionsImageButton.setOnClickListener(view ->{
+            binding.optionsImageButton.setOnClickListener(view -> {
                 if(isUserProfile) {
                     PopupMenu popup = new PopupMenu(context, binding.optionsImageButton, Gravity.BOTTOM,0,R.style.PopupMenu);
                     popup.getMenuInflater().inflate(R.menu.menu_post, popup.getMenu());
@@ -150,7 +155,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     }
                     popup.show();
                 }
-
             });
 
             binding.collectionImageButton.setOnClickListener(view -> showAddToCollectionDialog());
@@ -274,12 +278,22 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             }
         }
 
-        private void edit(){
-            //read post type
-            //open activity to relevant post editting page
-            //populate views with data from post
-            //also send in path in db for overwritting
-            //after submit button is pressed return to previous activity
+        private void edit() {
+            Intent intent;
+            if (joke.getType() == Constants.TEXT) {
+                intent = new Intent(context, NewPostActivity2.class);
+                intent.putExtra("posttype",3);
+            } else {
+                if (joke.getMetaData().getType().equals("visual")){
+                    intent = new Intent(context, VisualMediaPostSubmissionActivity.class);
+                } else {
+                    intent = new Intent(context, AudioMediaPostSubmissionActivity.class);
+                }
+                /*intent = (joke.getMetaData().getType().equals("visual")) ? new Intent(context, VisualMediaPostSubmissionActivity.class) :
+                        new Intent(context, AudioMediaPostSubmissionActivity.class);*/
+            }
+            intent.putExtra("post", joke);
+            context.startActivity(intent);
         }
 
         private void report(){

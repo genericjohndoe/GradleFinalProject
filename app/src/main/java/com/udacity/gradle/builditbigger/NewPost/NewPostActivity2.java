@@ -25,6 +25,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.takusemba.spotlight.SimpleTarget;
 import com.takusemba.spotlight.Spotlight;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.NewPost.AudioMediaPost.AudioMediaPostFragment;
 import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifPost;
 import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImagePost;
@@ -51,6 +52,9 @@ public class NewPostActivity2 extends AppCompatActivity {
         Intent intent = new Intent(this, NewPostActivity2.class);
         intent.putExtra("number", number);
 
+        Post post = getIntent().getParcelableExtra("post");
+        Log.i("iefioejwfw", "post is null: " + (post == null));
+
         TabLayout tabLayout = findViewById(R.id.tabLayout);
 
         tabLayout.getTabAt(0).setCustomView(R.layout.icon_document_post);
@@ -67,6 +71,11 @@ public class NewPostActivity2 extends AppCompatActivity {
                 break;
             case 2:
                 fragment = AudioMediaPostFragment.newInstance(number);
+                break;
+            case 3:
+                fragment = NewTextPostEditFragment.newInstance(post);
+                posttype = 0;
+                Log.i("iefioejwfw", "posttype is 3");
                 break;
             default:
                 fragment = null;

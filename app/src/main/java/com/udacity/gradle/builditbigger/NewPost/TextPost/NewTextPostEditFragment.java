@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostBinding;
+import com.udacity.gradle.builditbigger.Models.Post;
 
 import jp.wasabeef.richeditor.RichEditorToolBar;
 
@@ -24,10 +26,9 @@ public class NewTextPostEditFragment extends Fragment {
     public static final String TAGLINE = "tagline";
     public static final String BODY = "body";
     public static final String TITLE = "title";
+    public static final String NUMBER = "number";
     FragmentNewTextPostBinding bind;
-    private String title;
-    private String body;
-    private String tagline;
+    private Post post;
     private boolean wasDiscarded = false;
     private String number;
 
@@ -37,46 +38,48 @@ public class NewTextPostEditFragment extends Fragment {
         return newTextPostEditFragment;
     }
 
-    public static NewTextPostEditFragment newInstance(String title, String body, String tagline) {
+    public static NewTextPostEditFragment newInstance(Post post) {
+        Log.i("iefioejwfw", "post is null 1 : " + (post == null));
         NewTextPostEditFragment newTextPostEditFragment = new NewTextPostEditFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(TITLE, title);
-        bundle.putString(BODY, body);
-        bundle.putString(TAGLINE, tagline);
+        bundle.putParcelable("post", post);
         newTextPostEditFragment.setArguments(bundle);
-        return new NewTextPostEditFragment();
+        return newTextPostEditFragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null){
-            title = savedInstanceState.getString(TITLE);
-            body = savedInstanceState.getString(BODY);
-            tagline = savedInstanceState.getString(TAGLINE);
-        }
-        if (getArguments() != null){
-            title = getArguments().getString(TITLE);
-            body = getArguments().getString(BODY);
-            tagline = getArguments().getString(TAGLINE);
-        }
+        if (savedInstanceState != null) post = savedInstanceState.getParcelable("post");
+        if (getArguments() != null) post = getArguments().getParcelable("post");
+        Log.i("iefioejwfw", "post is null 0 : " + (post == null));
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_text_post, container, false);
-        if (title != null) {
-            bind.titleEditText.setText(title);
-            bind.bodyEditText.setHtml(body);
-            bind.taglineEditText.setText(tagline);
+        if (post != null) {
+            Log.i("iefioejwfw", "post isn't null");
+            bind.titleEditText.setText(post.getJokeTitle());
+            bind.bodyEditText.setHtml(post.getJokeBody());
+            bind.taglineEditText.setText(post.getTagline());
+        } else {
+            Log.i("iefioejwfw", "post is null");
         }
         bind.continuebutton.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), TextPostSubmissionActivity.class);
-            intent.putExtra("title", bind.titleEditText.getText().toString());
-            intent.putExtra("body", bind.bodyEditText.getHtml());
-            intent.putExtra("tagline", bind.taglineEditText.getText().toString());
-            intent.putExtra("number", number);
+            if (post != null){
+                post.setJokeTitle(bind.titleEditText.getText().toString());
+                post.setJokeBody(bind.bodyEditText.getHtml());
+                post.setTagline(bind.taglineEditText.getText().toString());
+                intent.putExtra("post", post);
+            } else {
+                intent.putExtra(TITLE, bind.titleEditText.getText().toString());
+                intent.putExtra(BODY, bind.bodyEditText.getHtml());
+                intent.putExtra(TAGLINE, bind.taglineEditText.getText().toString());
+                intent.putExtra(NUMBER, number);
+            }
             startActivity(intent);
         });
         RichEditorToolBar toolBar = bind.getRoot().findViewById(R.id.richEditorToolBar);
@@ -95,9 +98,10 @@ public class NewTextPostEditFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if (!wasDiscarded) {
-            outState.putString(TITLE, bind.titleEditText.getText().toString());
-            outState.putString(BODY, bind.bodyEditText.getHtml());
-            outState.putString(TAGLINE, bind.taglineEditText.getText().toString());
+            post.setJokeTitle(bind.titleEditText.getText().toString());
+            post.setJokeBody(bind.bodyEditText.getHtml());
+            post.setTagline(bind.taglineEditText.getText().toString());
+            outState.putParcelable("post", post);
         }
         super.onSaveInstanceState(outState);
     }

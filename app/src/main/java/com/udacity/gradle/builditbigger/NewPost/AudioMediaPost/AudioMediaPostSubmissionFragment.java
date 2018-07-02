@@ -40,6 +40,8 @@ import java.io.File;
 public class AudioMediaPostSubmissionFragment extends Fragment {
     private String number;
     private String audioFilePath;
+    private Post post;
+    private File file;
     private FragmentAudioMediaPostSubmissionBinding bind;
 
     public AudioMediaPostSubmissionFragment() {}
@@ -58,12 +60,22 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
         return fragment;
     }
 
+    public static AudioMediaPostSubmissionFragment newInstance(Post post) {
+        AudioMediaPostSubmissionFragment fragment = new AudioMediaPostSubmissionFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("post", post);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null){
             number = getArguments().getString("number");
             audioFilePath = getArguments().getString("path");
+            if (audioFilePath != null) file = new File(audioFilePath);
+            post = getArguments().getParcelable("post");
         }
     }
 
@@ -73,33 +85,16 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
         bind = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_audio_media_post_submission, container, false);
         getLifecycle().addObserver(new VideoLifeCyclerObserver(getActivity(), bind.simpleexoview));
+        if (post != null) {
+            Constants.STORAGE.child(post.getJokeTitle()).getFile(file);
+            bind.socialEditText.setText(post.getTagline());
+        }
         bind.submitbutton.setOnClickListener(view -> {
-            File file = new File(audioFilePath);
-            String path = "users/" + Constants.UID + "/audio/" + Constants.getCurrentDateAndTime() + ".mp3";
-            Constants.STORAGE.child(path).putFile(Uri.fromFile(file))
-                    .addOnFailureListener(exception -> {
-                    })
-                    .addOnSuccessListener(taskSnapshot -> {
-                                file.delete();
-                                Constants.STORAGE.child(path).getDownloadUrl().addOnSuccessListener(uri ->{
-                                    String downloadUrl = uri.toString();
-                                    DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
-                                    String tagline = bind.socialEditText.getText().toString();
-                                    Post newAudioPost = new Post("", "", System.currentTimeMillis(),
-                                            "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO_AUDIO,
-                                            new MetaData("audio", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
-                                    db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
-                                        if (databaseError == null){
-                                            getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
-                                            Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
-                                            Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
-                                            Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
-                                        }
-                                    }));
-                                });
-
-                            }
-                    );
+            if (post != null){
+                submitEdittedPost();
+            } else {
+                createAudioPost();
+            }
         });
 
         return bind.getRoot();
@@ -117,9 +112,43 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
         // Produces Extractor instances for parsing the media data.
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         if (bind.simpleexoview.getPlayer() != null) {
-            bind.simpleexoview.getPlayer().prepare(new ExtractorMediaSource(Uri.fromFile(new File(audioFilePath)),
+            bind.simpleexoview.getPlayer().prepare(new ExtractorMediaSource(Uri.fromFile(file),
                     dataSourceFactory, extractorsFactory, null, null), false, false);
         }
         bind.simpleexoview.getPlayer().setPlayWhenReady(true);
+    }
+
+    private void createAudioPost(){
+        String path = "users/" + Constants.UID + "/audio/" + Constants.getCurrentDateAndTime() + ".mp3";
+        Constants.STORAGE.child(path).putFile(Uri.fromFile(file))
+                .addOnFailureListener(exception -> {
+                })
+                .addOnSuccessListener(taskSnapshot -> {
+                            file.delete();
+                            Constants.STORAGE.child(path).getDownloadUrl().addOnSuccessListener(uri ->{
+                                String downloadUrl = uri.toString();
+                                DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
+                                String tagline = bind.socialEditText.getText().toString();
+                                Post newAudioPost = new Post("", "", System.currentTimeMillis(),
+                                        "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO_AUDIO,
+                                        new MetaData("audio", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
+                                db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
+                                    if (databaseError == null){
+                                        getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                        Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
+                                        Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
+                                        Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);
+                                    }
+                                }));
+                            });
+
+                        }
+                );
+    }
+
+    private void submitEdittedPost(){
+        DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts/"+post.getPushId());
+        post.setTagline(bind.socialEditText.getText().toString());
+        db.setValue(post, (databaseError, databaseReference) -> getActivity().finish());
     }
 }
