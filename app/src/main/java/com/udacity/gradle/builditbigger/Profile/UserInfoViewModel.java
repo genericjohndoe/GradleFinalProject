@@ -15,6 +15,7 @@ public class UserInfoViewModel extends ViewModel {
     private NumPostLiveData numPostLiveData;
     private NumFollowingLiveData numFollowingLiveData;
     private NumFollowersLiveData numFollowersLiveData;
+    private TaglineLiveData taglineLiveData;
 
     UserInfoViewModel(String uid){
         userNameLiveData = new UserNameLiveData(uid);
@@ -22,6 +23,7 @@ public class UserInfoViewModel extends ViewModel {
         numPostLiveData = new NumPostLiveData(uid);
         numFollowingLiveData = new NumFollowingLiveData(uid);
         numFollowersLiveData = new NumFollowersLiveData(uid);
+        taglineLiveData = new TaglineLiveData(uid);
     }
 
     public UserNameLiveData getUserName(){
@@ -41,4 +43,6 @@ public class UserInfoViewModel extends ViewModel {
     public NumFollowersLiveData getNumFollowersLiveData() {
         return numFollowersLiveData;
     }
+
+    public TaglineLiveData getTaglineLiveData() {return taglineLiveData;}
 }

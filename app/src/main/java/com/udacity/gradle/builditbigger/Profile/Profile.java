@@ -144,6 +144,10 @@ public class Profile extends Fragment implements HideFAB {
             binding.subscribersTv.setText(numFollowers != null ? numFollowers + " " : "0 ");
         });
 
+        userInfoViewModel.getTaglineLiveData().observe(this, tagline ->{
+            binding.taglineTextView.setText((tagline != null) ? tagline : Constants.TAGLINE);
+        });
+
         //binding.appBar.nav
 
 
