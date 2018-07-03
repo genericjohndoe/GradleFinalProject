@@ -13,7 +13,7 @@ public class UserSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.user_settings_settings_framelayout, UserSettingsFragment.newInstance())
+                .add(R.id.user_settings_settings_framelayout, new UserSettingsFragment())
                 .commit();
     }
 

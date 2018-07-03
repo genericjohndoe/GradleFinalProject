@@ -1,49 +1,107 @@
 package com.udacity.gradle.builditbigger.Settings.UserSettings;
 
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.databinding.FragmentUserSettingsBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link UserSettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class UserSettingsFragment extends Fragment {
-    private String uid;
-
-    public UserSettingsFragment() {}
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * @return A new instance of fragment UserSettingsFragment.
-     */
-    public static UserSettingsFragment newInstance() {
-        UserSettingsFragment fragment = new UserSettingsFragment();
-        Bundle args = new Bundle();
-        args.putString("uid", Constants.UID);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private boolean userNameValidated;
+    private ValueEventListener valueEventListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) uid = getArguments().getString("uid");
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_user_settings, container, false);
+        FragmentUserSettingsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_user_settings, container, false);
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() > 0) {
+                    bind.userNameValidImageview.setImageResource(R.drawable.ic_close_24dp);
+                    userNameValidated = false;
+                } else {
+                    bind.userNameValidImageview.setImageResource(R.drawable.ic_check_24dp);
+                    userNameValidated = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        bind.userNameEditText.setText(Constants.USER.getUserName());
+        bind.userNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Constants.DATABASE.child("userlist").orderByValue().equalTo(""+s)
+                        .addValueEventListener(valueEventListener);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        bind.userNameEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+            String newName = bind.userNameEditText.getText().toString();
+            if (!hasFocus && userNameValidated &&
+                    !Constants.USER.getUserName().equals(newName)) {
+                Constants.DATABASE.child("users/"+Constants.UID +"/userName").setValue(newName, (databaseError, databaseReference) -> {
+                    if (databaseError == null){
+                        Constants.USER.setUserName(newName);
+                        Constants.DATABASE.child("userlist").removeEventListener(valueEventListener);
+                    }
+                });
+            }
+        });
+        bind.selectNewPhotoButton.setOnClickListener(view -> {
+            //start new activity to take/choose photo or gif
+            //delete or overwrite old profile pic in storage
+            //change on client side
+        });
+
+        bind.profileTaglineEditText.setText(Constants.TAGLINE);
+        bind.profileTaglineEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
+            if (!hasFocus){
+                Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/tagline")
+                        .setValue(bind.profileTaglineEditText.getText().toString());
+            }
+        });
+
+        bind.autoTranslateSwitch.setChecked(true);
+        bind.autoTranslateSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
+            Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/autotranslate").setValue(isChecked);
+        });
+
+        //populate adapter with list of countries
+        bind.nationAutoCompleteTextView.setAdapter(null);
+        return bind.getRoot();
     }
 
 }

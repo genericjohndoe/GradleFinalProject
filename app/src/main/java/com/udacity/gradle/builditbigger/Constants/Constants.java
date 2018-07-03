@@ -28,6 +28,7 @@ public class Constants {
 
     public static HilarityUser USER;
     public static String UID;
+    public static String TAGLINE = "tagline";
     public static FirebaseDatabase FIREBASEDATABASE;
     public static FirebaseFirestore FIRESTORE = FirebaseFirestore.getInstance();
     public static DatabaseReference DATABASE;
