@@ -93,7 +93,7 @@ public class UserSettingsFragment extends Fragment {
                         .setValue(bind.profileTaglineEditText.getText().toString());
             }
         });
-
+        //make autotranslate machine learning album
         bind.autoTranslateSwitch.setChecked(true);
         bind.autoTranslateSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/autotranslate").setValue(isChecked);

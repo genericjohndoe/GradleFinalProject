@@ -63,7 +63,7 @@ public class ForumFragment extends Fragment {
             }
         });
         bind.fab.setOnClickListener(view ->{
-            getActivity().startActivity(new Intent(getActivity(), NewQuestionActivity.class));
+            startActivity(new Intent(getActivity(), NewQuestionActivity.class));
         });
         return bind.getRoot();
     }

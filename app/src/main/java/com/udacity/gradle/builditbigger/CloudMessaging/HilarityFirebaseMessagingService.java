@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.RemoteInput;
 import android.util.Log;
@@ -17,11 +18,17 @@ import com.bumptech.glide.Glide;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.udacity.gradle.builditbigger.Comments.CommentActivity;
+import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Forums.Replies.ForumQuestionActivity;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
+import com.udacity.gradle.builditbigger.Models.ForumQuestion;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
@@ -50,6 +57,16 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         } else if (data.get("type").equals("mention") || data.get("type").equals("comment")){
             sendNewCommentMentionNotification(data.get("title"), data.get("body"), data.get("uid"),
                     data.get("postid"), Integer.parseInt(data.get("position")));
+        } else if (data.get("type").equals("forums")) {
+            Constants.DATABASE.child("").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    sendForumNotification(dataSnapshot.getValue(ForumQuestion.class),data.get("title"), data.get("body"));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
+            });
         }
     }
 
@@ -77,9 +94,6 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
-
-
-
 
         String channelId = "new_message_channel";
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -135,7 +149,30 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        String channelId = "fcm_default_channel";
+        String channelId = "new_comment_channel";
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private void sendForumNotification(ForumQuestion forumQuestion, String title, String body){
+        Intent intent = new Intent(this, ForumQuestionActivity.class);
+        intent.putExtra("question", forumQuestion);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        String channelId = "new_forum_channel";
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
@@ -160,12 +197,10 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
             InputStream input = connection.getInputStream();
             Bitmap bitmap = BitmapFactory.decodeStream(input);
             return bitmap;
-
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
-
         }
     }
 }

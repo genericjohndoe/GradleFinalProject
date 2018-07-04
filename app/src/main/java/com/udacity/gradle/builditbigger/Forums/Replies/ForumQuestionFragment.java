@@ -41,13 +41,15 @@ public class ForumQuestionFragment extends Fragment {
      */
     public static ForumQuestionFragment newInstance(ForumQuestion forumQuestion) {
         ForumQuestionFragment fragment = new ForumQuestionFragment();
-        fragment.forumQuestion = forumQuestion;
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("fq", forumQuestion);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) forumQuestion = getArguments().getParcelable("fq");
     }
 
     @Override
@@ -69,8 +71,13 @@ public class ForumQuestionFragment extends Fragment {
             ForumReply forumReply = new ForumReply(Constants.USER, contents, System.currentTimeMillis(), db.getKey());
             db.setValue(forumReply, (databaseError, databaseReference) -> {
                 if (databaseError == null){
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("forumQuestionKey", forumQuestion.getKey());
+                    data.put("uid",forumQuestion.getHilarityUser().getUid());
+                    data.put("replierUserName", Constants.USER.getUserName());
+                    data.put("contents", contents);
+                    FirebaseFunctions.getInstance().getHttpsCallable("onForumReply").call(data);
                     if (bind.answerEditText.getMentions().size() > 0){
-                        Map<String, List<String>> data = new HashMap<>();
                         data.put("userNameList",bind.answerEditText.getMentions());
                         FirebaseFunctions.getInstance().getHttpsCallable("onReplyMentionCreated").call(data);
                     }
