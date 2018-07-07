@@ -49,15 +49,15 @@ dependencies {
     //Firebase
     implementation "com.google.firebase:firebase-storage:16.0.1"
     implementation "com.google.firebase:firebase-database:16.0.1"
-    implementation "com.google.firebase:firebase-auth:16.0.1"
-    implementation "com.google.firebase:firebase-messaging:17.0.0"
-    implementation "com.google.firebase:firebase-firestore:17.0.1"
+    implementation "com.google.firebase:firebase-auth:16.0.2"
+    implementation "com.google.firebase:firebase-messaging:17.1.0"
+    implementation "com.google.firebase:firebase-firestore:17.0.2"
     implementation "com.google.firebase:firebase-functions:16.0.1"
     implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
     implementation "com.google.android.gms:play-services-auth:15.0.1"
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     //support library
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation "com.android.support:appcompat-v7:$support_lib_version"
     implementation "com.android.support:support-v13:$support_lib_version"
     implementation "com.android.support:support-v4:$support_lib_version"
@@ -81,8 +81,8 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.1'
     implementation 'com.google.android.exoplayer:extension-mediasession:r2.5.1'
     // Room
-    implementation "android.arch.persistence.room:runtime:1.1.0"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.0"
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     //kapt "android.arch.persistence.room:compiler:1.0.0"
     //vid chat
     implementation 'co.netguru.videochatguru:videochatguru:0.1.2@aar'

@@ -148,9 +148,6 @@ public class Profile extends Fragment implements HideFAB {
             binding.taglineTextView.setText((tagline != null) ? tagline : Constants.TAGLINE);
         });
 
-        //binding.appBar.nav
-
-
         binding.appBarLayout.addOnOffsetChangedListener(((appBarLayout, verticalOffset) -> {
             if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()){
                 ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
