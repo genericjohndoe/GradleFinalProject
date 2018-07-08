@@ -4,7 +4,9 @@ import java.util.HashMap;
 
 public class FlagEmojiMap extends HashMap<String, String> {
 
-    public FlagEmojiMap(){
+    private static FlagEmojiMap flagEmojiMap;
+
+    private FlagEmojiMap(){
         put("AD", "🇦🇩");
         put("AE", "🇦🇪");
         put("AF", "🇦🇫");
@@ -258,5 +260,10 @@ public class FlagEmojiMap extends HashMap<String, String> {
         put("CP", "🇨🇵");
         put("DG", "🇩🇬");
         put("EA", "🇪🇦");
+    }
+
+    public static FlagEmojiMap getInstance(){
+        if (flagEmojiMap == null) flagEmojiMap = new FlagEmojiMap();
+        return flagEmojiMap;
     }
 }

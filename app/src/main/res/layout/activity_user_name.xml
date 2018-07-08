@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@color/black"
     tools:context="com.udacity.gradle.builditbigger.SignInTutorial.UserNameActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -19,7 +19,7 @@
         android:gravity="center"
         android:keepScreenOn="true"
         android:text="Pick user Name"
-        android:textColor="#33b5e5"
+        android:textColor="@color/green_8"
         android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,9 +32,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:backgroundTint="@color/green_8"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
+        android:textColor="@color/green_8"
+        android:textColorHint="@color/green_8"
         app:layout_constraintEnd_toStartOf="@+id/status_imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prompt_textview" />
@@ -45,16 +48,33 @@
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:src="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prompt_textview"
         app:srcCompat="@drawable/fui_idp_button_background_email" />
 
-    <Button
+    <ImageButton
         android:id="@+id/continue_button"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_border"
+        android:src="@drawable/ic_hilarity_continue"
+        android:scaleType="fitCenter"
+        android:text="continue"
+        android:textColor="@color/green_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/country_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="continue "
+        android:layout_marginTop="16dp"
+        android:text="🇺🇸"
+        android:textSize="150sp"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
