@@ -243,8 +243,14 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                                     if (face.getSmilingProbability() != FirebaseVisionFace.UNCOMPUTED_PROBABILITY) {
                                         float smiling = face.getSmilingProbability();
                                         Log.i("hjkhjkhkjhkjhjk", "smiling " + smiling);
-                                        int color = Color.rgb((int) smiling * 255,(int) smiling * 215,(int) smiling * 255);
-                                        ((ProfilePictureFragment) fragment).bind.background.setBackgroundColor(color);
+                                        /*int r = (int) smiling * 255;
+                                        int g = (int) smiling * 215;
+                                        int b = (int) smiling * 255;
+                                        int color = Color.rgb(r,g,b);
+                                        Log.i("hjkhjkhkjhkjhjk", "color " + color);*/
+                                        int color2 = fragment.getResources().getColor(R.color.pink);
+                                        if (smiling >0.90f)
+                                        ((ProfilePictureFragment) fragment).bind.background.setBackgroundColor(color2);
                                     }
                                 }
                             })

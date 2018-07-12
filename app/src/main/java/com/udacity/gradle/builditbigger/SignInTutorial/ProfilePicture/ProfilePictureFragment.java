@@ -86,6 +86,11 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
         // Inflate the layout for this fragment
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_picture, container, false);
         camera = new LifeCycleCamera(this, bind.textureview, LifeCycleCamera.PHOTO, false, true);
+        bind.galleryImageButton.setOnClickListener(view -> {
+
+        });
+        bind.switchCameraImageButton.setOnClickListener(view -> camera.switchCamera());
+        bind.takePictureImageButton.setOnClickListener(view -> camera.takePicture());
         return bind.getRoot();
     }
 
