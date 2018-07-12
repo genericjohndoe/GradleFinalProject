@@ -947,7 +947,10 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                 if (null != output) {
                     try {
                         output.close();
-                        ((VisualMediaPostFragment) fragment).moveFile(mFile);
+                        if (fragment instanceof  VisualMediaPostFragment)
+                            ((VisualMediaPostFragment) fragment).moveFile(mFile);
+                        if (fragment instanceof ProfilePictureFragment)
+                            ((ProfilePictureFragment) fragment).moveFile(mFile);
                         makeFileAvailible(mFile);
                     } catch (IOException e) {
                         e.printStackTrace();

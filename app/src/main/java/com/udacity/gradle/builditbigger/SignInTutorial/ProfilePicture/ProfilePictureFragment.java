@@ -2,11 +2,13 @@ package com.udacity.gradle.builditbigger.SignInTutorial.ProfilePicture;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.SurfaceTexture;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -19,6 +21,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.esp.videotogifconverter.VideoToGifConverter;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
@@ -28,9 +31,12 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
+import com.udacity.gradle.builditbigger.NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfilePictureBinding;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,6 +55,7 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
     private FirebaseVisionFaceDetectorOptions options;
     private FirebaseVisionFaceDetector detector;
     public FragmentProfilePictureBinding bind;
+    private int PICK_IMAGE = 1;
 
     public ProfilePictureFragment() {
     }
@@ -87,7 +94,10 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_picture, container, false);
         camera = new LifeCycleCamera(this, bind.textureview, LifeCycleCamera.PHOTO, false, true);
         bind.galleryImageButton.setOnClickListener(view -> {
-
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
         });
         bind.switchCameraImageButton.setOnClickListener(view -> camera.switchCamera());
         bind.takePictureImageButton.setOnClickListener(view -> camera.takePicture());
@@ -111,6 +121,42 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
     private void requestStorageReadPermission() {
         if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_READ);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == PICK_IMAGE) {
+            Uri uri = data.getData();
+            if (uri != null)
+                createIntent(uri.getPath());
+        }
+    }
+
+    public void createIntent(String filepath) {
+        //save to storage, add storage path (user settings) to rtd
+        //when down url (user data path) is generated, save then start intent for new activity
+        Intent intent = null;
+        startActivity(intent);
+    }
+
+    public void moveFile(File file){
+        if (camera.getMode() == LifeCycleCamera.GIF){
+            VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
+            byte[] gif = converter.generateGIF(1);
+            String path = getActivity().getCacheDir()+"/temp.gif";
+            FileOutputStream stream = null;
+            try {
+                stream = new FileOutputStream(path);
+                stream.write(gif);
+                stream.close();
+            } catch (Exception e) {
+
+            }
+            createIntent(path);
+        } else {
+            createIntent(file.getPath());
         }
     }
 }

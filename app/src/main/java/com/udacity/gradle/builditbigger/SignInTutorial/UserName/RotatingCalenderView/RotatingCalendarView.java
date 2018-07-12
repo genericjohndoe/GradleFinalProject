@@ -6,6 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import com.udacity.gradle.builditbigger.R;
 
@@ -23,6 +26,8 @@ public class RotatingCalendarView extends View {
                                     Color.parseColor("#33004c")};
     final float[] postions = new float[]{0.0417f,0.083f,0.083f,0.083f,0.083f,0.083f,0.083f,0.083f,0.083f,
             0.083f,0.083f,0.083f,0.0417f};
+    GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureListener());
+    float rotation;
 
 
     public RotatingCalendarView(Context context){
@@ -56,7 +61,11 @@ public class RotatingCalendarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.save();
+        canvas.rotate(rotation, getHeight()/2f ,getHeight()/2f);
         canvas.drawCircle(getWidth()/2f,getHeight()/2f ,getHeight()/2f - 16f,ringPaint);
+        canvas.restore();
+        Log.i("rotation", ""+rotation);
     }
 
     @Override
@@ -65,22 +74,39 @@ public class RotatingCalendarView extends View {
         ringPaint.setShader(new SweepGradient(getWidth() / 2, getHeight() / 2, COLORS2, null));
     }
 
-    public static int[] getHueRingColors(int n, float saturation, float value) {
-        int[] c = new int[n];
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //Log.i("movement", event.toString());
+        if (event.getAction() == MotionEvent.ACTION_MOVE){
+            //Log.i("movement", "move action logged");
+            //calculate distance away from center, further away = less fricition
+            //get center point
+            //find angle between point A, center, and point B
+            //divide by unit time to get angular velo
+            //rotate canvas at that rate
+            float x = event.getX();
+            float y = event.getY();
+            updateRotation(x,y);
+            invalidate();
+        }
+        return true;
+    }
+    private void updateRotation(float x, float y) {
 
-        for (int i = 0; i < n; i++)
-            c[i] = getColorFromHSV(i / (n - 1f) * 360f, saturation, value);
-        return c;
+        double r = Math.atan2(x - getHeight()/2f, getWidth()/2f - y);
+        rotation = (int) Math.toDegrees(r);
     }
 
-    public static int getColorFromHSV(float angle, float saturation, float value) {
-        angle = normalizeAngle(angle);
-        return Color.HSVToColor(new float[]{angle, saturation, value});
-    }
+    class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
 
-    public static float normalizeAngle(float deg) {
-        if (deg > 360) deg -= 360;
-        else if (deg < 0) deg += 360;
-        return deg;
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.i("movement", "move action logged");
+            return true;
+        }
     }
 }
