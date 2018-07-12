@@ -37,4 +37,18 @@
     <color name="green_7">#72CBAE</color>
     <color name="green_8">#369F77</color>
     <color name="green_9">#64369f77</color>
+
+    <color name="wheel_0">#33004c</color>
+    <color name="wheel_1">#4600d2</color>
+    <color name="wheel_2">#0000ff</color>
+    <color name="wheel_3">#0099ff</color>
+    <color name="wheel_4">#00eeff</color>
+    <color name="wheel_5">#00FF7F</color>
+    <color name="wheel_6">#48FF00</color>
+    <color name="wheel_7">#B6FF00</color>
+    <color name="wheel_8">#FFD700</color>
+    <color name="wheel_9">#ff9500</color>
+    <color name="wheel_10">#FF6200</color>
+    <color name="wheel_11">#FF0000</color>
+    <color name="pink">#FFD7FF</color>
 </resources>

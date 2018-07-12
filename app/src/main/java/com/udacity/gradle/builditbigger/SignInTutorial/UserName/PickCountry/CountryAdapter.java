@@ -1,22 +1,18 @@
-package com.udacity.gradle.builditbigger.SignInTutorial.PickCountry;
+package com.udacity.gradle.builditbigger.SignInTutorial.UserName.PickCountry;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.udacity.gradle.builditbigger.Constants.FlagEmojiMap;
 import com.udacity.gradle.builditbigger.Interfaces.DismissPopUp;
 import com.udacity.gradle.builditbigger.Interfaces.SetFlag;
 import com.udacity.gradle.builditbigger.Models.Country;
 import com.udacity.gradle.builditbigger.R;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryViewHolder> {
     private SetFlag setFlag;
@@ -62,7 +58,6 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
         @Override
         public void onClick(View v) {
-
             setFlag.setFlag(emojiText);
             dismissPopUp.dismissPopUp();
         }

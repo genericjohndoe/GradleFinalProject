@@ -1,19 +1,13 @@
 package com.udacity.gradle.builditbigger.SignInTutorial;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,14 +15,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.Credentials;
-import com.google.android.gms.auth.api.credentials.CredentialsClient;
 import com.google.android.gms.auth.api.credentials.CredentialsOptions;
-import com.google.android.gms.auth.api.credentials.IdentityProviders;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.tasks.Task;
@@ -38,12 +29,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.SignInTutorial.UserName.UserNameActivity;
 
 /**
  * A login screen that offers login via email/password.

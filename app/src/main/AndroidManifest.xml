@@ -27,6 +27,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/hilarity_logo"
         android:label="@string/app_name"
+        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
@@ -101,16 +102,16 @@
             android:label="@string/title_activity_login"
             android:noHistory="true" />
         <activity
-            android:name=".SignInTutorial.UserNameActivity"
+            android:name=".SignInTutorial.UserName.UserNameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_user_name"
             android:noHistory="true"
-            android:theme="@style/AppTheme" >
-            <intent-filter>
+            android:theme="@style/AppTheme">
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".Messaging.SentMessages.MessagesActivity" />
         <activity
@@ -140,11 +141,14 @@
         <activity
             android:name=".SignInTutorial.AuthActivity"
             android:noHistory="true">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".NewPost.NewPostActivity2"
@@ -176,7 +180,14 @@
         <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostActivity" />
         <activity android:name=".NewPost.AudioMediaPost.AudioMediaPostSubmissionActivity" />
         <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity" />
-        <activity android:name=".ReportPost.ReportActivity"></activity>
+        <activity android:name=".ReportPost.ReportActivity" />
+        <activity android:name=".SignInTutorial.ProfilePicture.ProfilePictureActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

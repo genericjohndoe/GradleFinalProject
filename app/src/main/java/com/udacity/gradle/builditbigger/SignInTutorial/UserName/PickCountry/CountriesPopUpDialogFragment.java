@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.SignInTutorial.PickCountry;
+package com.udacity.gradle.builditbigger.SignInTutorial.UserName.PickCountry;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +70,5 @@ public class CountriesPopUpDialogFragment extends DialogFragment implements Dism
     @Override
     public void dismissPopUp() {
         dismiss();
-        Log.i("countries", "dismissed called");
     }
 }

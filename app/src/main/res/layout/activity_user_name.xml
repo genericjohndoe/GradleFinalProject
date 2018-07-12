@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context="com.udacity.gradle.builditbigger.SignInTutorial.UserNameActivity">
+    tools:context="com.udacity.gradle.builditbigger.SignInTutorial.UserName.UserNameActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -48,10 +48,9 @@
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_close_24dp"
+        android:background="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prompt_textview"
-        app:srcCompat="@drawable/fui_idp_button_background_email" />
+        app:layout_constraintTop_toBottomOf="@+id/prompt_textview" />
 
     <ImageButton
         android:id="@+id/continue_button"
@@ -59,8 +58,8 @@
         android:layout_height="54dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_border"
-        android:src="@drawable/ic_hilarity_continue"
         android:scaleType="fitCenter"
+        android:src="@drawable/ic_hilarity_continue"
         android:text="continue"
         android:textColor="@color/green_8"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,13 +71,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:clickable="true"
         android:text="🇺🇸"
         android:textSize="150sp"
-        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_name_editText" />
+
+    <com.udacity.gradle.builditbigger.SignInTutorial.UserName.RotatingCalenderView.RotatingCalendarView
+        android:id="@+id/rotatingCalendarView2"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/country_textView" />
 
 
 </android.support.constraint.ConstraintLayout>

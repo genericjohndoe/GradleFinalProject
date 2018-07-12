@@ -70,4 +70,8 @@
     <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
         <item name="android:popupBackground">@color/black</item>
     </style>
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/green_8</item>
+
+    </style>
 </resources>
