@@ -26,8 +26,13 @@ public class RotatingCalendarView extends View {
                                     Color.parseColor("#33004c")};
     final float[] postions = new float[]{0.0417f,0.083f,0.083f,0.083f,0.083f,0.083f,0.083f,0.083f,0.083f,
             0.083f,0.083f,0.083f,0.0417f};
-    GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureListener());
     float rotation;
+    final int daysInYear = 365;
+    final int daysInLeapYear = 366;
+    int year;
+    int day;
+    float oldX = 0;
+    float oldY = 0;
 
 
     public RotatingCalendarView(Context context){
@@ -54,7 +59,6 @@ public class RotatingCalendarView extends View {
         ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         ringPaint.setStyle(Paint.Style.STROKE);
         ringPaint.setStrokeWidth(8f);
-        //ringPaint.setShader(new SweepGradient(0, 0, COLORS2, null));
     }
 
 
@@ -77,13 +81,13 @@ public class RotatingCalendarView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //Log.i("movement", event.toString());
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN){
+            oldX = event.getX();
+            oldY = event.getY();
+        }
         if (event.getAction() == MotionEvent.ACTION_MOVE){
-            //Log.i("movement", "move action logged");
-            //calculate distance away from center, further away = less fricition
-            //get center point
-            //find angle between point A, center, and point B
-            //divide by unit time to get angular velo
-            //rotate canvas at that rate
+            //
             float x = event.getX();
             float y = event.getY();
             updateRotation(x,y);
@@ -92,21 +96,9 @@ public class RotatingCalendarView extends View {
         return true;
     }
     private void updateRotation(float x, float y) {
-
         double r = Math.atan2(x - getHeight()/2f, getWidth()/2f - y);
-        rotation = (int) Math.toDegrees(r);
+        rotation = (float) Math.toDegrees(r);
+        day = (int) ((year %4==0) ? rotation * daysInLeapYear/360 : rotation *daysInYear/360);
     }
 
-    class GestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.i("movement", "move action logged");
-            return true;
-        }
-    }
 }
