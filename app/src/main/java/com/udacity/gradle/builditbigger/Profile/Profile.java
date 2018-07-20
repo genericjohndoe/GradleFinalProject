@@ -217,7 +217,7 @@ public class Profile extends Fragment implements HideFAB {
     //todo allow for post to be added to collection upon creation
     private void showNewPostFragment() {
         Intent intent = new Intent(getActivity(), NewPostActivity2.class);
-        intent.putExtra("number", binding.postsTv.getText().toString().split(" ")[0]);
+        intent.putExtra(getString(R.string.number), binding.postsTv.getText().toString().split(" ")[0]);
         startActivity(intent);
     }
 

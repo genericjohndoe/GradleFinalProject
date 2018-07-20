@@ -31,6 +31,7 @@ import com.udacity.gradle.builditbigger.databinding.FragmentUserSettingsBinding;
  * A simple {@link Fragment} subclass.
  */
 public class UserSettingsFragment extends Fragment implements SetFlag {
+    //todo replace edittext with rainbow ring
     private boolean userNameValidated;
     private ValueEventListener valueEventListener;
     private FragmentUserSettingsBinding bind;
@@ -52,9 +53,11 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
                 if (dataSnapshot.getChildrenCount() > 0) {
                     bind.userNameValidImageview.setImageResource(R.drawable.ic_close_24dp);
                     userNameValidated = false;
+                    bind.userNameValidImageview.setContentDescription(getString(R.string.user_name_invalid));
                 } else {
                     bind.userNameValidImageview.setImageResource(R.drawable.ic_check_24dp);
                     userNameValidated = true;
+                    bind.userNameValidImageview.setContentDescription(getString(R.string.user_name_valid));
                 }
             }
 
@@ -117,6 +120,9 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
         });
         bind.flagTextView.setOnClickListener(view -> {
             CountriesPopUpDialogFragment.getInstance(this).show(getActivity().getSupportFragmentManager(), "countries");
+        });
+        bind.addLangButton.setOnClickListener(view -> {
+            //todo open dialog to pick new language(s), append to list
         });
         return bind.getRoot();
     }
