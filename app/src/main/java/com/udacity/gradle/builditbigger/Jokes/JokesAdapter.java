@@ -489,4 +489,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     public JokesViewHolder getNowPlayingViewHolder() {
         return nowPlayingViewHolder;
     }
+
+    public List<Post> getJokes() {
+        return jokes;
+    }
 }

@@ -54,7 +54,7 @@ public class HilarityUserCollections extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         genres = new ArrayList<>();
-        uid = getArguments().getString("uid");
+        if (getArguments() != null) uid = getArguments().getString(getString(R.string.uid));
         genreAdapter = new CollectionAdapter(getActivity(), genres);
     }
 
@@ -64,7 +64,6 @@ public class HilarityUserCollections extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
         llm.setStackFromEnd(true);
-        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.setAdapter(genreAdapter);
 
@@ -79,17 +78,6 @@ public class HilarityUserCollections extends Fragment {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) profile.showFAB();
                 super.onScrollStateChanged(recyclerView, newState);
             }
-        });
-        //returns original list after search
-        binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
-            if(keyCode == KeyEvent.KEYCODE_BACK && searched){
-                genreAdapter.setGenres(genres);
-                searched = false;
-                configureUI();
-                binding.recyclerView.scrollToPosition(genres.size() - 1);
-                return true;
-            }
-            return false;
         });
 
         UserCollectionViewModel userCollectionViewModel = ViewModelProviders.of(this,
@@ -111,14 +99,13 @@ public class HilarityUserCollections extends Fragment {
     public void onResume() {
         super.onResume();
         profile.getFAB().setOnClickListener(view -> showSearchDialog());
-        Log.i("profilefragment",profile.getFAB().toString() + " HUC");
     }
 
     public void showSearchDialog() {
         new MaterialDialog.Builder(getActivity())
                 .customView(R.layout.search, true)
-                .positiveText("Search")
-                .negativeText("Cancel")
+                .positiveText(R.string.search)
+                .negativeText(R.string.cancel)
                 .onPositive((dialog, which) -> {
                             searched = true;
                             View view2 = dialog.getCustomView();

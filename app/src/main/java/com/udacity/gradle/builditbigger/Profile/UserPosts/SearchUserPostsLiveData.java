@@ -6,33 +6,27 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Post;
+import com.udacity.gradle.builditbigger.Models.PostWrapper;
 
 /**
  * SearchUserPostsLiveData class DEPRECATED
  */
 
-public class SearchUserPostsLiveData extends LiveData<Post> {
-    private DatabaseReference databaseReference;
-    private String[] tags;
+public class SearchUserPostsLiveData extends LiveData<PostWrapper> {
+    private Query query;
 
-    public SearchUserPostsLiveData(String uid, String[] tags){
-        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts");
-        this.tags = tags;
+    public SearchUserPostsLiveData(String uid, String tag){
+        query = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("metadata/" + tag).equalTo(true);
+
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-           Iterable<DataSnapshot> snaps = dataSnapshot.child("taglist").getChildren();
-           for (DataSnapshot snap: snaps){
-               for (String tag: tags){
-                   if (snap.getValue(String.class).equals(tag)){
-                       setValue(dataSnapshot.getValue(Post.class));
-                   }
-               }
-           }
+           setValue(new PostWrapper(dataSnapshot.getValue(Post.class),1));
         }
 
         @Override
@@ -50,13 +44,13 @@ public class SearchUserPostsLiveData extends LiveData<Post> {
 
     @Override
     protected void onActive() {
-        databaseReference.addChildEventListener(childEventListener);
+        query.addChildEventListener(childEventListener);
         super.onActive();
     }
 
     @Override
     protected void onInactive() {
-        databaseReference.removeEventListener(childEventListener);
+        query.removeEventListener(childEventListener);
         super.onInactive();
     }
 }

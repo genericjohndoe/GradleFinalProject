@@ -8,12 +8,20 @@ import android.arch.lifecycle.ViewModel;
 
 public class UserPostsViewModel extends ViewModel {
     UserPostsLiveData userPostsLiveData;
+    SearchUserPostsLiveData searchUserPostsLiveData;
+    String uid;
 
     public UserPostsViewModel(String uid){
         userPostsLiveData = new UserPostsLiveData(uid);
+        this.uid = uid;
     }
 
     public UserPostsLiveData getUserPostsLiveData() {
         return userPostsLiveData;
+    }
+
+    public SearchUserPostsLiveData getSearchUserPostsLiveData(String tag) {
+        if (searchUserPostsLiveData == null) searchUserPostsLiveData = new SearchUserPostsLiveData(uid,tag);
+        return searchUserPostsLiveData;
     }
 }

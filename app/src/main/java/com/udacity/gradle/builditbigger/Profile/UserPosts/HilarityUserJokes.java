@@ -22,6 +22,7 @@ import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Interfaces.VideoInfoTransfer;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
+import com.udacity.gradle.builditbigger.Models.PostWrapper;
 import com.udacity.gradle.builditbigger.Models.VideoInfo;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
@@ -44,6 +45,7 @@ public class HilarityUserJokes extends Fragment {
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
+    UserPostsViewModel userPostsViewModel;
 
     public static HilarityUserJokes newInstance(String uid, HideFAB profile) {
         HilarityUserJokes hilarityUserJokes = new HilarityUserJokes();
@@ -85,26 +87,11 @@ public class HilarityUserJokes extends Fragment {
             }
         });
 
-        UserPostsViewModel userPostsViewModel = ViewModelProviders.of(this,
+        userPostsViewModel = ViewModelProviders.of(this,
                 new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
         userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> {
-            Post post = postWrapper.getPost();
-            if (!jokes.contains(post)){
-                jokes.add(post);
-                jokeAdapter.notifyDataSetChanged();
-            } else if (postWrapper.getState() == 2) {
-                //if post gets modified
-                int index = jokes.indexOf(post);
-                jokes.remove(post);
-                jokes.add(index,post);
-                jokeAdapter.notifyDataSetChanged();
-            }
-            if (!searched) {
-                jokeAdapter.notifyDataSetChanged();
-                configureUI();
-                binding.recyclerView.scrollToPosition(jokes.size() - 1);
-            }
+            addPostToList(postWrapper, jokes);
         });
 
         configureUI();
@@ -132,14 +119,10 @@ public class HilarityUserJokes extends Fragment {
                             searched = true;
                             View view2 = dialog.getCustomView();
                             String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
-                            List<Post> searches = new ArrayList<>();
-                            List<String> splitSearchKeyword = Arrays.asList(searchKeyword.split(" "));
-                            for (Post post: jokes){
-                                Set<String> tags = post.getMetaData().getTags().keySet();
-                                if (tags.retainAll(splitSearchKeyword) && tags.size() > 0) searches.add(post);
-                            }
-                            jokeAdapter.setJokes(searches);
-                            binding.recyclerView.scrollToPosition(searches.size() - 1);
+                            userPostsViewModel.getSearchUserPostsLiveData(searchKeyword).observe(this, postWrapper -> {
+                                List<Post> searchedPosts = new ArrayList<>();
+                                addPostToList(postWrapper, searchedPosts);
+                            });
                         })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show().setCanceledOnTouchOutside(false);
@@ -152,6 +135,26 @@ public class HilarityUserJokes extends Fragment {
         } else {
             binding.recyclerView.setVisibility(View.VISIBLE);
             binding.noItemImageview.setVisibility(View.GONE);
+        }
+    }
+
+    public void addPostToList(PostWrapper postWrapper, List<Post> jokes){
+        if (!jokeAdapter.getJokes().equals(jokes)) jokeAdapter.setJokes(jokes);
+        Post post = postWrapper.getPost();
+        if (!jokes.contains(post)){
+            jokes.add(post);
+            jokeAdapter.notifyDataSetChanged();
+        } else if (postWrapper.getState() == 2) {
+            //if post gets modified
+            int index = jokes.indexOf(post);
+            jokes.remove(post);
+            jokes.add(index,post);
+            jokeAdapter.notifyDataSetChanged();
+        }
+        if (!searched) {
+            jokeAdapter.notifyDataSetChanged();
+            configureUI();
+            binding.recyclerView.scrollToPosition(jokes.size() - 1);
         }
     }
 }
