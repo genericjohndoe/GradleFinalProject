@@ -38,14 +38,14 @@ import java.util.Set;
 
 public class HilarityUserJokes extends Fragment {
     //todo test search and back press
-    Profile profile;
+    HideFAB profile;
     JokesAdapter jokeAdapter;
     List<Post> jokes = new ArrayList<>();
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserJokes newInstance(String uid, Profile profile) {
+    public static HilarityUserJokes newInstance(String uid, HideFAB profile) {
         HilarityUserJokes hilarityUserJokes = new HilarityUserJokes();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
@@ -58,9 +58,9 @@ public class HilarityUserJokes extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            uid = getArguments().getString("uid");
+            uid = getArguments().getString(getString(R.string.uid));
         }
-        if (savedInstanceState != null) jokes = savedInstanceState.getParcelableArrayList("posts");
+        if (savedInstanceState != null) jokes = savedInstanceState.getParcelableArrayList(getString(R.string.posts));
         jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
     }
 
@@ -71,8 +71,6 @@ public class HilarityUserJokes extends Fragment {
         llm.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.setAdapter(jokeAdapter);
-
-
 
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -87,30 +85,19 @@ public class HilarityUserJokes extends Fragment {
             }
         });
 
-        //returns full list of posts after search
-        binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
-            if(keyCode == KeyEvent.KEYCODE_BACK && searched){
-                jokeAdapter.setJokes(jokes);
-                searched = false;
-                configureUI();
-                binding.recyclerView.scrollToPosition(jokes.size() - 1);
-                return true;
-            }
-            return false;
-        });
-
         UserPostsViewModel userPostsViewModel = ViewModelProviders.of(this,
                 new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
-        userPostsViewModel.getUserPostsLiveData().observe(this, joke -> {
-
-            if (!jokes.contains(joke)){
-                jokes.add(joke);
-            } else {
+        userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> {
+            Post post = postWrapper.getPost();
+            if (!jokes.contains(post)){
+                jokes.add(post);
+                jokeAdapter.notifyDataSetChanged();
+            } else if (postWrapper.getState() == 2) {
                 //if post gets modified
-                int index = jokes.indexOf(joke);
-                jokes.remove(joke);
-                jokes.add(index,joke);
+                int index = jokes.indexOf(post);
+                jokes.remove(post);
+                jokes.add(index,post);
                 jokeAdapter.notifyDataSetChanged();
             }
             if (!searched) {
@@ -128,20 +115,19 @@ public class HilarityUserJokes extends Fragment {
     public void onResume() {
         super.onResume();
         profile.getFAB().setOnClickListener(view -> showSearchDialog());
-        Log.i("profilefragment",profile.getFAB().toString() + " HUJ");
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("posts",(ArrayList<? extends Parcelable>) jokes);
+        outState.putParcelableArrayList(getString(R.string.posts),(ArrayList<? extends Parcelable>) jokes);
     }
 
     public void showSearchDialog() {
         new MaterialDialog.Builder(getActivity())
                 .customView(R.layout.search, true)
-                .positiveText("Search")
-                .negativeText("Cancel")
+                .positiveText(R.string.search)
+                .negativeText(R.string.cancel)
                 .onPositive((dialog, which) -> {
                             searched = true;
                             View view2 = dialog.getCustomView();

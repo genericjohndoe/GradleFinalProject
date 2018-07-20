@@ -36,14 +36,14 @@ import java.util.List;
 
 public class HilarityUserLikes extends Fragment {
     //todo test search
-    Profile profile;
+    HideFAB profile;
     JokesAdapter jokeAdapter;
     List<Post> jokes = new ArrayList<>();
     FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserLikes newInstance(String uid, Profile profile){
+    public static HilarityUserLikes newInstance(String uid, HideFAB profile){
         HilarityUserLikes hilarityUserLikes = new HilarityUserLikes();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
@@ -81,18 +81,7 @@ public class HilarityUserLikes extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
-        //returns original list after search
-        binding.recyclerView.setOnKeyListener((v, keyCode, event) -> {
-            if(keyCode == KeyEvent.KEYCODE_BACK && searched){
-                jokeAdapter = new JokesAdapter(getActivity(), jokes, false);
-                jokeAdapter.notifyDataSetChanged();
-                searched = false;
-                configureUI();
-                binding.recyclerView.scrollToPosition(jokes.size() - 1);
-                return true;
-            }
-            return false;
-        });
+
         UserLikesViewModel userLikesViewModel = ViewModelProviders.of(this, new UserLikesViewModelFactory(uid))
                 .get(UserLikesViewModel.class);
 
@@ -120,21 +109,20 @@ public class HilarityUserLikes extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("posts",(ArrayList<? extends Parcelable>) jokes);
+        outState.putParcelableArrayList(getString(R.string.posts),(ArrayList<? extends Parcelable>) jokes);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         profile.getFAB().setOnClickListener(view -> showSearchDialog());
-        Log.i("profilefragment",profile.getFAB().toString() + " HUL");
     }
 
     public void showSearchDialog() {
         new MaterialDialog.Builder(getActivity())
                 .customView(R.layout.search, true)
-                .positiveText("Search")
-                .negativeText("Cancel")
+                .positiveText(R.string.search)
+                .negativeText(R.string.cancel)
                 .onPositive((dialog, which) -> {
                             searched = true;
                             View view2 = dialog.getCustomView();

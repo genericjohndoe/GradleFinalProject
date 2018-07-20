@@ -34,13 +34,13 @@ import java.util.List;
 public class HilarityUserCollections extends Fragment {
     //todo test search
     CollectionAdapter genreAdapter;
-    Profile profile;
+    HideFAB profile;
     List<Collection> genres;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
 
-    public static HilarityUserCollections newInstance(String uid, Profile profile) {
+    public static HilarityUserCollections newInstance(String uid, HideFAB profile) {
         HilarityUserCollections hilarityUserGenres = new HilarityUserCollections();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
