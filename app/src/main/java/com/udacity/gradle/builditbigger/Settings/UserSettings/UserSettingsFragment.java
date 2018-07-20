@@ -34,6 +34,7 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
     private boolean userNameValidated;
     private ValueEventListener valueEventListener;
     private FragmentUserSettingsBinding bind;
+    private String tag = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,7 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
         });
         bind.userNameEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             String newName = bind.userNameEditText.getText().toString();
-            if (!hasFocus && userNameValidated &&
-                    !Constants.USER.getUserName().equals(newName)) {
+            if (!hasFocus && userNameValidated && !Constants.USER.getUserName().equals(newName)) {
                 Constants.DATABASE.child("users/"+Constants.UID +"/userName").setValue(newName, (databaseError, databaseReference) -> {
                     if (databaseError == null){
                         Constants.USER.setUserName(newName);
@@ -88,6 +88,7 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             }
         });
         bind.selectNewPhotoButton.setOnClickListener(view -> {
+            //pass bundle to ensure the activity after the image is saved to the database
             Intent intent = new Intent(getActivity(), ProfilePictureActivity.class);
             startActivity(intent);
         });
@@ -99,11 +100,12 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
         });
 
         userSettingsViewModel.getTaglineLiveData().observe(this, tagline ->{
-            bind.profileTaglineEditText.setText((tagline != null) ? tagline : "generic tagline");
+            bind.profileTaglineEditText.setText((tagline != null) ? tagline : getString(R.string.generic_profile_tagline));
+            tag = tagline;
         });
 
         bind.profileTaglineEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if (!hasFocus){
+            if (!hasFocus && !bind.profileTaglineEditText.getText().toString().equals(tag)){
                 Constants.DATABASE.child("users/"+Constants.UID+"/tagline")
                         .setValue(bind.profileTaglineEditText.getText().toString());
             }
