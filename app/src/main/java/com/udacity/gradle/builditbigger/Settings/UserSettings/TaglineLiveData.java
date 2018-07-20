@@ -1,6 +1,7 @@
-package com.udacity.gradle.builditbigger.Profile;
+package com.udacity.gradle.builditbigger.Settings.UserSettings;
 
 import android.arch.lifecycle.LiveData;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,31 +11,31 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 
 public class TaglineLiveData extends LiveData<String> {
 
-    private DatabaseReference databaseReference;
+    DatabaseReference db;
 
-    public TaglineLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("users/"+uid+"/tagline");
+    public TaglineLiveData(){
+        db = Constants.DATABASE.child("users/"+Constants.UID+"/tagline");
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             setValue(dataSnapshot.getValue(String.class));
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {}
+        public void onCancelled(@NonNull DatabaseError databaseError) {}
     };
 
     @Override
     protected void onActive() {
-        databaseReference.addValueEventListener(valueEventListener);
         super.onActive();
+        db.addValueEventListener(valueEventListener);
     }
 
     @Override
     protected void onInactive() {
-        databaseReference.removeEventListener(valueEventListener);
         super.onInactive();
+        db.removeEventListener(valueEventListener);
     }
 }

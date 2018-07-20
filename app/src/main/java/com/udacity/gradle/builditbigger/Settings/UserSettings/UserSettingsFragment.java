@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Settings.UserSettings;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -91,15 +92,24 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             startActivity(intent);
         });
 
-        bind.profileTaglineEditText.setText(Constants.TAGLINE);
+        UserSettingsViewModel userSettingsViewModel = ViewModelProviders.of(this).get(UserSettingsViewModel.class);
+
+        userSettingsViewModel.getAutoTranslateLiveData().observe(this, aBoolean -> {
+            bind.autoTranslateSwitch.setChecked(aBoolean);
+        });
+
+        userSettingsViewModel.getTaglineLiveData().observe(this, tagline ->{
+            bind.profileTaglineEditText.setText((tagline != null) ? tagline : "generic tagline");
+        });
+
         bind.profileTaglineEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if (!hasFocus){
-                Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/tagline")
+                Constants.DATABASE.child("users/"+Constants.UID+"/tagline")
                         .setValue(bind.profileTaglineEditText.getText().toString());
             }
         });
-        //make autotranslate machine learning algo
-        bind.autoTranslateSwitch.setChecked(true);
+
+
         bind.autoTranslateSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/autotranslate").setValue(isChecked);
         });
