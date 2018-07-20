@@ -11,8 +11,8 @@ public class ExploreViewModel extends ViewModel {
 
     private ExploreLiveData exploreLiveData;
 
-    public ExploreViewModel(Context context){
-        exploreLiveData = new ExploreLiveData(context);
+    public ExploreViewModel(){
+        exploreLiveData = new ExploreLiveData();
     }
 
     public ExploreLiveData getExploreLiveData() {

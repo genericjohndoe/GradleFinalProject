@@ -106,11 +106,11 @@
             android:label="@string/title_activity_user_name"
             android:noHistory="true"
             android:theme="@style/AppTheme">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity android:name=".Messaging.SentMessages.MessagesActivity" />
         <activity
@@ -140,14 +140,11 @@
         <activity
             android:name=".SignInTutorial.AuthActivity"
             android:noHistory="true">
-
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".NewPost.NewPostActivity2"

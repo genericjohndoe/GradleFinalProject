@@ -30,6 +30,7 @@ public class NewTextPostEditFragment extends Fragment {
     FragmentNewTextPostBinding bind;
     private Post post;
     private boolean wasDiscarded = false;
+    private boolean saved = false;
     private String number;
 
     public static NewTextPostEditFragment newInstance(String number) {
@@ -85,10 +86,10 @@ public class NewTextPostEditFragment extends Fragment {
         RichEditorToolBar toolBar = bind.getRoot().findViewById(R.id.richEditorToolBar);
         toolBar.setRichEditor(bind.bodyEditText);
         bind.bodyEditText.setEditorFontColor("#369F77");
-        bind.saveDraftButton.setOnClickListener(view -> {//todo add path for saved drafts in database
+        bind.saveDraftButton.setOnClickListener(view -> { saved = true;
         });
         bind.discardButton.setOnClickListener(view -> {
-            wasDiscarded = true;
+
             startActivity(new Intent(getActivity(), HilarityActivity.class));
         });
 
@@ -97,7 +98,7 @@ public class NewTextPostEditFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (!wasDiscarded) {
+        if (saved) {
             post.setJokeTitle(bind.titleEditText.getText().toString());
             post.setJokeBody(bind.bodyEditText.getHtml());
             post.setTagline(bind.taglineEditText.getText().toString());

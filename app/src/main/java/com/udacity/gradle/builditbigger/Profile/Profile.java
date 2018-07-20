@@ -43,6 +43,7 @@ import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.Settings.UserSettings.UserSettingsActivity;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubsActivity;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
@@ -54,7 +55,6 @@ import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
  */
 
 public class Profile extends Fragment implements HideFAB {
-    //todo populate UI with info from database
     private String uid;
     private FragmentProfileBinding binding;
     private boolean isFollowed;
@@ -170,9 +170,10 @@ public class Profile extends Fragment implements HideFAB {
             });
         }
         if (uid.equals(Constants.UID)) binding.subscribeButton.setText("Edit Profile");
-        binding.subscribeButton.setOnClickListener(view ->{
+        binding.subscribeButton.setOnClickListener(view -> {
             if (uid.equals(Constants.UID)){
-                //todo create intent to edit profile
+                Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
+                startActivity(intent);
             } else {
                 if (!isFollowed){
                     Constants.DATABASE.child("followers/"+uid+"/list/"+Constants.UID).setValue(Constants.USER);

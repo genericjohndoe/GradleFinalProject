@@ -62,8 +62,8 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         bind = DataBindingUtil.inflate(inflater,R.layout.feed_explore_page, container, false);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        llm.setStackFromEnd(true);
         bind.recyclerView.setLayoutManager(llm);
-        bind.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         bind.recyclerView.setAdapter(jokeAdapter);
         bind.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

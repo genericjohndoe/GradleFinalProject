@@ -13,6 +13,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Post;
@@ -25,11 +27,10 @@ import javax.annotation.Nullable;
 
 public class ExploreLiveData extends LiveData<Post> {
     private CollectionReference collectionReference;
-    private Context context;
+    private ListenerRegistration registration;
 
-    public ExploreLiveData(Context context){
+    public ExploreLiveData(){
         collectionReference = Constants.FIRESTORE.collection("posts");
-        this.context = context;
     }
 
     private EventListener<QuerySnapshot> eventListener = (queryDocumentSnapshots, e) -> {
@@ -41,6 +42,12 @@ public class ExploreLiveData extends LiveData<Post> {
     @Override
     protected void onActive() {
         super.onActive();
-        collectionReference.addSnapshotListener((Activity) context, eventListener);
+        registration = collectionReference.addSnapshotListener(eventListener);
+    }
+
+    @Override
+    protected void onInactive() {
+        super.onInactive();
+        registration.remove();
     }
 }

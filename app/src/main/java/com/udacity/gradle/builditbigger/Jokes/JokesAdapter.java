@@ -88,14 +88,14 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         this.jokes = objects;
         this.isUserProfile = isUserProfile;
         setHasStableIds(true);
-        Post newVideoPost = new Post("", "", System.currentTimeMillis(),
+        /*Post newVideoPost = new Post("", "", System.currentTimeMillis(),
                 "genre push id", "asset:///portrait_test.mp4", Constants.UID, "key", "tagline", Constants.VIDEO_AUDIO,
                 new MetaData("video", Integer.parseInt("2") + 1, new HashMap<>()));
         jokes.add(newVideoPost);
         Post newVideoPost2 = new Post("", "", System.currentTimeMillis(),
                 "genre push id", "asset:///landscape_test.mp4", Constants.UID, "keys", "tagline", Constants.VIDEO_AUDIO,
                 new MetaData("video", Integer.parseInt("3") + 1, new HashMap<>()));
-        jokes.add(newVideoPost2);
+        jokes.add(newVideoPost2);*/
     }
 
     public class JokesViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner, PopupMenu.OnMenuItemClickListener {

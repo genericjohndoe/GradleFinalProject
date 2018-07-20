@@ -1,11 +1,10 @@
 package com.udacity.gradle.builditbigger.Feed;
 
 import android.arch.lifecycle.LiveData;
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.PostWrapper;
@@ -15,10 +14,10 @@ import com.udacity.gradle.builditbigger.Models.PostWrapper;
  */
 
 public class FeedLiveData extends LiveData<PostWrapper> {
-    DatabaseReference databaseReference;
+    Query query;
 
     public FeedLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("feeds/"+uid);
+        query = Constants.DATABASE.child("feeds/"+uid);//.limitToLast(30);endAt();
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {
@@ -38,25 +37,21 @@ public class FeedLiveData extends LiveData<PostWrapper> {
         }
 
         @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-        }
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
+        public void onCancelled(DatabaseError databaseError) {}
     };
 
     @Override
     protected void onActive() {
         super.onActive();
-        databaseReference.addChildEventListener(childEventListener);
+        query.addChildEventListener(childEventListener);
     }
 
     @Override
     protected void onInactive() {
         super.onInactive();
-        databaseReference.removeEventListener(childEventListener);
+        query.removeEventListener(childEventListener);
     }
 }

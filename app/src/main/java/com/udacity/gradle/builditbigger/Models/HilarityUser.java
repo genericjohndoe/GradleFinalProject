@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Models;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,11 +14,11 @@ import android.support.annotation.NonNull;
 public class HilarityUser implements Parcelable {
     private String userName;
     private String urlString;
-    @PrimaryKey @NonNull
-    private String uid;
+    @PrimaryKey @NonNull private String uid;
 
     public HilarityUser() {}
 
+    @Ignore
     public HilarityUser(String userName, String urlString, String uid) {
         this.userName = userName;
         this.urlString = urlString;
