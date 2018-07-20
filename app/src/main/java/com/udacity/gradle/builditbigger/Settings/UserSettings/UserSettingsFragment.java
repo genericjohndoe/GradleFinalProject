@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Settings.UserSettings;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,15 +19,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Interfaces.SetFlag;
+import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.SignInTutorial.ProfilePicture.ProfilePictureActivity;
+import com.udacity.gradle.builditbigger.SignInTutorial.UserName.PickCountry.CountriesPopUpDialogFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentUserSettingsBinding;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserSettingsFragment extends Fragment {
+public class UserSettingsFragment extends Fragment implements SetFlag {
     private boolean userNameValidated;
     private ValueEventListener valueEventListener;
+    private FragmentUserSettingsBinding bind;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,7 @@ public class UserSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentUserSettingsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_user_settings, container, false);
+        bind = DataBindingUtil.inflate(inflater,R.layout.fragment_user_settings, container, false);
 
         valueEventListener = new ValueEventListener() {
             @Override
@@ -81,9 +87,8 @@ public class UserSettingsFragment extends Fragment {
             }
         });
         bind.selectNewPhotoButton.setOnClickListener(view -> {
-            //start new activity to take/choose photo or gif
-            //delete or overwrite old profile pic in storage
-            //change on client side
+            Intent intent = new Intent(getActivity(), ProfilePictureActivity.class);
+            startActivity(intent);
         });
 
         bind.profileTaglineEditText.setText(Constants.TAGLINE);
@@ -93,15 +98,19 @@ public class UserSettingsFragment extends Fragment {
                         .setValue(bind.profileTaglineEditText.getText().toString());
             }
         });
-        //make autotranslate machine learning album
+        //make autotranslate machine learning algo
         bind.autoTranslateSwitch.setChecked(true);
         bind.autoTranslateSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/autotranslate").setValue(isChecked);
         });
-
-        //populate adapter with list of countries
-        bind.nationAutoCompleteTextView.setAdapter(null);
+        bind.flagTextView.setOnClickListener(view -> {
+            CountriesPopUpDialogFragment.getInstance(this).show(getActivity().getSupportFragmentManager(), "countries");
+        });
         return bind.getRoot();
     }
 
+    @Override
+    public void setFlag(String flag) {
+        bind.flagTextView.setText(flag);
+    }
 }

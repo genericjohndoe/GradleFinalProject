@@ -152,28 +152,13 @@
         android:id="@+id/nation_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@color/green_8"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Nation of Origin"
+        android:textColor="@color/green_8"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/auto_translate_textView" />
-
-    <AutoCompleteTextView
-        android:id="@+id/nation_autoCompleteTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/green_8"
-        android:textColor="@color/green_8"
-        android:textColorHint="@color/green_8"
-        android:text="AutoCompleteTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nation_textView" />
 
     <TextView
         android:id="@+id/age_title_textView"
@@ -181,11 +166,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:text="Age"
         android:textColor="@color/green_8"
         android:textSize="14sp"
-        android:text="Age"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nation_autoCompleteTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/flag_textView" />
 
     <TextView
         android:id="@+id/age_textView"
@@ -198,5 +183,18 @@
         android:text="01 Jan 1970"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/age_title_textView" />
+
+    <TextView
+        android:id="@+id/flag_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="🇺🇸"
+        android:textSize="36sp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nation_textView" />
 </android.support.constraint.ConstraintLayout>
 </layout>

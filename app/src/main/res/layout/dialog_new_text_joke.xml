@@ -24,7 +24,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
-        android:hint="@string/add_joke_short"
+        android:hint="Add post"
         android:inputType="textMultiLine" />
 
     <EditText

@@ -75,6 +75,7 @@ public class Profile extends Fragment implements HideFAB {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null)
         uid = getArguments().getString("uid");
     }
 
@@ -100,12 +101,12 @@ public class Profile extends Fragment implements HideFAB {
 
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
 
+
         binding.profileTabLayout.getTabAt(0).setCustomView(R.layout.icon_post);
         binding.profileTabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
         binding.profileTabLayout.getTabAt(2).setCustomView(R.layout.icon_likes);
 
         binding.subscribersTv.setOnClickListener(view -> createSubsIntent(1));
-
         binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(2));
 
         //originally calls new post dialog, changed when configureFAB is called
@@ -163,13 +164,13 @@ public class Profile extends Fragment implements HideFAB {
             new IsFollowingLiveData(uid).observe(this, isFollowed -> {
                 this.isFollowed = isFollowed;
                 if (isFollowed) {
-                    binding.subscribeButton.setText("Subscribed");
+                    binding.subscribeButton.setText(R.string.subscribed);
                 } else {
-                    binding.subscribeButton.setText("Subscribe");
+                    binding.subscribeButton.setText(R.string.subscribe);
                 }
             });
         }
-        if (uid.equals(Constants.UID)) binding.subscribeButton.setText("Edit Profile");
+        if (uid.equals(Constants.UID)) binding.subscribeButton.setText(R.string.edit_profile);
         binding.subscribeButton.setOnClickListener(view -> {
             if (uid.equals(Constants.UID)){
                 Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
@@ -205,8 +206,8 @@ public class Profile extends Fragment implements HideFAB {
 
     private void createSubsIntent(int fragmenttype){
         Intent intent = new Intent(getActivity(), SubsActivity.class);
-        intent.putExtra("uid", uid);
-        intent.putExtra("fragment", fragmenttype);
+        intent.putExtra(getString(R.string.uid), uid);
+        intent.putExtra(getString(R.string.fragment), fragmenttype);
         startActivity(intent);
     }
 
@@ -223,12 +224,11 @@ public class Profile extends Fragment implements HideFAB {
     /**
      * shows new genre dialog from profile when user created genres are shown
      */
-    //todo allow privacy? if yes, remember to do on server side too
     private void showNewGenreDialog() {
         new MaterialDialog.Builder(getActivity())
                 .customView(R.layout.dialog_new_genre, true)
-                .positiveText("Submit")
-                .negativeText("Cancel")
+                .positiveText(R.string.submit)
+                .negativeText(R.string.cancel)
                 .onPositive((dialog, which) -> {
                         View view = dialog.getCustomView();
                         String genreTitle = ((EditText) view.findViewById(R.id.new_genre_title_et)).getText().toString();
@@ -289,8 +289,4 @@ public class Profile extends Fragment implements HideFAB {
     public FloatingActionButton getFAB(){
         return binding.searchFab;
     }
-
-
-
-
 }
