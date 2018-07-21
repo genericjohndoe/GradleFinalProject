@@ -13,28 +13,28 @@ import java.util.Map;
 public class MetaData implements Parcelable {
     private String type;
     private int number;
-    private Map<String, Boolean> tags;
+    private Map<String, Boolean> keywords;
 
     public MetaData(){}
 
     public MetaData(String type, int number, Map<String, Boolean> tags){
         this.type = type;
         this.number = number;
-        this.tags = tags;
+        this.keywords = tags;
     }
 
     public MetaData(Parcel in){
         this.type = in.readString();
         this.number = in.readInt();
-        this.tags = in.readHashMap(HashMap.class.getClassLoader());
+        this.keywords = in.readHashMap(HashMap.class.getClassLoader());
     }
 
     public int getNumber() {
         return number;
     }
 
-    public Map<String, Boolean> getTags() {
-        return tags;
+    public Map<String, Boolean> getKeywords() {
+        return keywords;
     }
 
     public String getType() {
@@ -45,7 +45,7 @@ public class MetaData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(type);
         dest.writeInt(number);
-        dest.writeMap(tags);
+        dest.writeMap(keywords);
     }
 
     @Override

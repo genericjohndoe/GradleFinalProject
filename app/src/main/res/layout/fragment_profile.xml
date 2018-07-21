@@ -185,6 +185,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:elevation="8dp"
             app:layout_anchor="@id/profile_constraintLayout"
             app:layout_anchorGravity="right|bottom"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -208,6 +209,20 @@
                 fab:fab_colorNormal="@color/green_8"
                 app:fab_colorPressed="@color/green_7"/>
         </com.github.clans.fab.FloatingActionMenu>
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/search_fam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:menu_colorPressed="@color/green_7"
+            fab:menu_colorNormal="@color/green_8"
+            fab:menu_icon="@drawable/ic_close_24dp" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -21,7 +21,7 @@ public class UserPostsViewModel extends ViewModel {
     }
 
     public SearchUserPostsLiveData getSearchUserPostsLiveData(String tag) {
-        if (searchUserPostsLiveData == null) searchUserPostsLiveData = new SearchUserPostsLiveData(uid,tag);
+        searchUserPostsLiveData = new SearchUserPostsLiveData(uid,tag);
         return searchUserPostsLiveData;
     }
 }

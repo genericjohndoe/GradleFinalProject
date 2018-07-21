@@ -60,6 +60,7 @@
     <style name="EditTextOverride" parent="@android:style/Widget.EditText">
         <item name="android:textColor">@color/green_8</item>
         <item name="android:textColorHint">@color/green_6</item>
+        <item name="android:backgroundTint">@color/green_8</item>
     </style>
 
     <style name="CardWidgetStyle" parent="@android:style/Theme.DeviceDefault">

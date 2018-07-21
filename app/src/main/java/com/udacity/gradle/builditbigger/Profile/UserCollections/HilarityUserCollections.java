@@ -98,7 +98,7 @@ public class HilarityUserCollections extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        profile.getFAB().setOnClickListener(view -> showSearchDialog());
+        //if (isVisible()) profile.getFAB().setOnClickListener(view -> showSearchDialog());
     }
 
     public void showSearchDialog() {

@@ -27,6 +27,7 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
@@ -288,5 +289,11 @@ public class Profile extends Fragment implements HideFAB {
      */
     public FloatingActionButton getFAB(){
         return binding.searchFab;
+    }
+
+    @Override
+    public FloatingActionMenu getFAM() {
+        binding.fam.close(true);
+        return binding.searchFam;
     }
 }
