@@ -19,7 +19,7 @@ public class SearchUserLikesLiveData extends LiveData<PostWrapper> {
     private Query query;
 
     public SearchUserLikesLiveData(String uid, String tag){
-        query = Constants.DATABASE.child("userlikes/" + uid + "/posts").orderByChild("metaData/keywords/" + tag).equalTo(true);
+        query = Constants.DATABASE.child("userlikes/" + uid + "/list").orderByChild("metaData/keywords/" + tag).equalTo(true);
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {

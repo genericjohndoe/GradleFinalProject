@@ -59,8 +59,8 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uid = getArguments().getString("uid");
-        if (savedInstanceState != null) jokes = savedInstanceState.getParcelableArrayList("posts");
+        uid = getArguments().getString(getString(R.string.uid));
+        if (savedInstanceState != null) jokes = savedInstanceState.getParcelableArrayList(getString(R.string.posts));
         jokeAdapter = new JokesAdapter(getActivity(), jokes, false);
     }
 
@@ -90,21 +90,12 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
                 .get(UserLikesViewModel.class);
 
         userLikesViewModel.getUserLikesLiveData().observe(this, jokeWrapper -> {
-
-            switch (jokeWrapper.getState()){
-                case 1: if (!jokes.contains(jokeWrapper.getPost())) jokes.add(jokeWrapper.getPost());
-                        break;
-                case 2: int index = jokes.indexOf(jokeWrapper.getPost());
-                        jokes.set(index, jokeWrapper.getPost());
-                        break;
-                default: jokes.remove(jokeWrapper.getPost());
-                         break;
-            }
+            addPostToList(jokeWrapper, jokes);
+            configureUI();
         });
-        configureUI();
+
         FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
             if (position == 2) profile.getFAB().setOnClickListener(view -> showSearchDialog());
-            Log.i("position", ""+position + " from likes");
         });
         return binding.getRoot();
     }
@@ -115,11 +106,6 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
         outState.putParcelableArrayList(getString(R.string.posts),(ArrayList<? extends Parcelable>) jokes);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //profile.getFAB().setOnClickListener(view -> showSearchDialog());
-    }
 
     public void showSearchDialog() {
         SearchDialogFragment.getInstance(this).show(getFragmentManager(), getString(R.string.search));
@@ -140,13 +126,13 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
         Post post = postWrapper.getPost();
         if (!jokes.contains(post)) {
             jokes.add(post);
+            jokeAdapter.notifyDataSetChanged();
         } else if (postWrapper.getState() == 2) {
             //if post gets modified
             int index = jokes.indexOf(post);
-            jokes.remove(post);
-            jokes.add(index, post);
+            jokes.set(index, post);
+            jokeAdapter.notifyDataSetChanged();
         }
-        jokeAdapter.notifyDataSetChanged();
     }
 
     public void configureFAM() {

@@ -66,7 +66,7 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
 
         if (savedInstanceState != null) {
             jokes = savedInstanceState.getParcelableArrayList(getString(R.string.posts));
-            init = savedInstanceState.getBoolean("init");
+            init = savedInstanceState.getBoolean(getString(R.string.init));
         }
         jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
     }
@@ -94,11 +94,12 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
 
         userPostsViewModel = ViewModelProviders.of(this, new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
-        userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> addPostToList(postWrapper, jokes));
-        configureUI();
+        userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> {
+            addPostToList(postWrapper, jokes);
+            configureUI();
+        });
         FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
             if (position == 0) profile.getFAB().setOnClickListener(view -> showSearchDialog());
-            Log.i("position", ""+position + " from user posts");
         });
         return binding.getRoot();
     }
@@ -113,7 +114,7 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(getString(R.string.posts), (ArrayList<? extends Parcelable>) jokes);
-        outState.putBoolean("init", init);
+        outState.putBoolean(getString(R.string.init), init);
     }
 
     public void showSearchDialog() {

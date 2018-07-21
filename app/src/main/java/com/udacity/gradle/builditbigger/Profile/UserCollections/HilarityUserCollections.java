@@ -34,9 +34,9 @@ import java.util.List;
 
 public class HilarityUserCollections extends Fragment {
     //todo test search
-    CollectionAdapter genreAdapter;
-    HideFAB profile;
-    List<Collection> genres;
+    private CollectionAdapter genreAdapter;
+    private HideFAB profile;
+    private List<Collection> genres;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
@@ -95,15 +95,8 @@ public class HilarityUserCollections extends Fragment {
         configureUI();
         FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
             if (position == 1) profile.getFAB().setOnClickListener(view -> showSearchDialog());
-            Log.i("position", ""+position + " from collections");
         });
         return binding.getRoot();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //if (isVisible()) profile.getFAB().setOnClickListener(view -> showSearchDialog());
     }
 
     public void showSearchDialog() {
