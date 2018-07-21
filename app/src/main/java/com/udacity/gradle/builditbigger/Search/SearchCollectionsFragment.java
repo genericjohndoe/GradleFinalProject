@@ -57,7 +57,7 @@ public class SearchCollectionsFragment extends Fragment {
                     for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
                         genres.add(snap.toObject(com.udacity.gradle.builditbigger.Models.Collection.class));
                     }
-                    genreAdapter.setGenres(genres);
+                    genreAdapter.setCollections(genres);
                 }
             );
         });

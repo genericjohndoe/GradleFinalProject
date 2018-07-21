@@ -17,11 +17,13 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.udacity.gradle.builditbigger.Collections.CollectionAdapter;
+import com.udacity.gradle.builditbigger.Interfaces.EnableSearch;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.Profile.FragmentFocusLiveData;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.Search.SearchDialogFragment;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
@@ -32,14 +34,14 @@ import java.util.List;
  * Created by joeljohnson on 10/12/17.
  */
 
-public class HilarityUserCollections extends Fragment {
-    //todo test search
-    private CollectionAdapter genreAdapter;
+public class HilarityUserCollections extends Fragment implements EnableSearch {
+    private CollectionAdapter collectionAdapter;
     private HideFAB profile;
-    private List<Collection> genres;
+    private List<Collection> collections;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
     private boolean searched = false;
+    private UserCollectionViewModel userCollectionViewModel;
 
     public static HilarityUserCollections newInstance(String uid, HideFAB profile) {
         HilarityUserCollections hilarityUserGenres = new HilarityUserCollections();
@@ -54,9 +56,9 @@ public class HilarityUserCollections extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        genres = new ArrayList<>();
+        collections = new ArrayList<>();
         if (getArguments() != null) uid = getArguments().getString(getString(R.string.uid));
-        genreAdapter = new CollectionAdapter(getActivity(), genres);
+        collectionAdapter = new CollectionAdapter(getActivity(), collections);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class HilarityUserCollections extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
         llm.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(llm);
-        binding.recyclerView.setAdapter(genreAdapter);
+        binding.recyclerView.setAdapter(collectionAdapter);
 
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -81,18 +83,14 @@ public class HilarityUserCollections extends Fragment {
             }
         });
 
-        UserCollectionViewModel userCollectionViewModel = ViewModelProviders.of(this,
+        userCollectionViewModel = ViewModelProviders.of(this,
                 new UserCollectionViewModelFactory(uid))
                 .get(UserCollectionViewModel.class);
         userCollectionViewModel.getUserCollectionLiveData().observe(this, genre -> {
-            if (!genres.contains(genre))genres.add(genre);
-            if (!searched) {
-                genreAdapter.notifyDataSetChanged();
-                configureUI();
-                binding.recyclerView.scrollToPosition(genres.size() - 1);
-            }
+            addCollectionToList(genre, collections);
+            binding.recyclerView.scrollToPosition(collections.size() - 1);
+            configureUI();
         });
-        configureUI();
         FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
             if (position == 1) profile.getFAB().setOnClickListener(view -> showSearchDialog());
         });
@@ -100,32 +98,41 @@ public class HilarityUserCollections extends Fragment {
     }
 
     public void showSearchDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .customView(R.layout.search, true)
-                .positiveText(R.string.search)
-                .negativeText(R.string.cancel)
-                .onPositive((dialog, which) -> {
-                            searched = true;
-                            View view2 = dialog.getCustomView();
-                            String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
-                            List<Collection> searches = new ArrayList<>();
-                            for (Collection collection: genres){
-                                if (collection.getTitle().contains(searchKeyword)) searches.add(collection);
-                            }
-                            genreAdapter.setGenres(searches);
-                        }
-                )
-                .onNegative((dialog, which) -> dialog.dismiss())
-                .show().setCanceledOnTouchOutside(false);
+        SearchDialogFragment.getInstance(this).show(getFragmentManager(), "search");
     }
 
     public void configureUI() {
-        if (genres.isEmpty()) {
+        if (collections.isEmpty()) {
             binding.recyclerView.setVisibility(View.GONE);
             binding.noItemImageview.setVisibility(View.VISIBLE);
         } else {
             binding.recyclerView.setVisibility(View.VISIBLE);
             binding.noItemImageview.setVisibility(View.GONE);
         }
+    }
+
+    public void configureFAM() {
+        profile.getFAM().setVisibility(View.VISIBLE);
+        profile.getFAM().setOnMenuButtonClickListener(view -> {
+            collectionAdapter.setCollections(collections);
+            profile.getFAM().setVisibility(View.GONE);
+        });
+    }
+
+    private void addCollectionToList(Collection collection, List<Collection> collectionList){
+        if (!collectionAdapter.getCollections().equals(collectionList)) collectionAdapter.setCollections(collectionList);
+        if (!collectionList.contains(collection)) {
+            collectionList.add(collection);
+            collectionAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void search(String keyword) {
+        List<Collection> filteredSearch = new ArrayList<>();
+        userCollectionViewModel.getSearchUserCollectionLiveData(keyword).observe(this, collection -> {
+            addCollectionToList(collection,filteredSearch);
+            configureFAM();
+        });
     }
 }

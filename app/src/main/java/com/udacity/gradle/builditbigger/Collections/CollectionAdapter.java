@@ -31,12 +31,12 @@ import javax.annotation.Nonnull;
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
 
     Context context;
-    List<Collection> genres;
+    List<Collection> collections;
 
 
-    public CollectionAdapter(Context context, List<Collection> genres) {
+    public CollectionAdapter(Context context, List<Collection> collections) {
         this.context = context;
-        this.genres = genres;
+        this.collections = collections;
     }
 
     public class CollectionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -65,7 +65,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     @Override
     public int getItemCount() {
-        return genres.size();
+        return collections.size();
     }
 
     @Override @NonNull
@@ -76,7 +76,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     @Override
     public void onBindViewHolder(@NonNull CollectionViewHolder holder, int position) {
-        Collection genre = genres.get(position);
+        Collection genre = collections.get(position);
         holder.bind.genreTitleTextview.setText(genre.getTitle());
         holder.collection = genre;
         if (genre.getUID().equals(Constants.UID)){
@@ -92,8 +92,12 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         }
     }
 
-    public void setGenres(List<Collection> genres) {
-        this.genres = genres;
+    public void setCollections(List<Collection> collections) {
+        this.collections = collections;
         notifyDataSetChanged();
+    }
+
+    public List<Collection> getCollections() {
+        return collections;
     }
 }
