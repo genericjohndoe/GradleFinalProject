@@ -54,9 +54,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
                                 if (databaseError == null){
                                     collection.setRestricted(!collection.getRestricted());
                                     if (collection.getRestricted()){
-                                        bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_outline_black_24dp);
+                                        bind.lockImageButton.setImageResource(R.drawable.ic_lock_outline_black_24dp);
                                     } else {
-                                        bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_open_black_24dp);
+                                        bind.lockImageButton.setImageResource(R.drawable.ic_lock_open_black_24dp);
                                     }
                                 }
                             });
@@ -92,9 +92,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         if (genre.getUID().equals(Constants.UID)){
             holder.bind.subscribeButton.setVisibility(View.GONE);
             if (genre.getRestricted()){
-                holder.bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_outline_black_24dp);
+                holder.bind.lockImageButton.setImageResource(R.drawable.ic_lock_outline_black_24dp);
             } else {
-                holder.bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_open_black_24dp);
+                holder.bind.lockImageButton.setImageResource(R.drawable.ic_lock_open_black_24dp);
             }
         } else {
             holder.bind.lockImageButton.setVisibility(View.GONE);
