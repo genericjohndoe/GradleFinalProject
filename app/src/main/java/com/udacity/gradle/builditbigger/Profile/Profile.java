@@ -94,6 +94,8 @@ public class Profile extends Fragment implements HideFAB {
             @Override
             public void onPageSelected(int position) {
                 configureFAB(position);
+                FragmentFocusLiveData.getFragmentFocusLiveData().setValue(position);
+                Log.i("position", ""+position);
             }
 
             @Override

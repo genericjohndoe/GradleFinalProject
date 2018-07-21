@@ -24,6 +24,7 @@ import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.PostWrapper;
+import com.udacity.gradle.builditbigger.Profile.FragmentFocusLiveData;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Search.SearchDialogFragment;
@@ -101,6 +102,10 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
             }
         });
         configureUI();
+        FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
+            if (position == 2) profile.getFAB().setOnClickListener(view -> showSearchDialog());
+            Log.i("position", ""+position + " from likes");
+        });
         return binding.getRoot();
     }
 
@@ -113,7 +118,7 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
     @Override
     public void onResume() {
         super.onResume();
-        profile.getFAB().setOnClickListener(view -> showSearchDialog());
+        //profile.getFAB().setOnClickListener(view -> showSearchDialog());
     }
 
     public void showSearchDialog() {

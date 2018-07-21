@@ -19,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.udacity.gradle.builditbigger.Collections.CollectionAdapter;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Collection;
+import com.udacity.gradle.builditbigger.Profile.FragmentFocusLiveData;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
@@ -92,6 +93,10 @@ public class HilarityUserCollections extends Fragment {
             }
         });
         configureUI();
+        FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
+            if (position == 1) profile.getFAB().setOnClickListener(view -> showSearchDialog());
+            Log.i("position", ""+position + " from collections");
+        });
         return binding.getRoot();
     }
 

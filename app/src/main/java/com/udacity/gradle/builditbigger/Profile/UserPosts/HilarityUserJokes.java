@@ -26,6 +26,7 @@ import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.PostWrapper;
 import com.udacity.gradle.builditbigger.Models.VideoInfo;
+import com.udacity.gradle.builditbigger.Profile.FragmentFocusLiveData;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Search.SearchDialogFragment;
@@ -41,13 +42,13 @@ import java.util.Set;
  */
 
 public class HilarityUserJokes extends Fragment implements EnableSearch {
-    //todo test search and back press
-    HideFAB profile;
-    JokesAdapter jokeAdapter;
-    List<Post> jokes = new ArrayList<>();
+    private HideFAB profile;
+    private JokesAdapter jokeAdapter;
+    private List<Post> jokes = new ArrayList<>();
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
-    UserPostsViewModel userPostsViewModel;
+    private UserPostsViewModel userPostsViewModel;
+    private boolean init = true;
 
     public static HilarityUserJokes newInstance(String uid, HideFAB profile) {
         HilarityUserJokes hilarityUserJokes = new HilarityUserJokes();
@@ -63,8 +64,10 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) uid = getArguments().getString(getString(R.string.uid));
 
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
             jokes = savedInstanceState.getParcelableArrayList(getString(R.string.posts));
+            init = savedInstanceState.getBoolean("init");
+        }
         jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
     }
 
@@ -93,23 +96,29 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
                 .get(UserPostsViewModel.class);
         userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> addPostToList(postWrapper, jokes));
         configureUI();
+        FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
+            if (position == 0) profile.getFAB().setOnClickListener(view -> showSearchDialog());
+            Log.i("position", ""+position + " from user posts");
+        });
         return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (isVisible()) profile.getFAB().setOnClickListener(view -> showSearchDialog());
+        if (init) profile.getFAB().setOnClickListener(view -> showSearchDialog());
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(getString(R.string.posts), (ArrayList<? extends Parcelable>) jokes);
+        outState.putBoolean("init", init);
     }
 
     public void showSearchDialog() {
         SearchDialogFragment.getInstance(this).show(getFragmentManager(), getString(R.string.search));
+        init = false;
     }
 
     public void configureUI() {
@@ -127,12 +136,13 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
         Post post = postWrapper.getPost();
         if (!jokes.contains(post)) {
             jokes.add(post);
+            jokeAdapter.notifyDataSetChanged();
         } else if (postWrapper.getState() == 2) {
             //if post gets modified
             int index = jokes.indexOf(post);
             jokes.set(index, post);
+            jokeAdapter.notifyDataSetChanged();
         }
-        jokeAdapter.notifyDataSetChanged();
     }
 
     public void configureFAM() {
