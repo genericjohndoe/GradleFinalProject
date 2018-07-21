@@ -50,7 +50,16 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
             bind.lockImageButton.setOnClickListener(view2-> {
                     Constants.DATABASE
                             .child("usercollections/"+collection.getUID()+"/"+collection.getGenreId()+"/restricted")
-                            .setValue(!collection.getRestricted());
+                            .setValue(!collection.getRestricted(), (databaseError, databaseReference) -> {
+                                if (databaseError == null){
+                                    collection.setRestricted(!collection.getRestricted());
+                                    if (collection.getRestricted()){
+                                        bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_outline_black_24dp);
+                                    } else {
+                                        bind.lockImageButton.setBackgroundResource(R.drawable.ic_lock_open_black_24dp);
+                                    }
+                                }
+                            });
             });
             bind.getRoot().setOnClickListener(this);
             bind.getRoot().setTag(this);
