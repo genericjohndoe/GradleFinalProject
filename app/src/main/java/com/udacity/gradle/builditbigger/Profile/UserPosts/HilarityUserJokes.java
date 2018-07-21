@@ -47,7 +47,6 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     List<Post> jokes = new ArrayList<>();
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
-    private boolean searched = false;
     UserPostsViewModel userPostsViewModel;
 
     public static HilarityUserJokes newInstance(String uid, HideFAB profile) {
@@ -62,9 +61,8 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            uid = getArguments().getString(getString(R.string.uid));
-        }
+        if (getArguments() != null) uid = getArguments().getString(getString(R.string.uid));
+
         if (savedInstanceState != null)
             jokes = savedInstanceState.getParcelableArrayList(getString(R.string.posts));
         jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
@@ -91,13 +89,9 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
             }
         });
 
-        userPostsViewModel = ViewModelProviders.of(this,
-                new UserPostViewModelFactory(uid))
+        userPostsViewModel = ViewModelProviders.of(this, new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
-        userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> {
-            addPostToList(postWrapper, jokes);
-        });
-
+        userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> addPostToList(postWrapper, jokes));
         configureUI();
         return binding.getRoot();
     }
@@ -133,19 +127,12 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
         Post post = postWrapper.getPost();
         if (!jokes.contains(post)) {
             jokes.add(post);
-            jokeAdapter.notifyDataSetChanged();
         } else if (postWrapper.getState() == 2) {
             //if post gets modified
             int index = jokes.indexOf(post);
-            jokes.remove(post);
-            jokes.add(index, post);
-            jokeAdapter.notifyDataSetChanged();
+            jokes.set(index, post);
         }
-        if (!searched) {
-            jokeAdapter.notifyDataSetChanged();
-            configureUI();
-            binding.recyclerView.scrollToPosition(jokes.size() - 1);
-        }
+        jokeAdapter.notifyDataSetChanged();
     }
 
     public void configureFAM() {
@@ -158,7 +145,6 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
 
     @Override
     public void search(String keyword) {
-        Log.i("HUJ", keyword);
         List<Post> searchedPosts = new ArrayList<>();
         userPostsViewModel.getSearchUserPostsLiveData(keyword).observe(this, postWrapper -> {
             addPostToList(postWrapper, searchedPosts);

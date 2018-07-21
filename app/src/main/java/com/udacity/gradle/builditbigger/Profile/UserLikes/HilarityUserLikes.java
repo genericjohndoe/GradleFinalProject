@@ -19,11 +19,14 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Interfaces.EnableSearch;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
+import com.udacity.gradle.builditbigger.Models.PostWrapper;
 import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.Search.SearchDialogFragment;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
@@ -34,14 +37,14 @@ import java.util.List;
  * HilarityUserLikes class shows posts liked by the user
  */
 
-public class HilarityUserLikes extends Fragment {
+public class HilarityUserLikes extends Fragment implements EnableSearch {
     //todo test search
     HideFAB profile;
     JokesAdapter jokeAdapter;
     List<Post> jokes = new ArrayList<>();
     FragmentJokeslistGenrelistBinding binding;
     private String uid;
-    private boolean searched = false;
+    UserLikesViewModel userLikesViewModel;
 
     public static HilarityUserLikes newInstance(String uid, HideFAB profile){
         HilarityUserLikes hilarityUserLikes = new HilarityUserLikes();
@@ -82,7 +85,7 @@ public class HilarityUserLikes extends Fragment {
             }
         });
 
-        UserLikesViewModel userLikesViewModel = ViewModelProviders.of(this, new UserLikesViewModelFactory(uid))
+       userLikesViewModel = ViewModelProviders.of(this, new UserLikesViewModelFactory(uid))
                 .get(UserLikesViewModel.class);
 
         userLikesViewModel.getUserLikesLiveData().observe(this, jokeWrapper -> {
@@ -95,11 +98,6 @@ public class HilarityUserLikes extends Fragment {
                         break;
                 default: jokes.remove(jokeWrapper.getPost());
                          break;
-            }
-            if (!searched) {
-                jokeAdapter.notifyDataSetChanged();
-                configureUI();
-                binding.recyclerView.scrollToPosition(jokes.size() - 1);
             }
         });
         configureUI();
@@ -119,23 +117,7 @@ public class HilarityUserLikes extends Fragment {
     }
 
     public void showSearchDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .customView(R.layout.search, true)
-                .positiveText(R.string.search)
-                .negativeText(R.string.cancel)
-                .onPositive((dialog, which) -> {
-                            searched = true;
-                            View view2 = dialog.getCustomView();
-                            String searchKeyword = ((EditText) view2.findViewById(R.id.search)).getText().toString();
-                            String[] splitSearchKeyword = searchKeyword.split(" |\\,");
-                            List<Post> searches = new ArrayList<>();
-                            jokeAdapter = new JokesAdapter(getActivity(),searches, false);
-                    //go through jokes list, search metadata, if metadata contains search term add 2 new list
-                    //then call setList
-                        }
-                )
-                .onNegative((dialog, which) -> dialog.dismiss())
-                .show().setCanceledOnTouchOutside(false);
+        SearchDialogFragment.getInstance(this).show(getFragmentManager(), getString(R.string.search));
     }
 
     public void configureUI() {
@@ -146,5 +128,36 @@ public class HilarityUserLikes extends Fragment {
             binding.recyclerView.setVisibility(View.VISIBLE);
             binding.noItemImageview.setVisibility(View.GONE);
         }
+    }
+
+    public void addPostToList(PostWrapper postWrapper, List<Post> jokes) {
+        if (!jokeAdapter.getJokes().equals(jokes)) jokeAdapter.setJokes(jokes);
+        Post post = postWrapper.getPost();
+        if (!jokes.contains(post)) {
+            jokes.add(post);
+        } else if (postWrapper.getState() == 2) {
+            //if post gets modified
+            int index = jokes.indexOf(post);
+            jokes.remove(post);
+            jokes.add(index, post);
+        }
+        jokeAdapter.notifyDataSetChanged();
+    }
+
+    public void configureFAM() {
+        profile.getFAM().setVisibility(View.VISIBLE);
+        profile.getFAM().setOnMenuButtonClickListener(view -> {
+            jokeAdapter.setJokes(jokes);
+            profile.getFAM().setVisibility(View.GONE);
+        });
+    }
+
+    @Override
+    public void search(String keyword) {
+        List<Post> searchedPosts = new ArrayList<>();
+        userLikesViewModel.getSearchUserLikesLiveData(keyword).observe(this, postWrapper -> {
+            addPostToList(postWrapper, searchedPosts);
+            configureFAM();
+        });
     }
 }
