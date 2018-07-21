@@ -40,7 +40,6 @@ public class HilarityUserCollections extends Fragment implements EnableSearch {
     private List<Collection> collections;
     private FragmentJokeslistGenrelistBinding binding;
     private String uid;
-    private boolean searched = false;
     private UserCollectionViewModel userCollectionViewModel;
 
     public static HilarityUserCollections newInstance(String uid, HideFAB profile) {

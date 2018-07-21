@@ -48,8 +48,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
             this.bind = bind;
 
             bind.lockImageButton.setOnClickListener(view2-> {
-                    //todo switch between lock and unlock if genre was created by user
-                    //todo after checking if the changes in the database are made
+                    Constants.DATABASE
+                            .child("usercollections/"+collection.getUID()+"/"+collection.getGenreId()+"/restricted")
+                            .setValue(!collection.getRestricted());
             });
             bind.getRoot().setOnClickListener(this);
             bind.getRoot().setTag(this);
