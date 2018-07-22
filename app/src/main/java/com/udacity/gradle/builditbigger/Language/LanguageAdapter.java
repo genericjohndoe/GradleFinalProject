@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Language;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
 
         public LanguageViewHolder(View view) {
             super(view);
-            language = (TextView) view.findViewById(R.id.languages);
+            language =  view.findViewById(R.id.languages);
             view.setOnClickListener(this);
             view.setTag(this);
         }
@@ -49,14 +50,15 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.Langua
         return languages.length;
     }
 
+    @NonNull
     @Override
-    public LanguageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LanguageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.languages, null);
         return new LanguageViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(LanguageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull LanguageViewHolder holder, int position) {
         String language = languages[position];
         holder.language.setText(language);
     }

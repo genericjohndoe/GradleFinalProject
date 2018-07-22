@@ -1,10 +1,9 @@
 package com.udacity.gradle.builditbigger.Messaging.SentMessages;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Messaging.SentMessages.SentMessagesFragment;
 import com.udacity.gradle.builditbigger.R;
 
 public class MessagesActivity extends AppCompatActivity {

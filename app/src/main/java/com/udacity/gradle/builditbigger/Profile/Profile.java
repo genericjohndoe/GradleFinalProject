@@ -2,27 +2,20 @@ package com.udacity.gradle.builditbigger.Profile;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -32,21 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
-import com.udacity.gradle.builditbigger.Interfaces.VideoInfoTransfer;
-import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
-import com.udacity.gradle.builditbigger.Models.HilarityUser;
-import com.udacity.gradle.builditbigger.Models.VideoInfo;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.Profile.UserCollections.HilarityUserCollections;
 import com.udacity.gradle.builditbigger.Profile.UserLikes.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.Profile.UserPosts.HilarityUserJokes;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Settings.UserSettings.UserSettingsActivity;
 import com.udacity.gradle.builditbigger.SubscribersSubsrciptions.SubsActivity;
-import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
 import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
 
@@ -81,7 +67,7 @@ public class Profile extends Fragment implements HideFAB {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_profile,container,false);
 
@@ -95,7 +81,6 @@ public class Profile extends Fragment implements HideFAB {
             public void onPageSelected(int position) {
                 configureFAB(position);
                 FragmentFocusLiveData.getFragmentFocusLiveData().setValue(position);
-                Log.i("position", ""+position);
             }
 
             @Override

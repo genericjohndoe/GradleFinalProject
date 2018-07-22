@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger.Comments;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Comment;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.CommentCellBinding;
-
 
 import java.util.List;
 
@@ -48,14 +48,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         return comments.size();
     }
 
+    @NonNull
     @Override
-    public CommentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CommentCellBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.comment_cell, parent, false);
         return new CommentsViewHolder(bind);
     }
 
     @Override
-    public void onBindViewHolder(CommentsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         final Comment comment = comments.get(position);
 
         Glide.with(context).load(comment.getHilarityUser().getUrlString()).into(holder.bind.profileImageview);
@@ -63,7 +64,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/"+s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
                         Intent intent = new Intent(context, HilarityActivity.class);
                         intent.putExtra("number", 4);
@@ -73,7 +74,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
             return null;
         });

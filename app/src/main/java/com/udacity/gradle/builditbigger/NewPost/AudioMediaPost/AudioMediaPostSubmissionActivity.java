@@ -1,9 +1,9 @@
 package com.udacity.gradle.builditbigger.NewPost.AudioMediaPost;
 
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;

@@ -1,7 +1,5 @@
 package com.udacity.gradle.builditbigger.NewPost.VisualMediaPost;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.util.Log;

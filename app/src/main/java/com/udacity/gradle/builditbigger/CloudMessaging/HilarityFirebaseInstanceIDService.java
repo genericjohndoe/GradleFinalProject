@@ -1,7 +1,5 @@
 package com.udacity.gradle.builditbigger.CloudMessaging;
 
-import android.util.Log;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.udacity.gradle.builditbigger.Constants.Constants;

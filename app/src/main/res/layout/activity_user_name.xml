@@ -72,6 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:clickable="true"
+        android:focusable="true"
         android:text="🇺🇸"
         android:textSize="150sp"
         app:layout_constraintEnd_toEndOf="parent"

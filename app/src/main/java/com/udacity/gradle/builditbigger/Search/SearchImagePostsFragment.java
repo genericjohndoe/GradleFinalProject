@@ -4,6 +4,7 @@ package com.udacity.gradle.builditbigger.Search;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -46,7 +47,7 @@ public class SearchImagePostsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentSearchImagePostsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_image_posts, container, false);

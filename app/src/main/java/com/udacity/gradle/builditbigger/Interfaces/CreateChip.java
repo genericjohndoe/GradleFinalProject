@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger.Interfaces;
 
-import com.udacity.gradle.builditbigger.Messaging.ComposeMessage.ComposeMessageFragment;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
 import java.util.List;

@@ -4,11 +4,9 @@ package com.udacity.gradle.builditbigger.Forums.CreateQuestion;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +33,7 @@ public class NewQuestionFragment extends Fragment {
      * @return A new instance of fragment NewQuestionFragment.
      */
     public static NewQuestionFragment newInstance() {
-        NewQuestionFragment fragment = new NewQuestionFragment();
-        return fragment;
+        return new NewQuestionFragment();
     }
 
     @Override
@@ -45,7 +42,7 @@ public class NewQuestionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentNewQuestionBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_question, container, false);
         bind.questionEditText.requestFocus();

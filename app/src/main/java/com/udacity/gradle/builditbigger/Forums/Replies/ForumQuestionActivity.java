@@ -1,7 +1,7 @@
 package com.udacity.gradle.builditbigger.Forums.Replies;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.udacity.gradle.builditbigger.Models.ForumQuestion;
 import com.udacity.gradle.builditbigger.R;

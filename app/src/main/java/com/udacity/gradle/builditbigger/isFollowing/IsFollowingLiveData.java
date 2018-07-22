@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.isFollowing;
 
 import android.arch.lifecycle.LiveData;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +25,7 @@ public class IsFollowingLiveData extends LiveData<Boolean> {
         public void onDataChange(DataSnapshot dataSnapshot) {setValue(dataSnapshot.exists());}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {}
+        public void onCancelled(@NonNull DatabaseError databaseError) {}
     };
 
     @Override

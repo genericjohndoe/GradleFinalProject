@@ -9,7 +9,6 @@ import android.graphics.RectF;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 
 public class OverlayWithHoleImageView extends AppCompatImageView {
     private RectF circleRect;

@@ -11,9 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -181,7 +179,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
                 Constants.DATABASE.child("transcriptpreviews/" + Constants.UID + "/" + path)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     Constants.DATABASE.child("transcriptpreviews/" + Constants.UID + "/" + path + "/message")
                                             .setValue(message);
@@ -192,7 +190,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
                             }
                         });
                 Intent intent = new Intent(getActivity(), TranscriptActivity.class);

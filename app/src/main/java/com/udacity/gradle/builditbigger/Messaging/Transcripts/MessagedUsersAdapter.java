@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,17 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
-import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.MessagedUserCellBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,14 +36,15 @@ public class MessagedUsersAdapter extends RecyclerView.Adapter<MessagedUsersAdap
     }
 
     @Override
-    public void onBindViewHolder(MessagedUserViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MessagedUserViewHolder holder, int position) {
         Glide.with(context).load(hilarityUsers.get(position).getUrlString()).into(holder.bind.profileImageview);
         Log.i("HilarityMessage12", "position "+position);
         holder.uid = hilarityUsers.get(position).getUid();
     }
 
+    @NonNull
     @Override
-    public MessagedUserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MessagedUserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         MessagedUserCellBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.messaged_user_cell, parent, false);
         Log.i("HilarityMessage12", "view holder made");
         return new MessagedUserViewHolder(bind);

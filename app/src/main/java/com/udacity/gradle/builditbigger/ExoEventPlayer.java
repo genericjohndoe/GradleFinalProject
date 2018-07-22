@@ -1,8 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -12,9 +10,6 @@ import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Models.VideoInfo;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModel;
-import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 
 /**
  * class reacts to changes in state of video

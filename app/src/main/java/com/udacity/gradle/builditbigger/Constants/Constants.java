@@ -2,8 +2,6 @@ package com.udacity.gradle.builditbigger.Constants;
 
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -40,8 +38,7 @@ public class Constants {
     public static String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
+        return df.format(c.getTime());
     }
 
     public static CharSequence formattedTimeString(Context context, long timeInMillis){

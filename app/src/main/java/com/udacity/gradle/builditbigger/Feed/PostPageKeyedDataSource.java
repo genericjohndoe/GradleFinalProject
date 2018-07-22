@@ -11,7 +11,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Post;
-import com.udacity.gradle.builditbigger.Models.PostWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +27,21 @@ public class PostPageKeyedDataSource extends PageKeyedDataSource<String, Post> {
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
             //setValue(new PostWrapper(dataSnapshot.getValue(Post.class),2));
         }
 
         @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
             //setValue(new PostWrapper(dataSnapshot.getValue(Post.class),3));
         }
 
         @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
+        public void onCancelled(@NonNull DatabaseError databaseError) {
         }
     };
     private int currentPage;

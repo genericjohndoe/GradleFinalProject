@@ -5,24 +5,17 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesActivity;
 import com.udacity.gradle.builditbigger.Models.Collection;
-
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.GenreTextViewBinding;
 
 import java.util.List;
-
-import javax.annotation.Nonnull;
 
 /**
  * CLASS FOR STYLING collection for recyclerview
@@ -30,8 +23,8 @@ import javax.annotation.Nonnull;
 
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
 
-    Context context;
-    List<Collection> collections;
+    private Context context;
+    private List<Collection> collections;
 
 
     public CollectionAdapter(Context context, List<Collection> collections) {

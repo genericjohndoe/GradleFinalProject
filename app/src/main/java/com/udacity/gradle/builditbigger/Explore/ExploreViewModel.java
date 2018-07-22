@@ -1,7 +1,6 @@
 package com.udacity.gradle.builditbigger.Explore;
 
 import android.arch.lifecycle.ViewModel;
-import android.content.Context;
 
 /**
  * class provides all posts to fragment

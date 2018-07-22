@@ -124,7 +124,6 @@
                 <action android:name="com.udacity.gradle.builditbigger.ACTION_MESSAGE" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewPost.NewPostActivity" />
         <activity
             android:name=".Messaging.ComposeMessage.ComposeMessageActivity"
             android:parentActivityName=".Messaging.SentMessages.MessagesActivity" />

@@ -117,7 +117,7 @@ public class Post implements Parcelable {
 
     @Override
     public boolean equals(Object object){
-        return pushId.equals(((Post) object).getPushId());
+        return (object instanceof Post) && pushId.equals(((Post) object).getPushId());
     }
 
     @Override

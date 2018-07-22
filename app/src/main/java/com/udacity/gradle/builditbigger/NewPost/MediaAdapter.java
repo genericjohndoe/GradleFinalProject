@@ -1,12 +1,10 @@
 package com.udacity.gradle.builditbigger.NewPost;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,14 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.Interfaces.ReturnMediaResult;
-import com.udacity.gradle.builditbigger.NewPost.GifPost.NewGifSubmissionActivity;
-import com.udacity.gradle.builditbigger.NewPost.ImagePost.ImagePostSubmissionActivity;
-import com.udacity.gradle.builditbigger.NewPost.ImagePost.NewImageSubmission;
-import com.udacity.gradle.builditbigger.NewPost.VideoPost.NewVideoSubmission;
-import com.udacity.gradle.builditbigger.NewPost.VideoPost.VideoPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.R;
 
 import java.io.File;
@@ -53,15 +45,16 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         this.creator = creator;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.gallery_imageview, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         cursor.moveToPosition(position);
         String path = cursor.getString(0);
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();

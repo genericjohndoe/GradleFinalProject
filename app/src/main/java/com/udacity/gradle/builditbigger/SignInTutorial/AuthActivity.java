@@ -1,9 +1,9 @@
 package com.udacity.gradle.builditbigger.SignInTutorial;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.CircularPropagation;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,7 +58,7 @@ public class AuthActivity extends AppCompatActivity {
         Constants.UID = user.getUid();
         Constants.DATABASE.child("users/" + Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Constants.USER = dataSnapshot.getValue(HilarityUser.class);
                 if (Constants.USER != null) {
                     startActivity(new Intent(getBaseContext(), HilarityActivity.class));
@@ -68,7 +68,7 @@ public class AuthActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 }

@@ -53,6 +53,7 @@
     <string name="add_new_langauge">Add new languages</string>
     <string name="posts">posts</string>
     <string name="search">Search</string>
+    <string name="user">user</string>
 
 
     <string name="uid" translatable="false">uid</string>

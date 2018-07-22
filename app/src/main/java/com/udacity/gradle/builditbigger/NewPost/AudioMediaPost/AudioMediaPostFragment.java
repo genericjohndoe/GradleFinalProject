@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.NewPost.AudioMediaPost;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -25,8 +26,6 @@ import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentAudioMediaPostBinding;
-
-import android.Manifest;
 
 import java.io.IOException;
 
@@ -73,7 +72,7 @@ public class AudioMediaPostFragment extends Fragment implements LoaderManager.Lo
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentAudioMediaPostBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_audio_media_post, container, false);
 

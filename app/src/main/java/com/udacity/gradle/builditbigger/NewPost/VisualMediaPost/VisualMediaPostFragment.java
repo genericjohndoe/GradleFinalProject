@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -25,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
-import android.widget.Chronometer;
 
 import com.esp.videotogifconverter.VideoToGifConverter;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
@@ -34,10 +30,8 @@ import com.udacity.gradle.builditbigger.NewPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostBinding;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,7 +81,7 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentVisualMediaPostBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_visual_media_post, container, false);
         bind.recyclerView.setAdapter(mediaAdapter);

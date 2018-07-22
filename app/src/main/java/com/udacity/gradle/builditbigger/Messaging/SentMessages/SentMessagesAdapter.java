@@ -45,15 +45,15 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
     public void onBindViewHolder(@NonNull SentMessagesViewHolder holder, int position) {
         TranscriptPreview preview = transcriptPreviews.get(position);
         holder.preview = preview;
-        String userName = "";
+        StringBuilder userName = new StringBuilder();
         for (HilarityUser user: preview.getConversationalists()){
             if (!user.equals(Constants.USER)){
-                userName += user.getUserName() + " ";
+                userName.append(user.getUserName()).append(" ");
             }
         }
         if (preview != null) {
             holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, preview.getMessage().getTimeStamp()));
-            holder.binding.userNameTextView.setText(userName);
+            holder.binding.userNameTextView.setText(userName.toString());
             Glide.with(context).load(preview.getMessage().getHilarityUser().getUrlString()).into(holder.binding.profileImageview);
             String text = (preview.getMessage().getContents().size() == 1) ? preview.getMessage().getContents().get(0) : "Image Sent";
             holder.binding.lastMessageTextView.setText(text);

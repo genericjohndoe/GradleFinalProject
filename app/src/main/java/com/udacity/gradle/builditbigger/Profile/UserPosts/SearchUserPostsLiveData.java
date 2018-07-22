@@ -1,11 +1,11 @@
 package com.udacity.gradle.builditbigger.Profile.UserPosts;
 
 import android.arch.lifecycle.LiveData;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Post;
@@ -30,16 +30,16 @@ public class SearchUserPostsLiveData extends LiveData<PostWrapper> {
         }
 
         @Override
-        public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onChildRemoved(DataSnapshot dataSnapshot) {}
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
 
         @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {}
+        public void onCancelled(@NonNull DatabaseError databaseError) {}
     };
 
     @Override

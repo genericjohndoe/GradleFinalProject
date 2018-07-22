@@ -1,9 +1,9 @@
 package com.udacity.gradle.builditbigger.Settings.NotificationSettings;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.Settings.UserSettings.UserSettingsFragment;
 
 public class NotificationSettingsActivity extends AppCompatActivity {
 

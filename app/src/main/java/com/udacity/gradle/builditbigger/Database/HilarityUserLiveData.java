@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.Database;
 
 import android.arch.lifecycle.LiveData;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -40,10 +41,10 @@ public class HilarityUserLiveData extends LiveData {
         }
 
         @Override
-        public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {}
+        public void onCancelled(@NonNull DatabaseError databaseError) {}
     };
 
     @Override

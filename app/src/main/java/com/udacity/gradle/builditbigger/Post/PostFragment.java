@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger.Post;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,14 +36,14 @@ public class PostFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_joke, container, false);
 
-        jokeBody = (TextView) rootView.findViewById(R.id.joke_body);
-        jokeTitle = (TextView) rootView.findViewById(R.id.joke_title);
-        userName = (TextView) rootView.findViewById(R.id.joke_author);
+        jokeBody = rootView.findViewById(R.id.joke_body);
+        jokeTitle = rootView.findViewById(R.id.joke_title);
+        userName = rootView.findViewById(R.id.joke_author);
 
         jokeBody.setText(body);
         jokeTitle.setText(title);

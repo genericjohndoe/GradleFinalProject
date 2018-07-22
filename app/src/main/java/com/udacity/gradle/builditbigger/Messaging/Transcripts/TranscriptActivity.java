@@ -1,13 +1,9 @@
 package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Messaging.SentMessages.MessagesActivity;
-import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
-import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
 public class TranscriptActivity extends AppCompatActivity {

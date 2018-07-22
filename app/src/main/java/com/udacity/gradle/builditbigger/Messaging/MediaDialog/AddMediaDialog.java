@@ -2,7 +2,6 @@ package com.udacity.gradle.builditbigger.Messaging.MediaDialog;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;

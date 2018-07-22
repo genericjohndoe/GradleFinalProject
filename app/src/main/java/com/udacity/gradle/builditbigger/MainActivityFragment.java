@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +45,7 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerview = root.findViewById(R.id.languages_recyclerview);
@@ -66,7 +67,7 @@ public class MainActivityFragment extends Fragment implements RecyclerViewCallba
         languageList.add(item);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putStringSet(getString(R.string.preference_saved_languages_set), new HashSet<String>(languageList));
+        editor.putStringSet(getString(R.string.preference_saved_languages_set), new HashSet<>(languageList));
         if (editor.commit()) {
             Toast toast = Toast.makeText(getActivity(), "language added", Toast.LENGTH_SHORT);
             toast.show();

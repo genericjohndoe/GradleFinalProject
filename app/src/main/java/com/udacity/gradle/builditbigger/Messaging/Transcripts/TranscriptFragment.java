@@ -1,18 +1,17 @@
 package com.udacity.gradle.builditbigger.Messaging.Transcripts;
 
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +24,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.ActivityForResult;
 import com.udacity.gradle.builditbigger.Interfaces.IntentCreator;
-import com.udacity.gradle.builditbigger.Messaging.MediaDialog.AddMediaDialog;
 import com.udacity.gradle.builditbigger.Messaging.MediaDialog.ChooseMediaDialog;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.Models.Message;
-import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 import com.udacity.gradle.builditbigger.NewPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentTranscriptBinding;
@@ -72,12 +69,12 @@ public class TranscriptFragment extends Fragment implements IntentCreator, Activ
         for (String uid: usersUidList){
             Constants.DATABASE.child("users/"+uid).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     hilarityUsers.add(dataSnapshot.getValue(HilarityUser.class));
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
         }
 
@@ -85,7 +82,7 @@ public class TranscriptFragment extends Fragment implements IntentCreator, Activ
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_transcript,container,false);
         //shows horizontal list of users
         bind.usersRecyclerView.setAdapter(new MessagedUsersAdapter(hilarityUsers, getActivity()));

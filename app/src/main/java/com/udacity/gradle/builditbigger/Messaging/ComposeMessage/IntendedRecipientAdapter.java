@@ -19,7 +19,6 @@ import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.MessagedUserCellBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IntendedRecipientAdapter extends RecyclerView.Adapter {

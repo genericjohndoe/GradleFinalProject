@@ -8,7 +8,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -350,12 +349,9 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
 
     private void showToast(final String text) {
         if (fragment.getActivity() != null) {
-            fragment.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            fragment.getActivity().runOnUiThread(() -> {
                     Toast.makeText(fragment.getActivity(), text, Toast.LENGTH_SHORT).show();
-                }
-            });
+                });
         }
     }
 
@@ -599,7 +595,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
             mFlashSupported = available == null ? false : available;
 
             mCameraId = cameraId;
-            return;
+            //return;
         } catch (CameraAccessException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
@@ -673,15 +669,13 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
         } catch (CameraAccessException e) {
             Toast.makeText(fragment.getActivity(), "Cannot access the camera.", Toast.LENGTH_SHORT).show();
             fragment.getActivity().finish();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | SecurityException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
             //ErrorDialog.newInstance(getString(R.string.camera_error))
             //        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.");
-        } catch (SecurityException e) {
-
         }
     }
 
@@ -1034,16 +1028,13 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                     mCaptureSession = cameraCaptureSession;
                     updatePreview();
-                    fragment.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    fragment.getActivity().runOnUiThread(() -> {
                             // UI
                             //mButtonVideo.setText(R.string.stop);
                             mIsRecordingVideo = true;
 
                             // Start recording
                             mMediaRecorder.start();
-                        }
                     });
                 }
 
@@ -1152,8 +1143,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     private String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
+        return df.format(c.getTime());
     }
 
     public static void makeFileAvailible(File file) {

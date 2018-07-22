@@ -2,17 +2,15 @@ package com.udacity.gradle.builditbigger.Forums.Questions;
 
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.udacity.gradle.builditbigger.Forums.CreateQuestion.NewQuestionActivity;
 import com.udacity.gradle.builditbigger.Forums.ForumQuestionsViewModel;
@@ -47,7 +45,7 @@ public class ForumFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentForumBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_forum, container, false);
         List<ForumQuestion> forumQuestions = new ArrayList<>();
@@ -62,9 +60,7 @@ public class ForumFragment extends Fragment {
                 forumQuestionAdapter.notifyDataSetChanged();
             }
         });
-        bind.fab.setOnClickListener(view ->{
-            startActivity(new Intent(getActivity(), NewQuestionActivity.class));
-        });
+        bind.fab.setOnClickListener(view -> startActivity(new Intent(getActivity(), NewQuestionActivity.class)));
         return bind.getRoot();
     }
 

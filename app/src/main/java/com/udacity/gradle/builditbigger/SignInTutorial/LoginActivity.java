@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger.SignInTutorial;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -218,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
         Constants.UID = user.getUid();
         Constants.DATABASE.child("users/" + Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Constants.USER = dataSnapshot.getValue(HilarityUser.class);
                 if (Constants.USER != null) {
                     startActivity(new Intent(LoginActivity.this, HilarityActivity.class));
@@ -228,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 

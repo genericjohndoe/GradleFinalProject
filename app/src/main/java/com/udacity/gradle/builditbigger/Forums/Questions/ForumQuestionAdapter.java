@@ -15,8 +15,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Forums.Replies.ForumQuestionActivity;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Models.ForumQuestion;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.CellForumQuestionBinding;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Intent intent = new Intent(context, HilarityActivity.class);
                     intent.putExtra("uid", dataSnapshot.getValue(String.class));
                     intent.putExtra("number", 4);
@@ -59,7 +59,7 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
             return null;
         });

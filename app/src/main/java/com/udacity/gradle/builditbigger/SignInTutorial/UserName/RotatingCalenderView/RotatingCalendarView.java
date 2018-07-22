@@ -7,10 +7,8 @@ import android.graphics.Paint;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import com.udacity.gradle.builditbigger.R;
 
 public class RotatingCalendarView extends View {
 

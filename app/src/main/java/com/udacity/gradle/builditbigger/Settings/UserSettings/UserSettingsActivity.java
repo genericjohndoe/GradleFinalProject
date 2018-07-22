@@ -3,7 +3,6 @@ package com.udacity.gradle.builditbigger.Settings.UserSettings;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-
 import com.udacity.gradle.builditbigger.R;
 
 public class UserSettingsActivity extends AppCompatActivity {

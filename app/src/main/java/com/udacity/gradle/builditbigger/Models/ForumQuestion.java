@@ -2,7 +2,6 @@ package com.udacity.gradle.builditbigger.Models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 /**
  * Created by joeljohnson on 3/31/18.

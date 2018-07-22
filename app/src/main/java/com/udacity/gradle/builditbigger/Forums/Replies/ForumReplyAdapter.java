@@ -11,16 +11,13 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.functions.FirebaseFunctions;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.ForumReply;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.CellForumReplyBinding;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by joeljohnson on 3/31/18.
@@ -31,7 +28,7 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
     private Context context;
     private String key;
 
-    public ForumReplyAdapter(List<ForumReply> forumReplies, Context context, String key){
+    public ForumReplyAdapter(List<ForumReply> forumReplies, Context context, String key) {
         this.forumReplies = forumReplies;
         this.context = context;
         this.key = key;
@@ -49,11 +46,11 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
         ForumReply forumReply = forumReplies.get(position);
         holder.forumReply = forumReply;
         holder.bind.replyTextView.setText(forumReply.getContent());
-        holder.bind.userNameTextView.setText("@"+forumReply.getHilarityUser().getUserName());
+        holder.bind.userNameTextView.setText("@" + forumReply.getHilarityUser().getUserName());
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Intent intent = new Intent(context, HilarityActivity.class);
                     intent.putExtra("uid", dataSnapshot.getValue(String.class));
                     intent.putExtra("number", 4);
@@ -61,7 +58,8 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
             });
             return null;
         });
@@ -77,17 +75,16 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
         CellForumReplyBinding bind;
         ForumReply forumReply;
 
-        public ForumReplyViewHolder(CellForumReplyBinding bind){
+        public ForumReplyViewHolder(CellForumReplyBinding bind) {
             super(bind.getRoot());
             this.bind = bind;
-            bind.deleteButton.setOnClickListener(view -> {
-                Constants.DATABASE.child("forumreplies/"+key+"/"+forumReply.getKey()).removeValue((databaseError, databaseReference) -> {
-                    if (databaseError == null) {
-                        forumReplies.remove(forumReply);
-                        notifyDataSetChanged();
-                    }
-                });
-            });
+            bind.deleteButton.setOnClickListener(view -> Constants.DATABASE.child("forumreplies/" + key + "/" + forumReply.getKey())
+                    .removeValue((databaseError, databaseReference) -> {
+                        if (databaseError == null) {
+                            forumReplies.remove(forumReply);
+                            notifyDataSetChanged();
+                        }
+                    }));
         }
     }
 }

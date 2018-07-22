@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger.NewPost.TextPost;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
+import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostBinding;
-import com.udacity.gradle.builditbigger.Models.Post;
 
 import jp.wasabeef.richeditor.RichEditorToolBar;
 
@@ -58,7 +59,7 @@ public class NewTextPostEditFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_text_post, container, false);
         if (post != null) {
             Log.i("iefioejwfw", "post isn't null");
@@ -97,7 +98,7 @@ public class NewTextPostEditFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         if (saved) {
             post.setJokeTitle(bind.titleEditText.getText().toString());
             post.setJokeBody(bind.bodyEditText.getHtml());

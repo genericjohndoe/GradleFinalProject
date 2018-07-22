@@ -1,10 +1,9 @@
 package com.udacity.gradle.builditbigger.Messaging.ComposeMessage;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
-import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptFragment;
 import com.udacity.gradle.builditbigger.R;
 
 public class ComposeMessageActivity extends AppCompatActivity {

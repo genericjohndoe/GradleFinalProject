@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
-import com.udacity.gradle.builditbigger.Profile.Profile;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.SubsItemBinding;
 import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
@@ -38,14 +37,15 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public SubsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SubsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         SubsItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.subs_item, parent, false);
         return new SubsViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(final SubsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final SubsViewHolder holder, int position) {
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         Glide.with(context).load(subscribersList.get(position).getUrlString()).into(holder.binding.subsProfileImageview);
         holder.binding.usernameTextView.setText(subscribersList.get(position).getUserName());
@@ -116,19 +116,19 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder
     }
 
     @Override
-    public void onViewAttachedToWindow(SubsViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull SubsViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
     }
 
     @Override
-    public void onViewDetachedFromWindow(SubsViewHolder holder) {
+    public void onViewDetachedFromWindow(@NonNull SubsViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
     }
 
     @Override
-    public void onViewRecycled(SubsViewHolder holder) {
+    public void onViewRecycled(@NonNull SubsViewHolder holder) {
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
         super.onViewRecycled(holder);
     }
