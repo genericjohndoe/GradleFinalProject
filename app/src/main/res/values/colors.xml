@@ -1,35 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="theme_accent">#04561A</color>
-    <color name="theme_primary">#04561A</color>
-    <color name="theme_primary_dark">#04561A</color>
     <color name="primary">#031325</color>
-    <color name="primary_dark">#000000</color>
     <color name="dark_gray">#cfcfcf</color>
     <color name="white">#ffffff</color>
     <color name="accent">#2cb71a</color>
     <color name="colorPrimary">#04561A</color>
-    <color name="fui_bgEmail">#D0021B</color>
     <color name="colorAccent">#2cb71a</color>
 
 
-    <color name="material_green_50">#E8F5E9</color>
-    <color name="material_green_500">#4CAF50</color>
-    <color name="material_green_700">#388E3C</color>
-    <color name="material_green_a200">#69F0AE</color>
-    <color name="material_lime_a700">#AEEA00</color>
-    <color name="material_purple_a700">#AA00FF</color>
-
     <color name="black_overlay">#0a000000</color>
-
-    <color name="green_background">#18736E</color>
-    <color name="green_expanded_toolbar" >#308B87</color>
-    <color name="green_1">#63BDB1</color>
-    <color name="green_2">#16D7CC</color>
-    <color name="green_3">#94EDE8</color>
-    <color name="green_4">#CDF8F5</color>
-    <color name="green_5">#E3FFFD</color>
 
     <color name="black">#031A11</color>
     <color name="green_black_1">#052619</color>
@@ -38,17 +18,5 @@
     <color name="green_8">#369F77</color>
     <color name="green_9">#64369f77</color>
 
-    <color name="wheel_0">#33004c</color>
-    <color name="wheel_1">#4600d2</color>
-    <color name="wheel_2">#0000ff</color>
-    <color name="wheel_3">#0099ff</color>
-    <color name="wheel_4">#00eeff</color>
-    <color name="wheel_5">#00FF7F</color>
-    <color name="wheel_6">#48FF00</color>
-    <color name="wheel_7">#B6FF00</color>
-    <color name="wheel_8">#FFD700</color>
-    <color name="wheel_9">#ff9500</color>
-    <color name="wheel_10">#FF6200</color>
-    <color name="wheel_11">#FF0000</color>
     <color name="pink">#FFD7FF</color>
 </resources>
