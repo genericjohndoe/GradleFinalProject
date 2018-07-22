@@ -67,6 +67,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         if (!isAudio) {
             Glide.with(context).load(getVisualMediaTypeDrawable(path,mmr))
                     .into(holder.type);
+            holder.type.setContentDescription(getVisualMediaContentDescription(path,mmr));
         }
 
         Glide.with(context).load(isAudio ? mmr.getEmbeddedPicture() : new File(path))
@@ -115,6 +116,16 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             return R.drawable.ic_menu_camera;
         } else {
             return R.drawable.ic_videocam_white_24dp;
+        }
+    }
+
+    private String getVisualMediaContentDescription(String path, MediaMetadataRetriever mmr){
+        if (path.contains(".gif")) return context.getString(R.string.gif);
+        String isVideo = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO);
+        if (isVideo == null) {
+            return context.getString(R.string.photo);
+        } else {
+            return context.getString(R.string.video);
         }
     }
 }

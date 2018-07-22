@@ -10,7 +10,8 @@
         android:src="@drawable/ic_add_black_24dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:id="@+id/new_message_imagebutton"/>
+        android:id="@+id/new_message_imagebutton"
+        android:contentDescription="@string/send_new_message"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

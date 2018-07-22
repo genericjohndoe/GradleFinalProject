@@ -30,7 +30,8 @@
         app:layout_constraintBottom_toTopOf="@+id/audio_recyclerView"
         app:layout_constraintEnd_toStartOf="@+id/pauseButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/stopButton" />
+        app:layout_constraintStart_toEndOf="@+id/stopButton"
+        android:contentDescription="@string/start_recording"/>
 
     <ImageButton
         android:id="@+id/pauseButton"
@@ -43,7 +44,8 @@
         app:layout_constraintBottom_toTopOf="@+id/audio_recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/recordButton" />
+        app:layout_constraintStart_toEndOf="@+id/recordButton"
+        android:contentDescription="@string/pause_recording"/>
 
     <ImageButton
         android:id="@+id/stopButton"
@@ -56,7 +58,8 @@
         app:layout_constraintBottom_toTopOf="@+id/audio_recyclerView"
         app:layout_constraintEnd_toStartOf="@+id/recordButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/stop_recording"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/audio_recyclerView"

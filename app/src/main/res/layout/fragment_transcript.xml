@@ -57,7 +57,8 @@
             android:src="@drawable/add_media"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/send_media_message"/>
 
         <ImageButton
             android:id="@+id/send_button"
@@ -68,7 +69,8 @@
             android:src="@drawable/baseline_send_24px"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/send_message"/>
 
 
     </android.support.constraint.ConstraintLayout>

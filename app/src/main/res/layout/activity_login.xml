@@ -66,6 +66,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/fui_ic_googleg_color_24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/password_editText"
+        android:contentDescription="@string/google_sigin_cd"/>
 
 </android.support.constraint.ConstraintLayout>

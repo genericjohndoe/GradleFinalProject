@@ -39,7 +39,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_do_not_disturb_black_24dp" />
+                app:srcCompat="@drawable/ic_do_not_disturb_black_24dp"
+                android:contentDescription="@string/no_posts_cd"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab"

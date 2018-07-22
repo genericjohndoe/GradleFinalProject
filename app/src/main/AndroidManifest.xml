@@ -128,14 +128,11 @@
             android:name=".Messaging.ComposeMessage.ComposeMessageActivity"
             android:parentActivityName=".Messaging.SentMessages.MessagesActivity" />
         <activity android:name=".NewPost.TextPost.TextPostSubmissionActivity" />
-        <activity android:name=".NewPost.ImagePost.ImagePostSubmissionActivity" />
-        <activity android:name=".NewPost.VideoPost.VideoPostSubmissionActivity" />
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Comments.CommentActivity" />
         <activity
             android:name=".SubscribersSubsrciptions.SubsActivity"
             android:parentActivityName=".MainUI.HilarityActivity" />
-        <activity android:name=".NewPost.GifPost.NewGifSubmissionActivity" />
         <activity
             android:name=".SignIn_Onboarding.AuthActivity"
             android:noHistory="true">

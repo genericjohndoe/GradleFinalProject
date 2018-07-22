@@ -35,7 +35,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textureview" />
+            app:layout_constraintTop_toBottomOf="@+id/textureview"
+            android:contentDescription="@string/take_picture_cd"/>
 
         <ImageButton
             android:id="@+id/switch_camera_imageButton"
@@ -47,7 +48,8 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_switch_camera_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/switch_camera_cd"/>
 
         <ImageButton
             android:id="@+id/gallery_imageButton"
@@ -59,7 +61,8 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_menu_gallery"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/gallery_cd"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

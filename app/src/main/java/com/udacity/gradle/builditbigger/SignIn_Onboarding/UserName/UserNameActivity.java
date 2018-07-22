@@ -41,9 +41,11 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
                 Constants.FIRESTORE.collection("users").whereEqualTo("userName", userName).get().addOnSuccessListener(queryDocumentSnapshots -> {
                    if (queryDocumentSnapshots.getDocuments().size() == 0 && !userName.contains(" ") && !userName.equals("")){
                        imageView.setBackground(getDrawable(R.drawable.ic_check_24dp));
+                       imageView.setContentDescription(getString(R.string.user_name_valid));
                        proceed = true;
                    } else {
                        imageView.setBackground(getDrawable(R.drawable.ic_close_24dp));
+                       imageView.setContentDescription(getString(R.string.user_name_invalid));
                        proceed = false;
                    }
                 });

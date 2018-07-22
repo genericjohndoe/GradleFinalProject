@@ -24,7 +24,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Text"
                 android:textAppearance="@android:style/TextAppearance.Material.Display2"
                 android:textColor="@color/green_6"
                 android:textSize="20sp"
@@ -41,7 +40,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_lock_open_black_24dp" />
+                app:srcCompat="@drawable/ic_lock_open_black_24dp"
+                android:contentDescription="@string/change_collection_restriction_cd"/>
 
             <Button
                 android:id="@+id/subscribe_button"

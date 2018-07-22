@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/add_media_imagebutton"
             android:src="@drawable/add_media"
-            android:background="@null" />
+            android:background="@null"
+            android:contentDescription="@string/send_media_message"/>
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -45,7 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:background="@null"
-            android:src="@drawable/baseline_send_24px"/>
+            android:src="@drawable/baseline_send_24px"
+            android:contentDescription="@string/send_message"/>
     </LinearLayout>
 
 </LinearLayout>
