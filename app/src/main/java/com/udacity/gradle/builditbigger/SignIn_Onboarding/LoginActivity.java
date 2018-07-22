@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.SignInTutorial;
+package com.udacity.gradle.builditbigger.SignIn_Onboarding;
 
 import android.content.Intent;
 import android.content.IntentSender;
@@ -35,7 +35,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.SignInTutorial.UserName.UserNameActivity;
+import com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.UserNameActivity;
 
 /**
  * A login screen that offers login via email/password.

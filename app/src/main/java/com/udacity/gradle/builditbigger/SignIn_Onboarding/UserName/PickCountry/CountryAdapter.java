@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.SignInTutorial.UserName.PickCountry;
+package com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.PickCountry;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

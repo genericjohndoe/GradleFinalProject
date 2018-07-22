@@ -20,8 +20,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.SetFlag;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.SignInTutorial.ProfilePicture.ProfilePictureActivity;
-import com.udacity.gradle.builditbigger.SignInTutorial.UserName.PickCountry.CountriesPopUpDialogFragment;
+import com.udacity.gradle.builditbigger.SignIn_Onboarding.ProfilePicture.ProfilePictureActivity;
+import com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.PickCountry.CountriesPopUpDialogFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentUserSettingsBinding;
 
 /**

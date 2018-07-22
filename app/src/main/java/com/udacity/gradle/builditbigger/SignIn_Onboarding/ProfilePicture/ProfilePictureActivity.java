@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.SignInTutorial.ProfilePicture;
+package com.udacity.gradle.builditbigger.SignIn_Onboarding.ProfilePicture;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

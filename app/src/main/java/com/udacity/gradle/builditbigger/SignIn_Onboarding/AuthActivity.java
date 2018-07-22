@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.SignInTutorial;
+package com.udacity.gradle.builditbigger.SignIn_Onboarding;
 
 import android.content.Intent;
 import android.os.Bundle;

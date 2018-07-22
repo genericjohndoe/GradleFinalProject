@@ -36,7 +36,7 @@ import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlView
 import com.udacity.gradle.builditbigger.Profile.UserPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.Settings.SettingsFragment;
-import com.udacity.gradle.builditbigger.SignInTutorial.LoginActivity;
+import com.udacity.gradle.builditbigger.SignIn_Onboarding.LoginActivity;
 
 /**
  * shows pertinent information to the user

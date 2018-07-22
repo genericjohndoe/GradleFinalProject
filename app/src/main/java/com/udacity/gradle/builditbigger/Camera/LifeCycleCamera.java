@@ -48,7 +48,7 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import com.udacity.gradle.builditbigger.NewPost.VisualMediaPost.VisualMediaPostFragment;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.SignInTutorial.ProfilePicture.ProfilePictureFragment;
+import com.udacity.gradle.builditbigger.SignIn_Onboarding.ProfilePicture.ProfilePictureFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;

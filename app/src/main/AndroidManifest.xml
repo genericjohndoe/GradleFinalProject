@@ -97,11 +97,11 @@
         </service>
 
         <activity
-            android:name=".SignInTutorial.LoginActivity"
+            android:name=".SignIn_Onboarding.LoginActivity"
             android:label="@string/title_activity_login"
             android:noHistory="true" />
         <activity
-            android:name=".SignInTutorial.UserName.UserNameActivity"
+            android:name=".SignIn_Onboarding.UserName.UserNameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_user_name"
             android:noHistory="true"
@@ -137,7 +137,7 @@
             android:parentActivityName=".MainUI.HilarityActivity" />
         <activity android:name=".NewPost.GifPost.NewGifSubmissionActivity" />
         <activity
-            android:name=".SignInTutorial.AuthActivity"
+            android:name=".SignIn_Onboarding.AuthActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -176,7 +176,7 @@
         <activity android:name=".NewPost.AudioMediaPost.AudioMediaPostSubmissionActivity" />
         <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity" />
         <activity android:name=".ReportPost.ReportActivity" />
-        <activity android:name=".SignInTutorial.ProfilePicture.ProfilePictureActivity">
+        <activity android:name=".SignIn_Onboarding.ProfilePicture.ProfilePictureActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

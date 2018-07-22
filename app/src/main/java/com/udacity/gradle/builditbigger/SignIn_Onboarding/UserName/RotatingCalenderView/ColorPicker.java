@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.SignInTutorial.UserName.RotatingCalenderView;
+package com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.RotatingCalenderView;
 
 import android.content.Context;
 import android.content.res.TypedArray;

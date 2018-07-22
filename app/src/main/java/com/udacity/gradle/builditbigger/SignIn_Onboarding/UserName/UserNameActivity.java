@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.SignInTutorial.UserName;
+package com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import com.udacity.gradle.builditbigger.Interfaces.SetFlag;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.SignInTutorial.UserName.PickCountry.CountriesPopUpDialogFragment;
+import com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.PickCountry.CountriesPopUpDialogFragment;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

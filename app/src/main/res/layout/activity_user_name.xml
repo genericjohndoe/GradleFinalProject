@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context="com.udacity.gradle.builditbigger.SignInTutorial.UserName.UserNameActivity">
+    tools:context="com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.UserNameActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -80,7 +80,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_name_editText" />
 
-    <com.udacity.gradle.builditbigger.SignInTutorial.UserName.RotatingCalenderView.RotatingCalendarView
+    <com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.RotatingCalenderView.RotatingCalendarView
         android:id="@+id/rotatingCalendarView2"
         android:layout_width="160dp"
         android:layout_height="160dp"
