@@ -51,7 +51,7 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:background="@drawable/button_border"
-                android:text="Subscribe"
+                android:text="@string/subscribe"
                 android:textColor="@color/green_6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/lock_imageButton"

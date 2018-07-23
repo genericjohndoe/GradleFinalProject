@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Collections.CollectionAdapter;
+import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Interfaces.EnableSearch;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Models.Collection;
@@ -113,8 +114,9 @@ public class HilarityUserCollections extends Fragment implements EnableSearch {
     }
 
     private void addCollectionToList(Collection collection, List<Collection> collectionList){
-        if (!collectionAdapter.getCollections().equals(collectionList)) collectionAdapter.setCollections(collectionList);
-        if (!collectionList.contains(collection)) {
+        if (!collectionAdapter.getCollections().equals(collectionList))
+            collectionAdapter.setCollections(collectionList);
+        if (!collectionList.contains(collection) && (uid.equals(Constants.UID) || !collection.getRestricted())) {
             collectionList.add(collection);
             collectionAdapter.notifyDataSetChanged();
         }
