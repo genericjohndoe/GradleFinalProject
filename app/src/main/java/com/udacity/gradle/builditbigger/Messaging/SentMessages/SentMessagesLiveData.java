@@ -30,7 +30,9 @@ public class SentMessagesLiveData extends LiveData<TranscriptPreview> {
         }
 
         @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {}
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
+            setValue(dataSnapshot.getValue(TranscriptPreview.class));
+        }
 
         @Override
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
