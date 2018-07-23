@@ -42,6 +42,8 @@ public class Message {
 
     public Boolean getOriginal() { return original; }
 
+
+
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof Message) && ((Message) obj).getPushId().equals(pushId);

@@ -69,7 +69,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (dy > 0 || dy < 0){
                     bind.fab.hide(true);
                     enableSwipeToRefresh = true;
-                    bind.refreshButton.setVisibility(View.GONE);
+                    //bind.refreshButton.setVisibility(View.GONE);
                 }
             }
 
@@ -89,7 +89,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         if (!enableSwipeToRefresh){
                             refreshLayout();
                         } else {
-                            bind.refreshButton.setVisibility(View.VISIBLE);
+                            //bind.refreshButton.setVisibility(View.VISIBLE);
                         }
                     }
                     break;
@@ -105,7 +105,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
             if (jokes.size() == 0 || jokes.size() == 1) configureUI();
         });
-        bind.refreshButton.setOnClickListener(view -> refreshLayout());
+        //bind.refreshButton.setOnClickListener(view -> refreshLayout());
         bind.swipe.setOnRefreshListener(this);
         configureUI();
         return bind.getRoot();

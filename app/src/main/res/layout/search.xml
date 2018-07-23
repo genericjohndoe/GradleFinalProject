@@ -3,7 +3,5 @@
     android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="type tag"
-    android:inputType="textMultiLine">
-
-</EditText>
+    android:hint="@string/tag"
+    android:inputType="textMultiLine"/>

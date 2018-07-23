@@ -7,6 +7,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
 
@@ -15,10 +16,10 @@ import com.udacity.gradle.builditbigger.Models.TranscriptPreview;
  */
 
 public class SentMessagesLiveData extends LiveData<TranscriptPreview> {
-    private DatabaseReference databaseReference;
+    private Query databaseReference;
 
     public SentMessagesLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("transcriptpreviews/"+uid);
+        databaseReference = Constants.DATABASE.child("transcriptpreviews/"+uid).orderByChild("message/timestamp");
     }
 
 

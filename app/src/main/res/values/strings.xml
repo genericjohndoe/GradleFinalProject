@@ -13,7 +13,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Sign in or Register</string>
 
     <!-- Strings related to login -->
     <string name="error_invalid_email">This email address is invalid</string>
@@ -37,7 +37,7 @@
     <string name="user_name_invalid">User name is invalid</string>
     <string name="check_user_name_validity">Check if user name is valid</string>
     <string name="profile_tagline">Profile Tagline</string>
-    <string name="profile_tagline_hint">Hi, my name is ...</string>
+    <string name="profile_tagline_hint">Hi, my name is …</string>
     <string name="add_new_langauge">Add new languages</string>
     <string name="posts">posts</string>
     <string name="search">Search</string>
@@ -93,8 +93,18 @@
     <string name="content_creator">Content Creator</string>
     <string name="payments">Payments</string>
     <string name="beta_program">Beta Program</string>
-
-
+    <string name="change_name">Change User Name</string>
+    <string name="tag">type tag</string>
+    <string name="pick_name">Pick User Name</string>
+    <string name="delete">delete</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="collection_title">Add Collection Title</string>
+    <string name="restricted">Restricted</string>
+    <string name="messages">Messages</string>
+    <string name="mentions">Mentions</string>
+    <string name="followers">Followers</string>
+    <string name="forum_replies">Forum Replies</string>
 
     <string name="uid" translatable="false">uid</string>
     <string name="fragment" translatable="false">fragment</string>
@@ -102,4 +112,7 @@
     <string name="init" translatable="false">init</string>
     <string name="full_screen" translatable="false">full screen video</string>
     <string name="pushId" translatable="false">pushId</string>
+    <string name="posttype" translatable="false">posttype</string>
+    <string name="filepath" translatable="false">filepath</string>
+    <string name="path" translatable="false">path</string>
 </resources>

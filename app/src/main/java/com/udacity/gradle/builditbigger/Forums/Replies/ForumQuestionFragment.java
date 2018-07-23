@@ -58,7 +58,8 @@ public class ForumQuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentForumQuestionBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_forum_question, container, false);
-        bind.question.userNameTextView.setText("@"+forumQuestion.getHilarityUser().getUserName());
+        String userName = "@"+forumQuestion.getHilarityUser().getUserName();
+        bind.question.userNameTextView.setText(userName);
         bind.question.questionTextView.setText(forumQuestion.getQuestion());
         bind.question.questionTextView.requestFocus();
         bind.question.timeTextView.setText(Constants.formattedTimeString(getActivity(),forumQuestion.getTimeStamp()));

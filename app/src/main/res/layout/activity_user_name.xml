@@ -35,7 +35,7 @@
         android:backgroundTint="@color/green_8"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="@string/pick_name"
         android:textColor="@color/green_8"
         android:textColorHint="@color/green_8"
         app:layout_constraintEnd_toStartOf="@+id/status_imageView"

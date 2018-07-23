@@ -185,7 +185,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
                                             .setValue(message);
                                 } else {
                                     Constants.DATABASE.child("transcriptpreviews/" + Constants.UID + "/" + path)
-                                            .setValue(new TranscriptPreview(message, hilarityUsers, path, true));
+                                            .setValue(new TranscriptPreview(message, hilarityUsers, path, true, false));
                                 }
                             }
 
@@ -194,7 +194,7 @@ public class ComposeMessageFragment extends Fragment implements CreateChip, Filt
                             }
                         });
                 Intent intent = new Intent(getActivity(), TranscriptActivity.class);
-                intent.putExtra("path", path);
+                intent.putExtra(getString(R.string.path), path);
                 startActivity(intent);
                 getActivity().finish();
                 InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

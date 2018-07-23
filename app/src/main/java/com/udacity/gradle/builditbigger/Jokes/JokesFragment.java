@@ -29,12 +29,6 @@ import java.util.List;
 
 public class JokesFragment extends Fragment {
 
-    // Firebase instance variables
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mjokesDatabaseReference;
-    private DatabaseReference mPersonaljokesDatabaseReference;
-    private ChildEventListener mChildEventListener;
-
     RecyclerView recyclerview;
     JokesAdapter jokeAdapter;
     List<Post> jokes;
@@ -56,12 +50,12 @@ public class JokesFragment extends Fragment {
             language = extras.getString(getString(R.string.languages));
         }
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
-        mPersonaljokesDatabaseReference = mFirebaseDatabase.getReference();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference mjokesDatabaseReference = mFirebaseDatabase.getReference().child(genre);
+        DatabaseReference mPersonaljokesDatabaseReference = mFirebaseDatabase.getReference();
         jokes = new ArrayList<>();
         //jokeAdapter = new JokesAdapter(getActivity(), jokes);
-        mChildEventListener = new ChildEventListener() {
+        ChildEventListener mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                 Post joke = dataSnapshot.getValue(Post.class);

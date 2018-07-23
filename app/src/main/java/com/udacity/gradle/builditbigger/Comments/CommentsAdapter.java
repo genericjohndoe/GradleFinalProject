@@ -60,7 +60,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         final Comment comment = comments.get(position);
 
         Glide.with(context).load(comment.getHilarityUser().getUrlString()).into(holder.bind.profileImageview);
-        holder.bind.userNameTextView.setText(comment.getHilarityUser().getUserName() + " " + comment.getCommentContent());
+        String content = comment.getHilarityUser().getUserName() + " " + comment.getCommentContent();
+        holder.bind.userNameTextView.setText(content);
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/"+s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

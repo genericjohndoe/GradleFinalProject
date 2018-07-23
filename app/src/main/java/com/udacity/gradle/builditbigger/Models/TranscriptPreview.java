@@ -1,5 +1,7 @@
 package com.udacity.gradle.builditbigger.Models;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -12,14 +14,16 @@ public class TranscriptPreview {
     private List<HilarityUser> conversationalists;
     private String path;
     private Boolean original;
+    private Boolean hasUnreadMessages;
 
     public TranscriptPreview(){}
 
-    public TranscriptPreview(Message message, List<HilarityUser> conversationalists, String path, Boolean original){
+    public TranscriptPreview(Message message, List<HilarityUser> conversationalists, String path, Boolean original, Boolean hasUnreadMessages){
         this.message = message;
         this.conversationalists = conversationalists;
         this.path = path;
         this.original = original;
+        this.hasUnreadMessages = hasUnreadMessages;
     }
 
     public Message getMessage() {
@@ -30,14 +34,18 @@ public class TranscriptPreview {
         return conversationalists;
     }
 
-    public String getPath() {
-        return path;
-    }
+    public String getPath() {return path;}
 
-    public Boolean getOriginal() { return original;}
+    public Boolean getOriginal() {return original;}
+
+    public Boolean getHasUnreadMessages() {return hasUnreadMessages;}
 
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof TranscriptPreview) && ((TranscriptPreview) obj).getPath().equals(path);
+    }
+
+    public boolean compare(@NonNull TranscriptPreview transcriptPreview){
+        return  message.equals(transcriptPreview.getMessage());
     }
 }

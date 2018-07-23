@@ -342,7 +342,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             prepareVideoPlayback(holder);
             holder.orientationControlViewModel.getOrientationLiveData().observe(holder, orientationChanged -> {
                 //currently doesn't get called
-                Log.i("orientation3", "viewholder observing orientation live data");
                 if (orientationChanged && holder.equals(getNowPlayingViewHolder())){
                     //todo there is a lag after rotation, show loading spinner
                     holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(false);
@@ -372,11 +371,13 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         }
 
         viewHolderViewModel.getNumLikesLiveData().observe(holder, num -> {
-            holder.binding.likesCounterTextView.setText(num + "");
+            String number2 = num + "";
+            holder.binding.likesCounterTextView.setText(number2);
         });
 
         viewHolderViewModel.getNumCommentsLiveData().observe(holder, num -> {
-            holder.binding.commentCounterTextView.setText(num + "");
+            String number3 = num + "";
+            holder.binding.commentCounterTextView.setText(number3);
         });
 
         viewHolderViewModel.getIsLikedLiveData().observe(holder, aBoolean -> {

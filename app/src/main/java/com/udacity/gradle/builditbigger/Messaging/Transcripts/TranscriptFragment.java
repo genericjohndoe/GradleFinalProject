@@ -62,8 +62,8 @@ public class TranscriptFragment extends Fragment implements IntentCreator, Activ
         super.onCreate(savedInstanceState);
         hilarityUsers = new ArrayList<>();
         if (getArguments() != null){
-            uid = getArguments().getString("uid");
-            path = getArguments().getString("path");
+            uid = getArguments().getString(getString(R.string.uid));
+            path = getArguments().getString(getString(R.string.path));
             if (path != null) usersUidList = path.split(", ");
         }
         for (String uid: usersUidList){
@@ -100,6 +100,7 @@ public class TranscriptFragment extends Fragment implements IntentCreator, Activ
                 messages.add(message);
                 messagesAdapter.notifyDataSetChanged();
                 bind.messagesRecyclerView.scrollToPosition(messages.size()-1);
+                Constants.DATABASE.child("transcriptpreviews/"+uid+"/"+path+"/hasUnreadMessages").setValue(false);
             }
         });
         bind.sendButton.setOnClickListener(view ->{
@@ -114,8 +115,6 @@ public class TranscriptFragment extends Fragment implements IntentCreator, Activ
             //todo start different activity based off whats pressed
             chooseMediaDialog = ChooseMediaDialog.getInstance(this);
             chooseMediaDialog.show(getActivity().getSupportFragmentManager(),"new media");
-            //newMedia = AddMediaDialog.getInstance(this);
-            //newMedia.show(getActivity().getSupportFragmentManager(),"new media");
         });
 
         return bind.getRoot();
@@ -153,18 +152,15 @@ public class TranscriptFragment extends Fragment implements IntentCreator, Activ
     @Override
     public void activityForResult(int num) {
         Intent intent = new Intent(getActivity(), NewPostActivity2.class);
-        intent.putExtra("posttype", num);
-        intent.putExtra("number", "-1");
+        intent.putExtra(getString(R.string.posttype), num);
+        intent.putExtra(getString(R.string.number), "-1");
         startActivityForResult(intent, 1);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("newmediatest", "OAR called");
         if (requestCode == 1){
-            Log.i("newmediatest", ""+resultCode);
-            String filepath = data.getStringExtra("filepath");
-            Log.i("newmediatest", filepath);
+            String filepath = data.getStringExtra(getString(R.string.filepath));
             createIntent(filepath, null);
         }
     }

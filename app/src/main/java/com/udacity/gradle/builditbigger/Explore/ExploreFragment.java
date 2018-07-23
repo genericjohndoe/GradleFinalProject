@@ -70,7 +70,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (dy > 0 || dy < 0){
                     bind.fab.hide(true);
                     enableSwipeToRefresh = true;
-                    bind.refreshButton.setVisibility(View.GONE);
+                    //bind.refreshButton.setVisibility(View.GONE);
                 }
             }
 
@@ -89,13 +89,13 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (!enableSwipeToRefresh){
                     refreshLayout();
                 } else {
-                    bind.refreshButton.setVisibility(View.VISIBLE);
+                    //bind.refreshButton.setVisibility(View.VISIBLE);
                 }
             }
             if (jokes.size() == 1 || jokes.size() == 0) configureUI();
         });
 
-        bind.refreshButton.setOnClickListener(view -> refreshLayout());
+        //bind.refreshButton.setOnClickListener(view -> refreshLayout());
         configureUI();
         return bind.getRoot();
     }

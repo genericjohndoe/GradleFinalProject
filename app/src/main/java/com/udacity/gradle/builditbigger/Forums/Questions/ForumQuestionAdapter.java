@@ -47,7 +47,8 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
         ForumQuestion forumQuestion = forumQuestions.get(position);
         holder.forumQuestion = forumQuestion;
         holder.bind.questionTextView.setText(forumQuestion.getQuestion());
-        holder.bind.userNameTextView.setText("@"+forumQuestion.getHilarityUser().getUserName());
+        String userName = "@"+forumQuestion.getHilarityUser().getUserName();
+        holder.bind.userNameTextView.setText(userName);
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

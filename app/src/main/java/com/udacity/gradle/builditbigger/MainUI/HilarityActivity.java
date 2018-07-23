@@ -59,9 +59,9 @@ public class HilarityActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        ViewModelProviders.of(this).get(UnreadMessagesViewModel.class).getUnreadMessagesLiveData().observe(this, num ->{
-            badgeCount = num.intValue();
-        });
+        /*ViewModelProviders.of(this).get(UnreadMessagesViewModel.class).getUnreadMessagesLiveData().observe(this, num ->{
+            badgeCount = (num != null) ? num.intValue() : 0;
+        });*/
         createNotificationChannel();
         messagingToken();
         setSupportActionBar(toolbar);

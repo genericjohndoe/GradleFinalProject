@@ -42,7 +42,7 @@ public class SentMessagesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) uid = getArguments().getString("uid");
+        if (getArguments() != null) uid = getArguments().getString(getString(R.string.uid));
     }
 
     @Override
@@ -51,18 +51,23 @@ public class SentMessagesFragment extends Fragment {
         // Inflate the layout for this fragment
         List<TranscriptPreview> transcriptPreviews = new ArrayList<>();
         SentMessagesAdapter sentMessagesAdapter = new SentMessagesAdapter(transcriptPreviews, getActivity());
-        FragmentSentMessageBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_sent_message, container, false);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        FragmentSentMessageBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sent_message, container, false);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        llm.setStackFromEnd(true);
         binding.sentMessagesRecyclerview.setLayoutManager(llm);
         binding.sentMessagesRecyclerview.setAdapter(sentMessagesAdapter);
 
-        binding.newMessageFab.setOnClickListener(view -> {
-            getActivity().startActivity(new Intent(getActivity(), ComposeMessageActivity.class));
-        });
+        binding.newMessageFab.setOnClickListener(view ->
+                startActivity(new Intent(getActivity(), ComposeMessageActivity.class)));
 
         SentMessagesViewModel sentMessagesViewModel = ViewModelProviders.of(this, new SentMessagesViewModelFactory(uid)).get(SentMessagesViewModel.class);
         sentMessagesViewModel.getSentMessagesLiveData().observe(this, transcriptPreview -> {
+            int index = transcriptPreviews.indexOf(transcriptPreview);
             if (!transcriptPreviews.contains(transcriptPreview)) {
+                transcriptPreviews.add(transcriptPreview);
+                sentMessagesAdapter.notifyDataSetChanged();
+            } else if (!transcriptPreview.compare(transcriptPreviews.get(index))) {
+                transcriptPreviews.remove(transcriptPreview);
                 transcriptPreviews.add(transcriptPreview);
                 sentMessagesAdapter.notifyDataSetChanged();
             }

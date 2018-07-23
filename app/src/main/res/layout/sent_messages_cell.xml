@@ -27,7 +27,6 @@
         android:layout_marginTop="12dp"
         android:textStyle="bold"
         android:textColor="@color/green_8"
-        android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/profile_imageview"
         app:layout_constraintTop_toTopOf="@+id/profile_imageview" />
 
@@ -36,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
         android:textColor="@color/green_7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +46,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:text="TextView"
         android:textColor="@color/green_6"
         app:layout_constraintStart_toEndOf="@+id/profile_imageview"
         app:layout_constraintTop_toBottomOf="@+id/user_name_textView" />

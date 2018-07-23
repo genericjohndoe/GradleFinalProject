@@ -30,15 +30,17 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
     private Context context;
 
 
-    public SentMessagesAdapter(List<TranscriptPreview> transcriptPreviews, Context context){
+    public SentMessagesAdapter(List<TranscriptPreview> transcriptPreviews, Context context) {
         this.transcriptPreviews = transcriptPreviews;
         this.context = context;
     }
 
-    @Override @NonNull
+    @Override
+    @NonNull
     public SentMessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         SentMessagesCellBinding bind = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.sent_messages_cell, parent, false);
-        return new SentMessagesViewHolder(bind);
+        if (viewType == 0) return new SentMessagesViewHolder(bind);
+        return new UnreadSentMessagesViewHolder(bind);
     }
 
     @Override
@@ -46,20 +48,17 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
         TranscriptPreview preview = transcriptPreviews.get(position);
         holder.preview = preview;
         StringBuilder userName = new StringBuilder();
-        for (HilarityUser user: preview.getConversationalists()){
-            if (!user.equals(Constants.USER)){
+        for (HilarityUser user : preview.getConversationalists()) {
+            if (!user.equals(Constants.USER)) {
                 userName.append(user.getUserName()).append(" ");
             }
         }
-        if (preview != null) {
-            holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, preview.getMessage().getTimeStamp()));
-            holder.binding.userNameTextView.setText(userName.toString());
-            Glide.with(context).load(preview.getMessage().getHilarityUser().getUrlString()).into(holder.binding.profileImageview);
-            String text = (preview.getMessage().getContents().size() == 1) ? preview.getMessage().getContents().get(0) : "Image Sent";
-            holder.binding.lastMessageTextView.setText(text);
-        } else {
-            Log.i("Hilarity","preview is null");
-        }
+        holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, preview.getMessage().getTimeStamp()));
+        holder.binding.userNameTextView.setText(userName.toString());
+        Glide.with(context).load(preview.getMessage().getHilarityUser().getUrlString()).into(holder.binding.profileImageview);
+        String text = (preview.getMessage().getContents().size() == 1) ? preview.getMessage().getContents().get(0) : "Media Sent";
+        holder.binding.lastMessageTextView.setText(text);
+
     }
 
     @Override
@@ -67,11 +66,17 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
         return transcriptPreviews.size();
     }
 
-    public class SentMessagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @Override
+    public int getItemViewType(int position) {
+        if (transcriptPreviews.get(position).getHasUnreadMessages()) return 1;
+        return 0;
+    }
+
+    public class SentMessagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         SentMessagesCellBinding binding;
         TranscriptPreview preview;
 
-        public SentMessagesViewHolder(SentMessagesCellBinding binding){
+        public SentMessagesViewHolder(SentMessagesCellBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             binding.getRoot().setOnClickListener(this);
@@ -80,8 +85,27 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, TranscriptActivity.class);
-            intent.putExtra("path", preview.getPath());
+            intent.putExtra(context.getString(R.string.path), preview.getPath());
             context.startActivity(intent);
+        }
+    }
+
+    public class UnreadSentMessagesViewHolder extends SentMessagesViewHolder {
+        public UnreadSentMessagesViewHolder(SentMessagesCellBinding binding) {
+            super(binding);
+            binding.getRoot().setBackgroundColor(context.getResources().getColor(R.color.green_8));
+            binding.lastMessageTextView.setTextColor(context.getResources().getColor(R.color.black));
+            binding.timeDateTextView.setTextColor(context.getResources().getColor(R.color.black));
+            binding.userNameTextView.setTextColor(context.getResources().getColor(R.color.black));
+        }
+
+        @Override
+        public void onClick(View v) {
+            super.onClick(v);
+            v.setBackgroundColor(0);
+            binding.lastMessageTextView.setTextColor(context.getResources().getColor(R.color.green_6));
+            binding.timeDateTextView.setTextColor(context.getResources().getColor(R.color.green_7));
+            binding.userNameTextView.setTextColor(context.getResources().getColor(R.color.green_8));
         }
     }
 }

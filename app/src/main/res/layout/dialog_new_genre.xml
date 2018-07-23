@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Add Genre Title"
+        android:hint="@string/collection_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:text="Restricted"
+        android:text="@string/restricted"
         app:layout_constraintStart_toStartOf="@+id/new_genre_title_et"
         app:layout_constraintTop_toBottomOf="@+id/new_genre_title_et" />
 

@@ -182,9 +182,8 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
     private CaptureRequest.Builder mPreviewRequestBuilder;
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
     private int mSensorOrientation; //is of type Integer in video class
-    //todo
+
     private FirebaseVisionImage image;
-    private FirebaseVisionFaceDetectorOptions options;
     private FirebaseVisionFaceDetector detector;
     private boolean lookForFace = false;
 
@@ -208,7 +207,7 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                 openCameraForVideo(width, height, isBackCamera ? CAMERA_BACK : CAMERA_FRONT);
             }
             if (lookForFace) {
-                options = new FirebaseVisionFaceDetectorOptions.Builder()
+                FirebaseVisionFaceDetectorOptions options = new FirebaseVisionFaceDetectorOptions.Builder()
                         .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
                         .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
                         .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
