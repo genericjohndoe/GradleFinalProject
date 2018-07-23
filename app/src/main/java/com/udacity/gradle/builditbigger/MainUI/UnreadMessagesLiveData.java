@@ -6,20 +6,21 @@ import android.support.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 
-public class UnreadMessagesLiveData extends LiveData<Double> {
-    DatabaseReference databaseReference;
+public class UnreadMessagesLiveData extends LiveData<Boolean> {
+    private Query databaseReference;
 
     public UnreadMessagesLiveData(){
-        databaseReference = Constants.DATABASE.child("messages/"+Constants.UID+"/numUnread");
+        databaseReference = Constants.DATABASE.child("transcriptpreviews/"+Constants.UID).orderByChild("hasUnreadMessages").equalTo(true);
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            setValue(dataSnapshot.getValue(Double.class));
+            setValue(dataSnapshot.hasChildren());
         }
 
         @Override
