@@ -25,6 +25,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.mikepenz.actionitembadge.library.ActionItemBadge;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
 import com.udacity.gradle.builditbigger.Feed.FeedFragment;
@@ -44,12 +46,13 @@ import com.udacity.gradle.builditbigger.SignIn_Onboarding.LoginActivity;
 public class HilarityActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     //todo replace imgs with gifs in left nav
-    DrawerLayout drawer;
-    int fragmentNumber;
-    String otherUid;
-    OrientationControlViewModel orientationControlViewModel;
-    FullScreenVideoDialog dialog;
-    boolean isVideoPlaying;
+    private DrawerLayout drawer;
+    private int fragmentNumber;
+    private String otherUid;
+    private OrientationControlViewModel orientationControlViewModel;
+    private FullScreenVideoDialog dialog;
+    private boolean isVideoPlaying;
+    private int badgeCount = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +62,8 @@ public class HilarityActivity extends AppCompatActivity
         createNotificationChannel();
         messagingToken();
         setSupportActionBar(toolbar);
-        fragmentNumber = getIntent().getIntExtra("number", 0);
-        otherUid = getIntent().getStringExtra("uid");
+        fragmentNumber = getIntent().getIntExtra(getString(R.string.number), 0);
+        otherUid = getIntent().getStringExtra(getString(R.string.uid));
         Fragment fragment;
         String tag;
         switch (fragmentNumber) {
@@ -70,13 +73,13 @@ public class HilarityActivity extends AppCompatActivity
                 break;
             case 2:
                 fragment = FeedFragment.newInstance(Constants.UID);
-                setTitle("Feed");
-                tag = "feed";
+                setTitle(getString(R.string.feed));
+                tag = getString(R.string.feed);
                 break;
             case 3:
                 fragment = ExploreFragment.newInstance(Constants.UID);
-                setTitle("Explore");
-                tag = "explore";
+                setTitle(getString(R.string.explore));
+                tag = getString(R.string.explore);
                 break;
             case 4:
                 fragment = Profile.newInstance(otherUid);
@@ -84,13 +87,13 @@ public class HilarityActivity extends AppCompatActivity
                 break;
             case 5:
                 fragment = ForumFragment.newInstance();
-                setTitle("Forums");
-                tag = "forums";
+                setTitle(getString(R.string.forums));
+                tag = getString(R.string.forums);
                 break;
             case 6:
                 fragment = SettingsFragment.newInstance();
-                setTitle("Settings");
-                tag = "settings";
+                setTitle(getString(R.string.settings));
+                tag = getString(R.string.settings);
                 break;
             default:
                 fragment = Profile.newInstance(Constants.UID);
@@ -108,16 +111,14 @@ public class HilarityActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        Fragment fragment2 = getSupportFragmentManager().findFragmentByTag("full screen video");
+        Fragment fragment2 = getSupportFragmentManager().findFragmentByTag(getString(R.string.full_screen));
         if(fragment2 != null) getSupportFragmentManager().beginTransaction().remove(fragment2).commit();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         orientationControlViewModel = ViewModelProviders.of(this, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
         orientationControlViewModel.getVideoPlayingMutableLiveData().observe(this, videoPlaying -> {
-            Log.i("orientation3", videoPlaying + " = hilarity activity is video playing?");
             isVideoPlaying = videoPlaying;
             formatUiForVideo(videoPlaying);
         });
@@ -137,6 +138,12 @@ public class HilarityActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.hilarity, menu);
+        if (badgeCount > 0) {
+            ActionItemBadge.update(this, menu.findItem(R.id.action_message),
+                    getDrawable(R.drawable.ic_mail_black_24dp),ActionItemBadge.BadgeStyles.RED,badgeCount);
+        } else {
+            ActionItemBadge.hide(menu.findItem(R.id.action_message));
+        }
         return true;
     }
 
@@ -163,15 +170,15 @@ public class HilarityActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent = new Intent(this, HilarityActivity.class);
         if (id == R.id.profile_page) {
-            intent.putExtra("number", 1);
+            intent.putExtra(getString(R.string.number), 1);
         } else if (id == R.id.feed_page) {
-            intent.putExtra("number", 2);
+            intent.putExtra(getString(R.string.number), 2);
         } else if (id == R.id.explore_page) {
-            intent.putExtra("number", 3);
+            intent.putExtra(getString(R.string.number), 3);
         } else if (id == R.id.forums_page) {
-            intent.putExtra("number", 5);
+            intent.putExtra(getString(R.string.number), 5);
         } else if (id == R.id.settings_page) {
-            intent.putExtra("number", 6);
+            intent.putExtra(getString(R.string.number), 6);
         } else if (id == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
@@ -189,23 +196,19 @@ public class HilarityActivity extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         int orientation = newConfig.orientation;
-        Log.i("orientation3", "HilarityActivity, onConfigurationChanged called");
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             if (dialog != null && dialog.isVisible()) {
                 dialog.pause();
                 VideoInfo videoInfo = new VideoInfo(dialog.getUrl(), dialog.getPosition());
                 orientationControlViewModel.getVideoLiveData().setValue(videoInfo);
-                Log.i("orientation4", "holder was pause2, info sent: " + videoInfo.getTimeElapsed());
                 dialog.dismiss();
-                Fragment fragment2 = getSupportFragmentManager().findFragmentByTag("full screen video");
+                Fragment fragment2 = getSupportFragmentManager().findFragmentByTag(getString(R.string.full_screen));
                 if (fragment2 != null) getSupportFragmentManager().beginTransaction().remove(fragment2).commit();
             }
             orientationControlViewModel.getOrientationLiveData().setValue(false);
-            Log.i("orientation3", "HilarityActivity, orientation is in portrait, set to false");
         } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             orientationControlViewModel.getOrientationLiveData().setValue(true);
-            if (dialog != null && !dialog.isVisible()) dialog.show(getSupportFragmentManager(), "full screen video");
-            Log.i("orientation3", "HilarityActivity, orientation is in landscape, set to true");
+            if (dialog != null && !dialog.isVisible()) dialog.show(getSupportFragmentManager(), getString(R.string.full_screen));
         }
     }
 
@@ -233,29 +236,22 @@ public class HilarityActivity extends AppCompatActivity
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 
     public void formatUiForVideo(boolean isVideoPlaying){
         if (!isVideoPlaying) {
-            Log.i("orientation3", "HA formatUiForVideos no videos playing, locked in portrait");
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
-            Log.i("orientation3", "HA formatUiForVideos video is playing, orientation unspecified");
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                orientationControlViewModel.getVideoLiveData().observe(this, videoInfo -> {
-                    Log.i("orientation3", "HA formatUiForVideos video info passed to dialog");
-                    setUpDialog(videoInfo);
-                });
+                orientationControlViewModel.getVideoLiveData().observe(this, videoInfo ->
+                        setUpDialog(videoInfo));
         }
 
     }
 
     public void setUpDialog(VideoInfo videoInfo){
-        Log.i("orientation3", "HA setUpDialog dialog set up");
         dialog = FullScreenVideoDialog.getInstance(videoInfo.getUrl(), videoInfo.getTimeElapsed());
     }
 

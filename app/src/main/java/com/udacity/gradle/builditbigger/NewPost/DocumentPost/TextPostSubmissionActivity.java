@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.NewPost.TextPost;
+package com.udacity.gradle.builditbigger.NewPost.DocumentPost;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

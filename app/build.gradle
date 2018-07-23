@@ -100,8 +100,13 @@ dependencies {
     implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
     //for tutorials
     implementation 'com.github.takusemba:spotlight:1.3.3'
+    //stripe
     implementation 'com.stripe:stripe-android:6.1.2'
-    implementation 'com.j2html:j2html:1.3.0'
+    //for notification badges
+    implementation 'com.mikepenz:actionitembadge:3.3.2@aar'
+    implementation "com.mikepenz:iconics-core:3.0.4@aar"
+    implementation 'com.mikepenz:fontawesome-typeface:4.7.0.0@aar'
+    //converts videos to gifs
     implementation 'com.github.ThanThai21:VideoToGif:1.0.1'
 }
 

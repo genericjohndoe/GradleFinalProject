@@ -127,7 +127,7 @@
         <activity
             android:name=".Messaging.ComposeMessage.ComposeMessageActivity"
             android:parentActivityName=".Messaging.SentMessages.MessagesActivity" />
-        <activity android:name=".NewPost.TextPost.TextPostSubmissionActivity" />
+        <activity android:name=".NewPost.DocumentPost.TextPostSubmissionActivity" />
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Comments.CommentActivity" />
         <activity

@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.NewPost.TextPost;
+package com.udacity.gradle.builditbigger.NewPost.DocumentPost;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;

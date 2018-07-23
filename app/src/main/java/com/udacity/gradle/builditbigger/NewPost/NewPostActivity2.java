@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.NewPost.AudioMediaPost.AudioMediaPostFragment;
-import com.udacity.gradle.builditbigger.NewPost.TextPost.NewTextPostEditFragment;
+import com.udacity.gradle.builditbigger.NewPost.DocumentPost.NewTextPostEditFragment;
 import com.udacity.gradle.builditbigger.NewPost.VisualMediaPost.VisualMediaPostFragment;
 import com.udacity.gradle.builditbigger.R;
 
