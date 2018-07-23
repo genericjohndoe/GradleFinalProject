@@ -7,27 +7,27 @@
         <item
             android:id="@+id/profile_page"
             android:icon="@drawable/ic_person_black_24dp"
-            android:title="Profile" />
+            android:title="" />
         <item
             android:id="@+id/feed_page"
             android:icon="@drawable/ic_group_black_24dp"
-            android:title="Feed" />
+            android:title="" />
         <item
             android:id="@+id/explore_page"
             android:icon="@drawable/ic_directions_run_black_24dp"
-            android:title="Explore" />
+            android:title="" />
         <item
             android:id="@+id/forums_page"
             android:icon="@drawable/ic_comment_black_24dp"
-            android:title="Forums" />
+            android:title="" />
         <item
             android:id="@+id/settings_page"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
+            android:title="" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="Logout" />
+            android:title="" />
     </group>
 
 

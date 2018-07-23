@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_message"
-        android:title="messages"
+        android:title=""
         android:icon="@drawable/ic_mail_black_24dp"
         app:showAsAction="ifRoom"/>
 </menu>
