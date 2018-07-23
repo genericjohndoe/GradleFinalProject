@@ -4,6 +4,7 @@
     <item
         android:id="@+id/action_message"
         android:title="messages"
-        app:actionLayout="@layout/menu_action_item_badge"
+        android:icon="@drawable/ic_mail_black_24dp"
         app:showAsAction="ifRoom"/>
 </menu>
+    <!--app:actionLayout="@layout/menu_action_item_badge"-->

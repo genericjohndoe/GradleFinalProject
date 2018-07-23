@@ -92,4 +92,5 @@
     <string name="number" translatable="false">number</string>
     <string name="init" translatable="false">init</string>
     <string name="full_screen" translatable="false">full screen video</string>
+    <string name="pushId" translatable="false">pushId</string>
 </resources>

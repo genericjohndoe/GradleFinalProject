@@ -52,13 +52,16 @@ public class HilarityActivity extends AppCompatActivity
     private OrientationControlViewModel orientationControlViewModel;
     private FullScreenVideoDialog dialog;
     private boolean isVideoPlaying;
-    private int badgeCount = 1;
+    private int badgeCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hilarity);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        ViewModelProviders.of(this).get(UnreadMessagesViewModel.class).getUnreadMessagesLiveData().observe(this, num ->{
+            badgeCount = num.intValue();
+        });
         createNotificationChannel();
         messagingToken();
         setSupportActionBar(toolbar);
@@ -138,12 +141,12 @@ public class HilarityActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.hilarity, menu);
-        if (badgeCount > 0) {
+        /*if (badgeCount >= 0) {
             ActionItemBadge.update(this, menu.findItem(R.id.action_message),
-                    getDrawable(R.drawable.ic_mail_black_24dp),ActionItemBadge.BadgeStyles.RED,badgeCount);
+                    getDrawable(R.drawable.ic_mail_black_24dp), ActionItemBadge.BadgeStyles.RED, badgeCount);
         } else {
-            ActionItemBadge.hide(menu.findItem(R.id.action_message));
-        }
+            //ActionItemBadge.hide(menu.findItem(R.id.action_message));
+        }*/
         return true;
     }
 

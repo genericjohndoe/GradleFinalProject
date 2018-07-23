@@ -7,16 +7,13 @@
     <color name="accent">#2cb71a</color>
     <color name="colorPrimary">#04561A</color>
     <color name="colorAccent">#2cb71a</color>
-
-
     <color name="black_overlay">#0a000000</color>
-
     <color name="black">#031A11</color>
     <color name="green_black_1">#052619</color>
-    <color name="green_6">#92D8C6</color>
+    <color name="green_6">#92d8c6</color>
     <color name="green_7">#72CBAE</color>
     <color name="green_8">#369F77</color>
     <color name="green_9">#64369f77</color>
-
     <color name="pink">#FFD7FF</color>
+    <color name="red">#f00</color>
 </resources>

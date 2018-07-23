@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -67,7 +68,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     private Context context;
     private List<Post> jokes;
     private boolean isUserProfile;
-    private int numVideos = 0;
     private JokesViewHolder nowPlayingViewHolder = null;
 
 
@@ -349,14 +349,12 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     VideoInfo videoInfo = new VideoInfo(joke.getMediaURL(),
                             holder.binding.videoLayout.postVideoView.getPlayer().getCurrentPosition());
                     holder.orientationControlViewModel.getVideoLiveData().setValue(videoInfo);
-                    Log.i("orientation4", "holder was pause, info sent: " + videoInfo.getTimeElapsed());
                 } else if (!orientationChanged && holder.equals(getNowPlayingViewHolder())){
                     holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
                         holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
                         holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(true);
 
                     });
-                    Log.i("orientation3", "holder received info from dialog");
                 }
             });
         }
@@ -413,8 +411,8 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         holder.binding.commentImageButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, CommentActivity.class);
-            intent.putExtra("uid", joke.getUID());
-            intent.putExtra("pushId", joke.getPushId());
+            intent.putExtra(context.getString(R.string.uid), joke.getUID());
+            intent.putExtra(context.getString(R.string.pushId), joke.getPushId());
             context.startActivity(intent);
             }
         );
@@ -433,10 +431,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
     public void onViewDetachedFromWindow(@NonNull JokesViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
-        if (holder.getJoke().getType() == Constants.VIDEO_AUDIO){
-            //holder.orientationControlViewModel.getNumVideosLiveData().setValue(--numVideos);
-            Log.i("numMovies", numVideos+"");
-        }
     }
 
     @Override
