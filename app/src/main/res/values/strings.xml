@@ -120,6 +120,7 @@
     <string name="body" translatable="false">body</string>
     <string name="position" translatable="false">position</string>
     <string name="forums_lc" translatable="false">forums</string>
+    <string name="forum_lc" translatable="false">forum</string>
     <string name="mentions_lc" translatable="false">mention</string>
     <string name="comment" translatable="false">comment</string>
     <string name="message" translatable="false">message</string>

@@ -52,23 +52,15 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.i("onMessageRecieved", "called");
         Map<String, String> data = remoteMessage.getData();
         if (data != null && data.get(getString(R.string.type)).equals(getString(R.string.message))) {
             sendNewMessageNotification(data.get(getString(R.string.body)), data.get(getString(R.string.path)), data.get(getString(R.string.title)));
         } else if (data.get(getString(R.string.type)).equals(getString(R.string.mentions_lc)) || data.get(getString(R.string.type)).equals(getString(R.string.comment))){
             sendNewCommentMentionNotification(data.get(getString(R.string.title)), data.get(getString(R.string.body)), data.get(getString(R.string.uid)),
                     data.get("postid"), Integer.parseInt(data.get(getString(R.string.position))));
-        } else if (data.get(getString(R.string.type)).equals(getString(R.string.forums_lc))) {
-            Constants.DATABASE.child("").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    sendForumNotification(dataSnapshot.getValue(ForumQuestion.class),
-                            data.get(getString(R.string.title)), data.get(getString(R.string.body)));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {}
-            });
+        } else if (data.get(getString(R.string.type)).equals(getString(R.string.forum_lc))) {
+            sendForumNotification(data.get("key"),data.get(getString(R.string.title)), data.get(getString(R.string.body)));
         }
     }
 
@@ -100,16 +92,17 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_person_black_24dp)
-                        .setLargeIcon(getBitmapfromUrl("https://ibin.co/2t1lLdpfS06F.png"))//user for profile pic
-                        .setStyle(new NotificationCompat.BigPictureStyle()
-                                .bigPicture(getBitmapfromUrl("https://ibin.co/2t1lLdpfS06F.png")))//use of picture was sent
+                        .setSmallIcon(R.mipmap.hilarity_logo)
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setContentIntent(pendingIntent);
+
+        /*.setLargeIcon(getBitmapfromUrl("https://ibin.co/2t1lLdpfS06F.png"))//user for profile pic
+                .setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(getBitmapfromUrl("https://ibin.co/2t1lLdpfS06F.png")))//use of picture was sent*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
             final String KEY_TEXT_REPLY = "key_text_reply";
 
@@ -154,7 +147,7 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.hilarity_logo)
                         .setContentTitle(title)
                         .setContentText(body)
                         .setAutoCancel(true)
@@ -166,9 +159,9 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(1 /* ID of notification */, notificationBuilder.build());
     }
 
-    private void sendForumNotification(ForumQuestion forumQuestion, String title, String body){
+    private void sendForumNotification(String key, String title, String body){
         Intent intent = new Intent(this, ForumQuestionActivity.class);
-        intent.putExtra("question", forumQuestion);
+        intent.putExtra("key", key);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -177,7 +170,7 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.hilarity_logo)
                         .setContentTitle(title)
                         .setContentText(body)
                         .setAutoCancel(true)

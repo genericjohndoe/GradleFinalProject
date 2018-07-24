@@ -59,9 +59,9 @@ public class HilarityActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         ViewModelProviders.of(this).get(UnreadMessagesViewModel.class).getUnreadMessagesLiveData().observe(this, hasUnreadMessages ->{
             if (hasUnreadMessages){
-                menuItem.setIcon(R.drawable.ic_mail_black_24dp);
+                 if (menuItem != null) menuItem.setIcon(R.drawable.ic_mail_black_24dp);
             } else {
-                menuItem.setIcon(R.drawable.ic_email_open);
+                if (menuItem != null) menuItem.setIcon(R.drawable.ic_email_open);
             }
         });
         createNotificationChannel();
@@ -143,7 +143,7 @@ public class HilarityActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.hilarity, menu);
-         menuItem = menu.getItem(0);
+        menuItem = menu.getItem(0);
         return true;
     }
 
@@ -221,10 +221,13 @@ public class HilarityActivity extends AppCompatActivity
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("new_message_channel", name, importance);
             channel.setDescription(description);
+            NotificationChannel channel2 = new NotificationChannel("new_forum_channel", "Forum Channel", importance);
+            channel.setDescription("Channel for Forum Replies");
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(channel2);
         }
     }
 
