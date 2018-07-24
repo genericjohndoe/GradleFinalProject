@@ -39,7 +39,8 @@ public class ForumQuestionFragment extends Fragment {
     private ForumQuestionsViewModel forumQuestionsViewModel;
     private FragmentForumQuestionBinding bind;
 
-    public ForumQuestionFragment() {}
+    public ForumQuestionFragment() {
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -115,8 +116,8 @@ public class ForumQuestionFragment extends Fragment {
         return bind.getRoot();
     }
 
-    public void showName(String uid){
-        forumQuestionsViewModel.getUserNameLiveData(uid).observe(this, name ->{
+    public void showName(String uid) {
+        forumQuestionsViewModel.getUserNameLiveData(uid).observe(this, name -> {
             String userName = "@" + name;
             bind.question.userNameTextView.setText(userName);
         });

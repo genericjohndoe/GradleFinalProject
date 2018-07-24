@@ -55,6 +55,8 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         ForumQuestion forumQuestion = forumQuestions.get(position);
         holder.forumQuestion = forumQuestion;
+        if (Constants.UID.equals(forumQuestion.getHilarityUserUID()))
+            holder.bind.deleteImageButton.setVisibility(View.VISIBLE);
         holder.bind.questionTextView.setText(forumQuestion.getQuestion());
         ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(forumQuestion);
         viewHolderViewModel.getUserNameLiveData().observe(holder, name -> {
@@ -92,6 +94,15 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
         public ForumQuestionViewHolder(CellForumQuestionBinding bind){
             super(bind.getRoot());
             this.bind = bind;
+            bind.deleteImageButton.setOnClickListener(view -> {
+                Constants.DATABASE.child("forumquestions/"+forumQuestion.getKey()).removeValue((databaseError, databaseReference) -> {
+                    if (databaseError == null){
+                        forumQuestions.remove(forumQuestion);
+                        notifyDataSetChanged();
+                        Constants.DATABASE.child("forumquestionreplies/"+forumQuestion.getKey()).removeValue();
+                    }
+                });
+            });
             bind.getRoot().setOnClickListener(this);
             mLifecycleRegistry = new LifecycleRegistry(this);
             mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
