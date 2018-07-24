@@ -30,7 +30,7 @@ public class ForumQuestionsLiveData extends LiveData<ForumQuestion> {
 
         @Override
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
-
+            setValue(dataSnapshot.getValue(ForumQuestion.class));
         }
 
         @Override

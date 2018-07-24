@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Forums.CreateQuestion.NewQuestionActivity;
 import com.udacity.gradle.builditbigger.Forums.Replies.ForumQuestionActivity;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Jokes.UserNameLiveData;
@@ -55,8 +56,10 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
         holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         ForumQuestion forumQuestion = forumQuestions.get(position);
         holder.forumQuestion = forumQuestion;
-        if (Constants.UID.equals(forumQuestion.getHilarityUserUID()))
+        if (Constants.UID.equals(forumQuestion.getHilarityUserUID())) {
             holder.bind.deleteImageButton.setVisibility(View.VISIBLE);
+            holder.bind.editImageButton.setVisibility(View.VISIBLE);
+        }
         holder.bind.questionTextView.setText(forumQuestion.getQuestion());
         ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(forumQuestion);
         viewHolderViewModel.getUserNameLiveData().observe(holder, name -> {
@@ -102,6 +105,12 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
                         Constants.DATABASE.child("forumquestionreplies/"+forumQuestion.getKey()).removeValue();
                     }
                 });
+            });
+            bind.editImageButton.setOnClickListener(view ->{
+                Intent intent = new Intent(context, NewQuestionActivity.class);
+                intent.putExtra("contents", forumQuestion.getQuestion());
+                intent.putExtra("key", forumQuestion.getKey());
+                context.startActivity(intent);
             });
             bind.getRoot().setOnClickListener(this);
             mLifecycleRegistry = new LifecycleRegistry(this);

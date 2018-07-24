@@ -58,6 +58,10 @@ public class ForumFragment extends Fragment {
             if (!forumQuestions.contains(question)) {
                 forumQuestions.add(question);
                 forumQuestionAdapter.notifyDataSetChanged();
+            } else {
+                int index = forumQuestions.indexOf(question);
+                forumQuestions.set(index, question);
+                forumQuestionAdapter.notifyDataSetChanged();
             }
         });
         bind.fab.setOnClickListener(view -> startActivity(new Intent(getActivity(), NewQuestionActivity.class)));

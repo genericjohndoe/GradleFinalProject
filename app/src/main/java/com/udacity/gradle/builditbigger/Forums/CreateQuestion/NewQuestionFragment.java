@@ -24,6 +24,8 @@ import com.udacity.gradle.builditbigger.databinding.FragmentNewQuestionBinding;
  * create an instance of this fragment.
  */
 public class NewQuestionFragment extends Fragment {
+    private String contents;
+    private String key;
 
     public NewQuestionFragment() {}
 
@@ -32,23 +34,33 @@ public class NewQuestionFragment extends Fragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment NewQuestionFragment.
      */
-    public static NewQuestionFragment newInstance() {
-        return new NewQuestionFragment();
+    public static NewQuestionFragment newInstance(String contents, String key) {
+        NewQuestionFragment newQuestionFragment = new NewQuestionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("contents", contents);
+        bundle.putString("key", key);
+        newQuestionFragment.setArguments(bundle);
+        return newQuestionFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null){
+            contents = getArguments().getString("contents");
+            key = getArguments().getString("key");
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentNewQuestionBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_new_question, container, false);
+        if (contents != null) bind.questionEditText.setText(contents);
         bind.questionEditText.requestFocus();
         bind.submitButton.setOnClickListener(view ->{
-            String question = bind.questionEditText.getText().toString();
-            if (question.length() > 10){
+            String question = bind.questionEditText.getText().toString().trim();
+            if (question.length() > 10 && (key == null)){
                 DatabaseReference db = Constants.DATABASE.child("forumquestions").push();
                 ForumQuestion fq = new ForumQuestion(question, Constants.UID, System.currentTimeMillis(), db.getKey());
                 db.setValue(fq, (databaseError, databaseReference) -> {
@@ -57,9 +69,16 @@ public class NewQuestionFragment extends Fragment {
                        intent.putExtra("key", fq.getKey());
                        startActivity(intent);
                        getActivity().finish();
-                   } else {
-                       Log.i("Hilarity", databaseError.getMessage());
                    }
+                });
+            } else if (question.length() > 10 && (key != null)) {
+                Constants.DATABASE.child("forumquestions/"+key+"/question").setValue(question, (databaseError, databaseReference) -> {
+                    if (databaseError == null){
+                        Intent intent = new Intent(getActivity(), ForumQuestionActivity.class);
+                        intent.putExtra("key", key);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
                 });
             }
         });
