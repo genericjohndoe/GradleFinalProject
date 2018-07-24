@@ -229,14 +229,8 @@ public class HilarityActivity extends AppCompatActivity
     }
 
     public void messagingToken() {
-        Constants.DATABASE.child("messagingtokens/" + Constants.UID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Constants.DATABASE.child("messagingtokens/" + Constants.UID).setValue(FirebaseInstanceId.getInstance().getToken());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(task ->{
+            Constants.DATABASE.child("messagingtokens/" + Constants.UID).setValue(task.getToken());
         });
     }
 

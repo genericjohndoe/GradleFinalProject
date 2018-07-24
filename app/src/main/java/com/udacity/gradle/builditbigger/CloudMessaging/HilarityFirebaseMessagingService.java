@@ -41,6 +41,11 @@ import java.util.Map;
 public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
 
+    @Override
+    public void onNewToken(String s) {
+        Constants.DATABASE.child("messagingtokens/"+Constants.UID).setValue(s);
+    }
+
     /**
      * Called when message is received.
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
