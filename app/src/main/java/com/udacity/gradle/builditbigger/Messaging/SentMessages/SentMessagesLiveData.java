@@ -19,7 +19,7 @@ public class SentMessagesLiveData extends LiveData<TranscriptPreview> {
     private Query databaseReference;
 
     public SentMessagesLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("transcriptpreviews/"+uid).orderByChild("message/timestamp");
+        databaseReference = Constants.DATABASE.child("transcriptpreviews/"+uid).orderByChild("message/timeStamp");
     }
 
 
