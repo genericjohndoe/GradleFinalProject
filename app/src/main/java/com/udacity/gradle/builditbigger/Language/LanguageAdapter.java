@@ -17,9 +17,9 @@ import com.udacity.gradle.builditbigger.R;
 
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder> {
 
-    Context context;
-    RecyclerViewCallback rvc;
-    String[] languages = new String[]{"English", "Español", "Français", "Deutsch", "Português", "русский",
+    private Context context;
+    private RecyclerViewCallback rvc;
+    private String[] languages = new String[]{"English", "Español", "Français", "Deutsch", "Português", "русский",
             "العربية", "中文", "日本語", "हिंदी"};
 
 

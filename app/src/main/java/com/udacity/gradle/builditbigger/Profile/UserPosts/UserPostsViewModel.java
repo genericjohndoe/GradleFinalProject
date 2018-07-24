@@ -7,9 +7,9 @@ import android.arch.lifecycle.ViewModel;
  */
 
 public class UserPostsViewModel extends ViewModel {
-    UserPostsLiveData userPostsLiveData;
-    SearchUserPostsLiveData searchUserPostsLiveData;
-    String uid;
+    private UserPostsLiveData userPostsLiveData;
+    private SearchUserPostsLiveData searchUserPostsLiveData;
+    private String uid;
 
     public UserPostsViewModel(String uid){
         userPostsLiveData = new UserPostsLiveData(uid);

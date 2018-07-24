@@ -29,8 +29,8 @@ import java.util.List;
 
 public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.SubsViewHolder> {
 
-    List<HilarityUser> subscribersList;
-    Context context;
+    private List<HilarityUser> subscribersList;
+    private Context context;
 
     public SubsAdapter(List<HilarityUser> list, Context context) {
         subscribersList = list;

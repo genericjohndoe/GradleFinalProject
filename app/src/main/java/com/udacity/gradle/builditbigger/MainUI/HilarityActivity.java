@@ -25,8 +25,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.mikepenz.actionitembadge.library.ActionItemBadge;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Explore.ExploreFragment;
 import com.udacity.gradle.builditbigger.Feed.FeedFragment;
@@ -61,9 +59,9 @@ public class HilarityActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         ViewModelProviders.of(this).get(UnreadMessagesViewModel.class).getUnreadMessagesLiveData().observe(this, hasUnreadMessages ->{
             if (hasUnreadMessages){
-                menuItem.setIcon(R.drawable.baseline_send_24px);
-            } else {
                 menuItem.setIcon(R.drawable.ic_mail_black_24dp);
+            } else {
+                menuItem.setIcon(R.drawable.ic_email_open);
             }
         });
         createNotificationChannel();
@@ -146,12 +144,6 @@ public class HilarityActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.hilarity, menu);
          menuItem = menu.getItem(0);
-        /*if (badgeCount >= 0) {
-            ActionItemBadge.update(this, menu.findItem(R.id.action_message),
-                    getDrawable(R.drawable.ic_mail_black_24dp), ActionItemBadge.BadgeStyles.RED, badgeCount);
-        } else {
-            //ActionItemBadge.hide(menu.findItem(R.id.action_message));
-        }*/
         return true;
     }
 

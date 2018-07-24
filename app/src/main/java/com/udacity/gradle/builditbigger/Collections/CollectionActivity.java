@@ -18,7 +18,7 @@ import com.udacity.gradle.builditbigger.R;
 
 public class CollectionActivity extends AppCompatActivity {
 
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

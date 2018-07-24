@@ -105,6 +105,7 @@
     <string name="mentions">Mentions</string>
     <string name="followers">Followers</string>
     <string name="forum_replies">Forum Replies</string>
+    <string name="reply">reply</string>
 
     <string name="uid" translatable="false">uid</string>
     <string name="fragment" translatable="false">fragment</string>
@@ -115,4 +116,11 @@
     <string name="posttype" translatable="false">posttype</string>
     <string name="filepath" translatable="false">filepath</string>
     <string name="path" translatable="false">path</string>
+    <string name="type" translatable="false">type</string>
+    <string name="body" translatable="false">body</string>
+    <string name="position" translatable="false">position</string>
+    <string name="forums_lc" translatable="false">forums</string>
+    <string name="mentions_lc" translatable="false">mention</string>
+    <string name="comment" translatable="false">comment</string>
+    <string name="message" translatable="false">message</string>
 </resources>

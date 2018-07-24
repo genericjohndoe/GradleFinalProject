@@ -16,7 +16,7 @@ import com.udacity.gradle.builditbigger.Models.PostWrapper;
  */
 
 public class FeedLiveData extends LiveData<PostWrapper> {
-    Query query;
+    private Query query;
 
     public FeedLiveData(String uid){
         query = Constants.DATABASE.child("feeds/"+uid);//.limitToLast(30);endAt();

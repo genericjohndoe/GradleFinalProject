@@ -47,18 +47,18 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.i("Ladidadi", "onMessageReceived called");
         Map<String, String> data = remoteMessage.getData();
-        if (data != null && data.get("type").equals("message")) {
-            sendNewMessageNotification(data.get("body"), data.get("path"), data.get("title"));
-        } else if (data.get("type").equals("mention") || data.get("type").equals("comment")){
-            sendNewCommentMentionNotification(data.get("title"), data.get("body"), data.get("uid"),
-                    data.get("postid"), Integer.parseInt(data.get("position")));
-        } else if (data.get("type").equals("forums")) {
+        if (data != null && data.get(getString(R.string.type)).equals(getString(R.string.message))) {
+            sendNewMessageNotification(data.get(getString(R.string.body)), data.get(getString(R.string.path)), data.get(getString(R.string.title)));
+        } else if (data.get(getString(R.string.type)).equals(getString(R.string.mentions_lc)) || data.get(getString(R.string.type)).equals(getString(R.string.comment))){
+            sendNewCommentMentionNotification(data.get(getString(R.string.title)), data.get(getString(R.string.body)), data.get(getString(R.string.uid)),
+                    data.get("postid"), Integer.parseInt(data.get(getString(R.string.position))));
+        } else if (data.get(getString(R.string.type)).equals(getString(R.string.forums_lc))) {
             Constants.DATABASE.child("").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    sendForumNotification(dataSnapshot.getValue(ForumQuestion.class),data.get("title"), data.get("body"));
+                    sendForumNotification(dataSnapshot.getValue(ForumQuestion.class),
+                            data.get(getString(R.string.title)), data.get(getString(R.string.body)));
                 }
 
                 @Override
@@ -85,9 +85,8 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNewMessageNotification(String messageBody, String path, String title) {
-        Log.i("Ladidadi", "sendNewMessageNotification");
         Intent intent = new Intent(this, TranscriptActivity.class);
-        intent.putExtra("path", path);
+        intent.putExtra(getString(R.string.path), path);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -111,11 +110,11 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
 
 
             RemoteInput remoteInput = new RemoteInput.Builder(KEY_TEXT_REPLY)
-                    .setLabel("reply")
+                    .setLabel(getString(R.string.reply))
                     .build();
 
             Intent intent1 = new Intent(this, NotifcationMessageReceiver.class);
-            intent1.putExtra("path", path);
+            intent1.putExtra(getString(R.string.path), path);
 
             PendingIntent replyPendingIntent =
                     PendingIntent.getBroadcast(getApplicationContext(),
@@ -125,7 +124,7 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
 
             NotificationCompat.Action action =
                     new NotificationCompat.Action.Builder(R.drawable.baseline_send_24px,
-                            "reply", replyPendingIntent)
+                            getString(R.string.reply), replyPendingIntent)
                             .addRemoteInput(remoteInput)
                             .build();
 
@@ -139,9 +138,9 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNewCommentMentionNotification(String title, String body, String uid, String pushId, int position){
         Intent intent = new Intent(this, CommentActivity.class);
-        intent.putExtra("uid", uid);
-        intent.putExtra("pushId", pushId);
-        intent.putExtra("position", position);
+        intent.putExtra(getString(R.string.uid), uid);
+        intent.putExtra(getString(R.string.pushId), pushId);
+        intent.putExtra(getString(R.string.position), position);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);

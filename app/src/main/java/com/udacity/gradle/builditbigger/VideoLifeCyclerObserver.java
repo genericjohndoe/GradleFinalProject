@@ -33,15 +33,15 @@ import com.udacity.gradle.builditbigger.Messaging.Transcripts.MessagesAdapter;
 
 public class VideoLifeCyclerObserver implements LifecycleObserver {
 
-    MediaSessionCompat mMediaSession;
-    PlaybackStateCompat.Builder mStateBuilder;
-    SimpleExoPlayerView playerView;
-    SimpleExoPlayer player;
-    MediaSessionConnector mediaSessionConnector;
-    Context context;
-    long position;
-    RecyclerView.ViewHolder viewHolder;
-    RecyclerView.Adapter jokesAdapter;
+    private MediaSessionCompat mMediaSession;
+    private PlaybackStateCompat.Builder mStateBuilder;
+    private SimpleExoPlayerView playerView;
+    private SimpleExoPlayer player;
+    private MediaSessionConnector mediaSessionConnector;
+    private Context context;
+    private long position;
+    private RecyclerView.ViewHolder viewHolder;
+    private RecyclerView.Adapter jokesAdapter;
 
     public VideoLifeCyclerObserver(Context context, RecyclerView.ViewHolder viewHolder, RecyclerView.Adapter jokesAdapter){
         if (viewHolder instanceof JokesAdapter.JokesViewHolder){

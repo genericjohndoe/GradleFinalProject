@@ -11,7 +11,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 
 public class AutoTranslateLiveData extends LiveData<Boolean> {
 
-    DatabaseReference db;
+    private DatabaseReference db;
 
     public AutoTranslateLiveData(){
         db = Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/autotranslate");

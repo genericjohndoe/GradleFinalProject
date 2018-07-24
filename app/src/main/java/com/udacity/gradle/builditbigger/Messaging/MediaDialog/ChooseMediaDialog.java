@@ -17,7 +17,7 @@ import com.udacity.gradle.builditbigger.R;
 
 public class ChooseMediaDialog extends DialogFragment {
     //todo pass in interface call intent creater method
-    ActivityForResult activityForResult;
+    private ActivityForResult activityForResult;
 
     public  ChooseMediaDialog(){}
 

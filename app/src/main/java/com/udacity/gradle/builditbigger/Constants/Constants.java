@@ -54,7 +54,6 @@ public class Constants {
             for (String string : array) {
                 if (string.substring(0, 1).equals("#")) {
                     tags.put(string.substring(1), true);
-                    Log.i("Hilarity", "tag added " + string);
                 }
             }
             return tags;

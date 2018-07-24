@@ -16,7 +16,7 @@ import com.udacity.gradle.builditbigger.Models.PostWrapper;
  */
 
 public class UserLikesLiveData extends LiveData<PostWrapper> {
-    DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
 
     public UserLikesLiveData(String uid){
         databaseReference = Constants.DATABASE.child("userlikes/" + uid + "/list");

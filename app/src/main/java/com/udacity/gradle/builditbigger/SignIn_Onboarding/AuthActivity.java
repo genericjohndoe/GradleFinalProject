@@ -18,10 +18,10 @@ import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
 public class AuthActivity extends AppCompatActivity {
-    FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;
-    CircularProgressView circularProgressView;
+    private CircularProgressView circularProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

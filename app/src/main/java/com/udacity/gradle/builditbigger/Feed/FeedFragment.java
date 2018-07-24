@@ -31,9 +31,9 @@ import java.util.Set;
 
 public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    JokesAdapter jokeAdapter;
-    List<Post> jokes;
-    FeedExplorePageBinding bind;
+    private JokesAdapter jokeAdapter;
+    private List<Post> jokes;
+    private FeedExplorePageBinding bind;
     private String uid;
     private boolean enableSwipeToRefresh = false;
     private boolean searched = false;

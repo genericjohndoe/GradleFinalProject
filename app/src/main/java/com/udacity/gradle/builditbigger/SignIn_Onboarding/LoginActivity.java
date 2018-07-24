@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final int RC_SIGN_IN = 1;
     private int RC_SAVE = 2;
-    FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;

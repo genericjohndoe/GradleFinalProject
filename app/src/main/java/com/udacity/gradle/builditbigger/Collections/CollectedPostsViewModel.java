@@ -8,7 +8,7 @@ import android.arch.lifecycle.ViewModel;
 
 public class CollectedPostsViewModel extends ViewModel {
 
-    CollectedPostsLiveData collectedPostsLiveData;
+    private CollectedPostsLiveData collectedPostsLiveData;
 
     public CollectedPostsViewModel(String collectionId){
         collectedPostsLiveData = new CollectedPostsLiveData(collectionId);

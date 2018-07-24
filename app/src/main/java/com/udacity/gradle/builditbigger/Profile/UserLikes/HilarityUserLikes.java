@@ -33,12 +33,12 @@ import java.util.List;
 
 public class HilarityUserLikes extends Fragment implements EnableSearch {
     //todo test search
-    HideFAB profile;
-    JokesAdapter jokeAdapter;
-    List<Post> jokes = new ArrayList<>();
-    FragmentJokeslistGenrelistBinding binding;
+    private HideFAB profile;
+    private JokesAdapter jokeAdapter;
+    private List<Post> jokes = new ArrayList<>();
+    private FragmentJokeslistGenrelistBinding binding;
     private String uid;
-    UserLikesViewModel userLikesViewModel;
+    private UserLikesViewModel userLikesViewModel;
 
     public static HilarityUserLikes newInstance(String uid, HideFAB profile){
         HilarityUserLikes hilarityUserLikes = new HilarityUserLikes();

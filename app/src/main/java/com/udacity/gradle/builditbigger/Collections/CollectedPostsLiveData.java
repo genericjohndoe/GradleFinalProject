@@ -15,13 +15,13 @@ import com.udacity.gradle.builditbigger.Models.Post;
  */
 
 public class CollectedPostsLiveData extends LiveData<Post> {
-    DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
 
     public CollectedPostsLiveData(String collectionId){
         databaseReference = Constants.DATABASE.child("usercollections/"+Constants.UID+"/"+collectionId+"/posts");
     }
 
-    ChildEventListener childEventListener = new ChildEventListener() {
+    private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             setValue(dataSnapshot.getValue(Post.class));

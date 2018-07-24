@@ -11,7 +11,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 
 public class TaglineLiveData extends LiveData<String> {
 
-    DatabaseReference db;
+    private DatabaseReference db;
 
     public TaglineLiveData(){
         db = Constants.DATABASE.child("users/"+Constants.UID+"/tagline");

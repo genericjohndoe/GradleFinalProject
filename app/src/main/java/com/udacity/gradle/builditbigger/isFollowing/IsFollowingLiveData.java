@@ -14,7 +14,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
  */
 
 public class IsFollowingLiveData extends LiveData<Boolean> {
-    DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
 
     public IsFollowingLiveData(String uid){
         databaseReference = Constants.DATABASE.child("followers/" + uid + "/list/"+ Constants.UID);

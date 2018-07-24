@@ -30,11 +30,11 @@ import java.util.Map;
  */
 
 public class CommentFragment extends Fragment {
-    String uid;
-    String postId;
-    int position;
-    List<Comment> comments;
-    CommentsAdapter commentsAdapter;
+    private String uid;
+    private String postId;
+    private int position;
+    private List<Comment> comments;
+    private CommentsAdapter commentsAdapter;
 
     public static CommentFragment newInstance(String uid, String pushId) {
         Bundle bundle = new Bundle();

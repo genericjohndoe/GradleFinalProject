@@ -24,9 +24,9 @@ import com.udacity.gradle.builditbigger.databinding.FragmentSearchBinding;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
-    int position;
-    String searchTerm;
-    boolean fromTag;
+    private int position;
+    private String searchTerm;
+    private boolean fromTag;
 
     public SearchFragment() {}
 

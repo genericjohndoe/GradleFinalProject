@@ -16,7 +16,7 @@ import com.udacity.gradle.builditbigger.Models.Collection;
  */
 
 public class UserCollectionLiveData extends LiveData<Collection> {
-    DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
 
     public UserCollectionLiveData(String uid){
         databaseReference = Constants.DATABASE.child("usercollections/" + uid);

@@ -17,7 +17,7 @@ import com.udacity.gradle.builditbigger.databinding.DialogSearchBinding;
 
 public class SearchDialogFragment extends DialogFragment {
 
-    EnableSearch enableSearch;
+    private EnableSearch enableSearch;
 
     public static SearchDialogFragment getInstance(EnableSearch enableSearch){
         SearchDialogFragment searchDialogFragment = new SearchDialogFragment();

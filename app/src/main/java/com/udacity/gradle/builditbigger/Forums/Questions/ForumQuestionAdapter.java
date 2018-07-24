@@ -27,8 +27,8 @@ import java.util.List;
 
 public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdapter.ForumQuestionViewHolder> {
 
-    List<ForumQuestion> forumQuestions;
-    Context context;
+    private List<ForumQuestion> forumQuestions;
+    private Context context;
 
     public ForumQuestionAdapter(List<ForumQuestion> forumQuestions, Context context){
         this.forumQuestions = forumQuestions;
