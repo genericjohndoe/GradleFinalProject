@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -79,13 +80,17 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
         public ForumReplyViewHolder(CellForumReplyBinding bind) {
             super(bind.getRoot());
             this.bind = bind;
-            bind.deleteButton.setOnClickListener(view -> Constants.DATABASE.child("forumreplies/" + key + "/" + forumReply.getKey())
-                    .removeValue((databaseError, databaseReference) -> {
-                        if (databaseError == null) {
-                            forumReplies.remove(forumReply);
-                            notifyDataSetChanged();
-                        }
-                    }));
+            bind.deleteButton.setOnClickListener(view -> {
+                if (forumReply.getHilarityUser().getUid().equals(Constants.UID)) {
+                    Constants.DATABASE.child("forumquestionreplies/" + key + "/" + forumReply.getKey())
+                            .removeValue((databaseError, databaseReference) -> {
+                                if (databaseError == null) {
+                                    forumReplies.remove(forumReply);
+                                    notifyDataSetChanged();
+                                }
+                            });
+                }
+            });
         }
     }
 }

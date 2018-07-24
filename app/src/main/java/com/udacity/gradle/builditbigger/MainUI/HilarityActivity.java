@@ -223,11 +223,14 @@ public class HilarityActivity extends AppCompatActivity
             channel.setDescription(description);
             NotificationChannel channel2 = new NotificationChannel("new_forum_channel", "Forum Channel", importance);
             channel.setDescription("Channel for Forum Replies");
+            NotificationChannel channel3 = new NotificationChannel("new_comment_channel", "Comment Channel", importance);
+            channel.setDescription("Channel for Comment mentions and Comments");
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
             notificationManager.createNotificationChannel(channel2);
+            notificationManager.createNotificationChannel(channel3);
         }
     }
 

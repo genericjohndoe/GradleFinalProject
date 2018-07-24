@@ -37,8 +37,7 @@ public class ForumQuestionFragment extends Fragment {
     private String forumKey;
     private String authorUID;
 
-    public ForumQuestionFragment() {
-    }
+    public ForumQuestionFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -85,7 +84,9 @@ public class ForumQuestionFragment extends Fragment {
                     data.put("replierUserName", Constants.USER.getUserName());
                     data.put("contents", contents);
                     FirebaseFunctions.getInstance().getHttpsCallable("onForumReply").call(data);
+                    Log.i("mentions", ""+bind.answerEditText.getMentions().size());
                     if (bind.answerEditText.getMentions().size() > 0) {
+                        Log.i("userNameList",bind.answerEditText.getMentions().toString());
                         data.put("userNameList", bind.answerEditText.getMentions());
                         FirebaseFunctions.getInstance().getHttpsCallable("onReplyMentionCreated").call(data);
                     }
