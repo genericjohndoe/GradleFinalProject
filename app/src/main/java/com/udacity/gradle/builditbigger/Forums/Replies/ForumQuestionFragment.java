@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger.Forums.Replies;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,7 +18,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Forums.CreateQuestion.NewQuestionActivity;
 import com.udacity.gradle.builditbigger.Forums.ForumQuestionsViewModel;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.ForumQuestion;
 import com.udacity.gradle.builditbigger.Models.ForumReply;
 import com.udacity.gradle.builditbigger.R;
@@ -101,17 +104,40 @@ public class ForumQuestionFragment extends Fragment {
 
         forumQuestionsViewModel = ViewModelProviders.of(this).get(ForumQuestionsViewModel.class);
         forumQuestionsViewModel.getForumQuestionLiveData(forumKey).observe(this, forumQuestion -> {
-            showName(forumQuestion.getHilarityUserUID());
-            bind.question.questionTextView.setText(forumQuestion.getQuestion());
-            bind.question.questionTextView.requestFocus();
-            bind.question.timeTextView.setText(Constants.formattedTimeString(getActivity(), forumQuestion.getTimeStamp()));
-            authorUID = forumQuestion.getHilarityUserUID();
+            if (forumQuestion != null) {
+                showName(forumQuestion.getHilarityUserUID());
+                if (Constants.UID.equals(forumQuestion.getHilarityUserUID())) {
+                    bind.question.deleteImageButton.setVisibility(View.VISIBLE);
+                    bind.question.editImageButton.setVisibility(View.VISIBLE);
+                }
+                bind.question.questionTextView.setText(forumQuestion.getQuestion());
+                bind.question.questionTextView.requestFocus();
+                bind.question.timeTextView.setText(Constants.formattedTimeString(getActivity(), forumQuestion.getTimeStamp()));
+                authorUID = forumQuestion.getHilarityUserUID();
+            }
         });
         forumQuestionsViewModel.getForumQuestionReplyLiveData(forumKey).observe(this, reply -> {
             if (!replies.contains(reply)) {
                 replies.add(reply);
                 adapter.notifyDataSetChanged();
             }
+        });
+        bind.question.deleteImageButton.setOnClickListener(view -> {
+            Constants.DATABASE.child("forumquestions/"+forumKey).removeValue((databaseError, databaseReference) -> {
+                if (databaseError == null){
+                    Constants.DATABASE.child("forumquestionreplies/"+forumKey).removeValue();
+                    Intent intent = new Intent(getActivity(), HilarityActivity.class);
+                    intent.putExtra("number",5);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            });
+        });
+        bind.question.editImageButton.setOnClickListener(view ->{
+            Intent intent = new Intent(getActivity(), NewQuestionActivity.class);
+            intent.putExtra("contents", bind.question.questionTextView.getText().toString().trim());
+            intent.putExtra("key", forumKey);
+            startActivity(intent);
         });
         return bind.getRoot();
     }
