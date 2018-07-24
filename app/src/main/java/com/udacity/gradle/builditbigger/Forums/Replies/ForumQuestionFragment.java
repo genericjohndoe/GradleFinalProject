@@ -36,6 +36,8 @@ import java.util.Map;
 public class ForumQuestionFragment extends Fragment {
     private String forumKey;
     private String authorUID;
+    private ForumQuestionsViewModel forumQuestionsViewModel;
+    private FragmentForumQuestionBinding bind;
 
     public ForumQuestionFragment() {}
 
@@ -63,45 +65,46 @@ public class ForumQuestionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentForumQuestionBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_forum_question, container, false);
+        bind = DataBindingUtil.inflate(inflater, R.layout.fragment_forum_question, container, false);
 
         List<ForumReply> replies = new ArrayList<>();
         ForumReplyAdapter adapter = new ForumReplyAdapter(replies, getActivity(), forumKey);
         bind.recyclerview.setAdapter(adapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         bind.addButton.setOnClickListener(view -> {
-            String contents = bind.answerEditText.getText().toString();
-            DatabaseReference db = Constants.DATABASE.child("forumquestionreplies/" + forumKey).push();
-            ForumReply forumReply = new ForumReply(Constants.USER, contents, System.currentTimeMillis(), db.getKey());
-            db.setValue(forumReply, (databaseError, databaseReference) -> {
-                if (databaseError == null) {
+            String contents = bind.answerEditText.getText().toString().trim();
+            if (contents.length() > 0) {
+                DatabaseReference db = Constants.DATABASE.child("forumquestionreplies/" + forumKey).push();
+                ForumReply forumReply = new ForumReply(Constants.UID, contents, System.currentTimeMillis(), db.getKey());
+                db.setValue(forumReply, (databaseError, databaseReference) -> {
                     InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     mgr.hideSoftInputFromWindow(bind.answerEditText.getWindowToken(), 0);
                     bind.answerEditText.setText("");
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("forumQuestionKey", forumKey);
-                    data.put("uid", authorUID);
-                    data.put("replierUserName", Constants.USER.getUserName());
-                    data.put("contents", contents);
-                    FirebaseFunctions.getInstance().getHttpsCallable("onForumReply").call(data);
-                    Log.i("mentions", ""+bind.answerEditText.getMentions().size());
-                    if (bind.answerEditText.getMentions().size() > 0) {
-                        Log.i("userNameList",bind.answerEditText.getMentions().toString());
-                        data.put("userNameList", bind.answerEditText.getMentions());
-                        FirebaseFunctions.getInstance().getHttpsCallable("onReplyMentionCreated").call(data);
+                    if (databaseError == null && !Constants.UID.equals(authorUID)) {
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("forumQuestionKey", forumKey);
+                        data.put("uid", authorUID);
+                        data.put("replierUserName", Constants.USER.getUserName());
+                        data.put("contents", contents);
+                        FirebaseFunctions.getInstance().getHttpsCallable("onForumReply").call(data);
+                        Log.i("mentions", "" + bind.answerEditText.getMentions().size());
+                        if (bind.answerEditText.getMentions().size() > 0) {
+                            Log.i("userNameList", bind.answerEditText.getMentions().toString());
+                            data.put("userNameList", bind.answerEditText.getMentions());
+                            FirebaseFunctions.getInstance().getHttpsCallable("onReplyMentionCreated").call(data);
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
-        ForumQuestionsViewModel forumQuestionsViewModel = ViewModelProviders.of(this).get(ForumQuestionsViewModel.class);
+        forumQuestionsViewModel = ViewModelProviders.of(this).get(ForumQuestionsViewModel.class);
         forumQuestionsViewModel.getForumQuestionLiveData(forumKey).observe(this, forumQuestion -> {
-            String userName = "@" + forumQuestion.getHilarityUser().getUserName();
-            bind.question.userNameTextView.setText(userName);
+            showName(forumQuestion.getHilarityUserUID());
             bind.question.questionTextView.setText(forumQuestion.getQuestion());
             bind.question.questionTextView.requestFocus();
             bind.question.timeTextView.setText(Constants.formattedTimeString(getActivity(), forumQuestion.getTimeStamp()));
-            authorUID = forumQuestion.getHilarityUser().getUid();
+            authorUID = forumQuestion.getHilarityUserUID();
         });
         forumQuestionsViewModel.getForumQuestionReplyLiveData(forumKey).observe(this, reply -> {
             if (!replies.contains(reply)) {
@@ -110,6 +113,13 @@ public class ForumQuestionFragment extends Fragment {
             }
         });
         return bind.getRoot();
+    }
+
+    public void showName(String uid){
+        forumQuestionsViewModel.getUserNameLiveData(uid).observe(this, name ->{
+            String userName = "@" + name;
+            bind.question.userNameTextView.setText(userName);
+        });
     }
 
 }

@@ -10,29 +10,27 @@ import android.os.Parcelable;
 public class ForumQuestion implements Parcelable {
 
     private String question;
-    private HilarityUser hilarityUser;
+    private String hilarityUserUID;
     private Long timeStamp;
     private String key;
 
     public ForumQuestion(){}
 
-    public ForumQuestion(String question, HilarityUser hilarityUser, Long timeStamp, String key){
+    public ForumQuestion(String question, String hilarityUserUID, Long timeStamp, String key){
         this.question = question;
-        this.hilarityUser = hilarityUser;
+        this.hilarityUserUID = hilarityUserUID;
         this.timeStamp = timeStamp;
         this.key = key;
     }
 
     public ForumQuestion(Parcel in){
         question = in.readString();
-        hilarityUser = in.readParcelable(HilarityUser.class.getClassLoader());
+        hilarityUserUID = in.readString();
         timeStamp = in.readLong();
         key = in.readString();
     }
 
-    public HilarityUser getHilarityUser() {
-        return hilarityUser;
-    }
+    public String getHilarityUserUID() {return hilarityUserUID;}
 
     public Long getTimeStamp() {
         return timeStamp;
@@ -46,7 +44,7 @@ public class ForumQuestion implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(question);
-        dest.writeParcelable(hilarityUser,PARCELABLE_WRITE_RETURN_VALUE);
+        dest.writeString(hilarityUserUID);
         dest.writeLong(timeStamp);
         dest.writeString(key);
     }

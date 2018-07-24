@@ -6,22 +6,22 @@ package com.udacity.gradle.builditbigger.Models;
 
 public class ForumReply {
 
-    private HilarityUser hilarityUser;
+    private String hilarityUserUID;
     private String content;
     private Long timeStamp;
     private String key;
 
     public ForumReply(){}
 
-    public ForumReply(HilarityUser hilarityUser, String content, Long timeStamp, String key){
-        this.hilarityUser = hilarityUser;
+    public ForumReply(String hilarityUserUID, String content, Long timeStamp, String key){
+        this.hilarityUserUID = hilarityUserUID;
         this.content = content;
         this.timeStamp = timeStamp;
         this.key = key;
     }
 
-    public HilarityUser getHilarityUser() {
-        return hilarityUser;
+    public String getHilarityUserUID() {
+        return hilarityUserUID;
     }
 
     public Long getTimeStamp() {

@@ -1,5 +1,9 @@
 package com.udacity.gradle.builditbigger.Forums.Questions;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -15,6 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Forums.Replies.ForumQuestionActivity;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Jokes.UserNameLiveData;
+import com.udacity.gradle.builditbigger.Jokes.ViewHolderViewModel;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.ForumQuestion;
 import com.udacity.gradle.builditbigger.R;
@@ -45,11 +52,15 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
 
     @Override
     public void onBindViewHolder(@NonNull ForumQuestionViewHolder holder, int position) {
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         ForumQuestion forumQuestion = forumQuestions.get(position);
         holder.forumQuestion = forumQuestion;
         holder.bind.questionTextView.setText(forumQuestion.getQuestion());
-        String userName = "@"+forumQuestion.getHilarityUser().getUserName();
-        holder.bind.userNameTextView.setText(userName);
+        ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(forumQuestion);
+        viewHolderViewModel.getUserNameLiveData().observe(holder, name -> {
+            String userName = "@"+name;
+            holder.bind.userNameTextView.setText(userName);
+        });
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -73,14 +84,17 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
         return forumQuestions.size();
     }
 
-    public class ForumQuestionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        CellForumQuestionBinding bind;
-        ForumQuestion forumQuestion;
+    public class ForumQuestionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, LifecycleOwner{
+        private CellForumQuestionBinding bind;
+        private ForumQuestion forumQuestion;
+        private LifecycleRegistry mLifecycleRegistry;
 
         public ForumQuestionViewHolder(CellForumQuestionBinding bind){
             super(bind.getRoot());
             this.bind = bind;
             bind.getRoot().setOnClickListener(this);
+            mLifecycleRegistry = new LifecycleRegistry(this);
+            mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
         }
 
         @Override
@@ -89,5 +103,33 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
             intent.putExtra("key", forumQuestion.getKey());
             context.startActivity(intent);
         }
+
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return mLifecycleRegistry;
+        }
+
+        public LifecycleRegistry getmLifecycleRegistry() {
+            return mLifecycleRegistry;
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ForumQuestionViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ForumQuestionViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ForumQuestionViewHolder holder) {
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        super.onViewRecycled(holder);
     }
 }

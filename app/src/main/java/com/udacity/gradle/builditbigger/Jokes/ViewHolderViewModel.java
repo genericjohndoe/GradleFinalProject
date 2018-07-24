@@ -1,5 +1,7 @@
 package com.udacity.gradle.builditbigger.Jokes;
 
+import com.udacity.gradle.builditbigger.Models.ForumQuestion;
+import com.udacity.gradle.builditbigger.Models.ForumReply;
 import com.udacity.gradle.builditbigger.Models.Post;
 
 /**
@@ -19,6 +21,14 @@ public class ViewHolderViewModel {
         numCommentsLiveData = new NumCommentsLiveData(joke.getUID(),joke.getPushId());
         isLikedLiveData = new IsLikedLiveData(joke.getUID(),joke.getPushId());
         userNameLiveData = new UserNameLiveData(joke.getUID());
+    }
+
+    public ViewHolderViewModel(ForumQuestion forumQuestion){
+        userNameLiveData = new UserNameLiveData(forumQuestion.getHilarityUserUID());
+    }
+
+    public ViewHolderViewModel(ForumReply reply){
+        userNameLiveData = new UserNameLiveData(reply.getHilarityUserUID());
     }
 
     public ProfileImgLiveData getProfileImgLiveData() {

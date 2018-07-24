@@ -17,7 +17,7 @@ public class UserNameLiveData extends LiveData<String> {
     private DatabaseReference databaseReference;
 
     public UserNameLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("userlist/"+uid);
+        databaseReference = Constants.DATABASE.child("users/"+uid+"/userName");
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {

@@ -1,5 +1,8 @@
 package com.udacity.gradle.builditbigger.Forums.Replies;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -13,6 +16,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Forums.Questions.ForumQuestionAdapter;
+import com.udacity.gradle.builditbigger.Jokes.UserNameLiveData;
+import com.udacity.gradle.builditbigger.Jokes.ViewHolderViewModel;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.ForumReply;
 import com.udacity.gradle.builditbigger.R;
@@ -44,11 +50,16 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
 
     @Override
     public void onBindViewHolder(@NonNull ForumReplyViewHolder holder, int position) {
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
         ForumReply forumReply = forumReplies.get(position);
         holder.forumReply = forumReply;
         holder.bind.replyTextView.setText(forumReply.getContent());
-        String userName = "@" + forumReply.getHilarityUser().getUserName();
-        holder.bind.userNameTextView.setText(userName);
+        ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(forumReply);
+        viewHolderViewModel.getUserNameLiveData().observe(holder, name ->{
+            String userName = "@"+name;
+            holder.bind.userNameTextView.setText(userName);
+        });
+
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/" + s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -73,15 +84,18 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
         return forumReplies.size();
     }
 
-    public class ForumReplyViewHolder extends RecyclerView.ViewHolder {
+    public class ForumReplyViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
         CellForumReplyBinding bind;
         ForumReply forumReply;
+        private LifecycleRegistry mLifecycleRegistry;
 
         public ForumReplyViewHolder(CellForumReplyBinding bind) {
             super(bind.getRoot());
             this.bind = bind;
+            mLifecycleRegistry = new LifecycleRegistry(this);
+            mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
             bind.deleteButton.setOnClickListener(view -> {
-                if (forumReply.getHilarityUser().getUid().equals(Constants.UID)) {
+                if (forumReply.getHilarityUserUID().equals(Constants.UID)) {
                     Constants.DATABASE.child("forumquestionreplies/" + key + "/" + forumReply.getKey())
                             .removeValue((databaseError, databaseReference) -> {
                                 if (databaseError == null) {
@@ -92,5 +106,34 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
                 }
             });
         }
+
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return mLifecycleRegistry;
+        }
+
+        public LifecycleRegistry getmLifecycleRegistry() {
+            return mLifecycleRegistry;
+        }
     }
+
+        @Override
+        public void onViewAttachedToWindow(@NonNull ForumReplyViewHolder holder) {
+            super.onViewAttachedToWindow(holder);
+            holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+        }
+
+        @Override
+        public void onViewDetachedFromWindow(@NonNull ForumReplyViewHolder holder) {
+            super.onViewDetachedFromWindow(holder);
+            holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+        }
+
+        @Override
+        public void onViewRecycled(@NonNull ForumReplyViewHolder holder) {
+            holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+            super.onViewRecycled(holder);
+        }
+
 }

@@ -50,12 +50,13 @@ public class NewQuestionFragment extends Fragment {
             String question = bind.questionEditText.getText().toString();
             if (question.length() > 10){
                 DatabaseReference db = Constants.DATABASE.child("forumquestions").push();
-                ForumQuestion fq = new ForumQuestion(question, Constants.USER, System.currentTimeMillis(), db.getKey());
+                ForumQuestion fq = new ForumQuestion(question, Constants.UID, System.currentTimeMillis(), db.getKey());
                 db.setValue(fq, (databaseError, databaseReference) -> {
                    if (databaseError == null){
                        Intent intent = new Intent(getActivity(), ForumQuestionActivity.class);
-                       intent.putExtra("question", fq);
-                       getActivity().startActivity(intent);
+                       intent.putExtra("key", fq.getKey());
+                       startActivity(intent);
+                       getActivity().finish();
                    } else {
                        Log.i("Hilarity", databaseError.getMessage());
                    }
