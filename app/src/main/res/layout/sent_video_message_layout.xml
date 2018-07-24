@@ -6,7 +6,6 @@
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/message_videoView"
-        android:background="@drawable/rounded_rectangle_green"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:padding="8dp"

@@ -27,7 +27,6 @@
 
     <ImageView
         android:id="@+id/message_imageView"
-        android:background="@drawable/rounded_rectangle_orange"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:padding="8dp"
