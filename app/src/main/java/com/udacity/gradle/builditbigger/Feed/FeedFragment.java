@@ -143,7 +143,7 @@ public class FeedFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     List<Post> searches = new ArrayList<>();
                     List<String> splitSearchKeyword = Arrays.asList(searchKeyword.split(" "));
                     for (Post post: jokes){
-                        Set<String> tags = post.getMetaData().getKeywords().keySet();
+                        Set<String> tags = post.getMetaData().keySet();
                         if (tags.retainAll(splitSearchKeyword) && tags.size() > 0) searches.add(post);
                     }
                     jokeAdapter.setJokes(searches);

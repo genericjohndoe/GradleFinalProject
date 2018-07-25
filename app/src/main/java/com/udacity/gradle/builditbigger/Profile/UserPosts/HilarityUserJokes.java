@@ -1,6 +1,9 @@
 package com.udacity.gradle.builditbigger.Profile.UserPosts;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,8 @@ import android.view.ViewGroup;
 import com.udacity.gradle.builditbigger.Interfaces.EnableSearch;
 import com.udacity.gradle.builditbigger.Interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Jokes.PostAdapter;
+import com.udacity.gradle.builditbigger.Jokes.PostDataSourceFactory;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.PostWrapper;
 import com.udacity.gradle.builditbigger.Profile.FragmentFocusLiveData;
@@ -38,6 +44,8 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     private String uid;
     private UserPostsViewModel userPostsViewModel;
     private boolean init = true;
+    private PostAdapter postAdapter;
+    private LiveData<PagedList<Post>> posts;
 
     public static HilarityUserJokes newInstance(String uid, HideFAB profile) {
         HilarityUserJokes hilarityUserJokes = new HilarityUserJokes();
@@ -57,16 +65,22 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
             jokes = savedInstanceState.getParcelableArrayList(getString(R.string.posts));
             init = savedInstanceState.getBoolean(getString(R.string.init));
         }
-        jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
+        //jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
+        postAdapter = new PostAdapter(getActivity(), true);
+        PagedList.Config config = new PagedList.Config.Builder().setPageSize(1).build();
+        PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory("userposts/" + uid + "/posts");
+        posts = new LivePagedListBuilder<>(postDataSourceFactory, config).build();
+        posts.observe(this, postAdapter::submitList);
+
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
-        llm.setStackFromEnd(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        //llm.setStackFromEnd(true);
         binding.recyclerView.setLayoutManager(llm);
-        binding.recyclerView.setAdapter(jokeAdapter);
+        binding.recyclerView.setAdapter(postAdapter);
 
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -81,12 +95,12 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
             }
         });
 
-        userPostsViewModel = ViewModelProviders.of(this, new UserPostViewModelFactory(uid))
+        /*userPostsViewModel = ViewModelProviders.of(this, new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
         userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> {
             addPostToList(postWrapper, jokes);
             configureUI();
-        });
+        });*/
         FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
             if (position == 0) profile.getFAB().setOnClickListener(view -> showSearchDialog());
         });
