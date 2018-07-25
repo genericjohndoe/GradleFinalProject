@@ -59,6 +59,15 @@ public class SearchFragment extends Fragment {
         FragmentSearchBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search, container, false);
         bind.viewPager.setAdapter(new SearchPagerAdapter(getActivity().getSupportFragmentManager()));
         bind.tabLayout.setupWithViewPager(bind.viewPager);
+        bind.tabLayout.getTabAt(0).setCustomView(R.layout.icon_person);
+        bind.tabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
+        bind.tabLayout.getTabAt(2).setCustomView(R.layout.icon_hashtag);//change
+        bind.tabLayout.getTabAt(3).setCustomView(R.layout.icon_document_post_green);
+        bind.tabLayout.getTabAt(4).setCustomView(R.layout.icon_images);
+        bind.tabLayout.getTabAt(5).setCustomView(R.layout.icon_video);
+        bind.tabLayout.getTabAt(6).setCustomView(R.layout.icon_gif);
+        bind.tabLayout.getTabAt(7).setCustomView(R.layout.icon_audio);
+
         SearchHilarityViewModel searchHilarityViewModel = ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class);
 
         bind.searcheditText.addTextChangedListener(new TextWatcher() {
@@ -87,9 +96,9 @@ public class SearchFragment extends Fragment {
 
         Fragment[] fragmentArray = new Fragment[]{SearchUserFragment.newInstance(), SearchCollectionsFragment.newInstance(),
                 SearchTagsFragment.newInstance(), SearchTextPostsFragment.newInstance(), SearchImagePostsFragment.newInstance(),
-                SearchVideoPostsFragment.newInstance(), SearchGifPostsFragment.newInstance()};
+                SearchVideoPostsFragment.newInstance(), SearchGifPostsFragment.newInstance(), SearchGifPostsFragment.newInstance()};
 
-        String[] tabTitles = new String[]{"Users", "Collections", "Tags", "Text", "Image", "Video", "Gif"};
+        String[] tabTitles = new String[]{"Users", "Collections", "Tags", "Text", "Image", "Video", "Gif", "Audio"};
 
         @Override
         public CharSequence getPageTitle(int position) {

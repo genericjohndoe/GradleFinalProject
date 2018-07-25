@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:drawableStart="@drawable/ic_search_black_24dp"
         android:ems="10"
-        android:backgroundTint="@color/green_8"
+        style="@style/EditTextOverride"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
