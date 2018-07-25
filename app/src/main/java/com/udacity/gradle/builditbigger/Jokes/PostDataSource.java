@@ -52,7 +52,7 @@ public class PostDataSource extends ItemKeyedDataSource<String, Post> {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int index = (int) dataSnapshot.getChildrenCount();
-                if (posts.size() < index) {
+                if (posts.size() % 20 == 0) {
                     int count = 1;
                     for (DataSnapshot snap : dataSnapshot.getChildren()) {
                         posts.add(snap.getValue(Post.class));
