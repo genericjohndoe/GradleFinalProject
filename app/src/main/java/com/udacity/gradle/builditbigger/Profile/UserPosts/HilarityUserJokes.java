@@ -67,7 +67,7 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
         }
         //jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
         postAdapter = new PostAdapter(getActivity(), true);
-        PagedList.Config config = new PagedList.Config.Builder().setPageSize(1).build();
+        PagedList.Config config = new PagedList.Config.Builder().setPageSize(20).build();
         PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory("userposts/" + uid + "/posts");
         posts = new LivePagedListBuilder<>(postDataSourceFactory, config).build();
         posts.observe(this, postAdapter::submitList);
