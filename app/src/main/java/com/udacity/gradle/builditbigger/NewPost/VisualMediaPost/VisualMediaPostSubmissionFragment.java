@@ -29,6 +29,8 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostSubmissionBinding;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,7 +89,7 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
         // Inflate the layout for this fragment
         bind = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_visual_media_post_submission, container, false);
-        Log.i("iefioejwfw", "onCreate");
+
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 
             if (post != null) {
@@ -100,11 +102,7 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
                             }
                         });*/
                 bind.socialEditText.setText(post.getTagline());
-                Log.i("iefioejwfw", "post isn't null");
-                Log.i("iefioejwfw", "post id is " + post.getPushId());
-                Log.i("iefioejwfw", "post id is " + post.toString());
             } else {
-                Log.i("iefioejwfw", "post is null");
                 try {
                     mmr.setDataSource(filePath);
                 } catch (Exception e) {
@@ -112,7 +110,6 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
                 }
             }
         isVideo = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO);
-        Log.i("wenfhluwhru", "" + (isVideo == null));
         if (isVideo == null) {
             bind.gifImageView.setVisibility(View.VISIBLE);
             bind.simpleExoPlayerView.setVisibility(View.GONE);
@@ -174,12 +171,21 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
                                 String downloadUrl = uri.toString();
                                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                 String tagline = bind.socialEditText.getText().toString();
-                                Post newAudioPost = new Post(path, "", System.currentTimeMillis(),
+                                Map<String, Boolean> keywords = new HashMap();
+                                if (isVideo != null) keywords.put("video", true);
+                                if ((isVideo == null) && addSuffix(filePath).equals(".gif")) keywords.put("gif", true);
+                                if ((isVideo == null) && !addSuffix(filePath).equals(".gif")) keywords.put("image", true);
+                                keywords.put("visual", true);
+                                keywords.put(""+Integer.parseInt(number) + 1,true);
+
+                                long time = System.currentTimeMillis();
+                                Post newAudioPost = new Post(path, "", time,
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, type,
-                                        new MetaData("visual", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
+                                        Constants.getTags(tagline, keywords),
+                                        Constants.INVERSE/time);
                                 db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
                                     if (databaseError == null) {
-                                        getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                        startActivity(new Intent(getActivity(), HilarityActivity.class));
                                         Constants.DATABASE.child("userposts/" + Constants.UID + "/num").setValue(Integer.parseInt(number) + 1);
                                         Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + databaseReference.getKey() + "/comments/num").setValue(0);
                                         Constants.DATABASE.child("userpostslikescomments/" + Constants.UID + "/" + databaseReference.getKey() + "/likes/num").setValue(0);

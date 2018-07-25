@@ -19,6 +19,9 @@ import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostSubmissionBinding;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link NewTextPostSubmissionFragment#newInstance} factory method to
@@ -100,9 +103,14 @@ public class NewTextPostSubmissionFragment extends Fragment {
                 startActivity(new Intent(getActivity(), HilarityActivity.class));
                 getActivity().finish();
             } else {
-                Post newJoke = new Post(title, body, System.currentTimeMillis(),
+                Map<String, Boolean> keywords = new HashMap<>();
+                keywords.put("text", true);
+                keywords.put("document", true);
+                keywords.put(""+Integer.parseInt(number) + 1, true);
+                long time = System.currentTimeMillis();
+                Post newJoke = new Post(title, body, time,
                         "genre push id", "", Constants.UID, null, tagline, Constants.TEXT,
-                        new MetaData("text", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
+                        Constants.getTags(tagline, keywords), Constants.INVERSE/time);
                 db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                 newJoke.setPushId(db.getKey());
                 db.setValue(newJoke, (databaseError, databaseReference) -> {

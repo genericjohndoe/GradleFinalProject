@@ -28,6 +28,8 @@ import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentAudioMediaPostSubmissionBinding;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -126,12 +128,16 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                                 String downloadUrl = uri.toString();
                                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                 String tagline = bind.socialEditText.getText().toString();
-                                Post newAudioPost = new Post("", "", System.currentTimeMillis(),
+                                Map<String, Boolean> keywords = new HashMap<>();
+                                keywords.put("audio", true);
+                                keywords.put(""+Integer.parseInt(number) + 1,true);
+                                long time = System.currentTimeMillis();
+                                Post newAudioPost = new Post("", "", time,
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO_AUDIO,
-                                        new MetaData("audio", Integer.parseInt(number) + 1, Constants.getTags(tagline)));
+                                         Constants.getTags(tagline, keywords), Constants.INVERSE/time);
                                 db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
                                     if (databaseError == null){
-                                        getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
+                                        startActivity(new Intent(getActivity(), HilarityActivity.class));
                                         Constants.DATABASE.child("userposts/"+Constants.UID+"/num").setValue(Integer.parseInt(number)+1);
                                         Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/comments/num").setValue(0);
                                         Constants.DATABASE.child("userpostslikescomments/"+Constants.UID+"/"+databaseReference.getKey()+"/likes/num").setValue(0);

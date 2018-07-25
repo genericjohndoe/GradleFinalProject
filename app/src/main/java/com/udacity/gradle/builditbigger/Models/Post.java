@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Joke class serves as model for user generated content
@@ -21,13 +23,14 @@ public class Post implements Parcelable {
     private String tagline;
     private Integer type;
     private List<String> taglist;
-    private MetaData metaData;
+    private Map<String,Boolean> metaData;
+    private Double inverseTimeStamp;
 
 
     public Post() {}
 
     public Post(String jokeTitle, String body, Long time, String genre,
-                String url, String uid, String pushId, String tagline, Integer type, MetaData metaData) {
+                String url, String uid, String pushId, String tagline, Integer type, Map<String, Boolean> metaData, Double inverseTimeStamp) {
         this.jokeTitle = jokeTitle;
         jokeBody = body;
         timeStamp = time;
@@ -39,6 +42,7 @@ public class Post implements Parcelable {
         this.type = type;
         taglist = new ArrayList<>();
         this.metaData = metaData;
+        this.inverseTimeStamp = inverseTimeStamp;
     }
 
     public Post(Parcel in){
@@ -50,7 +54,8 @@ public class Post implements Parcelable {
         pushId = in.readString();
         timeStamp = in.readLong();
         mediaURL = in.readString();
-        metaData = in.readParcelable(MetaData.class.getClassLoader());
+        metaData = in.readHashMap(HashMap.class.getClassLoader());
+        inverseTimeStamp = in.readDouble();
     }
 
     public String getJokeTitle() {
@@ -99,11 +104,11 @@ public class Post implements Parcelable {
         return taglist;
     }
 
-    public MetaData getMetaData() {
+    public Map<String, Boolean> getMetaData() {
         return metaData;
     }
 
-    public void setMetaData(MetaData metaData){
+    public void setMetaData(Map<String, Boolean> metaData){
         this.metaData = metaData;
     }
 
@@ -113,6 +118,10 @@ public class Post implements Parcelable {
 
     public void setTagline(String tagline) {
         this.tagline = tagline;
+    }
+
+    public Double getInverseTimeStamp() {
+        return inverseTimeStamp;
     }
 
     @Override
@@ -130,7 +139,8 @@ public class Post implements Parcelable {
         dest.writeString(pushId);
         dest.writeLong(timeStamp);
         dest.writeString(mediaURL);
-        dest.writeParcelable(metaData,PARCELABLE_WRITE_RETURN_VALUE);
+        dest.writeMap(metaData);
+        dest.writeDouble(inverseTimeStamp);
     }
 
     @Override

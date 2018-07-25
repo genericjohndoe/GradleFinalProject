@@ -25,6 +25,7 @@ import java.util.TimeZone;
 public class Constants {
 
     public static HilarityUser USER;
+    public static double INVERSE = 3000000000000.0;
     public static String UID;
     public static String TAGLINE = "tagline";
     public static FirebaseDatabase FIREBASEDATABASE;
@@ -47,16 +48,16 @@ public class Constants {
         return android.text.format.DateFormat.format("d MMM yyyy HH:mm",cal);
     }
 
-    public static Map<String, Boolean> getTags(String tagline) {
+    public static Map<String, Boolean> getTags(String tagline, Map<String, Boolean> map) {
         if (!(tagline.equals(""))) {
             String[] array = tagline.split(" ,;:.!?");
-            Map<String, Boolean> tags = new HashMap<>();
+
             for (String string : array) {
                 if (string.substring(0, 1).equals("#")) {
-                    tags.put(string.substring(1), true);
+                    map.put(string.substring(1), true);
                 }
             }
-            return tags;
+            return map;
         }
         return null;
     }
