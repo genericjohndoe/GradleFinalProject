@@ -61,7 +61,7 @@ public class SearchFragment extends Fragment {
         bind.tabLayout.setupWithViewPager(bind.viewPager);
         bind.tabLayout.getTabAt(0).setCustomView(R.layout.icon_person);
         bind.tabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
-        bind.tabLayout.getTabAt(2).setCustomView(R.layout.icon_hashtag);//change
+        bind.tabLayout.getTabAt(2).setCustomView(R.layout.icon_hashtag);
         bind.tabLayout.getTabAt(3).setCustomView(R.layout.icon_document_post_green);
         bind.tabLayout.getTabAt(4).setCustomView(R.layout.icon_images);
         bind.tabLayout.getTabAt(5).setCustomView(R.layout.icon_video);

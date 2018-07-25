@@ -28,11 +28,13 @@ import java.util.List;
  */
 public class SearchUserFragment extends Fragment {
 
-    public SearchUserFragment() {}
+    public SearchUserFragment() {
+    }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment SearchUserFragment.
      */
     public static SearchUserFragment newInstance() {
@@ -46,19 +48,21 @@ public class SearchUserFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentSearchUserBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_user, container, false);
-        SubsAdapter subsAdapter = new SubsAdapter(new ArrayList<>(),getActivity());
+        FragmentSearchUserBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_search_user, container, false);
+        SubsAdapter subsAdapter = new SubsAdapter(new ArrayList<>(), getActivity());
         bind.recyclerview.setAdapter(subsAdapter);
-        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
+        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         SearchHilarityViewModel searchHilarityViewModel = ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class);
         searchHilarityViewModel.getSearchQuery().observe(this, query -> {
-            Constants.FIRESTORE.collection("users").whereGreaterThanOrEqualTo("userName", query).get().addOnSuccessListener(documentSnapshots -> {
-                List<HilarityUser> allUsers = new ArrayList<>();
-                for (DocumentSnapshot item: documentSnapshots.getDocuments()){
-                    allUsers.add(item.toObject(HilarityUser.class));
-                }
-                subsAdapter.setSubscribersList(allUsers);
-            });
+            Constants.FIRESTORE.collection("users").whereGreaterThanOrEqualTo("userName", query)
+                    .whereLessThanOrEqualTo("userName", query + "z").get()
+                    .addOnSuccessListener(documentSnapshots -> {
+                        List<HilarityUser> allUsers = new ArrayList<>();
+                        for (DocumentSnapshot item : documentSnapshots.getDocuments()) {
+                            allUsers.add(item.toObject(HilarityUser.class));
+                        }
+                        subsAdapter.setSubscribersList(allUsers);
+                    });
         });
         return bind.getRoot();
     }
