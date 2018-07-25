@@ -51,7 +51,9 @@ public class SearchCollectionsFragment extends Fragment {
         bind.recyclerview.setAdapter(genreAdapter);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
-            Constants.FIRESTORE.collection("collections").whereGreaterThanOrEqualTo("title", query).get().addOnSuccessListener(documentSnapshots-> {
+            Constants.FIRESTORE.collection("collections").whereGreaterThanOrEqualTo("title", query)
+                    .whereLessThanOrEqualTo("title", query+"z").get()
+                    .addOnSuccessListener(documentSnapshots-> {
                     List<com.udacity.gradle.builditbigger.Models.Collection> genres = new ArrayList<>();
                     for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
                         genres.add(snap.toObject(com.udacity.gradle.builditbigger.Models.Collection.class));
