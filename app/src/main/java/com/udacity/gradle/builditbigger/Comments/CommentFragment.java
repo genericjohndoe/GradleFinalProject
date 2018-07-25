@@ -82,7 +82,7 @@ public class CommentFragment extends Fragment {
         bind.submitImageButton.setOnClickListener(view -> {
                 if (!bind.commentEditText.getText().toString().equals("")){
                     DatabaseReference db = Constants.DATABASE.child("userpostslikescomments/"+uid+"/"+postId+"/comments/commentlist").push();
-                    Comment comment = new Comment(Constants.USER, System.currentTimeMillis(),
+                    Comment comment = new Comment(Constants.UID, System.currentTimeMillis(),
                             bind.commentEditText.getText().toString(),uid,postId,db.getKey());
 
                     //todo change to transaction
@@ -93,7 +93,7 @@ public class CommentFragment extends Fragment {
                             data.put("commentFragmentUid", uid);
                             data.put("commentFragmentPostId", postId);
                             data.put("position", comments.size()-1);
-                            data.put("commentorUserName", comment.getHilarityUser().getUserName());
+                            data.put("commentorUserName", comment.getHilarityUserUID());
                             data.put("commentContent", comment.getCommentContent());
                             //how to get access to list of mentions on server side
                             FirebaseFunctions.getInstance().getHttpsCallable("onCommentMentionCreated")

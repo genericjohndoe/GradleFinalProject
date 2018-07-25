@@ -60,7 +60,7 @@ public class SearchFragment extends Fragment {
         bind.viewPager.setAdapter(new SearchPagerAdapter(getActivity().getSupportFragmentManager()));
         bind.tabLayout.setupWithViewPager(bind.viewPager);
         SearchHilarityViewModel searchHilarityViewModel = ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class);
-        Log.i("HilarityQuery4", searchHilarityViewModel.toString());
+
         bind.searcheditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

@@ -1,5 +1,8 @@
 package com.udacity.gradle.builditbigger.Comments;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -13,6 +16,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.Jokes.ViewHolderViewModel;
 import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.Comment;
 import com.udacity.gradle.builditbigger.R;
@@ -35,11 +40,25 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         this.comments = objects;
     }
 
-    public class CommentsViewHolder extends RecyclerView.ViewHolder{
-        CommentCellBinding bind;
+    public class CommentsViewHolder extends RecyclerView.ViewHolder implements LifecycleOwner{
+        private CommentCellBinding bind;
+        private LifecycleRegistry mLifecycleRegistry;
+
         public CommentsViewHolder(CommentCellBinding bind){
             super(bind.getRoot());
             this.bind = bind;
+            mLifecycleRegistry = new LifecycleRegistry(this);
+            mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
+        }
+
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return mLifecycleRegistry;
+        }
+
+        public LifecycleRegistry getmLifecycleRegistry() {
+            return mLifecycleRegistry;
         }
     }
 
@@ -58,10 +77,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     @Override
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         final Comment comment = comments.get(position);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
+        ViewHolderViewModel viewHolderViewModel = new ViewHolderViewModel(comment);
+        viewHolderViewModel.getUserNameLiveData().observe(holder, name ->{
+            String content = name + " " + comment.getCommentContent();
+            holder.bind.userNameTextView.setText(content);
+        });
+        viewHolderViewModel.getProfileImgLiveData().observe(holder, url ->{
+            Glide.with(context).load(url).into(holder.bind.profileImageview);
+        });
 
-        Glide.with(context).load(comment.getHilarityUser().getUrlString()).into(holder.bind.profileImageview);
-        String content = comment.getHilarityUser().getUserName() + " " + comment.getCommentContent();
-        holder.bind.userNameTextView.setText(content);
         holder.bind.userNameTextView.setOnMentionClickListener((socialView, s) -> {
             Constants.DATABASE.child("inverseuserslist/"+s).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -86,5 +111,23 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                             +"/comments/commentlist/"+comment.getCommentId()).removeValue();
             if (comments.remove(comment)) notifyDataSetChanged();
         });
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull CommentsViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull CommentsViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_STOP);
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull CommentsViewHolder holder) {
+        holder.getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_DESTROY);
+        super.onViewRecycled(holder);
     }
 }

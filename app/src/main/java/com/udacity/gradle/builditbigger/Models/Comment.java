@@ -11,22 +11,22 @@ public class Comment {
     private String postUid;
     private String postPushId;
     private String commentId;
-    private HilarityUser hilarityUser;
+    private String hilarityUserUID;
 
     public Comment(){}
 
-    public Comment(HilarityUser hilarityUser, Long timeDate, String commentContent,
+    public Comment(String hilarityUserUID, Long timeDate, String commentContent,
                    String postUid, String postPushId, String commentId){
         this.timeDate = timeDate;
-        this.hilarityUser = hilarityUser;
+        this.hilarityUserUID = hilarityUserUID;
         this.commentContent = commentContent;
         this.postUid = postUid;
         this.postPushId = postPushId;
         this.commentId = commentId;
     }
 
-    public HilarityUser getHilarityUser() {
-        return hilarityUser;
+    public String getHilarityUserUID() {
+        return hilarityUserUID;
     }
 
     public Long getTimeDate(){return timeDate;}
