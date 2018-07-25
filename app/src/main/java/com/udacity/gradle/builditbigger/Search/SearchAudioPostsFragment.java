@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger.Search;
 
-
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -17,31 +16,15 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.databinding.FragmentSearchGifPostsBinding;
+import com.udacity.gradle.builditbigger.databinding.FragmentSearchVideoPostsBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchGifPostsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SearchGifPostsFragment extends Fragment {
+public class SearchAudioPostsFragment extends Fragment {
 
-
-    public SearchGifPostsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * @return A new instance of fragment SearchGifPostsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchGifPostsFragment newInstance() {
-        return new SearchGifPostsFragment();
+    public static SearchAudioPostsFragment newInstance() {
+        return new SearchAudioPostsFragment();
     }
 
     @Override
@@ -52,22 +35,22 @@ public class SearchGifPostsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentSearchGifPostsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_gif_posts, container, false);
+        // Inflate the layout for this fragment
+        FragmentSearchVideoPostsBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_search_video_posts, container, false);
         JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), new ArrayList<>(), false);
         bind.recyclerview.setAdapter(jokesAdapter);
-        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
+        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         ViewModelProviders.of(this).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
-            Constants.FIRESTORE.collection("posts").whereEqualTo("metaData.keywords.gif", true)
+            Constants.FIRESTORE.collection("posts").whereEqualTo("metaData.keywords.audio", true)
                     .orderBy("timeStamp", Query.Direction.DESCENDING).get()
                     .addOnSuccessListener(documentSnapshots -> {
-                        List<Post> gifPosts = new ArrayList<>();
+                        List<Post> videoPosts = new ArrayList<>();
                         for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
-                            gifPosts.add(snap.toObject(Post.class));
+                            videoPosts.add(snap.toObject(Post.class));
                         }
-                        jokesAdapter.setJokes(gifPosts);
+                        jokesAdapter.setJokes(videoPosts);
                     });
         });
         return bind.getRoot();
     }
-
 }

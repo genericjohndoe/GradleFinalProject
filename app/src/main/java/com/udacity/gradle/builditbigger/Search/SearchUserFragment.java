@@ -27,9 +27,8 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class SearchUserFragment extends Fragment {
-
-    public SearchUserFragment() {
-    }
+    //todo might want to order by follower count
+    public SearchUserFragment() {}
 
     /**
      * Use this factory method to create a new instance of

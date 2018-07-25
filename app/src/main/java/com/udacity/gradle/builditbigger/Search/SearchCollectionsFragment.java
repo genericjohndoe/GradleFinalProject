@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.udacity.gradle.builditbigger.Collections.CollectionAdapter;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Models.Collection;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentSearchCollectionsBinding;
 
@@ -52,9 +54,10 @@ public class SearchCollectionsFragment extends Fragment {
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
             Constants.FIRESTORE.collection("collections").whereGreaterThanOrEqualTo("title", query)
-                    .whereLessThanOrEqualTo("title", query+"z").get()
+                    .whereLessThanOrEqualTo("title", query+"z")
+                    .orderBy("timeStamp", Query.Direction.DESCENDING).get()
                     .addOnSuccessListener(documentSnapshots-> {
-                    List<com.udacity.gradle.builditbigger.Models.Collection> genres = new ArrayList<>();
+                    List<Collection> genres = new ArrayList<>();
                     for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
                         genres.add(snap.toObject(com.udacity.gradle.builditbigger.Models.Collection.class));
                     }

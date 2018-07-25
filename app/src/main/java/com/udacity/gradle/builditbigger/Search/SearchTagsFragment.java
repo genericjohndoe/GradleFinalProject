@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.Models.Post;
@@ -34,6 +35,7 @@ public class SearchTagsFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment SearchTagsFragment.
      */
     public static SearchTagsFragment newInstance() {
@@ -48,17 +50,19 @@ public class SearchTagsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentSearchTagsBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_search_tags, container, false);
+        FragmentSearchTagsBinding bind = DataBindingUtil.inflate(inflater, R.layout.fragment_search_tags, container, false);
         JokesAdapter jokesAdapter = new JokesAdapter(getActivity(), new ArrayList<>(), false);
         bind.recyclerview.setAdapter(jokesAdapter);
-        ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query ->{
-            Constants.FIRESTORE.collection("posts").whereGreaterThanOrEqualTo("metaData.tags."+query, true).get().addOnSuccessListener(documentSnapshots -> {
-                List<Post> tags = new ArrayList<>();
-                for (DocumentSnapshot snap: documentSnapshots.getDocuments()){
-                    tags.add(snap.toObject(Post.class));
-                }
-                jokesAdapter.setJokes(tags);
-            });
+        ViewModelProviders.of(this, new SearchHilarityViewModelProvider()).get(SearchHilarityViewModel.class).getSearchQuery().observe(this, query -> {
+            Constants.FIRESTORE.collection("posts").whereEqualTo("metaData.keywords." + query, true)
+                    .orderBy("timeStamp", Query.Direction.DESCENDING).get()
+                    .addOnSuccessListener(documentSnapshots -> {
+                        List<Post> tags = new ArrayList<>();
+                        for (DocumentSnapshot snap : documentSnapshots.getDocuments()) {
+                            tags.add(snap.toObject(Post.class));
+                        }
+                        jokesAdapter.setJokes(tags);
+                    });
         });
         return bind.getRoot();
     }
