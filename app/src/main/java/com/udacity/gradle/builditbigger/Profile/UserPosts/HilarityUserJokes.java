@@ -89,15 +89,16 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 || dy < 0) profile.hideFAB();
+                if (llm.findLastVisibleItemPosition() >= (jokes.size() - 5)) {
+                    userPostsLiveData.newQuery();
+                    Log.i("new_query","new query called from fragment");
+                }
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) profile.showFAB();
-                if (llm.findLastVisibleItemPosition() >= (jokes.size() - 5)) {
-                    userPostsLiveData.newQuery();
-                    Log.i("new_query","new query called from fragment");
-                }
+
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });

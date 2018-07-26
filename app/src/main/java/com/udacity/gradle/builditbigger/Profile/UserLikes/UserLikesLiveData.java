@@ -2,11 +2,13 @@ package com.udacity.gradle.builditbigger.Profile.UserLikes;
 
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.PostWrapper;
@@ -16,10 +18,13 @@ import com.udacity.gradle.builditbigger.Models.PostWrapper;
  */
 
 public class UserLikesLiveData extends LiveData<PostWrapper> {
-    private DatabaseReference databaseReference;
+    private Query databaseReference;
+    private double startAt;
+    private String uid;
 
     public UserLikesLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("userlikes/" + uid + "/list");
+        databaseReference = Constants.DATABASE.child("userlikes/" + uid + "/list").orderByChild("inverseTimeStamp").limitToFirst(20);
+        this.uid = uid;
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {
@@ -55,5 +60,15 @@ public class UserLikesLiveData extends LiveData<PostWrapper> {
     protected void onInactive() {
         databaseReference.removeEventListener(childEventListener);
         super.onInactive();
+    }
+
+    public void setStartAt(double startAt) {
+        this.startAt = startAt;
+    }
+
+    public void newQuery(){
+        databaseReference = Constants.DATABASE.child("userlikes/" + uid + "/list").orderByChild("inverseTimeStamp").startAt(startAt).limitToFirst(20);
+        Log.i("new_query","new query called");
+        onActive();
     }
 }

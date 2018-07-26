@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger.Profile.UserPosts;
 
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -19,8 +20,8 @@ public class SearchUserPostsLiveData extends LiveData<PostWrapper> {
     private Query query;
 
     public SearchUserPostsLiveData(String uid, String tag){
-        query = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("metaData/" + tag).equalTo(true);
-
+        query = Constants.DATABASE.child("userposts/" + uid + "/posts")
+                .orderByChild("metaData/" + tag).equalTo(true);
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {

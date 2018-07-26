@@ -7,6 +7,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
@@ -15,10 +16,13 @@ import com.udacity.gradle.builditbigger.Models.HilarityUser;
  */
 
 public class SubscriptionsLiveData extends LiveData<HilarityUser> {
-    private DatabaseReference databaseReference;
+    private Query databaseReference;
+    private String startAt;
+    private String uid;
 
     public SubscriptionsLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("following/" + uid + "/list");
+        databaseReference = Constants.DATABASE.child("following/" + uid + "/list").orderByChild("userName").limitToFirst(20);
+        this.uid = uid;
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {
@@ -50,5 +54,15 @@ public class SubscriptionsLiveData extends LiveData<HilarityUser> {
     protected void onInactive() {
         databaseReference.removeEventListener(childEventListener);
         super.onInactive();
+    }
+
+    public void setStartAt(String startAt) {
+        this.startAt = startAt;
+    }
+
+    public void newQuery(){
+        databaseReference = Constants.DATABASE.child("following/" + uid + "/list").orderByChild("userName")
+                .startAt(startAt).limitToFirst(20);
+        onActive();
     }
 }

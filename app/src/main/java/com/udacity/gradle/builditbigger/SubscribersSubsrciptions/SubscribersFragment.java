@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,19 +47,32 @@ public class SubscribersFragment extends Fragment {
         FragmentJokeslistGenrelistBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
         List<HilarityUser> subscribers = new ArrayList<>();
         SubsAdapter subsAdapter = new SubsAdapter(subscribers, getActivity());
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.recyclerView.setAdapter(subsAdapter);
-
         SubscribersViewModel subscribersViewModel = ViewModelProviders.of(this,
                 new SubscribersViewModelFactory(uid))
                 .get(SubscribersViewModel.class);
 
-        subscribersViewModel.getSubscribersLiveData().observe(this, hilarityUser -> {
+        SubscribersLiveData subscribersLiveData = subscribersViewModel.getSubscribersLiveData();
+        subscribersLiveData.observe(this, hilarityUser -> {
             if (!subscribers.contains(hilarityUser)) {
                 subscribers.add(hilarityUser);
                 subsAdapter.notifyDataSetChanged();
+                if (subscribers.size() % 20 == 0) subscribersLiveData.setStartAt(hilarityUser.getUserName());
             }
         });
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        binding.recyclerView.setLayoutManager(llm);
+        binding.recyclerView.setAdapter(subsAdapter);
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (llm.findLastVisibleItemPosition() >= (subscribers.size() - 5)) {
+                    subscribersLiveData.newQuery();
+                }
+            }
+        });
+
+
         return binding.getRoot();
     }
 }

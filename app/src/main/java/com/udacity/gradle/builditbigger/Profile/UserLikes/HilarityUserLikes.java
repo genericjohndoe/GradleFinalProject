@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,19 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
-        llm.setStackFromEnd(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+
+        userLikesViewModel = ViewModelProviders.of(this, new UserLikesViewModelFactory(uid))
+                .get(UserLikesViewModel.class);
+        UserLikesLiveData userLikesLiveData = userLikesViewModel.getUserLikesLiveData();
+        userLikesLiveData.observe(this, jokeWrapper -> {
+            addPostToList(jokeWrapper, jokes);
+            configureUI();
+            if (jokes.size() % 20 == 0) {
+                Log.i("new_query","startAt set");
+                userLikesLiveData.setStartAt(jokeWrapper.getPost().getInverseTimeStamp());
+            }
+        });
         binding.recyclerView.setLayoutManager(llm);
         binding.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         binding.recyclerView.setAdapter(jokeAdapter);
@@ -70,6 +82,10 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0 || dy < 0) profile.hideFAB();
+                if (llm.findLastVisibleItemPosition() >= (jokes.size() - 5)) {
+                    userLikesLiveData.newQuery();
+                    Log.i("new_query","new query called from fragment");
+                }
             }
 
             @Override
@@ -79,13 +95,7 @@ public class HilarityUserLikes extends Fragment implements EnableSearch {
             }
         });
 
-       userLikesViewModel = ViewModelProviders.of(this, new UserLikesViewModelFactory(uid))
-                .get(UserLikesViewModel.class);
 
-        userLikesViewModel.getUserLikesLiveData().observe(this, jokeWrapper -> {
-            addPostToList(jokeWrapper, jokes);
-            configureUI();
-        });
 
         FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
             if (position == 2) profile.getFAB().setOnClickListener(view -> showSearchDialog());
