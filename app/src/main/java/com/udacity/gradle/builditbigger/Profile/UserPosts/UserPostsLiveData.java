@@ -3,11 +3,13 @@ package com.udacity.gradle.builditbigger.Profile.UserPosts;
 import android.arch.lifecycle.LiveData;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.PostWrapper;
@@ -17,10 +19,13 @@ import com.udacity.gradle.builditbigger.Models.PostWrapper;
  */
 //are the use of handlers necessary? yes, to keep from doing extra network request
 public class UserPostsLiveData extends LiveData<PostWrapper> {
-    private DatabaseReference databaseReference;
+    private Query databaseReference;
+    private double startAt;
+    private String uid;
 
     public UserPostsLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts");
+        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("inverseTimeStamp").limitToFirst(20);
+        this.uid = uid;
     }
 
     private boolean listenerRemovePending = false;
@@ -69,5 +74,15 @@ public class UserPostsLiveData extends LiveData<PostWrapper> {
         handler.postDelayed(removeListener, 2000);
         listenerRemovePending = true;
         super.onInactive();
+    }
+
+    public void setStartAt(double startAt) {
+        this.startAt = startAt;
+    }
+
+    public void newQuery(){
+        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("inverseTimeStamp").startAt(startAt).limitToFirst(20);
+        Log.i("new_query","new query called");
+        onActive();
     }
 }

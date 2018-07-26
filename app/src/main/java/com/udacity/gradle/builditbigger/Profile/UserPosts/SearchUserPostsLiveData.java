@@ -12,7 +12,7 @@ import com.udacity.gradle.builditbigger.Models.Post;
 import com.udacity.gradle.builditbigger.Models.PostWrapper;
 
 /**
- * SearchUserPostsLiveData class DEPRECATED
+ * SearchUserPostsLiveData class
  */
 
 public class SearchUserPostsLiveData extends LiveData<PostWrapper> {

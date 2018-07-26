@@ -130,11 +130,14 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                                 String tagline = bind.socialEditText.getText().toString();
                                 Map<String, Object> keywords = new HashMap<>();
                                 keywords.put("audio", true);
-                                keywords.put(""+Integer.parseInt(number) + 1,true);
+                                keywords.put(""+(Integer.parseInt(number) + 1),true);
+                                for (String tag : bind.socialEditText.getHashtags()){
+                                    keywords.put(tag,true);
+                                }
                                 long time = System.currentTimeMillis();
                                 Post newAudioPost = new Post("", "", time,
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO_AUDIO,
-                                         Constants.getTags(tagline, keywords), Constants.INVERSE/time);
+                                         keywords, Constants.INVERSE/time);
                                 db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
                                     if (databaseError == null){
                                         startActivity(new Intent(getActivity(), HilarityActivity.class));

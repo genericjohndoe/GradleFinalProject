@@ -176,13 +176,14 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
                                 if ((isVideo == null) && addSuffix(filePath).equals(".gif")) keywords.put("gif", true);
                                 if ((isVideo == null) && !addSuffix(filePath).equals(".gif")) keywords.put("image", true);
                                 keywords.put("visual", true);
-                                keywords.put(""+Integer.parseInt(number) + 1,true);
-
+                                keywords.put(""+(Integer.parseInt(number) + 1),true);
+                                for (String tag: bind.socialEditText.getHashtags()){
+                                    keywords.put(tag,true);
+                                }
                                 long time = System.currentTimeMillis();
                                 Post newAudioPost = new Post(path, "", time,
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, type,
-                                        Constants.getTags(tagline, keywords),
-                                        Constants.INVERSE/time);
+                                        keywords, Constants.INVERSE/time);
                                 db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
                                     if (databaseError == null) {
                                         startActivity(new Intent(getActivity(), HilarityActivity.class));
