@@ -44,8 +44,7 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     private String uid;
     private UserPostsViewModel userPostsViewModel;
     private boolean init = true;
-    private PostAdapter postAdapter;
-    private LiveData<PagedList<Post>> posts;
+
 
     public static HilarityUserJokes newInstance(String uid, HideFAB profile) {
         HilarityUserJokes hilarityUserJokes = new HilarityUserJokes();
@@ -65,23 +64,17 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
             jokes = savedInstanceState.getParcelableArrayList(getString(R.string.posts));
             init = savedInstanceState.getBoolean(getString(R.string.init));
         }
-        //jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
-        postAdapter = new PostAdapter(getActivity(), true);
-        PagedList.Config config = new PagedList.Config.Builder().setPageSize(20).build();
-        PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory("userposts/" + uid + "/posts");
-        posts = new LivePagedListBuilder<>(postDataSourceFactory, config).build();
-        posts.observe(this, postAdapter::submitList);
-
+        jokeAdapter = new JokesAdapter(getActivity(), jokes, true);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        //llm.setStackFromEnd(true);
+//        llm.setStackFromEnd(true);
+//        llm.setReverseLayout(true);
         binding.recyclerView.setLayoutManager(llm);
-        binding.recyclerView.setAdapter(postAdapter);
-
+        binding.recyclerView.setAdapter(jokeAdapter);
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -94,14 +87,14 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
-
-        /*userPostsViewModel = ViewModelProviders.of(this, new UserPostViewModelFactory(uid))
+        userPostsViewModel = ViewModelProviders.of(this, new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
         userPostsViewModel.getUserPostsLiveData().observe(this, postWrapper -> {
             addPostToList(postWrapper, jokes);
             configureUI();
-        });*/
-        FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position ->{
+        });
+
+        FragmentFocusLiveData.getFragmentFocusLiveData().observe(this, position -> {
             if (position == 0) profile.getFAB().setOnClickListener(view -> showSearchDialog());
         });
         return binding.getRoot();
@@ -111,12 +104,13 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     public void onResume() {
         super.onResume();
         if (init) profile.getFAB().setOnClickListener(view -> showSearchDialog());
+
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(getString(R.string.posts), (ArrayList<? extends Parcelable>) jokes);
+        //outState.putParcelableArrayList(getString(R.string.posts), (ArrayList<? extends Parcelable>) jokes);
         outState.putBoolean(getString(R.string.init), init);
     }
 

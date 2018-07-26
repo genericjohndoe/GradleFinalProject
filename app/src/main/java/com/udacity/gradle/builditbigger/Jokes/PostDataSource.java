@@ -18,12 +18,17 @@ public class PostDataSource extends ItemKeyedDataSource<String, Post> {
 
     private Query query;
     private ValueEventListener valueEventListener;
-    private Double startAt;
+    private double startAt;
 
     private List<Post> posts = new ArrayList<>();
 
-    public PostDataSource(String path){
-        query = Constants.DATABASE.child(path).orderByChild("inverseTimeStamp").limitToFirst(20);
+    public PostDataSource(String path, String searchTag) {
+        if (searchTag == null) {
+            query = Constants.DATABASE.child(path).orderByChild("inverseTimeStamp").limitToFirst(20);
+        } else {
+            query = Constants.DATABASE.child(path).orderByChild("metaData/" + searchTag).equalTo(true);
+        }
+
     }
 
     @Override
@@ -45,9 +50,11 @@ public class PostDataSource extends ItemKeyedDataSource<String, Post> {
 
     @NonNull
     @Override
-    public String getKey(@NonNull Post item) {return item.getPushId();}
+    public String getKey(@NonNull Post item) {
+        return item.getPushId();
+    }
 
-    public void query(boolean initialLoad, LoadCallback<Post> callback){
+    public void query(boolean initialLoad, LoadCallback<Post> callback) {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -55,20 +62,22 @@ public class PostDataSource extends ItemKeyedDataSource<String, Post> {
                 if (posts.size() % 20 == 0) {
                     int count = 1;
                     for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                        posts.add(snap.getValue(Post.class));
+                        Post post = snap.getValue(Post.class);
+                        if (!posts.contains(post)) posts.add(post);
                         count += 1;
                         if (count == index)
                             startAt = snap.getValue(Post.class).getInverseTimeStamp();
                     }
                     callback.onResult(posts);
-                    query.removeEventListener(valueEventListener);
                 }
+                query.removeEventListener(valueEventListener);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         };
-        if (!initialLoad) query.startAt(startAt);
-        query.addValueEventListener(valueEventListener);
+        if (!initialLoad && (query != null)) query.startAt(startAt);
+        if (query != null) query.addValueEventListener(valueEventListener);
     }
 }

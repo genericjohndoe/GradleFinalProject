@@ -128,7 +128,7 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                                 String downloadUrl = uri.toString();
                                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                 String tagline = bind.socialEditText.getText().toString();
-                                Map<String, Boolean> keywords = new HashMap<>();
+                                Map<String, Object> keywords = new HashMap<>();
                                 keywords.put("audio", true);
                                 keywords.put(""+Integer.parseInt(number) + 1,true);
                                 long time = System.currentTimeMillis();

@@ -416,7 +416,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.PostViewHold
             if (joke != null) {
                 Constants.DATABASE.child("userposts/" + joke.getUID() + "/posts/" + joke.getPushId()).removeValue((databaseError, databaseReference) -> {
                     if (databaseError == null) {
-                        getCurrentList().remove(joke);
+                        //getCurrentList().remove(joke);
                         notifyDataSetChanged();
                         Constants.DATABASE.child("userposts/" + joke.getUID() + "/num").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -439,7 +439,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.PostViewHold
                 intent = new Intent(context, NewPostActivity2.class);
                 intent.putExtra("posttype",3);
             } else {
-                if (joke.getMetaData().get("visual")){
+                if ((Boolean) joke.getMetaData().get("visual")){
                     intent = new Intent(context, VisualMediaPostSubmissionActivity.class);
                 } else {
                     intent = new Intent(context, AudioMediaPostSubmissionActivity.class);

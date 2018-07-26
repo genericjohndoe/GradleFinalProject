@@ -171,7 +171,7 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
                                 String downloadUrl = uri.toString();
                                 DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                 String tagline = bind.socialEditText.getText().toString();
-                                Map<String, Boolean> keywords = new HashMap();
+                                Map<String, Object> keywords = new HashMap();
                                 if (isVideo != null) keywords.put("video", true);
                                 if ((isVideo == null) && addSuffix(filePath).equals(".gif")) keywords.put("gif", true);
                                 if ((isVideo == null) && !addSuffix(filePath).equals(".gif")) keywords.put("image", true);

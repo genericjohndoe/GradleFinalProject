@@ -19,7 +19,7 @@ public class SearchUserPostsLiveData extends LiveData<PostWrapper> {
     private Query query;
 
     public SearchUserPostsLiveData(String uid, String tag){
-        query = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("metaData/keywords/" + tag).equalTo(true);
+        query = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("metaData/" + tag).equalTo(true);
 
     }
 

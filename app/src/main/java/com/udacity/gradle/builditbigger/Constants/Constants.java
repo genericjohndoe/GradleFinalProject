@@ -48,7 +48,7 @@ public class Constants {
         return android.text.format.DateFormat.format("d MMM yyyy HH:mm",cal);
     }
 
-    public static Map<String, Boolean> getTags(String tagline, Map<String, Boolean> map) {
+    public static Map<String, Object> getTags(String tagline, Map<String, Object> map) {
         if (!(tagline.equals(""))) {
             String[] array = tagline.split(" ,;:.!?");
 

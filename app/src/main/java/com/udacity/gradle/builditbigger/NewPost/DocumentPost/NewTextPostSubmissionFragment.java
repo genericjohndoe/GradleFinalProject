@@ -20,6 +20,7 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostSubmissionBinding;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,14 +104,17 @@ public class NewTextPostSubmissionFragment extends Fragment {
                 startActivity(new Intent(getActivity(), HilarityActivity.class));
                 getActivity().finish();
             } else {
-                Map<String, Boolean> keywords = new HashMap<>();
+                Map<String, Object> keywords = new HashMap<>();
                 keywords.put("text", true);
                 keywords.put("document", true);
-                keywords.put(""+Integer.parseInt(number) + 1, true);
+                keywords.put(""+(Integer.parseInt(number) + 1), true);
+                for (String tag: bind.socialTextView.getHashtags()){
+                    keywords.put(tag,true);
+                }
                 long time = System.currentTimeMillis();
                 Post newJoke = new Post(title, body, time,
                         "genre push id", "", Constants.UID, null, tagline, Constants.TEXT,
-                        Constants.getTags(tagline, keywords), Constants.INVERSE/time);
+                        keywords, Constants.INVERSE/time);
                 db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                 newJoke.setPushId(db.getKey());
                 db.setValue(newJoke, (databaseError, databaseReference) -> {

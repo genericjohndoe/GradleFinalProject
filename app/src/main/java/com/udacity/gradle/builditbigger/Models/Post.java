@@ -23,14 +23,14 @@ public class Post implements Parcelable {
     private String tagline;
     private Integer type;
     private List<String> taglist;
-    private Map<String,Boolean> metaData;
+    private Map<String,Object> metaData;
     private Double inverseTimeStamp;
 
 
     public Post() {}
 
     public Post(String jokeTitle, String body, Long time, String genre,
-                String url, String uid, String pushId, String tagline, Integer type, Map<String, Boolean> metaData, Double inverseTimeStamp) {
+                String url, String uid, String pushId, String tagline, Integer type, Map<String, Object> metaData, Double inverseTimeStamp) {
         this.jokeTitle = jokeTitle;
         jokeBody = body;
         timeStamp = time;
@@ -104,11 +104,11 @@ public class Post implements Parcelable {
         return taglist;
     }
 
-    public Map<String, Boolean> getMetaData() {
+    public Map<String, Object> getMetaData() {
         return metaData;
     }
 
-    public void setMetaData(Map<String, Boolean> metaData){
+    public void setMetaData(Map<String, Object> metaData){
         this.metaData = metaData;
     }
 

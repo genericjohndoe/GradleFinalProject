@@ -264,7 +264,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 intent = new Intent(context, NewPostActivity2.class);
                 intent.putExtra("posttype",3);
             } else {
-                if (joke.getMetaData().get("visual")){
+                if ((Boolean) joke.getMetaData().get("visual")){
                     intent = new Intent(context, VisualMediaPostSubmissionActivity.class);
                 } else {
                     intent = new Intent(context, AudioMediaPostSubmissionActivity.class);

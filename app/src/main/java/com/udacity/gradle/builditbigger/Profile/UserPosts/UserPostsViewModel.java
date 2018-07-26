@@ -1,6 +1,12 @@
 package com.udacity.gradle.builditbigger.Profile.UserPosts;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
+
+import com.udacity.gradle.builditbigger.Jokes.PostDataSourceFactory;
+import com.udacity.gradle.builditbigger.Models.Post;
 
 /**
  * UserPostsViewModel class used to pass user generated posts to fragment
@@ -24,4 +30,15 @@ public class UserPostsViewModel extends ViewModel {
         searchUserPostsLiveData = new SearchUserPostsLiveData(uid,tag);
         return searchUserPostsLiveData;
     }
+
+    /*public LiveData<PagedList<Post>> getPosts() {
+        return posts;
+    }
+
+    public LiveData<PagedList<Post>> getSearchPosts(String tag) {
+        searchPosts = new LivePagedListBuilder<>(
+                new PostDataSourceFactory("userposts/" + uid + "/posts",tag),
+                config).build();
+        return searchPosts;
+    }*/
 }
