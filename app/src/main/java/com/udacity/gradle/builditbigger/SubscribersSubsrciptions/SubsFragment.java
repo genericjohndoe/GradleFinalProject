@@ -19,41 +19,42 @@ import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBi
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * shows list of people followed by user
- */
-
-public class SubscriptionsFragment extends Fragment {
+public class SubsFragment extends Fragment {
     private String uid;
+    private boolean getFollowers;
 
-    public static SubscriptionsFragment newInstance(String uid){
-        SubscriptionsFragment subscriptionsFragment = new SubscriptionsFragment();
+    public static SubsFragment newInstance(String uid, boolean getFollowers){
+        SubsFragment subsFragment = new SubsFragment();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
-        subscriptionsFragment.setArguments(bundle);
-        return subscriptionsFragment;
+        bundle.putBoolean("getFollowers", getFollowers);
+        subsFragment.setArguments(bundle);
+        return subsFragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uid = getArguments().getString("uid");
+        if (getArguments() != null) {
+            uid = getArguments().getString("uid");
+            getFollowers = getArguments().getBoolean("getFollowers");
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentJokeslistGenrelistBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_jokeslist_genrelist, container, false);
-        List<HilarityUser> subscriptions = new ArrayList<>();
-        SubsAdapter subsAdapter = new SubsAdapter(subscriptions, getActivity());
-        SubscriptionsViewModel subscriptionsViewModel = ViewModelProviders.of(this, new SubscriptionsViewModelFactory(uid))
-                .get(SubscriptionsViewModel.class);
-        SubscriptionsLiveData subscriptionsLiveData = subscriptionsViewModel.getSubscriptionsLiveData();
-        subscriptionsLiveData.observe(this, hilarityUser -> {
-            if (!subscriptions.contains(hilarityUser)) {
-                subscriptions.add(hilarityUser);
+        FragmentJokeslistGenrelistBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
+        List<HilarityUser> subs = new ArrayList<>();
+        SubsAdapter subsAdapter = new SubsAdapter(subs, getActivity());
+        SubsViewModel subsViewModel = ViewModelProviders.of(this, new SubsViewModelFactory(uid, getFollowers))
+                .get(SubsViewModel.class);
+        SubsLiveData subsLiveData = subsViewModel.getSubsLiveData();
+        subsLiveData.observe(this, hilarityUser -> {
+            if (!subs.contains(hilarityUser)) {
+                subs.add(hilarityUser);
                 subsAdapter.notifyDataSetChanged();
-                if (subscriptions.size() % 20 == 0) subscriptionsLiveData.setStartAt(hilarityUser.getUserName());
+                if (subs.size() % 20 == 0) subsLiveData.setStartAt(hilarityUser.getUserName());
             }
         });
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -63,8 +64,8 @@ public class SubscriptionsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (llm.findLastVisibleItemPosition() >= (subscriptions.size() - 5)) {
-                    subscriptionsLiveData.newQuery();
+                if (llm.findLastVisibleItemPosition() >= (subs.size() - 5)) {
+                    subsLiveData.newQuery();
                 }
             }
         });

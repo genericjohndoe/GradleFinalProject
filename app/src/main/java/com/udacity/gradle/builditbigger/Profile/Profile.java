@@ -94,8 +94,8 @@ public class Profile extends Fragment implements HideFAB {
         binding.profileTabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
         binding.profileTabLayout.getTabAt(2).setCustomView(R.layout.icon_likes);
 
-        binding.subscribersTv.setOnClickListener(view -> createSubsIntent(1));
-        binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(2));
+        binding.subscribersTv.setOnClickListener(view -> createSubsIntent(true));
+        binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(false));
 
         //originally calls new post dialog, changed when configureFAB is called
         binding.newPostFab.setOnClickListener(view -> showNewPostFragment());
@@ -192,10 +192,10 @@ public class Profile extends Fragment implements HideFAB {
         }
     }
 
-    private void createSubsIntent(int fragmenttype){
+    private void createSubsIntent(boolean getFollowers){
         Intent intent = new Intent(getActivity(), SubsActivity.class);
         intent.putExtra(getString(R.string.uid), uid);
-        intent.putExtra(getString(R.string.fragment), fragmenttype);
+        intent.putExtra("getFollowers", getFollowers);
         startActivity(intent);
     }
 

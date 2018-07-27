@@ -14,23 +14,10 @@ public class SubsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subs);
-        int fragmenttype = getIntent().getIntExtra("fragment", 0);
         String uid = getIntent().getStringExtra("uid");
-        Fragment fragment = new Fragment();
-        switch (fragmenttype){
-            case 1:
-                fragment = SubscribersFragment.newInstance(uid);
-                break;
-            case 2:
-                fragment = SubscriptionsFragment.newInstance(uid);
-                break;
-            default:
-                startActivity(new Intent(this, HilarityActivity.class));
-                break;
-        }
-
+        boolean getFollowers = getIntent().getBooleanExtra("getFollowers", true);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.subs_framelayout, fragment)
+                .add(R.id.subs_framelayout, SubsFragment.newInstance(uid, getFollowers))
                 .commit();
     }
 }

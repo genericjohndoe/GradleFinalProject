@@ -4,20 +4,19 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-/**
- * SubscriptionsViewModelFactory aids in creation of SubscriptionsViewModel
- */
+public class SubsViewModelFactory implements ViewModelProvider.Factory {
 
-public class SubscriptionsViewModelFactory implements ViewModelProvider.Factory {
     private String uid;
+    private boolean getFollowers;
 
-    public SubscriptionsViewModelFactory(String uid){
+    public SubsViewModelFactory(String uid, boolean getFollowers){
         this.uid = uid;
+        this.getFollowers = getFollowers;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new SubscriptionsViewModel(uid);
+        return (T) new SubsViewModel(uid, getFollowers);
     }
 }

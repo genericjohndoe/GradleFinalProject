@@ -6,26 +6,22 @@ import android.support.annotation.NonNull;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 
-
-/**
- * retrieves list of subscribers from database
- */
-
-public class SubscribersLiveData extends LiveData<HilarityUser> {
-
-    private Query databaseReference;
+public class SubsLiveData extends LiveData<HilarityUser> {
+    private Query query;
+    private String path;
     private String startAt;
-    private String uid;
 
-    public SubscribersLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("followers/" + uid + "/list")
-                .orderByChild("userName").limitToFirst(20);
-        this.uid = uid;
+    public SubsLiveData(String uid, boolean getFollowers){
+        if (getFollowers){
+            path = "followers/" + uid + "/list";
+        } else {
+            path = "following/" + uid + "/list";
+        }
+        query = Constants.DATABASE.child(path).orderByChild("userName").limitToFirst(20);
     }
 
     private ChildEventListener childEventListener = new ChildEventListener() {
@@ -49,13 +45,13 @@ public class SubscribersLiveData extends LiveData<HilarityUser> {
 
     @Override
     protected void onActive() {
-        databaseReference.addChildEventListener(childEventListener);
+        query.addChildEventListener(childEventListener);
         super.onActive();
     }
 
     @Override
     protected void onInactive() {
-        databaseReference.removeEventListener(childEventListener);
+        query.removeEventListener(childEventListener);
         super.onInactive();
     }
 
@@ -64,7 +60,7 @@ public class SubscribersLiveData extends LiveData<HilarityUser> {
     }
 
     public void newQuery(){
-        databaseReference = Constants.DATABASE.child("followers/" + uid + "/list").orderByChild("userName")
+        query = Constants.DATABASE.child(path).orderByChild("userName")
                 .startAt(startAt).limitToFirst(20);
         onActive();
     }
