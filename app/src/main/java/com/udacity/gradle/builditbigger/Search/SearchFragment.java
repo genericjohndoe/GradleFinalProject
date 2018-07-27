@@ -95,8 +95,8 @@ public class SearchFragment extends Fragment {
         }
 
         Fragment[] fragmentArray = new Fragment[]{SearchUserFragment.newInstance(), SearchCollectionsFragment.newInstance(),
-                SearchTagsFragment.newInstance(), SearchTextPostsFragment.newInstance(), SearchImagePostsFragment.newInstance(),
-                SearchVideoPostsFragment.newInstance(), SearchGifPostsFragment.newInstance(), SearchAudioPostsFragment.newInstance()};
+                SearchPost.newInstance(null), SearchPost.newInstance("metaData.text"), SearchPost.newInstance("metaData.image"),
+                SearchPost.newInstance("metaData.video"), SearchPost.newInstance("metaData.gif"), SearchPost.newInstance("metaData.audio")};
 
         String[] tabTitles = new String[]{"Users", "Collections", "Tags", "Text", "Image", "Video", "Gif", "Audio"};
 

@@ -90,7 +90,6 @@ public class SearchUserFragment extends Fragment {
                     }
                     subsAdapter.setSubscribersList(allUsers);
                 });
-
     }
 
 }
