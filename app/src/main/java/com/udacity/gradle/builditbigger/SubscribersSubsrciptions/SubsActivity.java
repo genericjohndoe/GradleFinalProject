@@ -1,11 +1,8 @@
 package com.udacity.gradle.builditbigger.SubscribersSubsrciptions;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
 
 public class SubsActivity extends AppCompatActivity {

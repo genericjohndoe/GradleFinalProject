@@ -27,6 +27,7 @@ import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Forums.Replies.ForumQuestionActivity;
 import com.udacity.gradle.builditbigger.Messaging.Transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.Models.ForumQuestion;
+import com.udacity.gradle.builditbigger.Models.Notification;
 import com.udacity.gradle.builditbigger.R;
 
 import java.io.InputStream;
@@ -53,15 +54,27 @@ public class HilarityFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.i("onMessageRecieved", "called");
-        Map<String, String> data = remoteMessage.getData();
-        if (data != null && data.get(getString(R.string.type)).equals(getString(R.string.message))) {
-            sendNewMessageNotification(data.get(getString(R.string.body)), data.get(getString(R.string.path)), data.get(getString(R.string.title)));
-        } else if (data.get(getString(R.string.type)).equals(getString(R.string.mentions_lc)) || data.get(getString(R.string.type)).equals(getString(R.string.comment))){
-            sendNewCommentMentionNotification(data.get(getString(R.string.title)), data.get(getString(R.string.body)), data.get(getString(R.string.uid)),
-                    data.get("postid"), Integer.parseInt(data.get(getString(R.string.position))));
-        } else if (data.get(getString(R.string.type)).equals(getString(R.string.forum_lc))) {
-            sendForumNotification(data.get("key"),data.get(getString(R.string.title)), data.get(getString(R.string.body)));
-        }
+        Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/notifications").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Notification notification = dataSnapshot.getValue(Notification.class);
+                Map<String, String> data = remoteMessage.getData();
+                if (data != null && data.get(getString(R.string.type)).equals(getString(R.string.message)) && notification.getMessagesNotification()) {
+                    sendNewMessageNotification(data.get(getString(R.string.body)), data.get(getString(R.string.path)), data.get(getString(R.string.title)));
+                } else if ((data.get(getString(R.string.type)).equals(getString(R.string.mentions_lc)) || data.get(getString(R.string.type)).equals(getString(R.string.comment))) && notification.getMentionsNotification()){
+                    sendNewCommentMentionNotification(data.get(getString(R.string.title)), data.get(getString(R.string.body)), data.get(getString(R.string.uid)),
+                            data.get("postid"), Integer.parseInt(data.get(getString(R.string.position))));
+                } else if (data.get(getString(R.string.type)).equals(getString(R.string.forum_lc)) && notification.getForumReplyNotification()) {
+                    sendForumNotification(data.get("key"),data.get(getString(R.string.title)), data.get(getString(R.string.body)));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     /**

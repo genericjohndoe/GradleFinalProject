@@ -8,6 +8,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -241,14 +242,15 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
                                     if (face.getSmilingProbability() != FirebaseVisionFace.UNCOMPUTED_PROBABILITY) {
                                         float smiling = face.getSmilingProbability();
                                         Log.i("hjkhjkhkjhkjhjk", "smiling " + smiling);
-                                        /*int r = (int) smiling * 255;
+                                        int r = (int) smiling * 255;
                                         int g = (int) smiling * 215;
                                         int b = (int) smiling * 255;
                                         int color = Color.rgb(r,g,b);
-                                        Log.i("hjkhjkhkjhkjhjk", "color " + color);*/
+                                        Log.i("hjkhjkhkjhkjhjk", "color " + color);
                                         int color2 = fragment.getResources().getColor(R.color.pink);
+                                        int color3 = Color.rgb(255,215,255);
                                         if (smiling >0.90f)
-                                        ((ProfilePictureFragment) fragment).bind.background.setBackgroundColor(color2);
+                                        ((ProfilePictureFragment) fragment).bind.background.setBackgroundColor(color3);
                                     }
                                 }
                             })

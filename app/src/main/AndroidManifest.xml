@@ -136,11 +136,11 @@
         <activity
             android:name=".SignIn_Onboarding.AuthActivity"
             android:noHistory="true">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".NewPost.NewPostActivity2"
@@ -174,11 +174,11 @@
         <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity" />
         <activity android:name=".ReportPost.ReportActivity" />
         <activity android:name=".SignIn_Onboarding.ProfilePicture.ProfilePictureActivity">
-            <!--<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
     </application>
 

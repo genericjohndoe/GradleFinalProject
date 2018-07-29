@@ -1,6 +1,9 @@
 package com.udacity.gradle.builditbigger.Settings.NotificationSettings;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.databinding.FragmentNotificationSettingsBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,14 +41,29 @@ public class NotificationSettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) uid = getArguments().getString("uid");
+        if (getArguments() != null) uid = getArguments().getString(getString(R.string.uid));
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification_settings, container, false);
+        FragmentNotificationSettingsBinding bind = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_notification_settings, container, false);
+
+        bind.followersNotificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/notifications/followerNotification").setValue(isChecked);
+        });
+        bind.forumRepliesNotificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/notifications/forumReplyNotification").setValue(isChecked);
+        });
+        bind.mentionsNotificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/notifications/mentionsNotification").setValue(isChecked);
+        });
+        bind.messageNotificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/notifications/messagesNotification").setValue(isChecked);
+        });
+        return bind.getRoot();
     }
 
 }
