@@ -106,6 +106,7 @@
     <string name="followers">Followers</string>
     <string name="forum_replies">Forum Replies</string>
     <string name="reply">reply</string>
+    <string name="dob">Date of Birth</string>
 
     <string name="uid" translatable="false">uid</string>
     <string name="fragment" translatable="false">fragment</string>

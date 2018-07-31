@@ -104,6 +104,7 @@ dependencies {
     implementation 'com.stripe:stripe-android:6.1.2'
     //converts videos to gifs
     implementation 'com.github.ThanThai21:VideoToGif:1.0.1'
+    implementation 'com.github.drawers:SpinnerDatePicker:1.0.6'
 }
 
 apply plugin: 'com.google.gms.google-services'

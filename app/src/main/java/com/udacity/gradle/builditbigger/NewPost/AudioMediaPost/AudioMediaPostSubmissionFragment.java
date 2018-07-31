@@ -118,7 +118,8 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
     }
 
     private void createAudioPost(){
-        String path = "users/" + Constants.UID + "/audio/" + Constants.getCurrentDateAndTime() + ".mp3";
+        DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
+        String path = "users/" + Constants.UID + "/audio/" + db.getKey() + ".mp3";
         Constants.STORAGE.child(path).putFile(Uri.fromFile(file))
                 .addOnFailureListener(exception -> {
                 })
@@ -126,7 +127,6 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                             file.delete();
                             Constants.STORAGE.child(path).getDownloadUrl().addOnSuccessListener(uri ->{
                                 String downloadUrl = uri.toString();
-                                DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts").push();
                                 String tagline = bind.socialEditText.getText().toString();
                                 Map<String, Object> keywords = new HashMap<>();
                                 keywords.put("audio", true);

@@ -6,26 +6,6 @@
     android:background="@color/black"
     tools:context="com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.UserNameActivity">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-    <TextView
-        android:id="@+id/prompt_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="Pick user Name"
-        android:textColor="@color/green_8"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/user_name_editText"
         android:layout_width="0dp"
@@ -34,13 +14,13 @@
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/green_8"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/pick_name"
+        android:inputType="textPersonName"
         android:textColor="@color/green_8"
         android:textColorHint="@color/green_8"
         app:layout_constraintEnd_toStartOf="@+id/status_imageView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prompt_textview" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/status_imageView"
@@ -50,7 +30,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/prompt_textview" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/continue_button"
@@ -58,12 +38,12 @@
         android:layout_height="54dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_border"
+        android:contentDescription="@string/continue_onboarding_cd"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_hilarity_continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/continue_onboarding_cd"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/country_textView"
@@ -79,17 +59,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_name_editText" />
 
-    <com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.RotatingCalenderView.RotatingCalendarView
-        android:id="@+id/rotatingCalendarView2"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+    <TextView
+        android:id="@+id/dob_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:ems="10"
+        android:textColor="@color/green_8"
+        app:layout_constraintStart_toEndOf="@+id/dob_textView"
+        app:layout_constraintTop_toBottomOf="@+id/country_textView" />
+
+    <TextView
+        android:id="@+id/dob_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/dob"
+        android:textColor="@color/green_8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/country_textView"
-        android:background="@drawable/button_border"/>
+        app:layout_constraintTop_toBottomOf="@+id/country_textView" />
 
 
 </android.support.constraint.ConstraintLayout>

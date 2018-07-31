@@ -21,6 +21,8 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import com.udacity.gradle.builditbigger.Camera.AutoFitTextureView;
 import com.udacity.gradle.builditbigger.Camera.LifeCycleCamera;
+import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfilePictureBinding;
 
@@ -62,7 +64,8 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {}
+        if (getArguments() != null) {
+        }
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestStorageWritePermission();
         }
@@ -109,8 +112,7 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE) {
             Uri uri = data.getData();
             if (uri != null)
@@ -119,28 +121,38 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
     }
 
     public void createIntent(String filepath) {
-        //save to storage, add storage path (user settings) to rtd
-        //when down url (user data path) is generated, save then start intent for new activity
-        Intent intent = null;
-        startActivity(intent);
+        String path = Constants.UID + "/profilepic";
+        Constants.STORAGE.child(path).putFile(Uri.fromFile(new File(filepath))).addOnSuccessListener(task -> {
+            Constants.STORAGE.child(path).getDownloadUrl().addOnSuccessListener(uri -> {
+                String downloadUrl = uri.toString();
+                Constants.USER.setUrlString(downloadUrl);
+                Constants.DATABASE.child("users/" + Constants.UID + "/urlString").setValue(downloadUrl, (databaseError, databaseReference) -> {
+                    if (databaseError == null) {
+                        Intent intent = new Intent(getActivity(), HilarityActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            });
+
+        });
     }
 
-    public void moveFile(File file){
-        if (camera.getMode() == LifeCycleCamera.GIF){
-            VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
-            byte[] gif = converter.generateGIF(1);
-            String path = getActivity().getCacheDir()+"/temp.gif";
-            FileOutputStream stream = null;
-            try {
-                stream = new FileOutputStream(path);
-                stream.write(gif);
-                stream.close();
-            } catch (Exception e) {
+        public void moveFile(File file){
+            if (camera.getMode() == LifeCycleCamera.GIF) {
+                VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
+                byte[] gif = converter.generateGIF(1);
+                String path = getActivity().getCacheDir() + "/temp.gif";
+                FileOutputStream stream = null;
+                try {
+                    stream = new FileOutputStream(path);
+                    stream.write(gif);
+                    stream.close();
+                } catch (Exception e) {
 
+                }
+                createIntent(path);
+            } else {
+                createIntent(file.getPath());
             }
-            createIntent(path);
-        } else {
-            createIntent(file.getPath());
         }
     }
-}
