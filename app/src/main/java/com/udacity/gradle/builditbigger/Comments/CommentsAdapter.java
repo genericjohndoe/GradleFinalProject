@@ -104,7 +104,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             });
             return null;
         });
-        holder.bind.timeDateTextView.setText(Constants.formattedTimeString(context, comment.getTimeDate()));
+        holder.bind.timeDateTextView.setText(Constants.formattedTimeString(context, comment.getTimeDate(), false));
         holder.bind.deleteTextView.setOnClickListener(view ->{
             Constants.DATABASE
                     .child("userpostslikescomments/"+comment.getPostUid()+"/"+comment.getPostPushId()

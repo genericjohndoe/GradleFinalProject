@@ -87,14 +87,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof SentMessagesViewHolder) {
             if (message.getContents().size() == 1)
                 ((SentMessagesViewHolder) holder).content.setText(message.getContents().get(0));
-            ((SentMessagesViewHolder) holder).timeSent.setText(Constants.formattedTimeString(context, message.getTimeStamp()));
+            ((SentMessagesViewHolder) holder).timeSent.setText(Constants.formattedTimeString(context, message.getTimeStamp(), false));
             if (holder instanceof RecievedMessagesViewHolder) {
                 ((RecievedMessagesViewHolder) holder).user.setText(message.getHilarityUser().getUserName());
                 Glide.with(context).load(message.getHilarityUser().getUrlString())
                         .into(((RecievedMessagesViewHolder) holder).profileImg);
             }
         } else if (holder instanceof SentImageMessagesViewholder) {
-            ((SentImageMessagesViewholder) holder).timeSent.setText(Constants.formattedTimeString(context, message.getTimeStamp()));
+            ((SentImageMessagesViewholder) holder).timeSent.setText(Constants.formattedTimeString(context, message.getTimeStamp(), false));
             Constants.STORAGE.child(message.getContents().get(0)).getDownloadUrl().addOnSuccessListener(uri ->{
                 Glide.with(context).load(uri).into(((SentImageMessagesViewholder) holder).imageView);
             });
@@ -106,7 +106,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         .into(((RecievedImageMessagesViewHolder) holder).profileImg);
             }
         } else {
-            ((SentVideoMessagesViewHolder) holder).timeSent.setText(Constants.formattedTimeString(context, message.getTimeStamp()));
+            ((SentVideoMessagesViewHolder) holder).timeSent.setText(Constants.formattedTimeString(context, message.getTimeStamp(), false));
             ((SentVideoMessagesViewHolder) holder).getmLifecycleRegistry().handleLifecycleEvent(Lifecycle.Event.ON_START);
             Constants.STORAGE.child(message.getContents().get(0)).getDownloadUrl().addOnSuccessListener(uri ->{
                 ((SentVideoMessagesViewHolder) holder).path = uri;

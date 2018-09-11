@@ -17,6 +17,9 @@ import android.widget.CompoundButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.tsongkha.spinnerdatepicker.DatePicker;
+import com.tsongkha.spinnerdatepicker.DatePickerDialog;
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
 import com.udacity.gradle.builditbigger.Constants.Constants;
 import com.udacity.gradle.builditbigger.Constants.FlagEmojiMap;
 import com.udacity.gradle.builditbigger.Interfaces.SetFlag;
@@ -24,6 +27,11 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SignIn_Onboarding.ProfilePicture.ProfilePictureActivity;
 import com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.PickCountry.CountriesPopUpDialogFragment;
 import com.udacity.gradle.builditbigger.databinding.FragmentUserSettingsBinding;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -109,7 +117,7 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
         });
 
         userSettingsViewModel.getDobLiveData().observe(this, dob -> {
-            bind.ageTextView.setText(Constants.formattedTimeString(getActivity(), dob));
+            bind.ageTextView.setText(Constants.formattedTimeString(getActivity(), dob, true));
         });
 
         bind.profileTaglineEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
@@ -127,12 +135,50 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             CountriesPopUpDialogFragment.getInstance(this).show(getActivity().getSupportFragmentManager(), "countries");
         });
 
+        bind.ageTextView.setOnClickListener(view ->{
+            SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
+
+            int defaultYear = 0;
+            int defaultMonth = 0;
+            int defaultDay = 0;
+
+            try {
+                Date date = formatter.parse(bind.ageTextView.getText().toString());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                defaultDay = calendar.get(Calendar.DAY_OF_MONTH);
+                defaultMonth = calendar.get(Calendar.MONTH);
+                defaultYear = calendar.get(Calendar.YEAR);
+            } catch (ParseException e){}
+
+            DatePickerDialog.OnDateSetListener listener =
+                    (DatePicker view2, int year2, int monthOfYear, int dayOfMonth) -> {
+                        Calendar calendar2 = Calendar.getInstance();
+                        calendar2.set(year2,monthOfYear, dayOfMonth);
+                        long milliseconds = calendar2.getTimeInMillis();
+                        Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/dob").setValue(milliseconds);
+                    };
+
+            Calendar c = Calendar.getInstance();
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            int month = c.get(Calendar.MONTH);
+            int year = c.get(Calendar.YEAR);
+
+            new SpinnerDatePickerDialogBuilder()
+                    .context(getActivity())
+                    .callback(listener)
+                    .showTitle(true)
+                    .defaultDate(defaultYear, defaultMonth, defaultDay)
+                    .maxDate(year-16, month, day)
+                    .build()
+                    .show();
+        });
+
         return bind.getRoot();
     }
 
     @Override
     public void setFlag(String flag, String isoCode) {
-        //bind.flagTextView.setText(flag);
         Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/country").setValue(isoCode);
     }
 }

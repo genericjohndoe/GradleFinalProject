@@ -112,7 +112,7 @@ public class ForumQuestionFragment extends Fragment {
                 }
                 bind.question.questionTextView.setText(forumQuestion.getQuestion());
                 bind.question.questionTextView.requestFocus();
-                bind.question.timeTextView.setText(Constants.formattedTimeString(getActivity(), forumQuestion.getTimeStamp()));
+                bind.question.timeTextView.setText(Constants.formattedTimeString(getActivity(), forumQuestion.getTimeStamp(), false));
                 authorUID = forumQuestion.getHilarityUserUID();
             }
         });

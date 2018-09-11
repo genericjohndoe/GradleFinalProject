@@ -81,7 +81,7 @@ public class ForumQuestionAdapter extends RecyclerView.Adapter<ForumQuestionAdap
             });
             return null;
         });
-        holder.bind.timeTextView.setText(Constants.formattedTimeString(context,forumQuestion.getTimeStamp()));
+        holder.bind.timeTextView.setText(Constants.formattedTimeString(context,forumQuestion.getTimeStamp(), false));
     }
 
     @Override

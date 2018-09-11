@@ -53,7 +53,7 @@ public class SentMessagesAdapter extends RecyclerView.Adapter<SentMessagesAdapte
                 userName.append(user.getUserName()).append(" ");
             }
         }
-        holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, preview.getMessage().getTimeStamp()));
+        holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, preview.getMessage().getTimeStamp(), false));
         holder.binding.userNameTextView.setText(userName.toString());
         Glide.with(context).load(preview.getMessage().getHilarityUser().getUrlString()).into(holder.binding.profileImageview);
         String text = (preview.getMessage().getContents().size() == 1) ? preview.getMessage().getContents().get(0) : "Media Sent";

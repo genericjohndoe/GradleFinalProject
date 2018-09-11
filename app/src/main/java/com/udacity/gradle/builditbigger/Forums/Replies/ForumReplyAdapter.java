@@ -76,7 +76,7 @@ public class ForumReplyAdapter extends RecyclerView.Adapter<ForumReplyAdapter.Fo
             });
             return null;
         });
-        holder.bind.timeTextView.setText(Constants.formattedTimeString(context, forumReply.getTimeStamp()));
+        holder.bind.timeTextView.setText(Constants.formattedTimeString(context, forumReply.getTimeStamp(),false));
     }
 
     @Override

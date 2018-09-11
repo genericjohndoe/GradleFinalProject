@@ -379,7 +379,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
             holder.setIsLiked(aBoolean);
         });
 
-        holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, joke.getTimeStamp()));
+        holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, joke.getTimeStamp(), false));
 
         holder.binding.favoriteImageButton.setOnClickListener(view -> {
             final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;

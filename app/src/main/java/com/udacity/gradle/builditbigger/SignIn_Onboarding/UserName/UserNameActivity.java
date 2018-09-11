@@ -102,8 +102,8 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
                     .context(this)
                     .callback(listener)
                     .showTitle(true)
-                    .defaultDate(year, month-1, day)
-                    .maxDate(year, month-1, day)
+                    .defaultDate(year-16, month-1, day)
+                    .maxDate(year-16, month-1, day)
                     .build()
                     .show();
         });

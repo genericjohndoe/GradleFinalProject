@@ -42,10 +42,14 @@ public class Constants {
         return df.format(c.getTime());
     }
 
-    public static CharSequence formattedTimeString(Context context, long timeInMillis){
+    public static CharSequence formattedTimeString(Context context, long timeInMillis, boolean isDob){
         Calendar cal = Calendar.getInstance(TimeZone.getDefault(), context.getResources().getConfiguration().locale);
         cal.setTimeInMillis(timeInMillis);
-        return android.text.format.DateFormat.format("d MMM yyyy HH:mm",cal);
+        if (!isDob) {
+            return android.text.format.DateFormat.format("d MMM yyyy HH:mm", cal);
+        } else {
+            return android.text.format.DateFormat.format("d MMM yyyy", cal);
+        }
     }
 
     public static Map<String, Object> getTags(String tagline, Map<String, Object> map) {
