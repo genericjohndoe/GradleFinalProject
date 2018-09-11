@@ -58,7 +58,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
         @Override
         public void onClick(View v) {
-            setFlag.setFlag(emojiText);
+            setFlag.setFlag(emojiText, isoCode);
             dismissPopUp.dismissPopUp();
         }
     }

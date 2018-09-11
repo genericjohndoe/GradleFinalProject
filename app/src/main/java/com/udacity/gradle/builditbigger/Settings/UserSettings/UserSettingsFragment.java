@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.Constants.FlagEmojiMap;
 import com.udacity.gradle.builditbigger.Interfaces.SetFlag;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SignIn_Onboarding.ProfilePicture.ProfilePictureActivity;
@@ -42,7 +43,7 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        bind = DataBindingUtil.inflate(inflater,R.layout.fragment_user_settings, container, false);
+        bind = DataBindingUtil.inflate(inflater, R.layout.fragment_user_settings, container, false);
 
         valueEventListener = new ValueEventListener() {
             @Override
@@ -88,7 +89,6 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             }
         });
         bind.selectNewPhotoButton.setOnClickListener(view -> {
-            //pass bundle to ensure the activity after the image is saved to the database
             Intent intent = new Intent(getActivity(), ProfilePictureActivity.class);
             startActivity(intent);
         });
@@ -102,6 +102,10 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
         userSettingsViewModel.getTaglineLiveData().observe(this, tagline ->{
             bind.profileTaglineEditText.setText((tagline != null) ? tagline : getString(R.string.generic_profile_tagline));
             tag = tagline;
+        });
+
+        userSettingsViewModel.getCountryLiveData().observe(this, country ->{
+            bind.flagTextView.setText(FlagEmojiMap.getInstance().get(country));
         });
 
         bind.profileTaglineEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
@@ -125,7 +129,8 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
     }
 
     @Override
-    public void setFlag(String flag) {
+    public void setFlag(String flag, String isoCode) {
         bind.flagTextView.setText(flag);
+        Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/country").setValue(isoCode);
     }
 }

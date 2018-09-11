@@ -35,6 +35,7 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
     private boolean nameProceed = false;
     private TextView countryTextView;
     private boolean dateProceed = false;
+    private String twoDigit = getResources().getConfiguration().locale.getCountry();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String userName = "" + s;
+                //todo change to RTD
                 Constants.FIRESTORE.collection("users").whereEqualTo("userName", userName).get().addOnSuccessListener(queryDocumentSnapshots -> {
                    if (queryDocumentSnapshots.getDocuments().size() == 0 && !userName.contains(" ") && !userName.equals("")){
                        imageView.setBackground(getDrawable(R.drawable.ic_check_24dp));
@@ -75,7 +77,7 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
                     Date d = f.parse(dobEditText.getText().toString());
                     long milliseconds = d.getTime();
                     Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/dob").setValue(milliseconds);
-                    Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/country").setValue(getResources().getConfiguration().locale.getCountry());
+                    Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/country").setValue(twoDigit);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -114,7 +116,8 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
     }
 
     @Override
-    public void setFlag(String flag) {
+    public void setFlag(String flag, String isoCode) {
         countryTextView.setText(flag);
+        twoDigit = isoCode;
     }
 }

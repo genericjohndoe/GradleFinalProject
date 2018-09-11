@@ -114,9 +114,7 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE) {
-            Uri uri = data.getData();
-            if (uri != null)
-                createIntent(uri.getPath());
+            if (data.getData() != null) createIntent(data.getData().getPath());
         }
     }
 

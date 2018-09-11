@@ -1,9 +1,17 @@
 package com.udacity.gradle.builditbigger.SignIn_Onboarding;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,12 +30,14 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;
     private CircularProgressView circularProgressView;
+    private ImageView noSignal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         circularProgressView = findViewById(R.id.progress);
+        noSignal = findViewById(R.id.imageView);
         Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
         Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
         mAuthStateListener = firebaseAuth -> {
@@ -44,7 +54,16 @@ public class AuthActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         auth.addAuthStateListener(mAuthStateListener);
-        circularProgressView.startAnimation();
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (isConnected) {
+            circularProgressView.startAnimation();
+        } else {
+            noSignal.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -68,7 +87,8 @@ public class AuthActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 }
