@@ -108,6 +108,10 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             bind.flagTextView.setText(FlagEmojiMap.getInstance().get(country));
         });
 
+        userSettingsViewModel.getDobLiveData().observe(this, dob -> {
+            bind.ageTextView.setText(Constants.formattedTimeString(getActivity(), dob));
+        });
+
         bind.profileTaglineEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             if (!hasFocus && !bind.profileTaglineEditText.getText().toString().equals(tag)){
                 Constants.DATABASE.child("users/"+Constants.UID+"/tagline")
@@ -122,15 +126,13 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
         bind.flagTextView.setOnClickListener(view -> {
             CountriesPopUpDialogFragment.getInstance(this).show(getActivity().getSupportFragmentManager(), "countries");
         });
-        bind.addLangButton.setOnClickListener(view -> {
-            //todo open dialog to pick new language(s), append to list
-        });
+
         return bind.getRoot();
     }
 
     @Override
     public void setFlag(String flag, String isoCode) {
-        bind.flagTextView.setText(flag);
+        //bind.flagTextView.setText(flag);
         Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/country").setValue(isoCode);
     }
 }

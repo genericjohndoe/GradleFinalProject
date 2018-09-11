@@ -91,44 +91,6 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_tagline_textView" />
 
     <TextView
-        android:id="@+id/language_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="14sp"
-        android:textColor="@color/green_8"
-        android:text="@string/languages"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_tagline_editText" />
-
-    <ImageButton
-        android:id="@+id/add_lang_button"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@null"
-        android:src="@drawable/add_media"
-        android:contentDescription="@string/add_new_langauge"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/language_textView" />
-
-    <TextView
-        android:id="@+id/lang_list_textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/green_8"
-        android:textSize="20sp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text=""
-        app:layout_constraintEnd_toStartOf="@+id/add_lang_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/language_textView" />
-
-    <TextView
         android:id="@+id/auto_translate_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -140,16 +102,15 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/auto_translate_switch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lang_list_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_tagline_editText" />
 
     <Switch
         android:id="@+id/auto_translate_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lang_list_textView" />
+        app:layout_constraintTop_toTopOf="@+id/auto_translate_textView" />
 
     <TextView
         android:id="@+id/nation_textView"
