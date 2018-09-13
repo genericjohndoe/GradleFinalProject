@@ -31,6 +31,20 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseUser user;
     private CircularProgressView circularProgressView;
     private ImageView noSignal;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            if (isConnected) {
+                circularProgressView.startAnimation();
+                noSignal.setVisibility(View.GONE);
+            } else {
+                noSignal.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +68,8 @@ public class AuthActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         auth.addAuthStateListener(mAuthStateListener);
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if (isConnected) {
-            circularProgressView.startAnimation();
-        } else {
-            noSignal.setVisibility(View.VISIBLE);
-        }
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -71,6 +77,7 @@ public class AuthActivity extends AppCompatActivity {
         super.onPause();
         if (mAuthStateListener != null) auth.removeAuthStateListener(mAuthStateListener);
         circularProgressView.stopAnimation();
+        unregisterReceiver(broadcastReceiver);
     }
 
     public void configureApp(FirebaseUser user) {

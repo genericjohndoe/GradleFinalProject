@@ -135,7 +135,7 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             CountriesPopUpDialogFragment.getInstance(this).show(getActivity().getSupportFragmentManager(), "countries");
         });
 
-        bind.ageTextView.setOnClickListener(view ->{
+        bind.ageTextView.setOnClickListener(view -> {
             SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
 
             int defaultYear = 0;
