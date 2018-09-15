@@ -38,18 +38,16 @@ import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.UserNameActivity;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via email/password and sign in with Google.
  */
 public class LoginActivity extends AppCompatActivity {
 
     public static final int RC_SIGN_IN = 1;
-    private int RC_SAVE = 2;
+    //private int RC_SAVE = 2;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;
-
-    // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
 
@@ -95,12 +93,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //start listening for changes in authorization state
         auth.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        //stop listening for changes in authorization state
         if (mAuthStateListener != null) auth.removeAuthStateListener(mAuthStateListener);
     }
 
@@ -152,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        return email.contains("@") && !email.contains(" ");
+        return email.contains("@") && !email.contains(" ") && email.contains(".");
     }
 
     private boolean isPasswordValid(String password) {
@@ -163,12 +163,8 @@ public class LoginActivity extends AppCompatActivity {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                             if (!task.isSuccessful()) {
+                                //if user doesn't have account, one  is automatically created
                                 createAccount(email, password);
-                            } else {
-                                /*Credential credential = new Credential.Builder(email)
-                                        .setPassword(password)
-                                        .build();
-                                saveCredential(credential);*/
                             }
                         }
                 );
@@ -176,10 +172,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void createAccount(String email, String password) {
         auth.createUserWithEmailAndPassword(email, password);
-        /*Credential credential = new Credential.Builder(email)
-                .setPassword(password)
-                .build();
-        saveCredential(credential);*/
     }
 
     @Override
@@ -193,26 +185,21 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
+                Toast.makeText(this, "Google Sign in Failed", Toast.LENGTH_SHORT).show();
             }
         }
-        if (requestCode == RC_SAVE) {
+        /*if (requestCode == RC_SAVE) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Credentials saved", Toast.LENGTH_SHORT).show();
             } else {
                 //Log.e(TAG, "SAVE: Canceled by user", e);
             }
-        }
-
+        }*/
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential);
-        /*Credential savedCredential = new Credential.Builder(acct.getEmail())
-                .setAccountType(IdentityProviders.GOOGLE)
-                .build();
-        saveCredential(savedCredential);*/
     }
 
     public void configureApp(FirebaseUser user) {
@@ -222,8 +209,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Constants.USER = dataSnapshot.getValue(HilarityUser.class);
                 if (Constants.USER != null) {
+                    //move to main UI
                     startActivity(new Intent(LoginActivity.this, HilarityActivity.class));
                 } else {
+                    //move to page to pick user and set birth information
                     startActivity(new Intent(LoginActivity.this, UserNameActivity.class));
                 }
             }
@@ -231,35 +220,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
-    }
-
-    private void saveCredential(Credential credential){
-        CredentialsOptions options = new CredentialsOptions.Builder()
-                .forceEnableSaveDialog()
-                .build();
-        Credentials.getClient(this, options).save(credential)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(this, "Credentials saved", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    Exception e = task.getException();
-                    if (e instanceof ResolvableApiException) {
-                        // Try to resolve the save request. This will prompt the user if
-                        // the credential is new.
-                        ResolvableApiException rae = (ResolvableApiException) e;
-                        try {
-                            rae.startResolutionForResult(this, RC_SAVE);
-                        } catch (IntentSender.SendIntentException ex) {
-                            // Could not resolve the request
-                            Toast.makeText(this, "Save failed", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        // Request has no resolution
-                        Toast.makeText(this, "Save failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 }
 

@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,12 +24,16 @@ import com.udacity.gradle.builditbigger.MainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.Models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 
+/**
+ * This activity checks to see if user is authorized to use the application
+ */
 public class AuthActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseUser user;
     private CircularProgressView circularProgressView;
     private ImageView noSignal;
+    //broadcast receiver acts as connectivity listener, changes UI accordingly
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -54,11 +57,14 @@ public class AuthActivity extends AppCompatActivity {
         noSignal = findViewById(R.id.imageView);
         Constants.FIREBASEDATABASE = FirebaseDatabase.getInstance();
         Constants.DATABASE = Constants.FIREBASEDATABASE.getReference();
+        //anonymous class checks to see if user is logged in
         mAuthStateListener = firebaseAuth -> {
             user = firebaseAuth.getCurrentUser();
             if (user != null) {
+                //if user is logged in, app attempts to move to main UI
                 configureApp(user);
             } else {
+                //if user isn't logged in, app moves to login page
                 startActivity(new Intent(this, LoginActivity.class));
             }
         };
@@ -69,6 +75,7 @@ public class AuthActivity extends AppCompatActivity {
         super.onResume();
         auth.addAuthStateListener(mAuthStateListener);
         IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        //turn on connectivity listener
         registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -77,6 +84,7 @@ public class AuthActivity extends AppCompatActivity {
         super.onPause();
         if (mAuthStateListener != null) auth.removeAuthStateListener(mAuthStateListener);
         circularProgressView.stopAnimation();
+        //turn off connectivity listener
         unregisterReceiver(broadcastReceiver);
     }
 
@@ -87,15 +95,16 @@ public class AuthActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Constants.USER = dataSnapshot.getValue(HilarityUser.class);
                 if (Constants.USER != null) {
+                    //if Constants.USER holds data, move into main UI
                     startActivity(new Intent(getBaseContext(), HilarityActivity.class));
                 } else {
+                    //if Constants.USER holds no data, move to login page
                     startActivity(new Intent(AuthActivity.this, LoginActivity.class));
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 }

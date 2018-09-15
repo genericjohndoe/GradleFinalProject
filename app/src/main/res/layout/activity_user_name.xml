@@ -81,5 +81,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/country_textView" />
 
+    <TextView
+        android:id="@+id/gender_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Gender"
+        android:textColor="@color/green_8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dob_textView" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gender_textView">
+
+        <RadioButton
+            android:id="@+id/trans_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/green_8"
+            android:text="\u26a7"
+            android:textColor="@color/green_8"
+            android:textSize="40sp" />
+
+        <RadioButton
+            android:id="@+id/female_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/green_8"
+            android:text="\u2640"
+            android:textColor="@color/green_8"
+            android:textSize="40sp" />
+
+        <RadioButton
+            android:id="@+id/male_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/green_8"
+            android:text="\u2642"
+            android:textColor="@color/green_8"
+            android:textSize="40sp" />
+    </RadioGroup>
+
 
 </android.support.constraint.ConstraintLayout>

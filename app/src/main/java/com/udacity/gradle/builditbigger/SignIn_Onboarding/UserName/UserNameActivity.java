@@ -8,6 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.tsongkha.spinnerdatepicker.DatePicker;
@@ -36,6 +38,7 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
     private TextView countryTextView;
     private boolean dateProceed = false;
     private String twoDigit = getResources().getConfiguration().locale.getCountry();
+    private boolean isMale, isFemale, isAgender, isTrans = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,6 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
 
         findViewById(R.id.continue_button).setOnClickListener(view ->{
             if (nameProceed && dateProceed){
-                //todo switch out with generic icon
                 SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
                 try {
                     Date d = f.parse(dobEditText.getText().toString());
@@ -85,6 +87,9 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
                 Constants.DATABASE.child("users/"+Constants.UID).setValue(Constants.USER, (databaseError, databaseReference) -> {
                     if (databaseError == null) startActivity(new Intent(this, ProfilePictureActivity.class));
                 });
+                int selected = ((RadioGroup) findViewById(R.id.radioGroup)).getCheckedRadioButtonId();
+                RadioButton button = findViewById(selected);
+                Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/gender").setValue(button.getText());
             }
         });
         Calendar c = Calendar.getInstance();
@@ -113,6 +118,8 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
         countryTextView.setOnClickListener(view -> {
             CountriesPopUpDialogFragment.getInstance(this).show(getSupportFragmentManager(), "countries");
         });
+
+
     }
 
     @Override

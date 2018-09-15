@@ -222,6 +222,7 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-base-15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.webrtc:google-webrtc-1.0.22512" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-r2.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.AnyChart:AnyChart-Android-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:disklrucache:4.7.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-clearcut-15.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-database-16.0.1" level="project" />

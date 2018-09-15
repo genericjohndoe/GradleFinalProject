@@ -104,7 +104,10 @@ dependencies {
     implementation 'com.stripe:stripe-android:6.1.2'
     //converts videos to gifs
     implementation 'com.github.ThanThai21:VideoToGif:1.0.1'
+    //pick a date
     implementation 'com.github.drawers:SpinnerDatePicker:1.0.6'
+    //for charts
+    implementation 'com.github.AnyChart:AnyChart-Android:1.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
