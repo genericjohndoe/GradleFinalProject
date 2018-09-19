@@ -30,23 +30,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfilePictureFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * the class allows user to take your profile picture or select one from your device
  */
 public class ProfilePictureFragment extends Fragment implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_EXTERNAL_STORAGE_READ = 2;
     private LifeCycleCamera camera;
-    private FirebaseVisionImage image;
-    private AutoFitTextureView autoFitTextureView;
-    private FirebaseVisionFaceDetectorOptions options;
-    private FirebaseVisionFaceDetector detector;
     public FragmentProfilePictureBinding bind;
     private int PICK_IMAGE = 1;
 
-    public ProfilePictureFragment() {
-    }
+    public ProfilePictureFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -66,6 +59,7 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+        //check to see if permissions are granted
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestStorageWritePermission();
         }
@@ -84,7 +78,7 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture)), PICK_IMAGE);
         });
         bind.switchCameraImageButton.setOnClickListener(view -> camera.switchCamera());
         bind.takePictureImageButton.setOnClickListener(view -> camera.takePicture());
@@ -118,6 +112,11 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
         }
     }
 
+    /**
+     * this methods submits image to storage, sets the profile url in db
+     * and the Constant.USER.urlString property
+     * @param filepath is path of image
+     */
     public void createIntent(String filepath) {
         String path = Constants.UID + "/profilepic";
         Constants.STORAGE.child(path).putFile(Uri.fromFile(new File(filepath))).addOnSuccessListener(task -> {
@@ -126,8 +125,10 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
                 Constants.USER.setUrlString(downloadUrl);
                 Constants.DATABASE.child("users/" + Constants.UID + "/urlString").setValue(downloadUrl, (databaseError, databaseReference) -> {
                     if (databaseError == null) {
+                        //if db is successfully updated, move on to Main UI
                         Intent intent = new Intent(getActivity(), HilarityActivity.class);
                         startActivity(intent);
+                        //todo implement error handling
                     }
                 });
             });
@@ -135,7 +136,11 @@ public class ProfilePictureFragment extends Fragment implements ActivityCompat.O
         });
     }
 
-        public void moveFile(File file){
+    /**
+     * callback fired when LifeCycle Camera object captures an image
+     * @param file a reference to the file object
+     */
+    public void moveFile(File file){
             if (camera.getMode() == LifeCycleCamera.GIF) {
                 VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
                 byte[] gif = converter.generateGIF(1);

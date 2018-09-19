@@ -23,11 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * this class generates dialog box with countries' flags ready to be selected
+ */
 public class CountriesPopUpDialogFragment extends DialogFragment implements DismissPopUp {
     private SetFlag setFlag;
     private List<Country> countryList = new ArrayList<>();
     private FlagEmojiMap flagEmojiMap = FlagEmojiMap.getInstance();
-
 
     public static CountriesPopUpDialogFragment getInstance(SetFlag setFlag){
         CountriesPopUpDialogFragment pop = new CountriesPopUpDialogFragment();
@@ -41,7 +43,6 @@ public class CountriesPopUpDialogFragment extends DialogFragment implements Dism
         for (Map.Entry<String,String> entry : flagEmojiMap.entrySet()){
             countryList.add(new Country(entry.getKey(),entry.getValue()));
         }
-        Log.i("countries", ""+countryList.size());
     }
 
     @Nullable
@@ -58,15 +59,16 @@ public class CountriesPopUpDialogFragment extends DialogFragment implements Dism
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
+        //modify look of dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //setContentView used to ensure max width of dialog
         dialog.setContentView(R.layout.dialog_countries);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        //dialog.getWindow().setGravity(Gravity.BOTTOM);
         return dialog;
     }
 
-
+    /**
+     * callback fired by CountryAdapter class when item is selected
+     */
     @Override
     public void dismissPopUp() {
         dismiss();

@@ -64,6 +64,7 @@ public class Profile extends Fragment implements HideFAB {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         uid = getArguments().getString(getString(R.string.uid));
+        //test
     }
 
     @Override

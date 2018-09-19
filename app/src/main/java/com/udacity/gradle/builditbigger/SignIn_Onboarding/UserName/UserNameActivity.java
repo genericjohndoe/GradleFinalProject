@@ -30,15 +30,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * the activity allows user to select user name, birth date, and gender (optional)
  */
 public class UserNameActivity extends AppCompatActivity implements SetFlag {
     private boolean nameProceed = false;
     private TextView countryTextView;
     private boolean dateProceed = false;
     private String twoDigit = getResources().getConfiguration().locale.getCountry();
-    private boolean isMale, isFemale, isAgender, isTrans = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +45,8 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
         EditText editText = findViewById(R.id.user_name_editText);
         TextView dobEditText = findViewById(R.id.dob_editText);
         ImageView imageView = findViewById(R.id.status_imageView);
+
+        //make edittext reactive to input, when user selected unused name green check mark shows
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -54,7 +54,6 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String userName = "" + s;
-                //todo change to RTD
                 Constants.FIRESTORE.collection("users").whereEqualTo("userName", userName).get().addOnSuccessListener(queryDocumentSnapshots -> {
                    if (queryDocumentSnapshots.getDocuments().size() == 0 && !userName.contains(" ") && !userName.equals("")){
                        imageView.setBackground(getDrawable(R.drawable.ic_check_24dp));
@@ -72,14 +71,15 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
             public void afterTextChanged(Editable s) {}
         });
 
+        //submit all relevant information to the database
         findViewById(R.id.continue_button).setOnClickListener(view ->{
             if (nameProceed && dateProceed){
                 SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
                 try {
                     Date d = f.parse(dobEditText.getText().toString());
                     long milliseconds = d.getTime();
-                    Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/dob").setValue(milliseconds);
-                    Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/country").setValue(twoDigit);
+                    Constants.DATABASE.child("cloudsettings/" + Constants.UID + "/demographic/dob").setValue(milliseconds);
+                    Constants.DATABASE.child("cloudsettings/" + Constants.UID + "/demographic/country").setValue(twoDigit);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -88,16 +88,20 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
                     if (databaseError == null) startActivity(new Intent(this, ProfilePictureActivity.class));
                 });
                 int selected = ((RadioGroup) findViewById(R.id.radioGroup)).getCheckedRadioButtonId();
-                RadioButton button = findViewById(selected);
-                Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/gender").setValue(button.getText());
+                if (selected != -1) {
+                    RadioButton button = findViewById(selected);
+                    Constants.DATABASE.child("cloudsettings/" + Constants.UID + "/demographic/gender").setValue(button.getText());
+                }
             }
         });
+
+        //set up the dialog for birthday selection
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH)+1;
         int year = c.get(Calendar.YEAR);
         dobEditText.setText(day +"/"+month+"/"+year);
-        dobEditText.setOnClickListener(view ->{
+        dobEditText.setOnClickListener(view -> {
             DatePickerDialog.OnDateSetListener listener =
                     (DatePicker view2, int year2, int monthOfYear, int dayOfMonth) -> {
                     dobEditText.setText(dayOfMonth+"/"+(monthOfYear+1)+"/"+year2);
@@ -112,6 +116,8 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
                     .build()
                     .show();
         });
+
+        //select flag based on information from phone
         String country = getResources().getConfiguration().locale.getCountry();
         countryTextView = findViewById(R.id.country_textView);
         countryTextView.setText(FlagEmojiMap.getInstance().get(country));
@@ -122,6 +128,11 @@ public class UserNameActivity extends AppCompatActivity implements SetFlag {
 
     }
 
+    /**
+     * callback receives information from dialog after item ws pressed
+     * @param flag the emoji seen in the UI
+     * @param isoCode the two digit isocode used on the back end
+     */
     @Override
     public void setFlag(String flag, String isoCode) {
         countryTextView.setText(flag);

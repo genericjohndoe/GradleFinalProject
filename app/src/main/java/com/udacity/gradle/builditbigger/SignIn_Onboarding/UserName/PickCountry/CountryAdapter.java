@@ -14,6 +14,9 @@ import com.udacity.gradle.builditbigger.R;
 
 import java.util.List;
 
+/**
+ * class used to prepare views for recycler view containing dialog box
+ */
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryViewHolder> {
     private SetFlag setFlag;
     private DismissPopUp dismissPopUp;
