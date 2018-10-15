@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.udacity.gradle.builditbigger.NewPost.NewPostActivity2"
+    tools:context="com.udacity.gradle.builditbigger.newPost.NewPostActivity2"
     android:background="@color/black">
 
     <android.support.design.widget.AppBarLayout

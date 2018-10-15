@@ -4,5 +4,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/forum_question_framelayout"
-    tools:context="com.udacity.gradle.builditbigger.Forums.Replies.ForumQuestionActivity" />
+    tools:context="com.udacity.gradle.builditbigger.forums.replies.ForumQuestionActivity" />
 

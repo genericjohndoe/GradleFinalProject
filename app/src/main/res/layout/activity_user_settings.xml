@@ -5,4 +5,4 @@
     android:layout_height="match_parent"
     android:id="@+id/user_settings_settings_framelayout"
     android:background="@color/black"
-    tools:context=".Settings.UserSettings.UserSettingsActivity" />
+    tools:context=".settings.userSettings.UserSettingsActivity" />

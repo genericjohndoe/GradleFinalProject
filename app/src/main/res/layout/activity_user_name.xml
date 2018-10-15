@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context="com.udacity.gradle.builditbigger.SignIn_Onboarding.UserName.UserNameActivity">
+    tools:context="com.udacity.gradle.builditbigger.signInOnboarding.userName.UserNameActivity">
 
     <EditText
         android:id="@+id/user_name_editText"

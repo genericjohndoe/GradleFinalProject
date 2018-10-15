@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.internal.view.menu.ListMenuItemView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="96dp"
+    android:layout_height="?attr/dropdownListPreferredItemHeight"
+    android:paddingRight="16dip"/>

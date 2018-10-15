@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".SignIn_Onboarding.ProfilePicture.ProfilePictureFragment">
+    tools:context=".signInOnboarding.profilePicture.ProfilePictureFragment">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/background"
@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:background="#000">
 
-        <com.udacity.gradle.builditbigger.Camera.AutoFitTextureView
+        <com.udacity.gradle.builditbigger.camera.AutoFitTextureView
             android:id="@+id/textureview"
             android:layout_width="0dp"
             android:layout_height="0dp"

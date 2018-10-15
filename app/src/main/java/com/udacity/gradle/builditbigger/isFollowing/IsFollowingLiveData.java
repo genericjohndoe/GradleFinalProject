@@ -7,7 +7,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.udacity.gradle.builditbigger.Constants.Constants;
+import com.udacity.gradle.builditbigger.constants.Constants;
 
 /**
  * CLASS responsible for seeing if user follows a given user

@@ -5,10 +5,10 @@
 <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewPost.VisualMediaPost.VisualMediaPostFragment">
+    tools:context=".newPost.visualMediaPost.VisualMediaPostFragment">
 
 
-    <com.udacity.gradle.builditbigger.Camera.AutoFitTextureView
+    <com.udacity.gradle.builditbigger.camera.AutoFitTextureView
         android:id="@+id/autoFitTextureView"
         android:layout_width="0dp"
         android:layout_height="0dp"

@@ -24,8 +24,8 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.udacity.gradle.builditbigger.Jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.Messaging.Transcripts.MessagesAdapter;
+import com.udacity.gradle.builditbigger.jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.messaging.transcripts.MessagesAdapter;
 
 /**
  * class controls video playback

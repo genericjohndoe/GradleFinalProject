@@ -50,7 +50,7 @@
 
 
         <activity
-            android:name=".Collections.CollectionActivity"
+            android:name=".collections.CollectionActivity"
             android:label="@string/genres"
             android:theme="@style/AppTheme">
 
@@ -59,37 +59,37 @@
             <!-- android:value=".MainActivity" /> -->
         </activity>
         <activity
-            android:name=".Jokes.JokesActivity"
+            android:name=".jokes.JokesActivity"
             android:label="@string/jokes_list"
-            android:parentActivityName=".Collections.CollectionActivity"
+            android:parentActivityName=".collections.CollectionActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Collections.CollectionActivity" />
+                android:value=".collections.CollectionActivity" />
         </activity>
         <activity
-            android:name=".Post.PostActivity"
+            android:name=".post.PostActivity"
             android:label="@string/jokes_list"
-            android:parentActivityName=".Jokes.JokesActivity"
+            android:parentActivityName=".jokes.JokesActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Jokes.JokesActivity" />
+                android:value=".jokes.JokesActivity" />
         </activity>
         <activity
-            android:name=".MainUI.HilarityActivity"
+            android:name=".mainUI.HilarityActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_main22"
-            android:parentActivityName=".MainUI.HilarityActivity"
+            android:parentActivityName=".mainUI.HilarityActivity"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".CloudMessaging.HilarityFirebaseMessagingService">
+        <service android:name=".cloudMessaging.HilarityFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".CloudMessaging.HilarityJobService"
+            android:name=".cloudMessaging.HilarityJobService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
@@ -97,11 +97,11 @@
         </service>
 
         <activity
-            android:name=".SignIn_Onboarding.LoginActivity"
+            android:name=".signInOnboarding.LoginActivity"
             android:label="@string/title_activity_login"
             android:noHistory="true" />
         <activity
-            android:name=".SignIn_Onboarding.UserName.UserNameActivity"
+            android:name=".signInOnboarding.userName.UserNameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_user_name"
             android:noHistory="true"
@@ -112,29 +112,29 @@
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".Messaging.SentMessages.MessagesActivity" />
+        <activity android:name=".messaging.sentMessages.MessagesActivity" />
         <activity
-            android:name=".Messaging.Transcripts.TranscriptActivity"
-            android:parentActivityName=".Messaging.SentMessages.MessagesActivity">
+            android:name=".messaging.transcripts.TranscriptActivity"
+            android:parentActivityName=".messaging.sentMessages.MessagesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Messaging.SentMessages.MessagesActivity" />
+                android:value=".messaging.sentMessages.MessagesActivity" />
 
             <intent-filter>
                 <action android:name="com.udacity.gradle.builditbigger.ACTION_MESSAGE" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Messaging.ComposeMessage.ComposeMessageActivity"
-            android:parentActivityName=".Messaging.SentMessages.MessagesActivity" />
-        <activity android:name=".NewPost.DocumentPost.TextPostSubmissionActivity" />
-        <activity android:name=".Search.SearchActivity" />
-        <activity android:name=".Comments.CommentActivity" />
+            android:name=".messaging.composeMessage.ComposeMessageActivity"
+            android:parentActivityName=".messaging.sentMessages.MessagesActivity" />
+        <activity android:name=".newPost.documentPost.TextPostSubmissionActivity" />
+        <activity android:name=".search.SearchActivity" />
+        <activity android:name=".comments.CommentActivity" />
         <activity
-            android:name=".SubscribersSubsrciptions.SubsActivity"
-            android:parentActivityName=".MainUI.HilarityActivity" />
+            android:name=".subscribersSubsrciptions.SubsActivity"
+            android:parentActivityName=".mainUI.HilarityActivity" />
         <activity
-            android:name=".SignIn_Onboarding.AuthActivity"
+            android:name=".signInOnboarding.AuthActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -143,37 +143,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewPost.NewPostActivity2"
+            android:name=".newPost.NewPostActivity2"
             android:label=""
             android:theme="@style/AppTheme" />
-        <activity android:name=".Settings.SettingsActivity" />
-        <activity android:name=".Forums.Replies.ForumQuestionActivity" />
+        <activity android:name=".settings.SettingsActivity" />
+        <activity android:name=".forums.replies.ForumQuestionActivity" />
         <activity
-            android:name=".Forums.CreateQuestion.NewQuestionActivity"
-            android:parentActivityName=".MainUI.HilarityActivity" />
+            android:name=".forums.createQuestion.NewQuestionActivity"
+            android:parentActivityName=".mainUI.HilarityActivity" />
 
         <receiver
-            android:name=".CloudMessaging.NotifcationMessageReceiver"
+            android:name=".cloudMessaging.NotifcationMessageReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name=".Settings.UserSettings.UserSettingsActivity"
+            android:name=".settings.userSettings.UserSettingsActivity"
             android:label="@string/title_activity_user_settings"
-            android:parentActivityName=".Settings.SettingsActivity"
+            android:parentActivityName=".settings.SettingsActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.udacity.gradle.builditbigger.Settings.SettingsActivity" />
+                android:value="com.udacity.gradle.builditbigger.settings.SettingsActivity" />
         </activity>
-        <activity android:name=".Settings.NotificationSettings.NotificationSettingsActivity" />
-        <activity android:name=".Settings.ContentCreatorSettings.ContentCreatorActivity" />
-        <activity android:name=".Settings.PaymentSettings.PaymentActivity" />
-        <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostActivity" />
-        <activity android:name=".NewPost.AudioMediaPost.AudioMediaPostSubmissionActivity" />
-        <activity android:name=".NewPost.VisualMediaPost.VisualMediaPostSubmissionActivity" />
-        <activity android:name=".ReportPost.ReportActivity" />
-        <activity android:name=".SignIn_Onboarding.ProfilePicture.ProfilePictureActivity">
+        <activity android:name=".settings.notificationSettings.NotificationSettingsActivity" />
+        <activity android:name=".settings.contentCreatorSettings.ContentCreatorActivity" />
+        <activity android:name=".settings.paymentSettings.PaymentActivity" />
+        <activity android:name=".newPost.visualMediaPost.VisualMediaPostActivity" />
+        <activity android:name=".newPost.audioMediaPost.AudioMediaPostSubmissionActivity" />
+        <activity android:name=".newPost.visualMediaPost.VisualMediaPostSubmissionActivity" />
+        <activity android:name=".reportPost.ReportActivity" />
+        <activity android:name=".signInOnboarding.profilePicture.ProfilePictureActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 

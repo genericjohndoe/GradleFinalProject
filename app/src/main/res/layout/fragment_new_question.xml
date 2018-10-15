@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context="com.udacity.gradle.builditbigger.Forums.CreateQuestion.NewQuestionFragment">
+    tools:context="com.udacity.gradle.builditbigger.forums.createQuestion.NewQuestionFragment">
 
     <EditText
         android:id="@+id/question_editText"

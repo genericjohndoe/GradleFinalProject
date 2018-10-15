@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.udacity.gradle.builditbigger.Interfaces.RecyclerViewCallback;
-import com.udacity.gradle.builditbigger.Language.LanguageAdapter;
+import com.udacity.gradle.builditbigger.interfaces.RecyclerViewCallback;
+import com.udacity.gradle.builditbigger.language.LanguageAdapter;
 
 import java.util.ArrayList;
 import java.util.HashSet;

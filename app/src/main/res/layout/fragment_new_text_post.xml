@@ -36,7 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <jp.wasabeef.richeditor.RichEditor
+        <com.udacity.gradle.builditbigger.richTextEditor.RichEditor
             android:id="@+id/body_editText"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tagline_editText"
             android:contentDescription="@string/discard_post_cd"/>
 
-        <jp.wasabeef.richeditor.RichEditorToolBar
+        <com.udacity.gradle.builditbigger.richTextEditor.RichEditorToolBar
             android:id="@+id/richEditorToolBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

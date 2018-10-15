@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
-        tools:context=".ReportPost.ReportActivity">
+        tools:context=".reportPost.ReportActivity">
 
         <TextView
             android:id="@+id/question_textView"
@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <jp.wasabeef.richeditor.RichEditorToolBar
+        <com.udacity.gradle.builditbigger.richTextEditor.RichEditorToolBar
             android:id="@+id/richEditorToolBar2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/question_textView" />
 
-        <jp.wasabeef.richeditor.RichEditor
+        <com.udacity.gradle.builditbigger.richTextEditor.RichEditor
             android:id="@+id/editor"
             android:layout_width="0dp"
             android:layout_height="0dp"

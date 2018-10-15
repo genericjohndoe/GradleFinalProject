@@ -4,6 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".NewPost.AudioMediaPost.AudioMediaPostSubmissionActivity"
+    tools:context=".newPost.audioMediaPost.AudioMediaPostSubmissionActivity"
     android:id="@+id/audio_post_submission_framelayout"/>
 

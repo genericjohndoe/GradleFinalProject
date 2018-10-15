@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.udacity.gradle.builditbigger.Forums.Questions.ForumFragment">
+    tools:context="com.udacity.gradle.builditbigger.forums.questions.ForumFragment">
 
     <EditText
         android:id="@+id/filter_editText"
