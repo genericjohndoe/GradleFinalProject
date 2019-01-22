@@ -28,6 +28,7 @@ public class NewTextPostEditFragment extends Fragment {
     public static final String BODY = "body";
     public static final String TITLE = "title";
     public static final String NUMBER = "number";
+    public static final String SYNOPSIS = "synopsis";
     FragmentNewTextPostBinding bind;
     private Post post;
     private boolean wasDiscarded = false;
@@ -63,8 +64,8 @@ public class NewTextPostEditFragment extends Fragment {
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_new_text_post, container, false);
         if (post != null) {
             Log.i("iefioejwfw", "post isn't null");
-            bind.titleEditText.setText(post.getJokeTitle());
-            bind.bodyEditText.setHtml(post.getJokeBody());
+            bind.titleEditText.setText(post.getTitle());
+            bind.bodyEditText.setHtml(post.getBody());
             bind.taglineEditText.setText(post.getTagline());
         } else {
             Log.i("iefioejwfw", "post is null");
@@ -72,15 +73,17 @@ public class NewTextPostEditFragment extends Fragment {
         bind.continuebutton.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), TextPostSubmissionActivity.class);
             if (post != null){
-                post.setJokeTitle(bind.titleEditText.getText().toString());
-                post.setJokeBody(bind.bodyEditText.getHtml());
+                post.setTitle(bind.titleEditText.getText().toString());
+                post.setBody(bind.bodyEditText.getHtml());
                 post.setTagline(bind.taglineEditText.getText().toString());
+                post.setSynopsis(bind.synopsis.getText().toString());
                 intent.putExtra("post", post);
             } else {
                 intent.putExtra(TITLE, bind.titleEditText.getText().toString());
                 intent.putExtra(BODY, bind.bodyEditText.getHtml());
                 intent.putExtra(TAGLINE, bind.taglineEditText.getText().toString());
                 intent.putExtra(NUMBER, number);
+                intent.putExtra(SYNOPSIS,bind.synopsis.getText().toString());
             }
             startActivity(intent);
         });
@@ -100,9 +103,10 @@ public class NewTextPostEditFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         if (saved) {
-            post.setJokeTitle(bind.titleEditText.getText().toString());
-            post.setJokeBody(bind.bodyEditText.getHtml());
+            post.setTitle(bind.titleEditText.getText().toString());
+            post.setBody(bind.bodyEditText.getHtml());
             post.setTagline(bind.taglineEditText.getText().toString());
+            post.setSynopsis(bind.synopsis.getText().toString());
             outState.putParcelable("post", post);
         }
         super.onSaveInstanceState(outState);

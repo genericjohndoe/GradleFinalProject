@@ -1,16 +1,20 @@
 package com.udacity.gradle.builditbigger.post;
 
+import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.databinding.FragmentJokeBinding;
 
 /**
  * DEPRECATED
@@ -19,36 +23,32 @@ import com.udacity.gradle.builditbigger.R;
 public class PostFragment extends Fragment {
     String body;
     String title;
-    String author;
-    TextView jokeBody;
-    TextView jokeTitle;
-    TextView userName;
+
+    public static PostFragment newInstance(String title, String body, Context context) {
+        Bundle args = new Bundle();
+        PostFragment fragment = new PostFragment();
+        args.putString(context.getString(R.string.title),title);
+        args.putString(context.getString(R.string.body),body);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getActivity().getIntent();
-        Bundle bundle = intent.getExtras();
-
-        body = bundle.getString(getString(R.string.jokeBody));
-        title = bundle.getString(getString(R.string.jokeTitle));
-        author = bundle.getString(getString(R.string.userName));
+        if (getArguments() != null) {
+            title = getArguments().getString(getString(R.string.title));
+            body = getArguments().getString(getString(R.string.body));
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_joke, container, false);
-
-        jokeBody = rootView.findViewById(R.id.joke_body);
-        jokeTitle = rootView.findViewById(R.id.joke_title);
-        userName = rootView.findViewById(R.id.joke_author);
-
-        jokeBody.setText(body);
-        jokeTitle.setText(title);
-        userName.setText(author);
-
-        return rootView;
+        FragmentJokeBinding binding = DataBindingUtil
+                .inflate(inflater, R.layout.fragment_joke, container, false);
+        binding.jokeTitle.setText(title);
+        binding.jokeBody.setText(Html.fromHtml(body));
+        return binding.getRoot();
     }
 }

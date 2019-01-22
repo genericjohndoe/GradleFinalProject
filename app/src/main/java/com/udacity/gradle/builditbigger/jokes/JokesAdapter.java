@@ -7,12 +7,16 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,6 +51,7 @@ import com.udacity.gradle.builditbigger.models.VideoInfo;
 import com.udacity.gradle.builditbigger.newPost.audioMediaPost.AudioMediaPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.newPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.newPost.visualMediaPost.VisualMediaPostSubmissionActivity;
+import com.udacity.gradle.builditbigger.post.PostActivity;
 import com.udacity.gradle.builditbigger.profile.userPosts.OrientationControlViewModel;
 import com.udacity.gradle.builditbigger.profile.userPosts.OrientationControlViewModelFactory;
 import com.udacity.gradle.builditbigger.R;
@@ -113,9 +118,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                         return null;
                     }
             );
-            binding.optionsImageButton.setOnClickListener(view -> {
+            binding.postbar.optionsImageButton.setOnClickListener(view -> {
                 if(isUserProfile) {
-                    PopupMenu popup = new PopupMenu(context, binding.optionsImageButton, Gravity.BOTTOM,0,R.style.PopupMenu);
+                    PopupMenu popup = new PopupMenu(context, binding.postbar.optionsImageButton, Gravity.BOTTOM,0,R.style.PopupMenu);
                     popup.getMenuInflater().inflate(R.menu.menu_post, popup.getMenu());
                     popup.setOnMenuItemClickListener(this);
                     MenuPopupHelper menuHelper;
@@ -136,7 +141,7 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                 }
             });
 
-            binding.collectionImageButton.setOnClickListener(view -> showAddToCollectionDialog());
+            binding.postbar.collectionImageButton.setOnClickListener(view -> showAddToCollectionDialog());
 
             orientationControlViewModel = ViewModelProviders.of((FragmentActivity) context, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
         }
@@ -320,8 +325,23 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         holder.joke = joke;
 
         if (joke.getType() == Constants.TEXT) {
-            holder.binding.textLayout.jokeTitleTextView.setText(joke.getJokeTitle());
-            holder.binding.textLayout.jokeBodyTextView.setText(joke.getJokeBody());
+            holder.binding.textLayout.jokeTitleTextView.setText(joke.getTitle());
+            if (joke.getBody().isEmpty()) {
+                holder.binding.textLayout.jokeBodyTextView.setText(joke.getSynopsis());
+            }else {
+                String more = "...++" ;
+                SpannableString ss = new SpannableString(joke.getSynopsis() + more);
+                ss.setSpan(new StyleSpan(Typeface.BOLD),joke.getSynopsis().length(),
+                        joke.getSynopsis().length() + more.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.binding.textLayout.jokeBodyTextView.setText(ss);
+                holder.binding.textLayout.jokeBodyTextView.setClickable(true);
+                holder.binding.textLayout.jokeBodyTextView.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, PostActivity.class);
+                    intent.putExtra(context.getString(R.string.title), joke.getTitle());
+                    intent.putExtra(context.getString(R.string.body), joke.getBody());
+                    context.startActivity(intent);
+                });
+            }
         } else if (joke.getType() == Constants.IMAGE_GIF) {
             Glide.with(context).load(joke.getMediaURL())
                     .into(holder.binding.gifLayout.postGifimageview);
@@ -341,7 +361,6 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
                     holder.orientationControlViewModel.getVideoLiveData().observe(holder, videoInfo -> {
                         holder.binding.videoLayout.postVideoView.getPlayer().seekTo(videoInfo.getTimeElapsed());
                         holder.binding.videoLayout.postVideoView.getPlayer().setPlayWhenReady(true);
-
                     });
                 }
             });
@@ -361,45 +380,45 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         viewHolderViewModel.getNumLikesLiveData().observe(holder, num -> {
             String number2 = num + "";
-            holder.binding.likesCounterTextView.setText(number2);
+            holder.binding.postbar.likesCounterTextView.setText(number2);
         });
 
         viewHolderViewModel.getNumCommentsLiveData().observe(holder, num -> {
             String number3 = num + "";
-            holder.binding.commentCounterTextView.setText(number3);
+            holder.binding.postbar.commentCounterTextView.setText(number3);
         });
 
         viewHolderViewModel.getIsLikedLiveData().observe(holder, aBoolean -> {
             if (aBoolean) {
-                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_like).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_like).into(holder.binding.postbar.favoriteImageButton);
             } else {
-                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_unlike).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_unlike).into(holder.binding.postbar.favoriteImageButton);
             }
             holder.setIsLiked(aBoolean);
         });
 
-        holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, joke.getTimeStamp(), false));
+        holder.binding.postbar.timeDateTextView.setText(Constants.formattedTimeString(context, joke.getTimeStamp(), false));
 
-        holder.binding.favoriteImageButton.setOnClickListener(view -> {
+        holder.binding.postbar.favoriteImageButton.setOnClickListener(view -> {
             final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;
             if (holder.getIsLiked()) {
                 Constants.DATABASE.child(path).removeValue((databaseError, databaseReference) -> {
                     if (databaseError == null) {
-                        Glide.with(context).load(R.drawable.hilarity_mask_unlike).into(holder.binding.favoriteImageButton);
+                        Glide.with(context).load(R.drawable.hilarity_mask_unlike).into(holder.binding.postbar.favoriteImageButton);
                         Constants.DATABASE.child("userlikes/" + Constants.UID + "/list/" + joke.getUID() + " " + joke.getPushId()).removeValue();
                     }
                 });
             } else {
                 Constants.DATABASE.child(path).setValue(true, (databaseError, databaseReference) -> {
                     if (databaseError == null){
-                        Glide.with(context).load(R.drawable.hilarity_mask_like).into(holder.binding.favoriteImageButton);
+                        Glide.with(context).load(R.drawable.hilarity_mask_like).into(holder.binding.postbar.favoriteImageButton);
                         Constants.DATABASE.child("userlikes/" + Constants.UID + "/list/" + joke.getUID() + " " + joke.getPushId()).setValue(joke);
                     }
                 });
             }
         });
 
-        holder.binding.commentImageButton.setOnClickListener(view -> {
+        holder.binding.postbar.commentImageButton.setOnClickListener(view -> {
             Intent intent = new Intent(context, CommentActivity.class);
             intent.putExtra(context.getString(R.string.uid), joke.getUID());
             intent.putExtra(context.getString(R.string.pushId), joke.getPushId());

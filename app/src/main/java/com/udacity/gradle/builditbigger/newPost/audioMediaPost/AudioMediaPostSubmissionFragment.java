@@ -84,7 +84,7 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                 R.layout.fragment_audio_media_post_submission, container, false);
         getLifecycle().addObserver(new VideoLifeCyclerObserver(getActivity(), bind.simpleexoview));
         if (post != null) {
-            Constants.STORAGE.child(post.getJokeTitle()).getFile(file);
+            Constants.STORAGE.child(post.getTitle()).getFile(file);
             bind.socialEditText.setText(post.getTagline());
         }
         bind.submitbutton.setOnClickListener(view -> {

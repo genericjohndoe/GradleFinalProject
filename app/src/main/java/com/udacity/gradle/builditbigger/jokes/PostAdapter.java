@@ -103,8 +103,14 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.PostViewHold
         holder.joke = joke;
 
         if (joke.getType() == Constants.TEXT) {
-            holder.binding.textLayout.jokeTitleTextView.setText(joke.getJokeTitle());
-            holder.binding.textLayout.jokeBodyTextView.setText(joke.getJokeBody());
+            holder.binding.textLayout.jokeTitleTextView.setText(joke.getTitle());
+            holder.binding.textLayout.jokeBodyTextView.setText(joke.getSynopsis());
+            if (!joke.getBody().isEmpty()){
+                /*holder.binding.textLayout.showTextButton.setVisibility(View.VISIBLE);
+                holder.binding.textLayout.showTextButton.setOnClickListener((view -> {
+                    //todo add intent
+                }));*/
+            }
         } else if (joke.getType() == Constants.IMAGE_GIF) {
             Glide.with(context).load(joke.getMediaURL())
                     .into(holder.binding.gifLayout.postGifimageview);
@@ -144,45 +150,45 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.PostViewHold
 
         viewHolderViewModel.getNumLikesLiveData().observe(holder, num -> {
             String number2 = num + "";
-            holder.binding.likesCounterTextView.setText(number2);
+            holder.binding.postbar.likesCounterTextView.setText(number2);
         });
 
         viewHolderViewModel.getNumCommentsLiveData().observe(holder, num -> {
             String number3 = num + "";
-            holder.binding.commentCounterTextView.setText(number3);
+            holder.binding.postbar.commentCounterTextView.setText(number3);
         });
 
         viewHolderViewModel.getIsLikedLiveData().observe(holder, aBoolean -> {
             if (aBoolean) {
-                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_like).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_like).into(holder.binding.postbar.favoriteImageButton);
             } else {
-                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_unlike).into(holder.binding.favoriteImageButton);
+                Glide.with(context.getApplicationContext()).load(R.drawable.hilarity_mask_unlike).into(holder.binding.postbar.favoriteImageButton);
             }
             holder.setIsLiked(aBoolean);
         });
 
-        holder.binding.timeDateTextView.setText(Constants.formattedTimeString(context, joke.getTimeStamp(), false));
+        holder.binding.postbar.timeDateTextView.setText(Constants.formattedTimeString(context, joke.getTimeStamp(), false));
 
-        holder.binding.favoriteImageButton.setOnClickListener(view -> {
+        holder.binding.postbar.favoriteImageButton.setOnClickListener(view -> {
             final String path = "userpostslikescomments/" + joke.getUID() + "/" + joke.getPushId() + "/likes/list/" + Constants.UID;
             if (holder.getIsLiked()) {
                 Constants.DATABASE.child(path).removeValue((databaseError, databaseReference) -> {
                     if (databaseError == null) {
-                        Glide.with(context).load(R.drawable.hilarity_mask_unlike).into(holder.binding.favoriteImageButton);
+                        Glide.with(context).load(R.drawable.hilarity_mask_unlike).into(holder.binding.postbar.favoriteImageButton);
                         Constants.DATABASE.child("userlikes/" + Constants.UID + "/list/" + joke.getUID() + " " + joke.getPushId()).removeValue();
                     }
                 });
             } else {
                 Constants.DATABASE.child(path).setValue(true, (databaseError, databaseReference) -> {
                     if (databaseError == null){
-                        Glide.with(context).load(R.drawable.hilarity_mask_like).into(holder.binding.favoriteImageButton);
+                        Glide.with(context).load(R.drawable.hilarity_mask_like).into(holder.binding.postbar.favoriteImageButton);
                         Constants.DATABASE.child("userlikes/" + Constants.UID + "/list/" + joke.getUID() + " " + joke.getPushId()).setValue(joke);
                     }
                 });
             }
         });
 
-        holder.binding.commentImageButton.setOnClickListener(view -> {
+        holder.binding.postbar.commentImageButton.setOnClickListener(view -> {
                     Intent intent = new Intent(context, CommentActivity.class);
                     intent.putExtra(context.getString(R.string.uid), joke.getUID());
                     intent.putExtra(context.getString(R.string.pushId), joke.getPushId());
@@ -247,7 +253,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.PostViewHold
                 // Implement equals(), or write custom data comparison logic here.
                 @Override
                 public boolean areContentsTheSame(Post oldItem, Post newItem) {
-                    return (oldItem.getJokeTitle().equals(newItem.getJokeTitle()) && oldItem.getJokeBody().equals(newItem.getJokeBody())
+                    return (oldItem.getTitle().equals(newItem.getTitle()) && oldItem.getBody().equals(newItem.getBody())
                             && oldItem.getTagline().equals(newItem.getTagline()) && oldItem.getMediaURL().equals(newItem.getMediaURL()));
                 }
             };
@@ -289,9 +295,9 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.PostViewHold
                         return null;
                     }
             );
-            binding.optionsImageButton.setOnClickListener(view -> {
+            binding.postbar.optionsImageButton.setOnClickListener(view -> {
                 if(isUserProfile) {
-                    PopupMenu popup = new PopupMenu(context, binding.optionsImageButton, Gravity.BOTTOM,0, R.style.PopupMenu);
+                    PopupMenu popup = new PopupMenu(context, binding.postbar.optionsImageButton, Gravity.BOTTOM,0, R.style.PopupMenu);
                     popup.getMenuInflater().inflate(R.menu.menu_post, popup.getMenu());
                     popup.setOnMenuItemClickListener(this);
                     Object menuHelper;
@@ -312,7 +318,7 @@ public class PostAdapter extends PagedListAdapter<Post, PostAdapter.PostViewHold
                 }
             });
 
-            binding.collectionImageButton.setOnClickListener(view -> showAddToCollectionDialog());
+            binding.postbar.collectionImageButton.setOnClickListener(view -> showAddToCollectionDialog());
 
             orientationControlViewModel = ViewModelProviders.of((FragmentActivity) context, new OrientationControlViewModelFactory()).get(OrientationControlViewModel.class);
         }

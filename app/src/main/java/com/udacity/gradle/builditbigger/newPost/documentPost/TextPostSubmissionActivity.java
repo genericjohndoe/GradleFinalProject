@@ -17,8 +17,9 @@ public class TextPostSubmissionActivity extends AppCompatActivity {
         String body = getIntent().getStringExtra("body");
         String tagline = getIntent().getStringExtra("tagline");
         String number = getIntent().getStringExtra("number");
+        String synopsis = getIntent().getStringExtra("synopsis");
         Post post = getIntent().getParcelableExtra("post");
-        Fragment fragment = (post == null) ? NewTextPostSubmissionFragment.newInstance(title,body,tagline,number) :
+        Fragment fragment = (post == null) ? NewTextPostSubmissionFragment.newInstance(title,body,tagline,number, synopsis) :
                 NewTextPostSubmissionFragment.newInstance(post);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.new_text_submission_framelayout, fragment)

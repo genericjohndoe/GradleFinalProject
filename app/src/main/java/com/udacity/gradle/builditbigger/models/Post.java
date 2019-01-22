@@ -13,10 +13,10 @@ import java.util.Map;
  */
 
 public class Post implements Parcelable {
-    private String jokeTitle;
-    private String jokeBody;
+    private String title;
+    private String body;
+    private String synopsis;
     private Long timeStamp;
-    private String genre;
     private String uid;
     private String mediaURL;
     private String pushId;
@@ -29,12 +29,12 @@ public class Post implements Parcelable {
 
     public Post() {}
 
-    public Post(String jokeTitle, String body, Long time, String genre,
+    public Post(String jokeTitle, String body, Long time, String synopsis,
                 String url, String uid, String pushId, String tagline, Integer type, Map<String, Object> metaData, Double inverseTimeStamp) {
-        this.jokeTitle = jokeTitle;
-        jokeBody = body;
+        this.title = jokeTitle;
+        this.body = body;
         timeStamp = time;
-        this.genre = genre;
+        this.synopsis = synopsis;
         this.uid = uid;
         mediaURL = url;
         this.pushId = pushId;
@@ -46,8 +46,8 @@ public class Post implements Parcelable {
     }
 
     public Post(Parcel in){
-        jokeBody = in.readString();
-        jokeTitle = in.readString();
+        title = in.readString();
+        body = in.readString();
         uid = in.readString();
         tagline = in.readString();
         type = in.readInt();
@@ -56,30 +56,36 @@ public class Post implements Parcelable {
         mediaURL = in.readString();
         metaData = in.readHashMap(HashMap.class.getClassLoader());
         inverseTimeStamp = in.readDouble();
+        synopsis = in.readString();
+        taglist = in.readArrayList(ArrayList.class.getClassLoader());
     }
 
-    public String getJokeTitle() {
-        return jokeTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setJokeTitle(String text) {
-        jokeTitle = text;
+    public void setTitle(String text) {
+        title = text;
     }
 
-    public String getJokeBody() {
-        return jokeBody;
+    public String getBody() {
+        return body;
     }
 
-    public void setJokeBody(String body) {
-        jokeBody = body;
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public Long getTimeStamp() {
         return timeStamp;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 
     public String getUID() {
@@ -131,8 +137,8 @@ public class Post implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(jokeTitle);
-        dest.writeString(jokeBody);
+        dest.writeString(title);
+        dest.writeString(body);
         dest.writeString(uid);
         dest.writeString(tagline);
         dest.writeInt(type);
@@ -141,6 +147,8 @@ public class Post implements Parcelable {
         dest.writeString(mediaURL);
         dest.writeMap(metaData);
         dest.writeDouble(inverseTimeStamp);
+        dest.writeString(synopsis);
+        dest.writeList(taglist);
     }
 
     @Override

@@ -209,11 +209,11 @@ public class LifeCycleCamera implements LifecycleObserver, ActivityCompat.OnRequ
             }
             if (lookForFace) {
                 FirebaseVisionFaceDetectorOptions options = new FirebaseVisionFaceDetectorOptions.Builder()
-                        .setModeType(FirebaseVisionFaceDetectorOptions.ACCURATE_MODE)
-                        .setLandmarkType(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
-                        .setClassificationType(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+                        .setPerformanceMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
+                        .setLandmarkMode(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+                        .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
                         .setMinFaceSize(0.15f)
-                        .setTrackingEnabled(true)
+                        .enableTracking()
                         .build();
                 detector = FirebaseVision.getInstance().getVisionFaceDetector(options);
                 Log.i("hjkhjkhkjhkjhjk", "surface available");
