@@ -139,6 +139,7 @@ public class NewTextPostSubmissionFragment extends Fragment {
             getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
         });
         return bind.getRoot();
+        //no comment
     }
 
 
