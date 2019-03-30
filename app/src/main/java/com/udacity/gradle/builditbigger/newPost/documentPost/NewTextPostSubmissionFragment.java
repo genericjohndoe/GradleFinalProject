@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +101,7 @@ public class NewTextPostSubmissionFragment extends Fragment implements SetDate {
             bind.synopsisTextView.setText(post.getSynopsis());
         } else {
             bind.titleTextView.setText(title);
-            bind.bodyTextView.setText(Html.fromHtml(body));
+            if (body != null) bind.bodyTextView.setText(Html.fromHtml(body));
             bind.socialTextView.setText(tagline);
             bind.synopsisTextView.setText(synopsis);
         }
@@ -156,6 +157,7 @@ public class NewTextPostSubmissionFragment extends Fragment implements SetDate {
     @Override
     public void confirm() {
         isConfirmed = true;
+        Log.i("timeset", "time confirmed");
     }
 
 
