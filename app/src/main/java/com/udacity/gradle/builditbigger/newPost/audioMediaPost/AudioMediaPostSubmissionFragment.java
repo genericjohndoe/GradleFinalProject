@@ -20,13 +20,16 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.interfaces.SetDate;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.databinding.FragmentAudioMediaPostSubmissionBinding;
+import com.udacity.gradle.builditbigger.newPost.ScheduledPostDateDialog;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,12 +38,15 @@ import java.util.Map;
  * Use the {@link AudioMediaPostSubmissionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AudioMediaPostSubmissionFragment extends Fragment {
+public class AudioMediaPostSubmissionFragment extends Fragment implements SetDate {
     private String number;
     private String audioFilePath;
     private Post post;
     private File file;
     private FragmentAudioMediaPostSubmissionBinding bind;
+    private Calendar futureDate = Calendar.getInstance();
+    private boolean isConfirmed = false;
+
 
     public AudioMediaPostSubmissionFragment() {}
 
@@ -95,6 +101,10 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
             }
         });
 
+        bind.schPostButton.setOnClickListener(view -> {
+            ScheduledPostDateDialog.getInstance(this).show(getFragmentManager(),"sd");
+        });
+
         return bind.getRoot();
     }
 
@@ -133,7 +143,7 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
                                 for (String tag : bind.socialEditText.getHashtags()){
                                     keywords.put(tag,true);
                                 }
-                                long time = System.currentTimeMillis();
+                                long time = (isConfirmed) ? futureDate.getTimeInMillis() : System.currentTimeMillis();
                                 Post newAudioPost = new Post("", "", time,
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, Constants.VIDEO_AUDIO,
                                          keywords, Constants.INVERSE/time);
@@ -155,5 +165,15 @@ public class AudioMediaPostSubmissionFragment extends Fragment {
         DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts/"+post.getPushId());
         post.setTagline(bind.socialEditText.getText().toString());
         db.setValue(post, (databaseError, databaseReference) -> getActivity().finish());
+    }
+
+    @Override
+    public void setDate(int year, int month, int day, int hour, int minute) {
+        futureDate.set(year, month, day, hour, minute);
+    }
+
+    @Override
+    public void confirm() {
+        isConfirmed = true;
     }
 }

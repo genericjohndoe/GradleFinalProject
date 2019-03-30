@@ -22,12 +22,15 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.interfaces.SetDate;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostSubmissionBinding;
+import com.udacity.gradle.builditbigger.newPost.ScheduledPostDateDialog;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +39,7 @@ import java.util.Map;
  * Use the {@link VisualMediaPostSubmissionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VisualMediaPostSubmissionFragment extends Fragment {
+public class VisualMediaPostSubmissionFragment extends Fragment implements SetDate {
     private String filePath;
     private String number;
     private Post post;
@@ -44,6 +47,8 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
     private String isVideo;
     private int type;
     private File file;
+    private Calendar futureDate = Calendar.getInstance();
+    private boolean isConfirmed = false;
 
     public VisualMediaPostSubmissionFragment() {
     }
@@ -91,7 +96,7 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
 
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
 
-            if (post != null) {
+        if (post != null) {
                 /*Constants.STORAGE.child(post.getJokeTitle()).getFile(file)
                         .addOnSuccessListener(taskSnapshot -> {
                             try {
@@ -100,14 +105,14 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
 
                             }
                         });*/
-                bind.socialEditText.setText(post.getTagline());
-            } else {
-                try {
-                    mmr.setDataSource(filePath);
-                } catch (Exception e) {
+            bind.socialEditText.setText(post.getTagline());
+        } else {
+            try {
+                mmr.setDataSource(filePath);
+            } catch (Exception e) {
 
-                }
             }
+        }
         isVideo = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO);
         if (isVideo == null) {
             bind.gifImageView.setVisibility(View.VISIBLE);
@@ -128,6 +133,8 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
             }
 
         });
+
+        bind.scheduleButton.setOnClickListener(view -> ScheduledPostDateDialog.getInstance(this).show(getFragmentManager(),"sd"));
         return bind.getRoot();
     }
 
@@ -141,7 +148,7 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
                     Util.getUserAgent(getActivity(), "Hilarity"), bandwidthMeter);
             //SimpleCache cache = new SimpleCache(getActivity().getCacheDir(), new LeastRecentlyUsedCacheEvictor(1024^2*100));
             //CacheDataSourceFactory cacheDataSourceFactory = new CacheDataSourceFactory(cache, dataSourceFactory);
-            // Produces Extractor instances for parsing the media data.
+            //Produces Extractor instances for parsing the media data.
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
             if (bind.simpleExoPlayerView.getPlayer() != null) {
                 bind.simpleExoPlayerView.getPlayer().prepare(new ExtractorMediaSource(Uri.fromFile(file),
@@ -172,17 +179,19 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
                                 String tagline = bind.socialEditText.getText().toString();
                                 Map<String, Object> keywords = new HashMap<>();
                                 if (isVideo != null) keywords.put("video", true);
-                                if ((isVideo == null) && addSuffix(filePath).equals(".gif")) keywords.put("gif", true);
-                                if ((isVideo == null) && !addSuffix(filePath).equals(".gif")) keywords.put("image", true);
+                                if ((isVideo == null) && addSuffix(filePath).equals(".gif"))
+                                    keywords.put("gif", true);
+                                if ((isVideo == null) && !addSuffix(filePath).equals(".gif"))
+                                    keywords.put("image", true);
                                 keywords.put("visual", true);
-                                keywords.put(""+(Integer.parseInt(number) + 1),true);
-                                for (String tag: bind.socialEditText.getHashtags()){
-                                    keywords.put(tag,true);
+                                keywords.put("" + (Integer.parseInt(number) + 1), true);
+                                for (String tag : bind.socialEditText.getHashtags()) {
+                                    keywords.put(tag, true);
                                 }
-                                long time = System.currentTimeMillis();
+                                long time = (isConfirmed) ? futureDate.getTimeInMillis() : System.currentTimeMillis();
                                 Post newAudioPost = new Post(path, "", time,
                                         "genre push id", downloadUrl, Constants.UID, db.getKey(), tagline, type,
-                                        keywords, Constants.INVERSE/time);
+                                        keywords, Constants.INVERSE / time);
                                 db.setValue(newAudioPost, ((databaseError, databaseReference) -> {
                                     if (databaseError == null) {
                                         startActivity(new Intent(getActivity(), HilarityActivity.class));
@@ -202,5 +211,15 @@ public class VisualMediaPostSubmissionFragment extends Fragment {
         DatabaseReference db = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts/" + post.getPushId());
         post.setTagline(bind.socialEditText.getText().toString());
         db.setValue(post, (databaseError, databaseReference) -> getActivity().finish());
+    }
+
+    @Override
+    public void setDate(int year, int month, int day, int hour, int minute) {
+        futureDate.set(year, month, day, hour, minute);
+    }
+
+    @Override
+    public void confirm() {
+        isConfirmed = true;
     }
 }

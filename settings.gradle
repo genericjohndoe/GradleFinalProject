@@ -1,1 +1,1 @@
-include ':app', ':richtexteditor'
+include ':app', ':richtexteditor', ':gifconverter'

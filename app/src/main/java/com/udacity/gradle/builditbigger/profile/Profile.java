@@ -31,6 +31,7 @@ import com.udacity.gradle.builditbigger.profile.userCollections.HilarityUserColl
 import com.udacity.gradle.builditbigger.profile.userLikes.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.profile.userPosts.HilarityUserJokes;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.profile.userScheduledPosts.HilarityUserScheduledPosts;
 import com.udacity.gradle.builditbigger.settings.userSettings.UserSettingsActivity;
 import com.udacity.gradle.builditbigger.subscribersSubsrciptions.SubsActivity;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
@@ -94,6 +95,7 @@ public class Profile extends Fragment implements HideFAB {
         binding.profileTabLayout.getTabAt(0).setCustomView(R.layout.icon_post);
         binding.profileTabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
         binding.profileTabLayout.getTabAt(2).setCustomView(R.layout.icon_likes);
+        binding.profileTabLayout.getTabAt(3).setCustomView(R.layout.icon_post);
 
         binding.subscribersTv.setOnClickListener(view -> createSubsIntent(true));
         binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(false));
@@ -238,9 +240,9 @@ public class Profile extends Fragment implements HideFAB {
         public ProfilePagerAdapter(FragmentManager fm) {super(fm);}
 
         Fragment[] fragmentArray = new Fragment[]{HilarityUserJokes.newInstance(uid, Profile.this), HilarityUserCollections.newInstance(uid, Profile.this),
-                HilarityUserLikes.newInstance(uid, Profile.this)};
+                HilarityUserLikes.newInstance(uid, Profile.this),HilarityUserScheduledPosts.newInstance(Profile.this)};
 
-        String[] tabTitles = new String[]{"Posts", "Genres", "Likes"};
+        String[] tabTitles = new String[]{"Posts", "Genres", "Likes","Scheduled Posts"};
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -249,7 +251,8 @@ public class Profile extends Fragment implements HideFAB {
 
         @Override
         public int getCount() {
-            return fragmentArray.length;
+             if (uid.equals(Constants.UID)) return 4;
+             return 3;
         }
 
         @Override

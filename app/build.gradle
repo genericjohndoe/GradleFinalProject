@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
 /*apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'*/
@@ -16,7 +17,18 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+        python {
+            pip {
+                install "moviepy"
+                install "requests"
+            }
+            buildPython "/Library/Frameworks/Python.framework/Versions/3.6/bin/python3"
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -26,10 +38,12 @@ android {
             debuggable true
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     dataBinding {
         enabled = true
     }
@@ -42,18 +56,19 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation project(path: ':richtexteditor')
+    implementation project(path: ':gifconverter')
     //circular imageview
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //dialog boxes
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     //Firebase
     implementation "com.google.firebase:firebase-storage:16.0.5"
-    implementation "com.google.firebase:firebase-database:16.0.5"
+    implementation "com.google.firebase:firebase-database:16.0.6"
     implementation "com.google.firebase:firebase-auth:16.1.0"
-    implementation "com.google.firebase:firebase-messaging:17.3.4"
-    implementation "com.google.firebase:firebase-firestore:17.1.5"
+    implementation "com.google.firebase:firebase-messaging:17.4.0"
+    implementation "com.google.firebase:firebase-firestore:18.0.1"
     implementation "com.google.firebase:firebase-functions:16.1.3"
-    implementation 'com.google.firebase:firebase-ml-vision:18.0.2'
+    implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
     implementation "com.google.android.gms:play-services-auth:16.0.1"
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     //support library

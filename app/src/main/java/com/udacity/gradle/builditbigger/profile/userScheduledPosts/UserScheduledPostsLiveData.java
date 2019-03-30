@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.profile.userPosts;
+package com.udacity.gradle.builditbigger.profile.userScheduledPosts;
 
 import android.arch.lifecycle.LiveData;
 import android.os.Handler;
@@ -13,18 +13,14 @@ import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.models.PostWrapper;
 
-/**
- * UserPostsLiveData class provides references to user generated posts
- */
-//are the use of handlers necessary? yes, to keep from doing extra network request
-public class UserPostsLiveData extends LiveData<PostWrapper> {
+public class UserScheduledPostsLiveData extends LiveData<PostWrapper> {
     private Query databaseReference;
     private double startAt;
     private String uid;
 
-    public UserPostsLiveData(String uid){
+    public UserScheduledPostsLiveData(String uid){
         databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts")
-                .orderByChild("inverseTimeStamp").startAt(Constants.INVERSE/System.currentTimeMillis())
+                .orderByChild("inverseTimeStamp").endAt(Constants.INVERSE/System.currentTimeMillis())
                 .limitToFirst(20);
         this.uid = uid;
     }
@@ -82,7 +78,7 @@ public class UserPostsLiveData extends LiveData<PostWrapper> {
     }
 
     public void newQuery(){
-        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("inverseTimeStamp").startAt(startAt).limitToFirst(20);
+        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("inverseTimeStamp").endAt(startAt).limitToFirst(20);
         Log.i("new_query","new query called");
         onActive();
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -23,13 +24,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 
-import com.esp.videotogifconverter.VideoToGifConverter;
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
+import com.esp.videotogifconverter.GifEncoder;
+
+import com.gjd.gifconverter.VideoToGifConverter;
 import com.udacity.gradle.builditbigger.camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.newPost.MediaAdapter;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostBinding;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -83,7 +90,7 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentVisualMediaPostBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_visual_media_post, container, false);
+        FragmentVisualMediaPostBinding bind = DataBindingUtil.inflate(inflater,R.layout.fragment_visual_media_post,container,false);
         bind.recyclerView.setAdapter(mediaAdapter);
         bind.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         camera = new LifeCycleCamera(this, bind.autoFitTextureView, LifeCycleCamera.PHOTO);
@@ -228,19 +235,26 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
     public void moveFile(File file){
         if (camera.getMode() == LifeCycleCamera.GIF){
             VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
-            byte[] gif = converter.generateGIF(1);
+            byte[] gif = converter.generateGIF(0);
             String path = getActivity().getCacheDir()+"/temp.gif";
+
             FileOutputStream stream = null;
             try {
                 stream = new FileOutputStream(path);
                 stream.write(gif);
                 stream.close();
             } catch (Exception e) {
-
             }
             createIntent(path, number);
+            /*Python.start(new AndroidPlatform(getActivity()));
+            Python py = Python.getInstance();
+            PyObject gifConvert = py.getModule("gif_convert");
+            PyObject gif = gifConvert.callAttr("convert", file.getAbsolutePath());
+            Log.i("gif type", gif.toString());*/
         } else {
             createIntent(file.getPath(), number);
         }
     }
+
+
 }

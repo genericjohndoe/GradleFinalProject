@@ -14,11 +14,14 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.DatabaseReference;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.interfaces.SetDate;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostSubmissionBinding;
+import com.udacity.gradle.builditbigger.newPost.ScheduledPostDateDialog;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +30,7 @@ import java.util.Map;
  * Use the {@link NewTextPostSubmissionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewTextPostSubmissionFragment extends Fragment {
+public class NewTextPostSubmissionFragment extends Fragment implements SetDate {
     private static final String TITLE = "title";
     private static final String BODY = "body";
     public static final String TAGLINE = "tagline";
@@ -40,6 +43,8 @@ public class NewTextPostSubmissionFragment extends Fragment {
     private String number;
     private String synopsis;
     private Post post;
+    private Calendar futureDate = Calendar.getInstance();
+    private boolean isConfirmed = false;
 
     public NewTextPostSubmissionFragment() {
     }
@@ -101,6 +106,8 @@ public class NewTextPostSubmissionFragment extends Fragment {
         }
         bind.bodyTextView.setMovementMethod(new ScrollingMovementMethod());
 
+        bind.scheduleButton.setOnClickListener(view -> ScheduledPostDateDialog.getInstance(this).show(getFragmentManager(),"sd"));
+
         bind.submitButton.setOnClickListener(view -> {
             DatabaseReference db;
             if (post != null) {
@@ -116,7 +123,7 @@ public class NewTextPostSubmissionFragment extends Fragment {
                 for (String tag: bind.socialTextView.getHashtags()){
                     keywords.put(tag,true);
                 }
-                long time = System.currentTimeMillis();
+                long time = (isConfirmed) ? futureDate.getTimeInMillis() : System.currentTimeMillis();
                 Post newJoke = new Post(title, (body != null) ? body : "", time,
                         synopsis, "", Constants.UID, null, tagline, Constants.TEXT,
                         keywords, Constants.INVERSE/time);
@@ -139,7 +146,16 @@ public class NewTextPostSubmissionFragment extends Fragment {
             getActivity().startActivity(new Intent(getActivity(), HilarityActivity.class));
         });
         return bind.getRoot();
-        //no comment
+    }
+
+    @Override
+    public void setDate(int year, int month, int day, int hour, int minute) {
+        futureDate.set(year, month, day, hour, minute);
+    }
+
+    @Override
+    public void confirm() {
+        isConfirmed = true;
     }
 
 
