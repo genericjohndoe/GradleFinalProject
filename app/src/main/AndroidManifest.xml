@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature
         android:name="android.hardware.camera.any"
@@ -95,6 +96,9 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+        <service
+            android:name=".postScheduling.ScheduledPostJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <activity
             android:name=".signInOnboarding.LoginActivity"

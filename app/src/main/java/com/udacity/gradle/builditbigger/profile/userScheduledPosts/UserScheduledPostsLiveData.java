@@ -19,7 +19,7 @@ public class UserScheduledPostsLiveData extends LiveData<PostWrapper> {
     private String uid;
 
     public UserScheduledPostsLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts")
+        databaseReference = Constants.DATABASE.child("scheduledposts/" + uid + "/posts")
                 .orderByChild("inverseTimeStamp").endAt(Constants.INVERSE/System.currentTimeMillis())
                 .limitToFirst(20);
         this.uid = uid;

@@ -15,7 +15,7 @@ public class SearchUserScheduledPostsLiveData extends LiveData<PostWrapper> {
     private Query query;
     //todo won't work in current state, prolly should use firestore
     public SearchUserScheduledPostsLiveData(String tag){
-        query = Constants.DATABASE.child("userposts/" + Constants.UID + "/posts")
+        query = Constants.DATABASE.child("scheduledposts/" + Constants.UID + "/posts")
                 .orderByChild("metaData/" + tag).equalTo(true);
     }
 

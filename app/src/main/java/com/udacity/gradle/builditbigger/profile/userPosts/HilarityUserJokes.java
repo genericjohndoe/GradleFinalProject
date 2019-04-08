@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.interfaces.EnableSearch;
 import com.udacity.gradle.builditbigger.interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.jokes.JokesAdapter;

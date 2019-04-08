@@ -95,7 +95,7 @@ public class Profile extends Fragment implements HideFAB {
         binding.profileTabLayout.getTabAt(0).setCustomView(R.layout.icon_post);
         binding.profileTabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
         binding.profileTabLayout.getTabAt(2).setCustomView(R.layout.icon_likes);
-        binding.profileTabLayout.getTabAt(3).setCustomView(R.layout.icon_post);
+        if (uid.equals(Constants.UID)) binding.profileTabLayout.getTabAt(3).setCustomView(R.layout.icon_post);
 
         binding.subscribersTv.setOnClickListener(view -> createSubsIntent(true));
         binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(false));
