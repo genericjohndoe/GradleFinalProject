@@ -158,7 +158,7 @@ public class NewTextPostSubmissionFragment extends Fragment implements SetDate {
                             PersistableBundle pb = new PersistableBundle();
                             pb.putString("path", newJoke.getPushId());
                             ComponentName componentName = new ComponentName(getActivity(), ScheduledPostJobService.class);
-                            JobInfo jobInfo = new JobInfo.Builder(numScheduledposts+1, componentName)
+                            JobInfo jobInfo = new JobInfo.Builder(numScheduledposts + 1, componentName)
                                     .setMinimumLatency(time - System.currentTimeMillis())
                                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                                     .setExtras(pb)
@@ -167,10 +167,11 @@ public class NewTextPostSubmissionFragment extends Fragment implements SetDate {
                             JobScheduler jobScheduler = (JobScheduler)getActivity().getSystemService(Context.JOB_SCHEDULER_SERVICE);
                             int resultCode = jobScheduler.schedule(jobInfo);
                             if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                                Log.d("hi", "Job scheduled!");
+                                Log.d(Constants.TAG, "Job scheduled!");
                             } else {
-                                Log.d("hi", "Job not scheduled");
+                                Log.d(Constants.TAG, "Job not scheduled");
                             }
+                            startActivity(new Intent(getActivity(), HilarityActivity.class));
                         }
                     });
                 }

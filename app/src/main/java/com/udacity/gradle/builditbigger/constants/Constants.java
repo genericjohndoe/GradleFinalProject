@@ -33,6 +33,7 @@ public class Constants {
     public static final int TEXT = 1;
     public static final int IMAGE_GIF = 2;
     public static final int VIDEO_AUDIO = 3;
+    public static final String TAG = "hilarityAPP";
 
     public static String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();
