@@ -9,10 +9,11 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.RemoteInput;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.RemoteInput;
 
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
@@ -22,12 +23,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.comments.CommentActivity;
 import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.forums.replies.ForumQuestionActivity;
 import com.udacity.gradle.builditbigger.messaging.transcripts.TranscriptActivity;
 import com.udacity.gradle.builditbigger.models.Notification;
-import com.udacity.gradle.builditbigger.R;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;

@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.messaging.sentMessages;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * SentMessagesViewModel class provides transcript previews to fragments

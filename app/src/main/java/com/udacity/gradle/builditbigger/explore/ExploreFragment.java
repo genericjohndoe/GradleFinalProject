@@ -1,25 +1,26 @@
 package com.udacity.gradle.builditbigger.explore;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.gradle.builditbigger.jokes.JokesAdapter;
-import com.udacity.gradle.builditbigger.models.Post;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.search.SearchActivity;
 import com.udacity.gradle.builditbigger.SimpleDividerItemDecoration;
 import com.udacity.gradle.builditbigger.databinding.FeedExplorePageBinding;
+import com.udacity.gradle.builditbigger.jokes.JokesAdapter;
+import com.udacity.gradle.builditbigger.models.Post;
+import com.udacity.gradle.builditbigger.search.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                              Bundle savedInstanceState) {
         bind = DataBindingUtil.inflate(inflater,R.layout.feed_explore_page, container, false);
 
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL, true);
         //llm.setStackFromEnd(true);
         bind.recyclerView.setLayoutManager(llm);
         bind.recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));

@@ -1,7 +1,8 @@
 package com.udacity.gradle.builditbigger.database;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
+
+import androidx.lifecycle.AndroidViewModel;
 
 /**
  * Created by joeljohnson on 2/8/18.

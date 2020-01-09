@@ -1,10 +1,8 @@
 package com.udacity.gradle.builditbigger.profile.userScheduledPosts;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
-
-import com.udacity.gradle.builditbigger.profile.userPosts.UserPostsViewModel;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 public class UserScheduledPostViewModelFactory implements ViewModelProvider.Factory {
     private String uid;

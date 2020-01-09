@@ -1,19 +1,9 @@
 package com.udacity.gradle.builditbigger.jokes;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.view.menu.MenuPopupHelper;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -25,11 +15,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -42,23 +45,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
 import com.udacity.gradle.builditbigger.comments.CommentActivity;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.Collection;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.models.VideoInfo;
-import com.udacity.gradle.builditbigger.newPost.audioMediaPost.AudioMediaPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.newPost.NewPostActivity2;
+import com.udacity.gradle.builditbigger.newPost.audioMediaPost.AudioMediaPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.newPost.visualMediaPost.VisualMediaPostSubmissionActivity;
 import com.udacity.gradle.builditbigger.post.PostActivity;
 import com.udacity.gradle.builditbigger.profile.userPosts.OrientationControlViewModel;
 import com.udacity.gradle.builditbigger.profile.userPosts.OrientationControlViewModelFactory;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.reportPost.ReportActivity;
 import com.udacity.gradle.builditbigger.search.SearchActivity;
-import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
-import com.udacity.gradle.builditbigger.databinding.GenericPostBinding;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -279,7 +282,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         }
 
         private void report(){
+            String postId = joke.getPushId();
+            String contentCreatorId = joke.getUID();
             Intent intent = new Intent(context, ReportActivity.class);
+            intent.putExtra("pushId", postId);
+            intent.putExtra("ccID", contentCreatorId);
             context.startActivity(intent);
         }
     }
@@ -326,10 +333,11 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
 
         if (joke.getType() == Constants.TEXT) {
             holder.binding.textLayout.jokeTitleTextView.setText(joke.getTitle());
-            if (joke.getBody().isEmpty()) {
+            boolean isEmpty = (joke.getBody() != null) && joke.getBody().isEmpty();
+            if (isEmpty) {
                 holder.binding.textLayout.jokeBodyTextView.setText(joke.getSynopsis());
             }else {
-                String more = "...++" ;
+                String more = "...++";
                 SpannableString ss = new SpannableString(joke.getSynopsis() + more);
                 ss.setSpan(new StyleSpan(Typeface.BOLD),joke.getSynopsis().length(),
                         joke.getSynopsis().length() + more.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -463,8 +471,9 @@ public class JokesAdapter extends RecyclerView.Adapter<JokesAdapter.JokesViewHol
         // Produces Extractor instances for parsing the media data.
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         if (holder.binding.videoLayout.postVideoView.getPlayer() != null) {
-            holder.binding.videoLayout.postVideoView.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(holder.getJoke().getMediaURL()),
-                    dataSourceFactory, extractorsFactory, null, null), false, false);
+            ((SimpleExoPlayer) holder.binding.videoLayout.postVideoView.getPlayer()).prepare(new ProgressiveMediaSource
+                    .Factory(dataSourceFactory,extractorsFactory)
+                    .createMediaSource(Uri.parse(holder.getJoke().getMediaURL())));
         }
     }
 

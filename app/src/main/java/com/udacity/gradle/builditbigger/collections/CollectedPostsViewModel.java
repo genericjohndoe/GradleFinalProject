@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.collections;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * Created by joeljohnson on 4/7/18.

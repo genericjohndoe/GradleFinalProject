@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.feed;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * class provides fragment with posts for feed

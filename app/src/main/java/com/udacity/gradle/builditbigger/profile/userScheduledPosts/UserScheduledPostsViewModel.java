@@ -1,9 +1,6 @@
 package com.udacity.gradle.builditbigger.profile.userScheduledPosts;
 
-import android.arch.lifecycle.ViewModel;
-
-import com.udacity.gradle.builditbigger.profile.userPosts.SearchUserPostsLiveData;
-import com.udacity.gradle.builditbigger.profile.userPosts.UserPostsLiveData;
+import androidx.lifecycle.ViewModel;
 
 public class UserScheduledPostsViewModel extends ViewModel {
 

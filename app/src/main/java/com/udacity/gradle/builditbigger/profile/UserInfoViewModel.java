@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.profile;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * Class responsible for populating views in profile fragment with user data

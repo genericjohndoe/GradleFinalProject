@@ -4,41 +4,32 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
-import com.esp.videotogifconverter.GifEncoder;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.gjd.gifconverter.VideoToGifConverter;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.camera.LifeCycleCamera;
+import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostBinding;
 import com.udacity.gradle.builditbigger.interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.newPost.MediaAdapter;
-import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostBinding;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -234,7 +225,7 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
 
     public void moveFile(File file){
         if (camera.getMode() == LifeCycleCamera.GIF){
-            VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
+            /*VideoToGifConverter converter = new VideoToGifConverter(getActivity(), Uri.fromFile(file));
             byte[] gif = converter.generateGIF(0);
             String path = getActivity().getCacheDir()+"/temp.gif";
 
@@ -245,7 +236,7 @@ public class VisualMediaPostFragment extends Fragment implements ActivityCompat.
                 stream.close();
             } catch (Exception e) {
             }
-            createIntent(path, number);
+            createIntent(path, number);*/
             /*Python.start(new AndroidPlatform(getActivity()));
             Python py = Python.getInstance();
             PyObject gifConvert = py.getModule("gif_convert");

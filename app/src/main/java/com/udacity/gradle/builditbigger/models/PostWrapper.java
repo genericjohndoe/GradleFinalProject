@@ -4,6 +4,9 @@ public class PostWrapper {
 
     private Post post;
     private int state;
+    public static final int NEW = 1;
+    public static final int EDITTED = 2;
+    public static final int REMOVED = 3;
 
     public PostWrapper(Post post, int state){
         this.post = post;

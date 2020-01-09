@@ -4,24 +4,26 @@ package com.udacity.gradle.builditbigger.signInOnboarding.profilePicture;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.esp.videotogifconverter.VideoToGifConverter;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.camera.LifeCycleCamera;
 import com.udacity.gradle.builditbigger.constants.Constants;
-import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.FragmentProfilePictureBinding;
+import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;

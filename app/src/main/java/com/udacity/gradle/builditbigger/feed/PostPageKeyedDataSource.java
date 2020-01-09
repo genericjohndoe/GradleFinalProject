@@ -1,7 +1,7 @@
 package com.udacity.gradle.builditbigger.feed;
 
-import android.arch.paging.PageKeyedDataSource;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.paging.PageKeyedDataSource;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;

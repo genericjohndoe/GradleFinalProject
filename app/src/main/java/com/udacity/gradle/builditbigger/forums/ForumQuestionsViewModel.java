@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.forums;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 import com.udacity.gradle.builditbigger.forums.questions.ForumQuestionsLiveData;
 import com.udacity.gradle.builditbigger.forums.replies.ForumQuestionLiveData;

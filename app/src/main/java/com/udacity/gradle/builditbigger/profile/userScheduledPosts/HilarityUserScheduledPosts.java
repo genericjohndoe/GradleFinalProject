@@ -1,18 +1,19 @@
 package com.udacity.gradle.builditbigger.profile.userScheduledPosts;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
@@ -23,9 +24,6 @@ import com.udacity.gradle.builditbigger.jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.models.PostWrapper;
 import com.udacity.gradle.builditbigger.profile.FragmentFocusLiveData;
-import com.udacity.gradle.builditbigger.profile.userPosts.UserPostViewModelFactory;
-import com.udacity.gradle.builditbigger.profile.userPosts.UserPostsLiveData;
-import com.udacity.gradle.builditbigger.profile.userPosts.UserPostsViewModel;
 import com.udacity.gradle.builditbigger.search.SearchDialogFragment;
 
 import java.util.ArrayList;
@@ -66,7 +64,7 @@ public class HilarityUserScheduledPosts extends Fragment implements EnableSearch
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         userScheduledPostsViewModel = ViewModelProviders.of(this, new UserScheduledPostViewModelFactory(uid))
                 .get(UserScheduledPostsViewModel.class);
         UserScheduledPostsLiveData userScheduledPostsLiveData = userScheduledPostsViewModel.getUserScheduledPostsLiveData();
@@ -138,10 +136,13 @@ public class HilarityUserScheduledPosts extends Fragment implements EnableSearch
         if (!jokes.contains(post)) {
             jokes.add(post);
             postAdapter.notifyDataSetChanged();
-        } else if (postWrapper.getState() == 2) {
+        } else if (postWrapper.getState() == PostWrapper.EDITTED) {
             //if post gets modified
             int index = jokes.indexOf(post);
             jokes.set(index, post);
+            postAdapter.notifyDataSetChanged();
+        } else if (postWrapper.getState() == PostWrapper.REMOVED) {
+            jokes.remove(post);
             postAdapter.notifyDataSetChanged();
         }
     }
@@ -161,5 +162,9 @@ public class HilarityUserScheduledPosts extends Fragment implements EnableSearch
             addPostToList(postWrapper, searchedPosts);
             configureFAM();
         });
+    }
+
+    public FragmentJokeslistGenrelistBinding getBinding() {
+        return binding;
     }
 }

@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.profile;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class FragmentFocusLiveData extends MutableLiveData<Integer> {
     private static FragmentFocusLiveData fragmentFocusLiveData;

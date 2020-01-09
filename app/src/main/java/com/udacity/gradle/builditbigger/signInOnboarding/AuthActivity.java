@@ -7,10 +7,11 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,10 +20,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.HilarityUser;
-import com.udacity.gradle.builditbigger.R;
 
 /**
  * This activity checks to see if user is authorized to use the application

@@ -1,11 +1,12 @@
 package com.udacity.gradle.builditbigger.newPost.visualMediaPost;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 
-import com.udacity.gradle.builditbigger.models.Post;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.models.Post;
 
 public class VisualMediaPostSubmissionActivity extends AppCompatActivity {
 

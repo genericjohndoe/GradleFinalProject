@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.forums.replies;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class ForumQuestionViewModel extends ViewModel {
     private ForumQuestionLiveData forumQuestionLiveData;

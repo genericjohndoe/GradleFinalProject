@@ -1,16 +1,17 @@
 package com.udacity.gradle.builditbigger.signInOnboarding.userName.PickCountry;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.interfaces.DismissPopUp;
 import com.udacity.gradle.builditbigger.interfaces.SetFlag;
 import com.udacity.gradle.builditbigger.models.Country;
-import com.udacity.gradle.builditbigger.R;
 
 import java.util.List;
 

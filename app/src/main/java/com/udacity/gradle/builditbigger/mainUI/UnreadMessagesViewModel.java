@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.mainUI;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class UnreadMessagesViewModel extends ViewModel {
 

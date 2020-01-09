@@ -1,8 +1,9 @@
 package com.udacity.gradle.builditbigger.jokes;
 
-import android.arch.paging.ItemKeyedDataSource;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.paging.ItemKeyedDataSource;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

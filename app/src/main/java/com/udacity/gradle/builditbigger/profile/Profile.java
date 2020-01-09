@@ -1,21 +1,22 @@
 package com.udacity.gradle.builditbigger.profile;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -23,19 +24,19 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
 import com.udacity.gradle.builditbigger.interfaces.HideFAB;
+import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
 import com.udacity.gradle.builditbigger.models.Collection;
 import com.udacity.gradle.builditbigger.newPost.NewPostActivity2;
 import com.udacity.gradle.builditbigger.profile.userCollections.HilarityUserCollections;
 import com.udacity.gradle.builditbigger.profile.userLikes.HilarityUserLikes;
 import com.udacity.gradle.builditbigger.profile.userPosts.HilarityUserJokes;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.profile.userScheduledPosts.HilarityUserScheduledPosts;
 import com.udacity.gradle.builditbigger.settings.userSettings.UserSettingsActivity;
 import com.udacity.gradle.builditbigger.subscribersSubsrciptions.SubsActivity;
-import com.udacity.gradle.builditbigger.databinding.FragmentProfileBinding;
-import com.udacity.gradle.builditbigger.isFollowing.IsFollowingLiveData;
 
 
 /**
@@ -92,10 +93,7 @@ public class Profile extends Fragment implements HideFAB {
         binding.profileTabLayout.setupWithViewPager(binding.profileViewPager);
 
 
-        binding.profileTabLayout.getTabAt(0).setCustomView(R.layout.icon_post);
-        binding.profileTabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
-        binding.profileTabLayout.getTabAt(2).setCustomView(R.layout.icon_likes);
-        if (uid.equals(Constants.UID)) binding.profileTabLayout.getTabAt(3).setCustomView(R.layout.icon_post);
+
 
         binding.subscribersTv.setOnClickListener(view -> createSubsIntent(true));
         binding.subscriptionsTv.setOnClickListener(view -> createSubsIntent(false));
@@ -124,8 +122,9 @@ public class Profile extends Fragment implements HideFAB {
         );
 
         userInfoViewModel.getNumPostLiveData().observe(this, numPosts -> {
-            binding.postsTv.setText(numPosts != null ? numPosts + " " : "0 ");
-            }
+                    binding.postsTv.setText(numPosts != null ? numPosts + " " : "0 ");
+
+                }
         );
 
         userInfoViewModel.getNumFollowingLiveData().observe(this, numFollowing -> {
@@ -175,6 +174,11 @@ public class Profile extends Fragment implements HideFAB {
 
             }
         });
+
+        binding.profileTabLayout.getTabAt(0).setCustomView(R.layout.icon_post);
+        binding.profileTabLayout.getTabAt(1).setCustomView(R.layout.icon_collections);
+        binding.profileTabLayout.getTabAt(2).setCustomView(R.layout.icon_likes);
+        if (uid.equals(Constants.UID)) binding.profileTabLayout.getTabAt(3).setCustomView(R.layout.icon_post);
         return binding.getRoot();
     }
 
@@ -206,7 +210,7 @@ public class Profile extends Fragment implements HideFAB {
      * shows new post dialog from profile when user posts are shown
      */
     //todo allow for post to be added to collection upon creation
-    private void showNewPostFragment() {
+    private void showNewPostFragment(){
         Intent intent = new Intent(getActivity(), NewPostActivity2.class);
         intent.putExtra(getString(R.string.number), binding.postsTv.getText().toString().split(" ")[0]);
         startActivity(intent);
@@ -215,7 +219,7 @@ public class Profile extends Fragment implements HideFAB {
     /**
      * shows new genre dialog from profile when user created genres are shown
      */
-    private void showNewGenreDialog() {
+    private void showNewGenreDialog(){
         new MaterialDialog.Builder(getActivity())
                 .customView(R.layout.dialog_new_genre, true)
                 .positiveText(R.string.submit)
@@ -259,6 +263,8 @@ public class Profile extends Fragment implements HideFAB {
         public Fragment getItem(int position) {
             return fragmentArray[position];
         }
+
+        public Fragment getSelectedItem(int position) {return fragmentArray[position];}
     }
 
     /**

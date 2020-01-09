@@ -1,21 +1,20 @@
 package com.udacity.gradle.builditbigger;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ext.mediasession.DefaultPlaybackController;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -69,7 +68,7 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
         // Create a MediaControllerCompat
         MediaControllerCompat mediaController = new MediaControllerCompat(context, mMediaSession);
         MediaControllerCompat.setMediaController((AppCompatActivity) context, mediaController);
-        mediaSessionConnector = new MediaSessionConnector(mMediaSession, new PlayBackController());
+        mediaSessionConnector = new MediaSessionConnector(mMediaSession);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -84,7 +83,7 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
 
         if ((viewHolder instanceof JokesAdapter.JokesViewHolder) && jokesAdapter != null && viewHolder != null) player.addListener(new ExoEventPlayer((JokesAdapter) jokesAdapter, (JokesAdapter.JokesViewHolder) viewHolder, context));
         playerView.setPlayer(player);
-        mediaSessionConnector.setPlayer(player, null,null);
+        mediaSessionConnector.setPlayer(player);
         mMediaSession.setActive(true);
         Log.i("Video playback", "startPlayer finished");
     }
@@ -110,7 +109,7 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
         player.release();
     }
 
-    public class PlayBackController extends DefaultPlaybackController{
+    /*public class PlayBackController extends DefaultPlaybackController{
         @Override
         public void onPause(Player player) {
             Log.i("Hoe8", "onPause called");
@@ -135,5 +134,5 @@ public class VideoLifeCyclerObserver implements LifecycleObserver {
             //((JokesAdapter.VideoPostViewHolder) rv).setHasStarted(false);
             super.onStop(player);
         }
-    }
+    }*/
 }

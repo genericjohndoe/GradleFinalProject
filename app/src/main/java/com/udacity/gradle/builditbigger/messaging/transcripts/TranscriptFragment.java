@@ -1,34 +1,35 @@
 package com.udacity.gradle.builditbigger.messaging.transcripts;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.databinding.FragmentTranscriptBinding;
 import com.udacity.gradle.builditbigger.interfaces.ActivityForResult;
 import com.udacity.gradle.builditbigger.interfaces.IntentCreator;
 import com.udacity.gradle.builditbigger.messaging.mediaDialog.ChooseMediaDialog;
 import com.udacity.gradle.builditbigger.models.HilarityUser;
 import com.udacity.gradle.builditbigger.models.Message;
 import com.udacity.gradle.builditbigger.newPost.NewPostActivity2;
-import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.databinding.FragmentTranscriptBinding;
 
 import java.io.File;
 import java.util.ArrayList;

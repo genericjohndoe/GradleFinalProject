@@ -2,20 +2,21 @@ package com.udacity.gradle.builditbigger.settings;
 
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.databinding.FragmentSettingsBinding;
 import com.udacity.gradle.builditbigger.settings.contentCreatorSettings.ContentCreatorActivity;
 import com.udacity.gradle.builditbigger.settings.notificationSettings.NotificationSettingsActivity;
 import com.udacity.gradle.builditbigger.settings.paymentSettings.PaymentActivity;
 import com.udacity.gradle.builditbigger.settings.userSettings.UserSettingsActivity;
-import com.udacity.gradle.builditbigger.databinding.FragmentSettingsBinding;
 
 /**
  * A simple {@link Fragment} subclass.

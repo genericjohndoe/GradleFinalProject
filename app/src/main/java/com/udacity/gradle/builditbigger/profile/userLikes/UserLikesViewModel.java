@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.profile.userLikes;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * UserLikesViewModel class used to provide liked post data to fragment

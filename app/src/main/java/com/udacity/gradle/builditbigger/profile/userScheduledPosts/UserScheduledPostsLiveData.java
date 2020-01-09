@@ -1,9 +1,10 @@
 package com.udacity.gradle.builditbigger.profile.userScheduledPosts;
 
-import android.arch.lifecycle.LiveData;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -46,7 +47,9 @@ public class UserScheduledPostsLiveData extends LiveData<PostWrapper> {
         }
 
         @Override
-        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            setValue(new PostWrapper(dataSnapshot.getValue(Post.class), PostWrapper.REMOVED));
+        }
 
         @Override
         public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {}

@@ -1,32 +1,35 @@
 package com.udacity.gradle.builditbigger.newPost.visualMediaPost;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.DatabaseReference;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostSubmissionBinding;
 import com.udacity.gradle.builditbigger.interfaces.SetDate;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.Post;
-import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.databinding.FragmentVisualMediaPostSubmissionBinding;
 import com.udacity.gradle.builditbigger.newPost.ScheduledPostDateDialog;
 
 import java.io.File;
@@ -151,8 +154,10 @@ public class VisualMediaPostSubmissionFragment extends Fragment implements SetDa
             //Produces Extractor instances for parsing the media data.
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
             if (bind.simpleExoPlayerView.getPlayer() != null) {
-                bind.simpleExoPlayerView.getPlayer().prepare(new ExtractorMediaSource(Uri.fromFile(file),
-                        dataSourceFactory, extractorsFactory, null, null), false, false);
+                ((SimpleExoPlayer) bind.simpleExoPlayerView.getPlayer()).prepare(new ProgressiveMediaSource
+                        .Factory(dataSourceFactory,extractorsFactory)
+                        .createMediaSource(Uri.fromFile(file))
+                );
             }
             bind.simpleExoPlayerView.getPlayer().setPlayWhenReady(true);
         }

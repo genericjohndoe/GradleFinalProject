@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger.isFollowing;
+package com.udacity.gradle.builditbigger.settings.userSettings;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -9,20 +9,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.udacity.gradle.builditbigger.constants.Constants;
 
-/**
- * CLASS responsible for seeing if user follows a given user
- */
+public class GenderLiveData extends LiveData<Integer> {
+    private DatabaseReference db;
 
-public class IsFollowingLiveData extends LiveData<Boolean> {
-    private DatabaseReference databaseReference;
-
-    public IsFollowingLiveData(String uid){
-        databaseReference = Constants.DATABASE.child("followers/" + uid + "/list/"+ Constants.UID);
+    public GenderLiveData(){
+        db = Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/gender");
     }
 
     private ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {setValue(dataSnapshot.exists());}
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            setValue(dataSnapshot.getValue(Integer.class));
+        }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -30,13 +28,13 @@ public class IsFollowingLiveData extends LiveData<Boolean> {
 
     @Override
     protected void onActive() {
-        databaseReference.addValueEventListener(valueEventListener);
         super.onActive();
+        db.addValueEventListener(valueEventListener);
     }
 
     @Override
     protected void onInactive() {
-        databaseReference.removeEventListener(valueEventListener);
         super.onInactive();
+        db.removeEventListener(valueEventListener);
     }
 }

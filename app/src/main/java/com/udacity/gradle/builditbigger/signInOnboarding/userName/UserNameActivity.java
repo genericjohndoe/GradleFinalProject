@@ -3,7 +3,6 @@ package com.udacity.gradle.builditbigger.signInOnboarding.userName;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -12,14 +11,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.constants.FlagEmojiMap;
 import com.udacity.gradle.builditbigger.interfaces.SetFlag;
 import com.udacity.gradle.builditbigger.models.HilarityUser;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.signInOnboarding.profilePicture.ProfilePictureActivity;
 import com.udacity.gradle.builditbigger.signInOnboarding.userName.PickCountry.CountriesPopUpDialogFragment;
 

@@ -8,14 +8,14 @@
         tools:context="com.udacity.gradle.builditbigger.messaging.composeMessage.ComposeMessageFragment"
         android:background="@color/black">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recipient_recyclerview"
         android:background="@color/green_black_1"
          />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

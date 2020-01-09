@@ -1,19 +1,20 @@
 package com.udacity.gradle.builditbigger.search;
 
 import android.app.Dialog;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.udacity.gradle.builditbigger.interfaces.EnableSearch;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
+
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.DialogSearchBinding;
+import com.udacity.gradle.builditbigger.interfaces.EnableSearch;
 
 public class SearchDialogFragment extends DialogFragment {
 

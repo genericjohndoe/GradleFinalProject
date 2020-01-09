@@ -1,24 +1,25 @@
 package com.udacity.gradle.builditbigger.comments;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.functions.FirebaseFunctions;
-import com.udacity.gradle.builditbigger.constants.Constants;
-import com.udacity.gradle.builditbigger.models.Comment;
 import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.databinding.FragmentCommentBinding;
+import com.udacity.gradle.builditbigger.models.Comment;
 
 import java.util.ArrayList;
 import java.util.HashMap;

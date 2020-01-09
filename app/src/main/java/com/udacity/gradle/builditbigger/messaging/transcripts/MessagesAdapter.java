@@ -1,22 +1,25 @@
 package com.udacity.gradle.builditbigger.messaging.transcripts;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -25,10 +28,10 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
-import com.udacity.gradle.builditbigger.constants.Constants;
-import com.udacity.gradle.builditbigger.models.Message;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.VideoLifeCyclerObserver;
+import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.models.Message;
 
 import java.util.List;
 
@@ -263,8 +266,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         // Produces Extractor instances for parsing the media data.
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         if (holder.exoPlayerView.getPlayer() != null && holder.path != null) {
-            holder.exoPlayerView.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(holder.path.toString()),
-                    dataSourceFactory, extractorsFactory, null, null), false, false);
+            ((SimpleExoPlayer) holder.exoPlayerView.getPlayer()).prepare(new ProgressiveMediaSource
+                    .Factory(dataSourceFactory,extractorsFactory)
+                    .createMediaSource(Uri.parse(holder.path.toString())));
         }
     }
 

@@ -65,13 +65,28 @@ public class ExoEventPlayer implements Player.EventListener {
         }
     }
 
-    @Override
-    public void onPositionDiscontinuity() {}
+
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {}
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+    }
 
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {}
 
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
+    }
 }

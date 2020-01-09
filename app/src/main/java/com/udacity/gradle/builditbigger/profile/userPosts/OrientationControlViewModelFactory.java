@@ -1,8 +1,8 @@
 package com.udacity.gradle.builditbigger.profile.userPosts;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 /**
  * Created by joeljohnson on 4/12/18.

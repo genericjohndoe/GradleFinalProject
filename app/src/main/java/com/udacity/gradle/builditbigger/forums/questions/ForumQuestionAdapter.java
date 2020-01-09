@@ -1,28 +1,29 @@
 package com.udacity.gradle.builditbigger.forums.questions;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRegistry;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.databinding.CellForumQuestionBinding;
 import com.udacity.gradle.builditbigger.forums.createQuestion.NewQuestionActivity;
 import com.udacity.gradle.builditbigger.forums.replies.ForumQuestionActivity;
 import com.udacity.gradle.builditbigger.jokes.ViewHolderViewModel;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.ForumQuestion;
-import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.databinding.CellForumQuestionBinding;
 
 import java.util.List;
 

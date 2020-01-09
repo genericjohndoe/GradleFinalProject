@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.messaging.transcripts;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * MessagesViewModel class used to provide fragment with message objects

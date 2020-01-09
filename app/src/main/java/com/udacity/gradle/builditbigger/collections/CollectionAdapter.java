@@ -2,18 +2,19 @@ package com.udacity.gradle.builditbigger.collections;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.databinding.GenreTextViewBinding;
 import com.udacity.gradle.builditbigger.jokes.JokesActivity;
 import com.udacity.gradle.builditbigger.models.Collection;
-import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.databinding.GenreTextViewBinding;
 
 import java.util.List;
 

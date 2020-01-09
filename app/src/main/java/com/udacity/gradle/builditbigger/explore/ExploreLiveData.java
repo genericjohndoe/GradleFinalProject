@@ -1,6 +1,8 @@
 package com.udacity.gradle.builditbigger.explore;
 
-import android.arch.lifecycle.LiveData;
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,6 +26,7 @@ public class ExploreLiveData extends LiveData<Post> {
 
     private EventListener<QuerySnapshot> eventListener = (queryDocumentSnapshots, e) -> {
         for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()){
+            Log.i("hilarityApp", snap.toObject(Post.class).toString());
             setValue(snap.toObject(Post.class));
         }
         };

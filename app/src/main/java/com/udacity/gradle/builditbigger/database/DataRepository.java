@@ -1,7 +1,8 @@
 package com.udacity.gradle.builditbigger.database;
 
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
+
+import androidx.lifecycle.LiveData;
 
 import com.udacity.gradle.builditbigger.models.HilarityUser;
 

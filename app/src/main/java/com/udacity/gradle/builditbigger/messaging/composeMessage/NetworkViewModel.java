@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.messaging.composeMessage;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * DEPRECATED

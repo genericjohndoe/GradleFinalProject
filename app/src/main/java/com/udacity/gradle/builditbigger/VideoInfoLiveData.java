@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.udacity.gradle.builditbigger.models.VideoInfo;
 

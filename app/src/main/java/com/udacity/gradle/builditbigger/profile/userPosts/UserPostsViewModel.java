@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.profile.userPosts;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * UserPostsViewModel class used to pass user generated posts to fragment

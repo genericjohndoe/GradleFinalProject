@@ -3,18 +3,21 @@ package com.udacity.gradle.builditbigger.mainUI;
 import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -77,8 +80,10 @@ public class FullScreenVideoDialog extends DialogFragment {
         // Produces Extractor instances for parsing the media data.
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         if (simpleExoPlayerView.getPlayer() != null) {
-            simpleExoPlayerView.getPlayer().prepare(new ExtractorMediaSource(Uri.parse(url),
-                    dataSourceFactory, extractorsFactory, null, null), false, true);
+            ((SimpleExoPlayer) simpleExoPlayerView.getPlayer()).prepare(new ProgressiveMediaSource
+                    .Factory(dataSourceFactory,extractorsFactory)
+                    .createMediaSource(Uri.parse(url)));
+
             simpleExoPlayerView.getPlayer().seekTo(position);
             Log.i("orientation4", "position = " + position + " in onResume");
             simpleExoPlayerView.getPlayer().setPlayWhenReady(true);

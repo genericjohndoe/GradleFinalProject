@@ -1,12 +1,13 @@
 package com.udacity.gradle.builditbigger.settings.userSettings;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class UserSettingsViewModel extends ViewModel {
     private AutoTranslateLiveData autoTranslateLiveData;
     private TaglineLiveData taglineLiveData;
     private CountryLiveData countryLiveData;
     private DobLiveData dobLiveData;
+    private GenderLiveData genderLiveData;
 
     public AutoTranslateLiveData getAutoTranslateLiveData() {
         if (autoTranslateLiveData ==  null) autoTranslateLiveData = new AutoTranslateLiveData();
@@ -26,5 +27,10 @@ public class UserSettingsViewModel extends ViewModel {
     public DobLiveData getDobLiveData() {
         if (dobLiveData == null) dobLiveData = new DobLiveData();
         return dobLiveData;
+    }
+
+    public GenderLiveData getGenderLiveData() {
+        if (genderLiveData == null) genderLiveData = new GenderLiveData();
+        return genderLiveData;
     }
 }

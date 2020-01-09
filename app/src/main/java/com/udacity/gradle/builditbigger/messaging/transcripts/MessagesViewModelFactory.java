@@ -1,8 +1,8 @@
 package com.udacity.gradle.builditbigger.messaging.transcripts;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 /**
  * MessagesViewModelFactory class aids in creation of MessagesViewModel

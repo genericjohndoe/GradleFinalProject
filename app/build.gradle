@@ -8,13 +8,17 @@ android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         applicationId "com.udacity.gradle.builditbigger"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         ndk {
@@ -51,40 +55,40 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:support-v4:28.0.0'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation project(path: ':richtexteditor')
-    implementation project(path: ':gifconverter')
+    //implementation project(path: ':gifconverter')
     //circular imageview
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //dialog boxes
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     //Firebase
-    implementation "com.google.firebase:firebase-storage:16.0.5"
-    implementation "com.google.firebase:firebase-database:16.0.6"
-    implementation "com.google.firebase:firebase-auth:16.1.0"
-    implementation "com.google.firebase:firebase-messaging:17.4.0"
-    implementation "com.google.firebase:firebase-firestore:18.0.1"
-    implementation "com.google.firebase:firebase-functions:16.1.3"
-    implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
-    implementation "com.google.android.gms:play-services-auth:16.0.1"
+    implementation "com.google.firebase:firebase-storage:18.1.1"
+    implementation "com.google.firebase:firebase-database:18.0.1"
+    implementation "com.google.firebase:firebase-auth:18.1.0"
+    implementation "com.google.firebase:firebase-messaging:19.0.1"
+    implementation "com.google.firebase:firebase-firestore:20.2.0"
+    implementation "com.google.firebase:firebase-functions:18.1.0"
+    implementation 'com.google.firebase:firebase-ml-vision:22.0.0'
+    implementation "com.google.android.gms:play-services-auth:17.0.0"
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     //support library
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "com.android.support:appcompat-v7:$support_lib_version"
-    implementation "com.android.support:support-v13:$support_lib_version"
-    implementation "com.android.support:support-v4:$support_lib_version"
-    implementation "com.android.support:support-compat:$support_lib_version"
-    implementation "com.android.support:design:$support_lib_version"
-    implementation "com.android.support:cardview-v7:$support_lib_version"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.core:core:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
     //lifecycle aware objects ViewModel and LiveData
-    implementation "android.arch.lifecycle:runtime:1.1.1"
-    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
-    implementation "android.arch.lifecycle:common-java8:1.1.1"
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    implementation "android.arch.paging:runtime:1.0.1"
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.paging:paging-runtime:2.1.0'
     //testing
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     testImplementation 'junit:junit:4.12'
@@ -94,22 +98,22 @@ dependencies {
     //floating action menu
     implementation 'com.github.clans:fab:1.6.4'
     //video playback
-    implementation 'com.google.android.exoplayer:exoplayer:r2.5.1'
-    implementation 'com.google.android.exoplayer:extension-mediasession:r2.5.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.10.3'
+    implementation 'com.google.android.exoplayer:extension-mediasession:2.10.3'
     // Room
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'androidx.room:room-runtime:2.1.0'
+    annotationProcessor 'androidx.room:room-compiler:2.1.0'
     //kapt "android.arch.persistence.room:compiler:1.0.0"
     //vid chat
     implementation 'co.netguru.videochatguru:videochatguru:0.1.2@aar'
     implementation 'org.webrtc:google-webrtc:1.0.22512'
     //socialtextview
-    implementation 'com.hendraanggrian:socialview-core:0.17'
-    implementation 'com.hendraanggrian:socialview-commons:0.17'
+    implementation 'com.hendraanggrian:socialview-core:0.18'
+    implementation 'com.hendraanggrian:socialview-commons:0.18'
     //gif support
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     //multidex
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
     //circular indicator
     implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
     //for tutorials

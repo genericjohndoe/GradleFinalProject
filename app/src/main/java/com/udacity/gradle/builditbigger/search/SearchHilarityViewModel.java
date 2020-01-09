@@ -1,7 +1,7 @@
 package com.udacity.gradle.builditbigger.search;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 /**
  * Created by joeljohnson on 3/16/18.

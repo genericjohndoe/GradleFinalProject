@@ -1,7 +1,7 @@
 package com.udacity.gradle.builditbigger.profile.userPosts;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.udacity.gradle.builditbigger.models.VideoInfo;
 

@@ -6,11 +6,8 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -18,16 +15,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
+import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostSubmissionBinding;
 import com.udacity.gradle.builditbigger.interfaces.SetDate;
 import com.udacity.gradle.builditbigger.mainUI.HilarityActivity;
 import com.udacity.gradle.builditbigger.models.Post;
-import com.udacity.gradle.builditbigger.R;
-import com.udacity.gradle.builditbigger.databinding.FragmentNewTextPostSubmissionBinding;
 import com.udacity.gradle.builditbigger.newPost.ScheduledPostDateDialog;
 import com.udacity.gradle.builditbigger.postScheduling.ScheduledPostJobService;
 
@@ -172,6 +173,7 @@ public class NewTextPostSubmissionFragment extends Fragment implements SetDate {
                                 Log.d(Constants.TAG, "Job not scheduled");
                             }
                             startActivity(new Intent(getActivity(), HilarityActivity.class));
+                            getActivity().finish();
                         }
                     });
                 }

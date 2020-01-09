@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.profile.userCollections;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 /**
  * UserGenreViewModel class provides fragment with user generated genres

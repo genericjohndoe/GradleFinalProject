@@ -1,9 +1,6 @@
 package com.udacity.gradle.builditbigger.messaging.composeMessage;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,11 +10,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.udacity.gradle.builditbigger.interfaces.FilterRecyclerView;
-import com.udacity.gradle.builditbigger.models.HilarityUser;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.databinding.MessagedUserCellBinding;
+import com.udacity.gradle.builditbigger.interfaces.FilterRecyclerView;
+import com.udacity.gradle.builditbigger.models.HilarityUser;
 
 import java.util.List;
 

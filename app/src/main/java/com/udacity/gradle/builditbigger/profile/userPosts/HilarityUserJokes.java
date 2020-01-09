@@ -1,29 +1,29 @@
 package com.udacity.gradle.builditbigger.profile.userPosts;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.gradle.builditbigger.constants.Constants;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 import com.udacity.gradle.builditbigger.interfaces.EnableSearch;
 import com.udacity.gradle.builditbigger.interfaces.HideFAB;
 import com.udacity.gradle.builditbigger.jokes.JokesAdapter;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.models.PostWrapper;
 import com.udacity.gradle.builditbigger.profile.FragmentFocusLiveData;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.search.SearchDialogFragment;
-import com.udacity.gradle.builditbigger.databinding.FragmentJokeslistGenrelistBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,16 +66,16 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_jokeslist_genrelist, container, false);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         userPostsViewModel = ViewModelProviders.of(this, new UserPostViewModelFactory(uid))
                 .get(UserPostsViewModel.class);
         UserPostsLiveData userPostsLiveData = userPostsViewModel.getUserPostsLiveData();
         userPostsLiveData.observe(this, postWrapper -> {
             addPostToList(postWrapper, jokes);
             configureUI();
-            Log.i("new_query","new post added to list");
+            Log.i("hilarityApp","new post added to list");
             if (jokes.size() % 20 == 0) {
-                Log.i("new_query","startAt set");
+                Log.i("hilarityApp","startAt set");
                 userPostsLiveData.setStartAt(postWrapper.getPost().getInverseTimeStamp());
             }
         });
@@ -133,12 +133,17 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
     }
 
     public void addPostToList(PostWrapper postWrapper, List<Post> jokes) {
+        Log.i("hilarityApp", "addPostToList called");
         if (!jokeAdapter.getJokes().equals(jokes)) jokeAdapter.setJokes(jokes);
         Post post = postWrapper.getPost();
         if (!jokes.contains(post)) {
-            jokes.add(post);
+            if (jokes.size() >= 1 && post.getInverseTimeStamp() <= jokes.get(0).getInverseTimeStamp()){
+                jokes.add(0, post);
+            } else {
+                jokes.add(post);
+            }
             jokeAdapter.notifyDataSetChanged();
-        } else if (postWrapper.getState() == 2) {
+        } else if (postWrapper.getState() == PostWrapper.EDITTED) {
             //if post gets modified
             int index = jokes.indexOf(post);
             jokes.set(index, post);
@@ -162,4 +167,5 @@ public class HilarityUserJokes extends Fragment implements EnableSearch {
             configureFAM();
         });
     }
+
 }

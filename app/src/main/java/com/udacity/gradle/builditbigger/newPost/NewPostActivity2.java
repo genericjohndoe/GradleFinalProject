@@ -2,16 +2,17 @@ package com.udacity.gradle.builditbigger.newPost;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.tabs.TabLayout;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.models.Post;
 import com.udacity.gradle.builditbigger.newPost.audioMediaPost.AudioMediaPostFragment;
 import com.udacity.gradle.builditbigger.newPost.documentPost.NewTextPostEditFragment;
 import com.udacity.gradle.builditbigger.newPost.visualMediaPost.VisualMediaPostFragment;
-import com.udacity.gradle.builditbigger.R;
 
 public class NewPostActivity2 extends AppCompatActivity {
     String number;

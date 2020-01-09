@@ -1,9 +1,10 @@
 package com.udacity.gradle.builditbigger.profile.userPosts;
 
-import android.arch.lifecycle.LiveData;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,9 +23,9 @@ public class UserPostsLiveData extends LiveData<PostWrapper> {
     private double startAt;
     private String uid;
 
-    public UserPostsLiveData(String uid){
+    public UserPostsLiveData(String uid) {
         databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts")
-                .orderByChild("inverseTimeStamp").startAt(Constants.INVERSE/System.currentTimeMillis())
+                .orderByChild("inverseTimeStamp").startAt(Constants.INVERSE / System.currentTimeMillis())
                 .limitToFirst(20);
         this.uid = uid;
     }
@@ -41,22 +42,28 @@ public class UserPostsLiveData extends LiveData<PostWrapper> {
     private ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            setValue(new PostWrapper(dataSnapshot.getValue(Post.class),1));
+            setValue(new PostWrapper(dataSnapshot.getValue(Post.class), PostWrapper.NEW));
+
+
         }
 
         @Override
         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            setValue(new PostWrapper(dataSnapshot.getValue(Post.class),2));
+            setValue(new PostWrapper(dataSnapshot.getValue(Post.class), PostWrapper.EDITTED));
         }
 
         @Override
-        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        }
 
         @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {}
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
+            Log.i("hilarityApp", "onChildMoved called");
+        }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {}
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
     };
 
     @Override
@@ -81,9 +88,9 @@ public class UserPostsLiveData extends LiveData<PostWrapper> {
         this.startAt = startAt;
     }
 
-    public void newQuery(){
+    public void newQuery() {
         databaseReference = Constants.DATABASE.child("userposts/" + uid + "/posts").orderByChild("inverseTimeStamp").startAt(startAt).limitToFirst(20);
-        Log.i("new_query","new query called");
+        Log.i("new_query", "new query called");
         onActive();
     }
 }

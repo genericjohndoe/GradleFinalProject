@@ -1,18 +1,21 @@
 package com.udacity.gradle.builditbigger.settings.userSettings;
 
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.RadioGroup;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,13 +23,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.tsongkha.spinnerdatepicker.DatePicker;
 import com.tsongkha.spinnerdatepicker.DatePickerDialog;
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.constants.FlagEmojiMap;
+import com.udacity.gradle.builditbigger.databinding.FragmentUserSettingsBinding;
 import com.udacity.gradle.builditbigger.interfaces.SetFlag;
-import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.signInOnboarding.profilePicture.ProfilePictureActivity;
 import com.udacity.gradle.builditbigger.signInOnboarding.userName.PickCountry.CountriesPopUpDialogFragment;
-import com.udacity.gradle.builditbigger.databinding.FragmentUserSettingsBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,28 +71,31 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         };
 
         bind.userNameEditText.setText(Constants.USER.getUserName());
         bind.userNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Constants.DATABASE.child("userlist").orderByValue().equalTo(""+s)
+                Constants.DATABASE.child("userlist").orderByValue().equalTo("" + s)
                         .addValueEventListener(valueEventListener);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         bind.userNameEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
             String newName = bind.userNameEditText.getText().toString();
             if (!hasFocus && userNameValidated && !Constants.USER.getUserName().equals(newName)) {
-                Constants.DATABASE.child("users/"+Constants.UID +"/userName").setValue(newName, (databaseError, databaseReference) -> {
-                    if (databaseError == null){
+                Constants.DATABASE.child("users/" + Constants.UID + "/userName").setValue(newName, (databaseError, databaseReference) -> {
+                    if (databaseError == null) {
                         Constants.USER.setUserName(newName);
                         Constants.DATABASE.child("userlist").removeEventListener(valueEventListener);
                     }
@@ -107,12 +113,12 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             bind.autoTranslateSwitch.setChecked(aBoolean);
         });
 
-        userSettingsViewModel.getTaglineLiveData().observe(this, tagline ->{
+        userSettingsViewModel.getTaglineLiveData().observe(this, tagline -> {
             bind.profileTaglineEditText.setText((tagline != null) ? tagline : getString(R.string.generic_profile_tagline));
             tag = tagline;
         });
 
-        userSettingsViewModel.getCountryLiveData().observe(this, country ->{
+        userSettingsViewModel.getCountryLiveData().observe(this, country -> {
             bind.flagTextView.setText(FlagEmojiMap.getInstance().get(country));
         });
 
@@ -120,16 +126,23 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
             bind.ageTextView.setText(Constants.formattedTimeString(getActivity(), dob, true));
         });
 
+        userSettingsViewModel.getGenderLiveData().observe(this, genderValue -> {
+            Log.i("hilarityApp", "gendervalue " + genderValue);
+            if (genderValue == 2) bind.genderRadiogroup.check(R.id.male_radioButton);
+            if (genderValue == 1) bind.genderRadiogroup.check(R.id.female_radioButton);
+            if (genderValue == 0) bind.genderRadiogroup.check(R.id.trans_radioButton);
+        });
+
         bind.profileTaglineEditText.setOnFocusChangeListener((View v, boolean hasFocus) -> {
-            if (!hasFocus && !bind.profileTaglineEditText.getText().toString().equals(tag)){
-                Constants.DATABASE.child("users/"+Constants.UID+"/tagline")
+            if (!hasFocus && !bind.profileTaglineEditText.getText().toString().equals(tag)) {
+                Constants.DATABASE.child("users/" + Constants.UID + "/tagline")
                         .setValue(bind.profileTaglineEditText.getText().toString());
             }
         });
 
 
         bind.autoTranslateSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
-            Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/autotranslate").setValue(isChecked);
+            Constants.DATABASE.child("cloudsettings/" + Constants.UID + "/autotranslate").setValue(isChecked);
         });
         bind.flagTextView.setOnClickListener(view -> {
             CountriesPopUpDialogFragment.getInstance(this).show(getActivity().getSupportFragmentManager(), "countries");
@@ -149,14 +162,15 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
                 defaultDay = calendar.get(Calendar.DAY_OF_MONTH);
                 defaultMonth = calendar.get(Calendar.MONTH);
                 defaultYear = calendar.get(Calendar.YEAR);
-            } catch (ParseException e){}
+            } catch (ParseException e) {
+            }
 
             DatePickerDialog.OnDateSetListener listener =
                     (DatePicker view2, int year2, int monthOfYear, int dayOfMonth) -> {
                         Calendar calendar2 = Calendar.getInstance();
-                        calendar2.set(year2,monthOfYear, dayOfMonth);
+                        calendar2.set(year2, monthOfYear, dayOfMonth);
                         long milliseconds = calendar2.getTimeInMillis();
-                        Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/dob").setValue(milliseconds);
+                        Constants.DATABASE.child("cloudsettings/" + Constants.UID + "/demographic/dob").setValue(milliseconds);
                     };
 
             Calendar c = Calendar.getInstance();
@@ -169,9 +183,16 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
                     .callback(listener)
                     .showTitle(true)
                     .defaultDate(defaultYear, defaultMonth, defaultDay)
-                    .maxDate(year-16, month, day)
+                    .maxDate(year - 16, month, day)
                     .build()
                     .show();
+        });
+
+        bind.genderRadiogroup.setOnCheckedChangeListener((RadioGroup radioGroup, int i) -> {
+            int genderValue = 0;
+            if (i == R.id.male_radioButton) genderValue = 2;
+            if (i == R.id.female_radioButton) genderValue = 1;
+            Constants.DATABASE.child("cloudsettings/" + Constants.UID + "/demographic/gender").setValue(genderValue);
         });
 
         return bind.getRoot();
@@ -179,6 +200,6 @@ public class UserSettingsFragment extends Fragment implements SetFlag {
 
     @Override
     public void setFlag(String flag, String isoCode) {
-        Constants.DATABASE.child("cloudsettings/"+Constants.UID+"/demographic/country").setValue(isoCode);
+        Constants.DATABASE.child("cloudsettings/" + Constants.UID + "/demographic/country").setValue(isoCode);
     }
 }

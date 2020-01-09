@@ -2,8 +2,8 @@ package com.example.chipslibrary.models;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by joeljohnson on 2/1/18.

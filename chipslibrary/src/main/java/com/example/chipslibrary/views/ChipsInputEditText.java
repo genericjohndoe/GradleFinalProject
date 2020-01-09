@@ -7,7 +7,7 @@ import android.util.AttributeSet;
  * Created by joeljohnson on 2/1/18.
  */
 
-public class ChipsInputEditText extends android.support.v7.widget.AppCompatEditText {
+public class ChipsInputEditText extends androidx.appcompat.widget.AppCompatEditText {
     //todo should make edittext wrap contents by default
     private FilterableListView filterableListView;
 

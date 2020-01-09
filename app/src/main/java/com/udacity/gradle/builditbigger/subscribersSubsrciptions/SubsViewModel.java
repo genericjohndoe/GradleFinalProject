@@ -1,6 +1,6 @@
 package com.udacity.gradle.builditbigger.subscribersSubsrciptions;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class SubsViewModel extends ViewModel {
 
