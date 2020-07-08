@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.reportPost;
 
 
+import android.app.Notification;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,15 +31,15 @@ public class ReportActivity extends AppCompatActivity {
             Constants.DATABASE.child("reportedposts/"+ccId+"/"+postId+"/list/"+Constants.UID).setValue(editor.getHtml(),
                     (databaseError, databaseReference) -> {
                         if (databaseError == null){
-                            Constants.DATABASE.child("reportedposts/"+ccId+"/"+postId+"/list")
+                            Constants.DATABASE.child("reportedposts/"+ccId+"/"+postId+"/num")
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     long num = dataSnapshot.getChildrenCount();
                                     if (num >= 3){
-                                        //initiate voting process
-                                        //send notification to immediate social network
-                                        //based on results send to entire network (or not)
+
+                                    } else {
+                                        Constants.DATABASE.child("reportedposts/"+ccId+"/"+postId+"/num").setValue(num+1);
                                     }
                                 }
 
@@ -53,3 +54,10 @@ public class ReportActivity extends AppCompatActivity {
         });
     }
 }
+//todo: test code that sends notification to original content creator once there are atleast 3 complaints
+//todo: set up code to send notification to entire network when rebuttal is sent
+//todo: check to see if rebuttal hasn't been sent on client side, if not send note to network anyway
+//todo: note opens to post, then proceeds to complaint and rebuttal (if applicable), then vote
+//todo: set voting to be open for 48 h (open own server, raspberry pi), if majority vote yes, remove post
+//todo: if user gets more than 3 removed posts in a 12 month span, users account is removed
+

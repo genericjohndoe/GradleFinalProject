@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.constants.Constants;
 import com.udacity.gradle.builditbigger.explore.ExploreFragment;
@@ -64,15 +65,12 @@ public class HilarityActivity extends AppCompatActivity
         createNotificationChannel();
         messagingToken();
         setSupportActionBar(toolbar);
+        subscribeToReportTopic();
         fragmentNumber = getIntent().getIntExtra(getString(R.string.number), 0);
         otherUid = getIntent().getStringExtra(getString(R.string.uid));
         Fragment fragment;
         String tag;
         switch (fragmentNumber) {
-            case 1:
-                fragment = Profile.newInstance(Constants.UID);
-                tag = "profile";
-                break;
             case 2:
                 fragment = FeedFragment.newInstance(Constants.UID);
                 setTitle(getString(R.string.feed));
@@ -229,6 +227,10 @@ public class HilarityActivity extends AppCompatActivity
             notificationManager.createNotificationChannel(channel2);
             notificationManager.createNotificationChannel(channel3);
         }
+    }
+
+    private void subscribeToReportTopic(){
+        FirebaseMessaging.getInstance().subscribeToTopic("reportedpost");
     }
 
     public void messagingToken() {
