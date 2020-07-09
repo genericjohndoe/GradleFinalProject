@@ -1,8 +1,11 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
+*/
 /**
  * Created by joeljohnson on 4/25/18.
- */
+ *//*
+
 
 public class VideoInfo {
 
@@ -30,3 +33,4 @@ public class VideoInfo {
         return url;
     }
 }
+*/

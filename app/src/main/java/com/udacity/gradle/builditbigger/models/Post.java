@@ -1,3 +1,4 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
 import android.os.Parcel;
@@ -8,9 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+*/
 /**
  * Joke class serves as model for user generated content
- */
+ *//*
+
 
 public class Post implements Parcelable {
     private String title;
@@ -29,8 +32,10 @@ public class Post implements Parcelable {
 
     public Post() {}
 
-    public Post(String jokeTitle, String body, Long time, String synopsis,
-                String url, String uid, String pushId, String tagline, Integer type, Map<String, Object> metaData, Double inverseTimeStamp) {
+    public Post(String jokeTitle, String body, Long time,
+                String synopsis, String url, String uid,
+                String pushId, String tagline, Integer type,
+                Map<String, Object> metaData, Double inverseTimeStamp) {
         this.title = jokeTitle;
         this.body = body;
         timeStamp = time;
@@ -164,3 +169,4 @@ public class Post implements Parcelable {
         public Post[] newArray(int i) {return new Post[i];}
     };
 }
+*/

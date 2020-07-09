@@ -1,8 +1,11 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
+*/
 /**
  * Created by joeljohnson on 3/31/18.
- */
+ *//*
+
 
 public class ForumReply {
 
@@ -41,3 +44,4 @@ public class ForumReply {
         return ((obj instanceof ForumReply) && ((ForumReply) obj).getKey().equals(key));
     }
 }
+*/

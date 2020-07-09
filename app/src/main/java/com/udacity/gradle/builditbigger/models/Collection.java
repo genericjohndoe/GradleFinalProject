@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Genre serves as model for collections of posts
  */
 
-public class Collection implements Parcelable {
+/*public class Collection implements Parcelable {
     private String title;
     private String author;
     private Boolean restricted;
@@ -91,4 +91,4 @@ public class Collection implements Parcelable {
         @Override
         public Collection[] newArray(int i) {return new Collection[i];}
     };
-}
+}*/

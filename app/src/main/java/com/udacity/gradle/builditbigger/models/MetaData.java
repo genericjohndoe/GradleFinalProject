@@ -1,3 +1,4 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
 import android.os.Parcel;
@@ -6,9 +7,11 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
+*/
 /**
  * MetaData class serves as model for post meta data
- */
+ *//*
+
 
 public class MetaData implements Parcelable {
     private Map<String, Boolean> keywords;
@@ -50,3 +53,4 @@ public class MetaData implements Parcelable {
 
     };
 }
+*/

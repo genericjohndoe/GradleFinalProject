@@ -1,3 +1,4 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
 public class PostWrapper {
@@ -21,3 +22,4 @@ public class PostWrapper {
         return post;
     }
 }
+*/

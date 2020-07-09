@@ -1,3 +1,4 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
 import android.os.Parcel;
@@ -8,9 +9,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+*/
 /**
  * HilarityUser class serves as model for user
- */
+ *//*
+
 @Entity(tableName = "hilarityusers")
 public class HilarityUser implements Parcelable {
     private String userName;
@@ -83,3 +86,4 @@ public class HilarityUser implements Parcelable {
     };
 }
 
+*/

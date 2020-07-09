@@ -1,11 +1,14 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+*/
 /**
  * Created by joeljohnson on 3/31/18.
- */
+ *//*
+
 
 public class ForumQuestion implements Parcelable {
 
@@ -72,3 +75,4 @@ public class ForumQuestion implements Parcelable {
         return ((obj instanceof ForumQuestion) && ((ForumQuestion) obj).getKey().equals(key));
     }
 }
+*/

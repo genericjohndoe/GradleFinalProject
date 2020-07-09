@@ -1,10 +1,13 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
 import java.util.List;
 
+*/
 /**
  * Message class serves as model for direct messages sent among users
- */
+ *//*
+
 
 public class Message {
 
@@ -49,3 +52,4 @@ public class Message {
         return (obj instanceof Message) && ((Message) obj).getPushId().equals(pushId);
     }
 }
+*/

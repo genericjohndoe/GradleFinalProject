@@ -1,8 +1,11 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
+*/
 /**
  * Comment class serves as model for comments under posts
- */
+ *//*
+
 
 public class Comment {
 
@@ -39,3 +42,4 @@ public class Comment {
 
     public String getCommentId(){return commentId;}
 }
+*/

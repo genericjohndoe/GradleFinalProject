@@ -1,12 +1,15 @@
+/*
 package com.udacity.gradle.builditbigger.models;
 
 import androidx.annotation.NonNull;
 
 import java.util.List;
 
+*/
 /**
  * TranscriptPreview class serves as model for sent messages preview
- */
+ *//*
+
 
 public class TranscriptPreview {
 
@@ -49,3 +52,4 @@ public class TranscriptPreview {
         return  message.equals(transcriptPreview.getMessage());
     }
 }
+*/
